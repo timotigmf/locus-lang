@@ -2,7 +2,7 @@
 
 ## CLI
 
-`italica COMANDO FILE` oppure `python -m italica COMANDO FILE`.
+`locus COMANDO FILE` oppure `python -m locus COMANDO FILE`.
 `-h`/`--help` mostra l'aiuto italiano. Gli unici comandi implementati:
 
 | Comando | Output su stdout |
@@ -18,14 +18,14 @@ JSON leggibile Unicode; AST e IR sono sperimentali, non formati di scambio stabi
 
 ## API Python
 
-- `italica.lexer.tokenize(text, source='<memoria>')`: tupla Token, incluso EOF.
-- `italica.parser.parse(text, source='<memoria>')`: Program AST.
-- `italica.compiler.compile_source(text, kinds, source='<memoria>')`: ProgramIR.
-- `italica.compiler.analyze(program, kinds)`: validazione e lowering.
-- `italica.stdlib.default_kinds()`: nuovo dizionario dei tipi base ad ogni chiamata.
-- `italica.runtime.instantiate(program)`: World immutabile con entità runtime.
-- `italica.diagnostics.CompileError`: attributi `code`, `message`, `span`.
-- `italica.diagnostics.canonical(text)`: confronto NFC/casefold/spazi.
+- `locus.lexer.tokenize(text, source='<memoria>')`: tupla Token, incluso EOF.
+- `locus.parser.parse(text, source='<memoria>')`: Program AST.
+- `locus.compiler.compile_source(text, kinds, source='<memoria>')`: ProgramIR.
+- `locus.compiler.analyze(program, kinds)`: validazione e lowering.
+- `locus.stdlib.default_kinds()`: nuovo dizionario dei tipi base ad ogni chiamata.
+- `locus.runtime.instantiate(program)`: World immutabile con entità runtime.
+- `locus.diagnostics.CompileError`: attributi `code`, `message`, `span`.
+- `locus.diagnostics.canonical(text)`: confronto NFC/casefold/spazi.
 
 `kinds` mappa nomi canonici a ID non vuoti e univoci. Cataloghi invalidi sollevano
 ValueError. L'IR è un contratto interno prodotto dal compilatore: instantiate

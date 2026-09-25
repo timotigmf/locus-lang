@@ -7,12 +7,12 @@ from dataclasses import asdict
 from pathlib import Path
 from typing import Never
 
-from italica.compiler import compile_source
-from italica.diagnostics import CompileError
-from italica.parser import parse
-from italica.stdlib import default_kinds
+from locus.compiler import compile_source
+from locus.diagnostics import CompileError
+from locus.parser import parse
+from locus.stdlib import default_kinds
 
-_USAGE = "uso: italica {controlla,ast,ir,compila} FILE\n"
+_USAGE = "uso: locus {controlla,ast,ir,compila} FILE\n"
 _HELP = _USAGE + "\nControlla il sorgente o mostra AST/IR JSON. Opzioni: -h, --help.\n"
 
 
@@ -25,7 +25,7 @@ class _Arguments(argparse.ArgumentParser):
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = _Arguments(prog="italica", allow_abbrev=False)
+    parser = _Arguments(prog="locus", allow_abbrev=False)
     parser.add_argument("command", choices=("controlla", "ast", "ir", "compila"))
     parser.add_argument("file", type=Path)
     args = parser.parse_args(argv)

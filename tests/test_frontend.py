@@ -2,14 +2,14 @@ import unicodedata
 
 import pytest
 
-from italica.diagnostics import CompileError
-from italica.lexer import tokenize
-from italica.parser import parse
+from locus.diagnostics import CompileError
+from locus.lexer import tokenize
+from locus.parser import parse
 
 
 def test_tokens_preserve_original_positions() -> None:
     text = "\r\n  La Caffe\u0300 è una cosa."
-    tokens = tokenize(text, "storia.ita")
+    tokens = tokenize(text, "storia.locus")
     assert [t.kind for t in tokens] == ["WORD"] * 5 + ["DOT", "EOF"]
     name = tokens[1]
     assert name.text == "Caffe\u0300"
@@ -36,12 +36,12 @@ def test_articles_are_syntactic_not_gender_inference(article: str, indefinite: s
 
 def test_compound_names_case_and_span() -> None:
     source = "LA chiave di ottone È UNA COSA."
-    declaration = parse(source, "prova.ita").declarations[0]
+    declaration = parse(source, "prova.locus").declarations[0]
     assert declaration.name == "chiave di ottone"
     assert declaration.kind == "COSA"
     assert declaration.span.start == 0
     assert declaration.span.end == len(source)
-    assert declaration.span.source == "prova.ita"
+    assert declaration.span.source == "prova.locus"
 
 
 def test_decomposed_copula() -> None:
@@ -68,9 +68,9 @@ def test_decomposed_copula() -> None:
 )
 def test_rejected_syntax(source: str, code: str) -> None:
     with pytest.raises(CompileError) as result:
-        parse(source, "errore.ita")
+        parse(source, "errore.locus")
     assert result.value.code == code
-    assert "errore.ita:1:" in str(result.value)
+    assert "errore.locus:1:" in str(result.value)
 
 
 def test_empty_source() -> None:

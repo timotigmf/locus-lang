@@ -32,7 +32,7 @@ jobs:
       - name: Wheel installato fuori dal checkout
         shell: bash
         run: |
-          python -m pip uninstall -y italica
+          python -m pip uninstall -y locus
           python -m pip install --no-deps dist/*.whl
           cd "$RUNNER_TEMP"
-          italica controlla "$GITHUB_WORKSPACE/examples/dichiarazioni.ita"
+          locus controlla "$GITHUB_WORKSPACE/examples/dichiarazioni.locus"

@@ -1,7 +1,7 @@
-# Italica — laboratorio LOCUS
+# LOCUS — laboratorio LOCUS
 
 Linguaggio naturale controllato italiano per narrativa interattiva e simulazioni.
-Nome **Italica provvisorio**; il repository locale si chiama LOCUS.
+Nome **LOCUS provvisorio**; il repository locale si chiama LOCUS.
 
 ## Stato reale
 
@@ -26,19 +26,19 @@ python -m venv .venv
 . .venv/bin/activate
 # Windows PowerShell, in alternativa: .venv\Scripts\Activate.ps1
 python -m pip install -e '.[dev]'
-italica controlla examples/dichiarazioni.ita
-italica ast examples/dichiarazioni.ita
-italica ir examples/dichiarazioni.ita
-italica compila examples/dichiarazioni.ita > programma.json
+locus controlla examples/dichiarazioni.locus
+locus ast examples/dichiarazioni.locus
+locus ir examples/dichiarazioni.locus
+locus compila examples/dichiarazioni.locus > programma.json
 python -m pytest
 python -m ruff check .
 python -m ruff format --check .
 python -m mypy
 ```
 
-`python -m italica` equivale a `italica`. Il JSON è un dump sperimentale,
+`python -m locus` equivale a `locus`. Il JSON è un dump sperimentale,
 non un formato caricabile o un eseguibile. Non esistono ancora `gioca` e `studio`.
-Per usare il sorgente senza installazione: `PYTHONPATH=src python -m italica`
+Per usare il sorgente senza installazione: `PYTHONPATH=src python -m locus`
 (sintassi della variabile da adattare su Windows).
 
 Compilazione e modello del mondo funzionano offline. L'installazione degli

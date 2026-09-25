@@ -1,6 +1,6 @@
 # Visione
 
-Italica permette ad autori italiani di descrivere sistemi narrativi leggibili,
+LOCUS permette ad autori italiani di descrivere sistemi narrativi leggibili,
 verificabili e riproducibili. Inform è un riferimento concettuale, non un formato
 da emulare. Non promettiamo di superarlo in ogni dimensione: misureremo chiarezza
 delle diagnosi, modularità, riproducibilità, copertura dei casi d'uso e facilità

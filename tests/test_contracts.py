@@ -4,8 +4,8 @@ from pathlib import Path
 
 import pytest
 
-from italica.compiler import compile_source
-from italica.stdlib import default_kinds
+from locus.compiler import compile_source
+from locus.stdlib import default_kinds
 
 ROOT = Path(__file__).resolve().parents[1]
 MARKDOWN = sorted(ROOT.glob("*.md")) + sorted((ROOT / "docs").rglob("*.md"))
@@ -23,7 +23,7 @@ def test_documentation_examples(source: str, path: str) -> None:
     compile_source(source, default_kinds(), path)
 
 
-@pytest.mark.parametrize("path", sorted((ROOT / "examples").glob("*.ita")))
+@pytest.mark.parametrize("path", sorted((ROOT / "examples").glob("*.locus")))
 def test_example_files(path: Path) -> None:
     compile_source(path.read_text(encoding="utf-8"), default_kinds(), str(path))
 
@@ -39,7 +39,7 @@ def test_example_files(path: Path) -> None:
     ],
 )
 def test_dependency_boundaries(module: str, forbidden: set[str]) -> None:
-    tree = ast.parse((ROOT / "src" / "italica" / f"{module}.py").read_text(encoding="utf-8"))
+    tree = ast.parse((ROOT / "src" / "locus" / f"{module}.py").read_text(encoding="utf-8"))
     imports: list[str] = []
     for node in ast.walk(tree):
         if isinstance(node, ast.ImportFrom) and node.module:
@@ -48,6 +48,6 @@ def test_dependency_boundaries(module: str, forbidden: set[str]) -> None:
             imports.extend(alias.name for alias in node.names)
     for imported in imports:
         assert not any(
-            imported == f"italica.{name}" or imported.startswith(f"italica.{name}.")
+            imported == f"locus.{name}" or imported.startswith(f"locus.{name}.")
             for name in forbidden
         )

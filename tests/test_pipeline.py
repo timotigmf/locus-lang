@@ -2,11 +2,11 @@ from dataclasses import FrozenInstanceError
 
 import pytest
 
-from italica.compiler import compile_source
-from italica.diagnostics import CompileError
-from italica.ir import EntityIR, ProgramIR
-from italica.runtime import instantiate
-from italica.stdlib import default_kinds
+from locus.compiler import compile_source
+from locus.diagnostics import CompileError
+from locus.ir import EntityIR, ProgramIR
+from locus.runtime import instantiate
+from locus.stdlib import default_kinds
 
 
 def test_pipeline_and_determinism() -> None:
@@ -45,7 +45,7 @@ def test_duplicate_canonical_names(source: str) -> None:
 
 def test_unknown_type_and_error_location() -> None:
     with pytest.raises(CompileError) as result:
-        compile_source("La Cucina è una stanza.\nIl cane è un animale.", default_kinds(), "a.ita")
+        compile_source("La Cucina è una stanza.\nIl cane è un animale.", default_kinds(), "a.locus")
     assert result.value.code == "E102"
     assert result.value.span.line == 2
     assert "Tipo sconosciuto: animale" in str(result.value)

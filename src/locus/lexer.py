@@ -4,7 +4,7 @@ import unicodedata
 from dataclasses import dataclass
 from typing import Literal
 
-from italica.diagnostics import CompileError, Span, canonical
+from locus.diagnostics import CompileError, Span, canonical
 
 TokenKind = Literal["WORD", "APOSTROPHE", "DOT", "EOF"]
 

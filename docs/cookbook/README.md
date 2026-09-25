@@ -3,8 +3,8 @@
 Il compilatore riceve un catalogo dal chiamante, senza importare la stdlib:
 
 ```python
-from italica.compiler import compile_source
-from italica.runtime import instantiate
+from locus.compiler import compile_source
+from locus.runtime import instantiate
 
 program = compile_source("Il sensore è un dispositivo.", {"dispositivo": "lab.device"})
 world = instantiate(program)

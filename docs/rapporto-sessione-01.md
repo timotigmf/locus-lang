@@ -4,7 +4,7 @@
 
 Bootstrap `0.1.0a1` completo: architettura, specifica, ADR, progetto Python,
 CLI e skeleton verificato. Il primo milestone giocabile non è ancora implementato,
-come richiesto per questa sessione. Nome linguaggio/CLI Italica provvisorio;
+come richiesto per questa sessione. Nome linguaggio/CLI LOCUS provvisorio;
 repository GitHub indicata dall'autore: https://github.com/timotigmf/locus-lang.
 
 La pipeline esegue lexer → parser → AST → analisi/lowering → IR → mondo iniziale.
@@ -100,20 +100,20 @@ file esistenti senza sovrascriverli o creare storie divergenti per errore.
 - `docs/manuale/README.md`
 - `docs/rapporto-sessione-01.md`
 - `docs/reference/README.md`
-- `examples/dichiarazioni.ita`
+- `examples/dichiarazioni.locus`
 - `pyproject.toml`
-- `src/italica/__init__.py`
-- `src/italica/__main__.py`
-- `src/italica/ast.py`
-- `src/italica/cli.py`
-- `src/italica/compiler.py`
-- `src/italica/diagnostics.py`
-- `src/italica/ir.py`
-- `src/italica/lexer.py`
-- `src/italica/parser.py`
-- `src/italica/py.typed`
-- `src/italica/runtime.py`
-- `src/italica/stdlib/__init__.py`
+- `src/locus/__init__.py`
+- `src/locus/__main__.py`
+- `src/locus/ast.py`
+- `src/locus/cli.py`
+- `src/locus/compiler.py`
+- `src/locus/diagnostics.py`
+- `src/locus/ir.py`
+- `src/locus/lexer.py`
+- `src/locus/parser.py`
+- `src/locus/py.typed`
+- `src/locus/runtime.py`
+- `src/locus/stdlib/__init__.py`
 - `tests/test_cli.py`
 - `tests/test_contracts.py`
 - `tests/test_frontend.py`

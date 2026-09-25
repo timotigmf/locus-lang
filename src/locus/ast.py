@@ -2,7 +2,7 @@
 
 from dataclasses import dataclass
 
-from italica.diagnostics import Span
+from locus.diagnostics import Span
 
 
 @dataclass(frozen=True, slots=True)

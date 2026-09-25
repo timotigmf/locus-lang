@@ -2,10 +2,10 @@
 
 from collections.abc import Mapping
 
-from italica.ast import Program
-from italica.diagnostics import CompileError, canonical
-from italica.ir import IR_VERSION, EntityIR, ProgramIR
-from italica.parser import parse
+from locus.ast import Program
+from locus.diagnostics import CompileError, canonical
+from locus.ir import IR_VERSION, EntityIR, ProgramIR
+from locus.parser import parse
 
 
 def analyze(program: Program, kinds: Mapping[str, str]) -> ProgramIR:

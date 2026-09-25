@@ -1,4 +1,4 @@
-# Istruzioni per contribuire a Italica
+# Istruzioni per contribuire a LOCUS
 
 - Leggere README.md, LANGUAGE_SPEC.md e gli ADR prima di cambiare contratti.
 - Limitare lo scope alla fase richiesta; non implementare anticipatamente la roadmap.

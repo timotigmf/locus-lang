@@ -1,8 +1,8 @@
 """Parser autore sostituibile dietro il contratto Program."""
 
-from italica.ast import Declaration, Program
-from italica.diagnostics import CompileError, Span
-from italica.lexer import Token, tokenize
+from locus.ast import Declaration, Program
+from locus.diagnostics import CompileError, Span
+from locus.lexer import Token, tokenize
 
 
 class _Parser:

@@ -6,12 +6,12 @@ from pathlib import Path
 
 import pytest
 
-from italica.cli import main
+from locus.cli import main
 
 
 @pytest.mark.parametrize("command", ["ast", "ir", "compila", "controlla"])
 def test_commands(command: str, tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
-    source = tmp_path / "storia.ita"
+    source = tmp_path / "storia.locus"
     source.write_text("La Cucina è una stanza.", encoding="utf-8")
     assert main([command, str(source)]) == 0
     output = capsys.readouterr()
@@ -25,7 +25,7 @@ def test_commands(command: str, tmp_path: Path, capsys: pytest.CaptureFixture[st
 
 
 def test_ast_does_not_require_semantic_validation(tmp_path: Path) -> None:
-    source = tmp_path / "s.ita"
+    source = tmp_path / "s.locus"
     source.write_text("Il cane è un animale.", encoding="utf-8")
     assert main(["ast", str(source)]) == 0
     assert main(["controlla", str(source)]) == 1
@@ -33,7 +33,7 @@ def test_ast_does_not_require_semantic_validation(tmp_path: Path) -> None:
 
 @pytest.mark.parametrize("data", [b"invalid", b"\xff"])
 def test_invalid_input(data: bytes, tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
-    path = tmp_path / "s.ita"
+    path = tmp_path / "s.locus"
     path.write_bytes(data)
     assert main(["controlla", str(path)]) == 1
     output = capsys.readouterr()
@@ -63,7 +63,7 @@ def test_help(capsys: pytest.CaptureFixture[str]) -> None:
 
 def test_module_entrypoint_outside_checkout(tmp_path: Path) -> None:
     result = subprocess.run(
-        [sys.executable, "-m", "italica", "--help"],
+        [sys.executable, "-m", "locus", "--help"],
         cwd=tmp_path,
         capture_output=True,
         text=True,
@@ -72,11 +72,11 @@ def test_module_entrypoint_outside_checkout(tmp_path: Path) -> None:
         check=False,
     )
     assert result.returncode == 0
-    assert "uso: italica" in result.stdout
+    assert "uso: locus" in result.stdout
 
 
 def test_ast_offsets_preserve_crlf(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
-    source = tmp_path / "windows.ita"
+    source = tmp_path / "windows.locus"
     text = "La A è una cosa.\r\nLa B è una cosa."
     source.write_bytes(text.encode("utf-8"))
     assert main(["ast", str(source)]) == 0

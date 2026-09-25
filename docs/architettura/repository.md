@@ -7,7 +7,7 @@ Questa è la destinazione architetturale, non un invito a creare moduli vuoti.
 README.md VISION.md ARCHITECTURE.md LANGUAGE_SPEC.md ROADMAP.md
 CONTRIBUTING.md AGENTS.md pyproject.toml
 .github/workflows/ci.yml
-src/italica/
+src/locus/
   __init__.py __main__.py cli.py
   diagnostics.py lexer.py parser.py ast.py compiler.py ir.py runtime.py
   stdlib/__init__.py

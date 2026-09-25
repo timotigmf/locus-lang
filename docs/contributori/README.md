@@ -4,7 +4,7 @@ Test unitari: lessico, EOF, intervalli, Unicode composto/decomposto, articoli,
 nomi composti e sintassi negativa; duplicati e tipi sconosciuti nella semantica.
 Test integrazione: sorgente → AST → IR → mondo, catalogo non-IF, CLI e JSON.
 Regressioni: forme apostrofate, separatori, assenza di punto e collisioni canoniche.
-I blocchi Markdown `ita` e gli esempi `.ita` sono compilati automaticamente.
+I blocchi Markdown `ita` e gli esempi `.locus` sono compilati automaticamente.
 
 Test architetturali verificano gli import vietati: compilatore senza stdlib/runtime,
 runtime senza frontend. Sono guardrail di dipendenze statiche, non prove formali.

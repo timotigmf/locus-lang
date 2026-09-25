@@ -2,7 +2,7 @@
 
 from dataclasses import dataclass
 
-from italica.ir import IR_VERSION, ProgramIR
+from locus.ir import IR_VERSION, ProgramIR
 
 
 @dataclass(frozen=True, slots=True)

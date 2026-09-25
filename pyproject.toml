@@ -3,7 +3,7 @@ requires = ["hatchling>=1.26,<2"]
 build-backend = "hatchling.build"
 
 [project]
-name = "italica"
+name = "locus"
 version = "0.1.0a1"
 description = "Linguaggio controllato italiano per sistemi narrativi — skeleton"
 readme = "README.md"
@@ -14,10 +14,10 @@ dependencies = []
 dev = ["pytest>=8,<10", "ruff>=0.11,<1", "mypy>=1.15,<2", "build>=1.2,<2"]
 
 [project.scripts]
-italica = "italica.cli:main"
+locus = "locus.cli:main"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/italica"]
+packages = ["src/locus"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
