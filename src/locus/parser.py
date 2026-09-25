@@ -1,16 +1,37 @@
-"""Parser autore sostituibile dietro il contratto Program."""
+"""Parser autore controllato: costrutti generici, verbi forniti dal chiamante."""
 
-from locus.ast import Declaration, Program, Relation
+from collections.abc import Mapping
+
+from locus.ast import Assignment, Declaration, Program, PropertyDeclaration, Relation
 from locus.diagnostics import CompileError, Span
 from locus.lexer import Token, tokenize
+from locus.schema import Value, ValueKind
 
-_RESERVED = {"è", "nella", "della"}
+_LOCATIONS = {"nella", "nel", "nello", "nell"}
+_GENITIVES = {"della", "del", "dello", "dell"}
+_TARGETS = {"alla", "al", "allo", "all", "a"}
+_RESERVED = {"è", "ha", "collega", *_LOCATIONS, *_GENITIVES}
+
+
+def decode_string(text: str) -> str:
+    result: list[str] = []
+    index = 1
+    while index < len(text) - 1:
+        if text[index] == "\\":
+            index += 1
+            result.append("\n" if text[index] == "n" else text[index])
+        else:
+            result.append(text[index])
+        index += 1
+    return "".join(result)
 
 
 class _Parser:
-    def __init__(self, tokens: tuple[Token, ...]) -> None:
+    def __init__(self, tokens: tuple[Token, ...], verbs: Mapping[str, str]) -> None:
         self.tokens = tokens
         self.index = 0
+        self.verbs = verbs
+        self.reserved = _RESERVED | set(verbs)
 
     @property
     def current(self) -> Token:
@@ -32,20 +53,59 @@ class _Parser:
             self.fail("un articolo determinativo" if definite else "un articolo indeterminativo")
         self.index += 1
         if token.normalized == "l":
-            if self.current.kind != "APOSTROPHE":
-                self.fail("l'apostrofo dopo l")
-            self.index += 1
+            self.apostrophe()
         elif not definite and token.normalized == "un" and self.current.kind == "APOSTROPHE":
             self.index += 1
 
-    def words(self) -> str:
+    def apostrophe(self) -> None:
+        if self.current.kind != "APOSTROPHE":
+            self.fail("un apostrofo")
+        self.index += 1
+
+    def preposition(self, allowed: set[str]) -> None:
+        word = self.current.normalized
+        if self.current.kind != "WORD" or word not in allowed:
+            self.fail("una preposizione: " + ", ".join(sorted(allowed)))
+        self.index += 1
+        if word in {"nell", "dell", "all"}:
+            self.apostrophe()
+        if word == "a":
+            self.article(True)
+
+    def words(self, *, value_follows: bool = False, stop: set[str] | None = None) -> str:
+        if self.current.kind == "STRING":
+            name = decode_string(self.current.text)
+            if not name.strip() or "\n" in name:
+                self.fail("un nome non vuoto su una riga")
+            self.index += 1
+            return name
         words: list[str] = []
-        while self.current.kind == "WORD" and self.current.normalized not in _RESERVED:
+        while self.current.kind == "WORD" and self.current.normalized not in self.reserved:
+            if stop and words and self.current.normalized in stop:
+                break
+            if value_follows and self.current.normalized in {"vero", "falso"}:
+                break
             words.append(self.current.text)
             self.index += 1
         if not words:
-            self.fail("un nome senza parole riservate")
+            self.fail("un nome senza parole riservate, oppure un nome tra virgolette")
         return " ".join(words)
+
+    def value(self) -> Value:
+        token = self.current
+        if token.kind == "NUMBER":
+            if len(token.text.lstrip("-")) > 1000:
+                raise CompileError("E004", "Intero troppo lungo: massimo 1000 cifre.", token.span)
+            value: Value = int(token.text)
+        elif token.kind == "STRING":
+            value = decode_string(token.text)
+        elif token.kind == "WORD" and token.normalized in {"vero", "falso"}:
+            value = token.normalized == "vero"
+        else:
+            self.fail("un intero, una stringa, vero o falso")
+            raise AssertionError("irraggiungibile")
+        self.index += 1
+        return value
 
     def finish(self, start: Span) -> Span:
         if self.current.kind != "DOT":
@@ -57,27 +117,77 @@ class _Parser:
     def program(self) -> Program:
         declarations: list[Declaration] = []
         relations: list[Relation] = []
+        properties: list[PropertyDeclaration] = []
+        assignments: list[Assignment] = []
         while self.current.kind != "EOF":
             start = self.current.span
-            self.article(definite=True)
+            self.article(True)
             name = self.words()
-            self.keyword("è")
-            if self.current.normalized == "a":
-                self.keyword("a")
-                predicate = self.words()
-                self.keyword("della")
+            operator = self.current.normalized
+            if operator == "ha":
+                self.keyword("ha")
+                prop = self.words(value_follows=True)
+                value = self.value()
+                assignments.append(Assignment(name, prop, value, self.finish(start)))
+            elif operator in self.verbs:
+                self.keyword(operator)
+                self.article(True)
                 target = self.words()
-                relations.append(Relation(name, predicate, target, self.finish(start)))
+                relations.append(Relation(name, self.verbs[operator], target, self.finish(start)))
+            elif operator == "collega":
+                self.keyword("collega")
+                self.article(True)
+                left = self.words(stop=_TARGETS)
+                self.preposition(_TARGETS)
+                right = self.words()
+                span = self.finish(start)
+                relations.extend(
+                    (
+                        Relation(name, "collega da", left, span),
+                        Relation(name, "collega a", right, span),
+                    )
+                )
             else:
-                self.article(definite=False)
-                kind = self.words()
-                location = None
-                if self.current.normalized == "nella":
-                    self.keyword("nella")
-                    location = self.words()
-                declarations.append(Declaration(name, kind, self.finish(start), location))
-        return Program(tuple(declarations), tuple(relations))
+                self.keyword("è")
+                if self.current.normalized == "a":
+                    self.keyword("a")
+                    predicate = self.words()
+                    self.preposition(_GENITIVES)
+                    target = self.words()
+                    relations.append(Relation(name, predicate, target, self.finish(start)))
+                elif self.current.normalized in _LOCATIONS:
+                    self.preposition(_LOCATIONS)
+                    target = self.words()
+                    relations.append(Relation(name, "nella", target, self.finish(start)))
+                else:
+                    self.article(False)
+                    if self.current.normalized == "proprietà":
+                        self.keyword("proprietà")
+                        kinds: dict[str, ValueKind] = {
+                            "numerica": "numero",
+                            "testuale": "testo",
+                            "logica": "logico",
+                        }
+                        adjective = self.current.normalized
+                        if adjective not in kinds:
+                            self.fail("numerica, testuale o logica")
+                        self.index += 1
+                        properties.append(
+                            PropertyDeclaration(name, kinds[adjective], self.finish(start))
+                        )
+                    else:
+                        kind = self.words()
+                        location = None
+                        if self.current.normalized in _LOCATIONS:
+                            self.preposition(_LOCATIONS)
+                            location = self.words()
+                        declarations.append(Declaration(name, kind, self.finish(start), location))
+        return Program(tuple(declarations), tuple(relations), tuple(properties), tuple(assignments))
 
 
-def parse(text: str, source: str = "<memoria>") -> Program:
-    return _Parser(tokenize(text, source)).program()
+def parse(
+    text: str, source: str = "<memoria>", *, verbs: Mapping[str, str] | None = None
+) -> Program:
+    if verbs and any(verb in _RESERVED or not verb.isalpha() for verb in verbs):
+        raise ValueError("Un verbo registrato collide con una parola riservata.")
+    return _Parser(tokenize(text, source), verbs or {}).program()

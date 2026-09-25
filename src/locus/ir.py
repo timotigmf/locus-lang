@@ -2,7 +2,9 @@
 
 from dataclasses import dataclass
 
-IR_VERSION = 2
+from locus.schema import PropertySpec, Value
+
+IR_VERSION = 3
 
 
 @dataclass(frozen=True, slots=True)
@@ -20,7 +22,16 @@ class RelationIR:
 
 
 @dataclass(frozen=True, slots=True)
+class PropertyIR:
+    entity_id: str
+    property_id: str
+    value: Value
+
+
+@dataclass(frozen=True, slots=True)
 class ProgramIR:
     version: int
     entities: tuple[EntityIR, ...]
     relations: tuple[RelationIR, ...] = ()
+    property_specs: tuple[PropertySpec, ...] = ()
+    properties: tuple[PropertyIR, ...] = ()

@@ -1,6 +1,6 @@
 # Architettura tecnica
 
-Stato: progetto della piattaforma; implementazione attuale: primo milestone giocabile (M1).
+Stato: progetto della piattaforma; implementazione attuale: milestone M2, proprietà e mondo narrativo.
 Le decisioni strutturali sono motivate negli [ADR](docs/adr/README.md).
 
 ## Pipeline e dipendenze
@@ -27,7 +27,7 @@ Un test compila tipi e relazioni non narrativi per verificare concretamente l'in
 | lexer | token, originale, posizione; nessuna risoluzione di nomi | implementato |
 | parser autore | grammatica → AST immutabile | dichiarazioni e relazioni |
 | semantica | nomi canonici, tipi noti, duplicati, ID risolti | implementato |
-| IR | programma immutabile senza articoli o sintassi | schema sperimentale 2 |
+| IR | programma immutabile senza articoli o sintassi | schema sperimentale 3 |
 | mondo | istanze indipendenti dai nodi AST | istanziazione minima |
 | regole | ordinamento, condizioni, esiti, tracing | solo progetto |
 | runtime | transizioni, eventi e servizi deterministici | transizioni IF nella stdlib |
@@ -126,3 +126,26 @@ interna dei file sono sostituibili. Nessuna promessa di compatibilità prima di
 una release stabile; le modifiche semantiche vanno comunque documentate e testate.
 
 [Struttura completa proposta](docs/architettura/repository.md).
+
+## Implementazione M2 (sostituisce il modello di posizione M1)
+
+`schema.PropertySpec` definisce dominio, proprietari ammessi, default e scelte;
+`RelationSpec` accetta insiemi di tipi, vincolo aciclico e verbo facoltativo.
+Il compilatore raccoglie entità e proprietà, risolve relazioni, verifica grafi e
+valori; non importa la stdlib. `ProgramIR` versione 3 contiene schemi e valori.
+
+`stdlib.authoring.compile_story` compone parsing, analisi e validazione narrativa.
+`stdlib.validation` verifica la topologia delle porte; `graph.cycle_node` resta
+una funzione generica senza dominio. `runtime.instantiate` valida gli ID e i
+valori IR ma non sostituisce un loader per JSON non fidato.
+
+Una sessione mantiene un World immutabile corrente: le transizioni ne creano
+una nuova versione quando cambiano proprietà o containment. L'inventario contiene
+solo oggetti direttamente posseduti; figli dei contenitori seguono la posizione
+dei genitori. Nessun oggetto può risultare insieme contenuto e nell'inventario.
+Raggiungibilità e possesso sono controlli distinti. La libreria verifica invarianti
+dopo ogni transizione riuscita; un fallimento restituisce la sessione originale.
+
+Il parser giocatore resta distinto dal lexer autore, incluse le sue virgolette.
+I verbi apri/chiudi/metti/blocca sono azioni della stdlib, non codice eseguito dal
+parser. Si consulti l'[ADR 0005](docs/adr/0005-proprieta-e-mondo.md) per le alternative.

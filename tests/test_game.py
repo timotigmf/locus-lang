@@ -81,7 +81,9 @@ def test_complete_solution_transcript_and_replay() -> None:
         assert initial.inventory == ()
         assert session.inventory == ("e3",)
         assert session.room_id == initial.room_id
-        assert session.world is initial.world
+        assert session.world is not initial.world
+        assert len(initial.world.relations) == 3
+        assert len(session.world.relations) == 2
 
 
 def test_absent_and_unreachable_objects_do_not_change_state() -> None:

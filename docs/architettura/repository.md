@@ -9,8 +9,8 @@ CONTRIBUTING.md AGENTS.md pyproject.toml
 .github/workflows/ci.yml
 src/locus/
   __init__.py __main__.py cli.py
-  diagnostics.py lexer.py parser.py ast.py compiler.py ir.py runtime.py schema.py player.py
-  stdlib/__init__.py game.py render.py
+  diagnostics.py lexer.py parser.py ast.py compiler.py ir.py runtime.py schema.py player.py graph.py
+  stdlib/__init__.py game.py render.py authoring.py validation.py
   frontend/                 [futuro: migrazione di lexer/parser, non duplicazione]
   semantic/                 [futuro: simboli, tipi, lowering]
   world/                    [futuro: schemi, proprietà, relazioni, invarianti]

@@ -4,8 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from locus.compiler import compile_source
-from locus.stdlib import default_kinds, default_relations
+from locus.stdlib.authoring import compile_story
 
 ROOT = Path(__file__).resolve().parents[1]
 MARKDOWN = sorted(ROOT.glob("*.md")) + sorted((ROOT / "docs").rglob("*.md"))
@@ -20,14 +19,12 @@ EXAMPLES = [
 
 @pytest.mark.parametrize(("source", "path"), EXAMPLES)
 def test_documentation_examples(source: str, path: str) -> None:
-    compile_source(source, default_kinds(), path, relations=default_relations())
+    compile_story(source, path)
 
 
 @pytest.mark.parametrize("path", sorted((ROOT / "examples").glob("*.locus")))
 def test_example_files(path: Path) -> None:
-    compile_source(
-        path.read_text(encoding="utf-8"), default_kinds(), str(path), relations=default_relations()
-    )
+    compile_story(path.read_text(encoding="utf-8"), str(path))
 
 
 @pytest.mark.parametrize(

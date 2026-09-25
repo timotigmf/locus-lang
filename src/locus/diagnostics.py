@@ -6,7 +6,7 @@ from dataclasses import dataclass
 
 def canonical(text: str) -> str:
     """Normalizza per confronto, senza alterare il sorgente originale."""
-    return " ".join(unicodedata.normalize("NFC", text).casefold().split())
+    return " ".join(unicodedata.normalize("NFC", text).casefold().replace("’", "'").split())
 
 
 @dataclass(frozen=True, slots=True)

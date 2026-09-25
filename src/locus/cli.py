@@ -7,12 +7,13 @@ from dataclasses import asdict
 from pathlib import Path
 from typing import Never
 
-from locus.compiler import compile_source
+from locus.compiler import relation_verbs
 from locus.diagnostics import CompileError
 from locus.parser import parse
 from locus.player import Intent, parse_command
 from locus.runtime import instantiate
-from locus.stdlib import default_kinds, default_relations
+from locus.stdlib import default_relations
+from locus.stdlib.authoring import compile_story
 from locus.stdlib.game import start, step
 from locus.stdlib.render import render
 
@@ -37,11 +38,15 @@ def main(argv: list[str] | None = None) -> int:
         with args.file.open(encoding="utf-8", newline="") as source_file:
             text = source_file.read()
         if args.command == "ast":
-            print(json.dumps(asdict(parse(text, str(args.file))), ensure_ascii=False, indent=2))
-        else:
-            program = compile_source(
-                text, default_kinds(), str(args.file), relations=default_relations()
+            print(
+                json.dumps(
+                    asdict(parse(text, str(args.file), verbs=relation_verbs(default_relations()))),
+                    ensure_ascii=False,
+                    indent=2,
+                )
             )
+        else:
+            program = compile_story(text, str(args.file))
             if args.command == "gioca":
                 session = start(instantiate(program))
                 print(render(step(session, Intent("look"))))

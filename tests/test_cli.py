@@ -139,3 +139,33 @@ def test_game_eof(tmp_path: Path) -> None:
     )
     assert result.returncode == 0
     assert result.stdout == "A\nVedi: nessun oggetto.\n"
+
+
+def test_m2_cli_solution_outside_checkout(tmp_path: Path) -> None:
+    example = Path(__file__).resolve().parents[1] / "examples" / "porte_e_contenitori.locus"
+    result = subprocess.run(
+        [sys.executable, "-m", "locus", "gioca", str(example)],
+        cwd=tmp_path,
+        input=(
+            "apri scrigno\nprendi chiave di ottone\n"
+            "apri porta rossa con chiave di ottone\nnord\nesci\n"
+        ),
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        env={**os.environ, "PYTHONUTF8": "1"},
+        check=False,
+    )
+    assert result.returncode == 0
+    assert not result.stderr
+    assert "Hai aperto: porta rossa." in result.stdout
+    assert "Corridoio\n" in result.stdout
+
+
+def test_cli_reports_narrative_validation_error(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    source = tmp_path / "porta.locus"
+    source.write_text("La Sala è una stanza. La porta è una porta.", encoding="utf-8")
+    assert main(["controlla", str(source)]) == 1
+    assert "E201" in capsys.readouterr().err

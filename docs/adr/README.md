@@ -6,5 +6,7 @@
 
 - [0004 — milestone 1](0004-milestone-1.md): relazioni generiche, sessioni e intenti.
 
+- [0005 — proprietà e mondo M2](0005-proprieta-e-mondo.md): tipi di valore, accessibilità e invarianti.
+
 Ogni ADR include contesto, alternative, conseguenze e criterio di revisione.
 Le fonti e le licenze sono nel [registro](../architettura/fonti.md).

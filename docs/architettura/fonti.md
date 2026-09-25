@@ -19,3 +19,11 @@ Il confronto è architetturale, non una misurazione prestazionale.
 
 CI: label e architetture verificate nel [registro ufficiale dei runner GitHub](https://github.com/actions/runner-images).
 `macos-15` indica ARM64; `macos-15-intel` indica x64. Nessun codice riusato.
+
+## Studio M2 dei riferimenti IF
+
+Consultate licenze e sezioni mirate di Favella 1, Dialog e Inform 7:
+[revisione, file, licenze e idee ricavate](confronto-linguaggi.md).
+Lo studio sostituisce la precedente nota «Inform non esaminato» limitatamente
+al README e all'organizzazione dei moduli. Non è un audit completo del codice.
+Codice riutilizzato: nessuno, per tutti e tre i progetti.

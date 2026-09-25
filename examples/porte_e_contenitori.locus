@@ -1,0 +1,21 @@
+La Cucina è una stanza.
+Il Corridoio è una stanza.
+Il Corridoio è a nord della Cucina.
+
+La Cucina ha descrizione "Una cucina silenziosa. Uno scrigno custodisce una chiave.".
+Lo scrigno è un contenitore nella Cucina.
+Lo scrigno ha descrizione "Un piccolo scrigno di legno.".
+La chiave di ottone è una chiave nello scrigno.
+La chiave di ferro è una chiave nella Cucina.
+
+La porta rossa è una porta.
+La porta rossa collega la Cucina al Corridoio.
+La porta rossa ha stato "bloccato".
+La chiave di ottone apre la porta rossa.
+
+La massa è una proprietà numerica.
+La preziosa è una proprietà logica.
+La nota è una proprietà testuale.
+La chiave di ottone ha massa 2.
+La chiave di ottone ha preziosa vero.
+La chiave di ottone ha nota "Apre la porta rossa.".

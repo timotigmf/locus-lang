@@ -35,3 +35,13 @@ inesistente lascia invariata la posizione. Oggetti in un'altra stanza non sono
 raggiungibili. Gli oggetti privi di collocazione compilano ma non sono visibili.
 `locus ast` e `locus ir` consentono di ispezionare la compilazione.
 Il transcript di soluzione è verificato automaticamente da test di sessione e CLI.
+
+## Porte e contenitori
+
+Avviare `locus gioca examples/porte_e_contenitori.locus`. Lo scrigno è chiuso:
+aprirlo rende accessibile la chiave. Dopo averla presa, `apri porta rossa con
+chiave di ottone` permette di andare a nord. La chiave di ferro non apre quella
+porta. `esamina scrigno` mostra descrizione, stato e contenuto accessibile.
+
+`metti chiave di ottone nello scrigno` richiede lo scrigno aperto; chiuderlo rende
+la chiave inaccessibile. Vedi [sintassi e limiti M2](../linguaggio/milestone-2.md).

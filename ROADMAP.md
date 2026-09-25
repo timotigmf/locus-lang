@@ -15,7 +15,7 @@ ad hoc. Accettazione: transcript da Cucina a Corridoio e ritorno, presa una sola
 volta, inventario corretto, direzione impossibile e oggetti assenti diagnosticati;
 IR priva di stringhe da reinterpretare. Test non-IF preservati.
 
-## M2 — oggetti e azioni parametrizzate
+## M2 — implementato in 0.2.0a1
 
 Schemi di proprietà, porte, chiavi, contenitori, stati aperto/chiuso, oggetto
 diretto e indiretto. Accettazione: chiave errata, contenitore chiuso, doppie
@@ -41,8 +41,8 @@ solo come produttore di candidati; nessuna dipendenza del nucleo.
 
 ## Prossimi cinque task
 
-1. Integrare M1 dopo revisione e CI, confermando la sintassi di avvio esplicito.
-2. Specificare proprietà tipate e invarianti di containment per M2.
-3. Modellare contenitori aperti/chiusi con test sulle transizioni.
-4. Introdurre porte, chiavi e intenti con oggetto diretto/indiretto.
-5. Progettare ordine, esiti ed effetti del rule engine M3 in un ADR dedicato.
+1. Definire esiti, priorità ed effetti delle regole M3 con esempi di conformità.
+2. Confrontare l'attuale parser con Lark su corpus di regole/espressioni prima di ampliarli.
+3. Introdurre espressioni e condizioni tipate, senza coercizioni implicite.
+4. Implementare rulebook e tracing deterministici mantenendo i transcript M1/M2.
+5. Specificare tipi autore/moduli e avvio esplicito prima di ampliare gli ambiti narrativi.

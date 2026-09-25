@@ -37,3 +37,5 @@ jobs:
           cd "$RUNNER_TEMP"
           locus controlla "$GITHUB_WORKSPACE/examples/dichiarazioni.locus"
           locus gioca "$GITHUB_WORKSPACE/examples/prima_storia.locus" < /dev/null
+          locus controlla "$GITHUB_WORKSPACE/examples/porte_e_contenitori.locus"
+          locus gioca "$GITHUB_WORKSPACE/examples/porte_e_contenitori.locus" < /dev/null

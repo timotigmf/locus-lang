@@ -12,7 +12,8 @@ Determinismo: compilazioni ripetute e indipendenza delle istanze. Packaging:
 build wheel/sdist e comando installato fuori dal repository.
 
 M1 include transcript di soluzioni, errori del giocatore e invarianti di
-posizione; M2 test generativi per grafi e containment; M3 trace ed esiti dei
+posizione. M2 aggiunge proprietà tipate, grafi profondi, contenitori annidati,
+porte, chiavi, citazioni nei nomi e regressioni sulle transizioni. M3 aggiungerà trace ed esiti dei
 rulebook, replay e budget eventi. Non imporre una percentuale di coverage come
 sostituto dei casi semantici. Aggiungere benchmark solo con carichi significativi.
 

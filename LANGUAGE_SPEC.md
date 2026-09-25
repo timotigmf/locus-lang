@@ -1,5 +1,12 @@
 # Linguaggio 0.1 — sottoinsieme eseguibile M1
 
+## Stato attuale
+
+Versione `0.2.0a1`: M2 estende e, dove indicato, sostituisce i limiti M1 sotto.
+La [specifica M2](docs/linguaggio/milestone-2.md) è normativa per proprietà,
+stringhe, nomi quotati, preposizioni, contenitori, porte e chiavi. IR versione 3.
+Le sezioni S0/S1 seguenti descrivono il nucleo storico, non l'intera versione.
+
 ## Dichiarazioni (S0, mantenute in 0.1.0a2)
 
 ```ebnf
@@ -99,3 +106,11 @@ Compilare un mondo senza stanze è valido; `gioca` richiede almeno una stanza.
 L'IR ha versione 2; versione 1 non accettata dal runtime. Nessun formato persistente
 stabile. Gli ID dipendono dall'ordine delle dichiarazioni, non dall'ordine delle
 relazioni; l'ordine di queste nell'IR segue le asserzioni sorgente e gli inversi.
+
+## Diagnostica aggiunta in M2
+
+E003 stringa/escape non valido; E004 intero troppo lungo; E108 ciclo di relazione;
+E109 proprietà duplicata; E110 proprietà sconosciuta; E111 valore o destinatario
+incompatibile; E112 assegnazione ripetuta; E201 vincolo narrativo (porta) non valido.
+E201 punta alla dichiarazione della porta; gli altri errori conservano lo span
+dell'istruzione interessata. Cataloghi API malformati producono ValueError.
