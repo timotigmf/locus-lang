@@ -1,12 +1,12 @@
 # Roadmap verificabile
 
-## S0 — questa sessione
+## S0 — completato
 
 Documenti fondanti, ADR, packaging, strumenti, CI e una pipeline per dichiarazioni.
 Criterio: da una frase a token/AST/IR/mondo, errori italiani e test indipendenti
 dal dominio. Nessun comando di gioco, motore di regole o editor.
 
-## M1 — prima storia giocabile (versione 0.1)
+## M1 — implementato in 0.1.0a2, verifica CI remota separata
 
 Dichiarazioni, riferimenti in avanti, containment, nord/sud e inversioni esplicite.
 Parser giocatore separato con guarda/prendi/inventario/nord/sud. Runtime di
@@ -41,8 +41,8 @@ solo come produttore di candidati; nessuna dipendenza del nucleo.
 
 ## Prossimi cinque task
 
-1. Precisare AST/IR delle relazioni S1 e i conflitti fra nomi e delimitatori.
-2. Implementare risoluzione in due passaggi, riferimenti in avanti e relative diagnosi.
-3. Implementare relazioni del mondo con vincoli e policy nord/sud nella stdlib.
-4. Introdurre intenti del giocatore e transizioni M1 con transcript di accettazione.
-5. Completare CLI `gioca`, esempi eseguibili e verifiche dei pacchetti sui quattro sistemi.
+1. Integrare M1 dopo revisione e CI, confermando la sintassi di avvio esplicito.
+2. Specificare proprietà tipate e invarianti di containment per M2.
+3. Modellare contenitori aperti/chiusi con test sulle transizioni.
+4. Introdurre porte, chiavi e intenti con oggetto diretto/indiretto.
+5. Progettare ordine, esiti ed effetti del rule engine M3 in un ADR dedicato.

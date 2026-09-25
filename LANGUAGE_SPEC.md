@@ -1,6 +1,6 @@
-# Linguaggio 0.1 — bozza e sottoinsieme eseguibile
+# Linguaggio 0.1 — sottoinsieme eseguibile M1
 
-## S0: grammatica implementata in 0.1.0a1
+## Dichiarazioni (S0, mantenute in 0.1.0a2)
 
 ```ebnf
 programma      = { dichiarazione } EOF ;
@@ -11,7 +11,7 @@ nome           = parola { parola } ;
 nome_tipo      = parola { parola } ;
 ```
 
-Keyword senza distinzione di maiuscole. `è` è riservato e termina il nome.
+Keyword senza distinzione di maiuscole. `è`, `nella` e `della` sono riservate e delimitano i nomi.
 `parola` inizia con una lettera Unicode e continua con lettere o segni combinanti;
 apostrofi ASCII/tipografici sono token distinti e ammessi solo negli articoli.
 Nomi composti come `chiave di ottone` sono ammessi; `sala d'armi`, numeri, trattini,
@@ -34,13 +34,13 @@ Il Corridoio è una stanza.
 La chiave di ottone è una cosa.
 ```
 
-## S1: grammatica minima proposta per il primo milestone (NON implementata)
+## Relazioni S1: implementate in 0.1.0a2
 
 ```ebnf
 istruzione = dichiarazione | posizione_iniziale | collegamento ;
 posizione_iniziale = articolo nome "è" indefinito nome_tipo "nella" nome "." ;
-collegamento = articolo nome "è" "a" direzione "della" nome "." ;
-direzione = "nord" | "sud" ;
+collegamento = articolo nome "è" "a" predicato "della" nome "." ;
+predicato = parola { parola } ;
 ```
 
 In S1 `nella` e `della` delimitano i nomi nei rispettivi contesti. Prima di
@@ -48,14 +48,14 @@ estendere a tutti gli articoli articolati, introdurre una produzione di sintagma
 nominale con test sulle collisioni; non una catena di sostituzioni. La possibilità
 di nomi quotati è aperta per evitare parole riservate ambigue.
 
-```ita-proposta
+```locus
 La Cucina è una stanza.
 Il Corridoio è una stanza.
 Il Corridoio è a nord della Cucina.
 La chiave è una cosa nella Cucina.
 ```
 
-Semantica proposta: riferimenti in avanti permessi; collegamenti solo fra stanze;
+Semantica implementata: riferimenti in avanti permessi; collegamenti solo fra stanze;
 reciproco sud generato dalla stdlib, conflitti diagnosticati; cosa contenuta in una
 stanza; prima stanza dichiarata come inizio M1, da sostituire con una dichiarazione
 esplicita prima di pubblicare il linguaggio. Nessuna creazione implicita del
@@ -63,17 +63,39 @@ Corridoio dal solo collegamento: l'esempio orientativo della visione va reso
 esplicito per evitare errori di battitura che creano oggetti.
 
 Comandi giocatore M1: `guarda`, `prendi [la] chiave`, `inventario`, `nord`, `sud`.
-Il parser giocatore produrrà intenzioni tipate, senza riusare questa grammatica.
-Ambiguità, oggetto assente e uscita assente dovranno essere esiti distinti.
+Il parser giocatore produce intenzioni tipate senza riusare questa grammatica.
+Ambiguità, oggetto assente, oggetto già posseduto e uscita assente sono esiti distinti.
+`esci` termina la sessione. Maiuscole e spazi sono normalizzati; nomi esatti,
+nessuna abbreviazione, clitico o pronome. Gli articoli iniziali di `prendi` sono opzionali.
 
-## Diagnostica S0
+## Diagnostica M1
 
 Codici stabili, messaggi italiani, sorgente/riga/colonna; arresto al primo errore.
 `E001` carattere non ammesso; `E002` costruzione inattesa/incompleta;
-`E101` nome duplicato; `E102` tipo sconosciuto. Errori di catalogo sono errori API
+`E101` nome duplicato; `E102` tipo sconosciuto; `E103` entità non dichiarata;
+`E104` relazione sconosciuta; `E105` tipi incompatibili; `E106` destinazioni in
+conflitto; `E107` relazione riflessiva vietata. Errori di catalogo sono errori API
 (`ValueError`), non del sorgente. La CLI distingue uso scorretto (2),
 compilazione/lettura fallita (1), successo (0).
 
 Regole, verbi definiti dall'autore, proprietà, liste, tabelle, enumerazioni,
 funzioni, costanti e moduli non appartengono a S0/S1. La loro grammatica richiederà
 specifiche incrementali e casi negativi prima dell'implementazione.
+
+## Contratto delle relazioni
+
+Il parser riconosce predicati generici; la stdlib M1 registra soltanto `nord`,
+`sud` e `nella`. Senza uno schema la relazione è errore E104. Tipi di estremità,
+inversi e orientamento sono definiti dal catalogo passato al compilatore.
+
+Ogni predicato ha al massimo una destinazione per soggetto. Ripetere lo stesso
+collegamento è idempotente; dichiarare inversi coerenti è valido; due uscite
+in conflitto, anche generate da inversi, sono rifiutate. Auto-collegamenti vietati.
+`cosa nella stanza` non permette contenitori annidati: cicli di containment non
+sono rappresentabili con i tipi M1. Oggetti non collocati compilano ma non sono
+raggiungibili. Dopo `prendi`, l'oggetto è nell'inventario e non più nella stanza.
+Compilare un mondo senza stanze è valido; `gioca` richiede almeno una stanza.
+
+L'IR ha versione 2; versione 1 non accettata dal runtime. Nessun formato persistente
+stabile. Gli ID dipendono dall'ordine delle dichiarazioni, non dall'ordine delle
+relazioni; l'ordine di queste nell'IR segue le asserzioni sorgente e gli inversi.

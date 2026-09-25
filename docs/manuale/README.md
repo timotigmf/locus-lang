@@ -1,15 +1,37 @@
-# Primo programma
+# Prima storia giocabile
 
-Salvare in UTF-8 senza BOM un file `.locus`:
+Salvare come `storia.locus` in UTF-8 senza BOM:
 
-```ita
+```locus
 La Cucina è una stanza.
 Il Corridoio è una stanza.
-La chiave è una cosa.
+Il Corridoio è a nord della Cucina.
+La chiave è una cosa nella Cucina.
 ```
 
-`locus controlla file.locus` conferma tre entità. `locus ast file.locus` mostra
-nomi e posizioni; `locus ir file.locus` mostra ID e tipi risolti. La chiave non è
-ancora collocata nella Cucina: le posizioni arriveranno in M1. Lo skeleton non
-permette di giocare. Un nome duplicato o un tipo sconosciuto produce un errore
-con nome del file, riga, colonna e codice.
+Eseguire `locus gioca storia.locus`. Una copia è in `examples/prima_storia.locus`.
+La prima stanza dichiarata è l'inizio; la posizione nord genera automaticamente
+l'uscita sud nel senso opposto. Nomi e riferimenti possono precedere le dichiarazioni.
+
+```text
+Cucina
+Vedi: chiave.
+> prendi la chiave
+Hai preso: chiave.
+> inventario
+Inventario: chiave.
+> nord
+Corridoio
+Vedi: nessun oggetto.
+> sud
+Cucina
+Vedi: nessun oggetto.
+> esci
+A presto.
+```
+
+`guarda` ripete la descrizione; prendere due volte non duplica l'oggetto; un'uscita
+inesistente lascia invariata la posizione. Oggetti in un'altra stanza non sono
+raggiungibili. Gli oggetti privi di collocazione compilano ma non sono visibili.
+`locus ast` e `locus ir` consentono di ispezionare la compilazione.
+Il transcript di soluzione è verificato automaticamente da test di sessione e CLI.

@@ -46,7 +46,7 @@ def test_missing_file(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> Non
     assert "Impossibile leggere" in capsys.readouterr().err
 
 
-@pytest.mark.parametrize("args", [[], ["gioca", "x"], ["controlla"], ["ir", "x", "y"]])
+@pytest.mark.parametrize("args", [[], ["sconosciuto", "x"], ["controlla"], ["ir", "x", "y"]])
 def test_usage_errors(args: list[str], capsys: pytest.CaptureFixture[str]) -> None:
     with pytest.raises(SystemExit) as error:
         main(args)
@@ -83,3 +83,59 @@ def test_ast_offsets_preserve_crlf(tmp_path: Path, capsys: pytest.CaptureFixture
     span = json.loads(capsys.readouterr().out)["declarations"][1]["span"]
     assert span["start"] == text.index("La B")
     assert span["line"] == 2
+
+
+def test_game_cli_transcript(tmp_path: Path) -> None:
+    source = tmp_path / "storia.locus"
+    source.write_text(
+        "La Cucina è una stanza. Il Corridoio è una stanza. "
+        "Il Corridoio è a nord della Cucina. La chiave è una cosa nella Cucina.",
+        encoding="utf-8",
+    )
+    result = subprocess.run(
+        [sys.executable, "-m", "locus", "gioca", str(source)],
+        input="prendi la chiave\ninventario\nnord\nsud\nesci\n",
+        cwd=tmp_path,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        env={**os.environ, "PYTHONUTF8": "1"},
+        check=False,
+    )
+    assert result.returncode == 0
+    assert not result.stderr
+    assert result.stdout.splitlines() == [
+        "Cucina",
+        "Vedi: chiave.",
+        "Hai preso: chiave.",
+        "Inventario: chiave.",
+        "Corridoio",
+        "Vedi: nessun oggetto.",
+        "Cucina",
+        "Vedi: nessun oggetto.",
+        "A presto.",
+    ]
+
+
+def test_game_without_rooms(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    source = tmp_path / "vuoto.locus"
+    source.write_text("", encoding="utf-8")
+    assert main(["gioca", str(source)]) == 1
+    assert "almeno una stanza" in capsys.readouterr().err
+
+
+def test_game_eof(tmp_path: Path) -> None:
+    source = tmp_path / "storia.locus"
+    source.write_text("La A è una stanza.", encoding="utf-8")
+    result = subprocess.run(
+        [sys.executable, "-m", "locus", "gioca", str(source)],
+        input="",
+        cwd=tmp_path,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        env={**os.environ, "PYTHONUTF8": "1"},
+        check=False,
+    )
+    assert result.returncode == 0
+    assert result.stdout == "A\nVedi: nessun oggetto.\n"

@@ -1,6 +1,6 @@
 # Architettura tecnica
 
-Stato: progetto della piattaforma; implementazione attuale limitata alle dichiarazioni.
+Stato: progetto della piattaforma; implementazione attuale: primo milestone giocabile (M1).
 Le decisioni strutturali sono motivate negli [ADR](docs/adr/README.md).
 
 ## Pipeline e dipendenze
@@ -15,30 +15,30 @@ frontend → parser giocatore → intento → dispatcher → runtime / regole
                                                   eventi → renderer
 ```
 
-La CLI è il punto di composizione: seleziona la stdlib e passa il catalogo dei tipi
+La CLI è il punto di composizione: seleziona la stdlib e passa i cataloghi di tipi e relazioni
 al compilatore. Il compilatore non importa la stdlib né il runtime. Il runtime
 importa esclusivamente il contratto IR e i suoi modelli, mai il parser o l'AST.
-La stdlib oggi fornisce solo `stanza` e `cosa`, senza ereditarietà. Un test compila
-un tipo non narrativo per verificare concretamente l'indipendenza del core.
+La stdlib fornisce `stanza`, `cosa`, containment e nord/sud, senza ereditarietà.
+Un test compila tipi e relazioni non narrativi per verificare concretamente l'indipendenza del core.
 
 | Livello | Responsabilità e contratto | Stato |
 | --- | --- | --- |
 | source / diagnostica | file, intervallo, codice stabile, testo italiano | implementato |
 | lexer | token, originale, posizione; nessuna risoluzione di nomi | implementato |
-| parser autore | grammatica → AST immutabile | sole dichiarazioni |
+| parser autore | grammatica → AST immutabile | dichiarazioni e relazioni |
 | semantica | nomi canonici, tipi noti, duplicati, ID risolti | implementato |
-| IR | programma immutabile senza articoli o sintassi | schema sperimentale 1 |
+| IR | programma immutabile senza articoli o sintassi | schema sperimentale 2 |
 | mondo | istanze indipendenti dai nodi AST | istanziazione minima |
 | regole | ordinamento, condizioni, esiti, tracing | solo progetto |
-| runtime | transizioni, eventi e servizi deterministici | inizializzazione minima |
-| parser giocatore | testo → intenzioni/candidati | futuro M1 |
-| stdlib | tipi, relazioni, azioni, lessico del dominio | due tipi in Python |
-| strumenti | CLI, dump, diagnostica | quattro comandi |
+| runtime | transizioni, eventi e servizi deterministici | transizioni IF nella stdlib |
+| parser giocatore | testo → intenzioni/candidati | comandi M1 separati |
+| stdlib | tipi, relazioni, azioni, lessico del dominio | tipi, schemi, sessione e renderer |
+| strumenti | CLI, dump, diagnostica | cinque comandi, incluso gioca |
 
 ## AST e modello semantico iniziali
 
-`Program(declarations: tuple[Declaration, ...])` contiene
-`Declaration(name, kind, span)`. I nomi mantengono grafia e parole; l'AST non
+`Program(declarations, relations)` contiene `Declaration(name, kind, span, location)`
+e `Relation(subject, predicate, target, span)`. I nomi mantengono grafia e parole; l'AST non
 contiene oggetti runtime. `Span(source, start, end, line, column)` usa offset
 Unicode originali, fine esclusiva e riga/colonna da 1. Tab = un carattere, non
 una colonna visiva. L'intervallo della dichiarazione include il punto.
@@ -49,14 +49,15 @@ sono confrontati dopo NFC, casefold e collasso degli spazi. Due dichiarazioni
 omonime sono errore, anche se identiche: una dichiarazione non è un'affermazione
 idempotente. Futuri scope/moduli qualificati risolveranno gli omonimi.
 
-Lo skeleton fonde analisi e lowering in una funzione piccola: tabella simboli
-locale, validazione e produzione IR. Non crea un secondo albero semantico vuoto.
-Quando arrivano riferimenti, serviranno due passaggi: raccolta dichiarazioni,
-poi risoluzione e verifica delle relazioni, inclusi riferimenti in avanti.
+La semantica risolve in due passaggi: prima entità e tipi, poi relazioni e
+riferimenti in avanti. Il catalogo `RelationSpec` definisce tipi agli estremi,
+orientamento e inversi. Nessuna conoscenza di stanze o direzioni nel compilatore.
+Conflitti funzionali, auto-collegamenti e riferimenti non risolti sono diagnosticati.
 
-`ProgramIR(version, entities)` contiene `EntityIR(id, label, type_id)`; ID ordinali
-riproducibili per lo stesso sorgente, non persistenti fra modifiche. Nessuna
-serializzazione di oggetti Python o codice eseguibile. Il JSON è solo un dump.
+`ProgramIR(version, entities, relations)` contiene `EntityIR(id, label, type_id)`
+e `RelationIR(source_id, predicate_id, target_id)`; ID ordinali riproducibili per
+lo stesso sorgente, non persistenti fra modifiche. Nessuna serializzazione di
+oggetti Python o codice eseguibile. Il JSON è solo un dump.
 Source map separata e loader validante sono rinviati: non congelare un ABI ora.
 
 ## Mondo e runtime previsti
@@ -67,12 +68,16 @@ relazione aciclica con destinazione unica. Stanze, porte, regioni e direzioni
 saranno vocabolario e vincoli della stdlib. Ereditarietà singola iniziale proposta;
 tratti e composizione da valutare prima di ereditarietà multipla.
 
-Lo skeleton `World(entities)` è uno snapshot immutabile iniziale. Il runtime non
-esegue azioni. M1 introdurrà stato di sessione separato dal programma, giocatore
-interno non confondibile con un oggetto, transizioni esplicite e output strutturato.
-Nessun print nel core. Il parser giocatore riceverà lessico e una vista degli
-oggetti visibili; emetterà intento, ambiguità o errore. Il dispatcher controllerà
-raggiungibilità e permessi: il parsing di un nome non autorizza un'azione.
+`World(entities, relations)` è uno snapshot immutabile iniziale. `stdlib.game`
+implementa `Session(world, room_id, inventory)` e transizioni pure da intenti a
+`Transition(session, event)`. `stdlib.render` traduce gli eventi in testo italiano.
+Il giocatore è stato di sessione distinto dalle entità. La presa sposta logicamente
+una cosa dalla sua collocazione iniziale all'inventario; l'IR non viene mutata.
+
+Nessun print nel core. `player.parse_command` produce intenti senza usare lexer
+o parser autore; la sessione controlla visibilità, tipo e possesso prima di una
+transizione. Nessun rule engine M3: le azioni M1 restano esplicite e sostituibili.
+Dettagli e limiti nell'[ADR 0004](docs/adr/0004-milestone-1.md).
 
 Per replay: input semantici, seme casuale, clock logico, versione programma e
 ordine eventi; niente clock reale o casualità globale nel core. Salvataggi

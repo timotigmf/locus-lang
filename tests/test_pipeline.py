@@ -4,7 +4,7 @@ import pytest
 
 from locus.compiler import compile_source
 from locus.diagnostics import CompileError
-from locus.ir import EntityIR, ProgramIR
+from locus.ir import IR_VERSION, EntityIR, ProgramIR
 from locus.runtime import instantiate
 from locus.stdlib import default_kinds
 
@@ -72,7 +72,7 @@ def test_runtime_rejects_unknown_version_and_duplicate_ids() -> None:
         instantiate(ProgramIR(999, ()))
     duplicate = EntityIR("e1", "A", "x")
     with pytest.raises(ValueError, match="duplicati"):
-        instantiate(ProgramIR(1, (duplicate, duplicate)))
+        instantiate(ProgramIR(IR_VERSION, (duplicate, duplicate)))
 
 
 def test_compound_type_name() -> None:

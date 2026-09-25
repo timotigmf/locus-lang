@@ -7,3 +7,5 @@
 - [Cookbook](cookbook/README.md): catalogo estraneo alla IF.
 - [Contributori](contributori/README.md): strategia di test.
 - [ADR](adr/README.md) e [fonti](architettura/fonti.md).
+
+- [Rapporto M1](rapporto-milestone-1.md): funzionalità, verifiche e limiti.

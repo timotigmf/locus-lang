@@ -1,8 +1,10 @@
 """Parser autore sostituibile dietro il contratto Program."""
 
-from locus.ast import Declaration, Program
+from locus.ast import Declaration, Program, Relation
 from locus.diagnostics import CompileError, Span
 from locus.lexer import Token, tokenize
+
+_RESERVED = {"è", "nella", "della"}
 
 
 class _Parser:
@@ -18,6 +20,11 @@ class _Parser:
         actual = repr(self.current.text) if self.current.kind != "EOF" else "fine del file"
         raise CompileError("E002", f"Atteso {expected}; trovato {actual}.", self.current.span)
 
+    def keyword(self, word: str) -> None:
+        if self.current.kind != "WORD" or self.current.normalized != word:
+            self.fail(repr(word))
+        self.index += 1
+
     def article(self, definite: bool) -> None:
         allowed = {"il", "lo", "la", "l"} if definite else {"un", "uno", "una"}
         token = self.current
@@ -31,38 +38,45 @@ class _Parser:
         elif not definite and token.normalized == "un" and self.current.kind == "APOSTROPHE":
             self.index += 1
 
-    def words(self, stop_at_copula: bool) -> str:
+    def words(self) -> str:
         words: list[str] = []
-        while self.current.kind == "WORD":
-            if self.current.normalized == "è":
-                break
+        while self.current.kind == "WORD" and self.current.normalized not in _RESERVED:
             words.append(self.current.text)
             self.index += 1
         if not words:
-            self.fail("un nome" if stop_at_copula else "un nome di tipo")
+            self.fail("un nome senza parole riservate")
         return " ".join(words)
+
+    def finish(self, start: Span) -> Span:
+        if self.current.kind != "DOT":
+            self.fail("'.'")
+        span = Span(start.source, start.start, self.current.span.end, start.line, start.column)
+        self.index += 1
+        return span
 
     def program(self) -> Program:
         declarations: list[Declaration] = []
+        relations: list[Relation] = []
         while self.current.kind != "EOF":
             start = self.current.span
             self.article(definite=True)
-            name = self.words(stop_at_copula=True)
-            if self.current.kind != "WORD" or self.current.normalized != "è":
-                self.fail("'è'")
-            self.index += 1
-            self.article(definite=False)
-            kind = self.words(stop_at_copula=False)
-            if self.current.kind != "DOT":
-                self.fail("'.'")
-            end = self.current.span.end
-            self.index += 1
-            declarations.append(
-                Declaration(
-                    name, kind, Span(start.source, start.start, end, start.line, start.column)
-                )
-            )
-        return Program(tuple(declarations))
+            name = self.words()
+            self.keyword("è")
+            if self.current.normalized == "a":
+                self.keyword("a")
+                predicate = self.words()
+                self.keyword("della")
+                target = self.words()
+                relations.append(Relation(name, predicate, target, self.finish(start)))
+            else:
+                self.article(definite=False)
+                kind = self.words()
+                location = None
+                if self.current.normalized == "nella":
+                    self.keyword("nella")
+                    location = self.words()
+                declarations.append(Declaration(name, kind, self.finish(start), location))
+        return Program(tuple(declarations), tuple(relations))
 
 
 def parse(text: str, source: str = "<memoria>") -> Program:

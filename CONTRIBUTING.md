@@ -19,7 +19,7 @@ python -m build
 ```
 
 La CI esegue gli stessi controlli e un test dell'entry point dal wheel installato
-fuori dal checkout. Un test importa e compila ogni blocco `ita` nei Markdown:
+fuori dal checkout. Un test importa e compila ogni blocco `locus` (o `ita` storico) nei Markdown:
 le proposte non eseguibili usano `ita-proposta`. Non segnare come completate
 funzioni soltanto progettate. Il branch principale deve rimanere verificabile.
 

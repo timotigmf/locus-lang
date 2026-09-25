@@ -36,3 +36,4 @@ jobs:
           python -m pip install --no-deps dist/*.whl
           cd "$RUNNER_TEMP"
           locus controlla "$GITHUB_WORKSPACE/examples/dichiarazioni.locus"
+          locus gioca "$GITHUB_WORKSPACE/examples/prima_storia.locus" < /dev/null
