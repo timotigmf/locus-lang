@@ -1,0 +1,8 @@
+# Architecture Decision Records
+
+- [0001 — parser](0001-parser.md): accettato per S0, revisione prima di regole/espressioni.
+- [0002 — IR e separazione di dominio](0002-ir.md): accettato, formato sperimentale.
+- [0003 — Python, CLI e packaging](0003-toolchain.md): accettato per bootstrap.
+
+Ogni ADR include contesto, alternative, conseguenze e criterio di revisione.
+Le fonti e le licenze sono nel [registro](../architettura/fonti.md).
