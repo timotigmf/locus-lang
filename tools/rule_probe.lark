@@ -1,0 +1,25 @@
+start: rule+
+rule: "regola"i STRING "per"i action "nella"i "fase"i PHASE priority? guard? ":" effect+ "fine"i "regola"i "."
+priority: "priorità"i NUMBER
+guard: "quando"i expression
+?expression: conjunction ("o"i conjunction)*
+?conjunction: unary ("e"i unary)*
+?unary: "non"i unary | "(" expression ")" | comparison | BOOLEAN
+comparison: STRING "di"i STRING comparator value
+comparator: "è"i ("maggiore"i "di"i | "minore"i "di"i | "almeno"i | "al"i "massimo"i | "diverso"i "da"i)?
+action: WORD+ STRING? ("con"i STRING)?
+?effect: "dì"i STRING ";"
+       | "imposta"i STRING "di"i STRING "a"i value ";"
+       | "aumenta"i STRING "di"i STRING "di"i NUMBER ";"
+       | "diminuisci"i STRING "di"i STRING "di"i NUMBER ";"
+       | "continua"i ";" | "interrompi"i ";"
+       | "fallisci"i STRING ";" | "sostituisci"i "con"i action ";"
+       | "restituisci"i value ";"
+?value: STRING | NUMBER | BOOLEAN
+PHASE: "prima"i | "invece"i | "verifica"i | "esegui"i | "dopo"i | "descrivi"i
+BOOLEAN: "vero"i | "falso"i
+WORD: /(?!(?i:nella|con)\b)[^\W\d_]+/
+NUMBER: /-?[0-9]{1,1000}/
+STRING: /"([^"\\\r\n]|\\["\\n])*"/
+%import common.WS
+%ignore WS

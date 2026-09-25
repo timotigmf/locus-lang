@@ -3,6 +3,7 @@
 from dataclasses import dataclass
 
 from locus.ir import IR_VERSION, ProgramIR, PropertyIR, RelationIR
+from locus.rule_model import RuleIR
 from locus.schema import PropertySpec
 
 
@@ -19,6 +20,7 @@ class World:
     relations: tuple[RelationIR, ...] = ()
     property_specs: tuple[PropertySpec, ...] = ()
     properties: tuple[PropertyIR, ...] = ()
+    rules: tuple[RuleIR, ...] = ()
 
 
 def instantiate(program: ProgramIR) -> World:
@@ -53,4 +55,5 @@ def instantiate(program: ProgramIR) -> World:
         program.relations,
         program.property_specs,
         program.properties,
+        program.rules,
     )

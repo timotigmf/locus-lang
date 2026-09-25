@@ -21,7 +21,7 @@ Schemi di proprietà, porte, chiavi, contenitori, stati aperto/chiuso, oggetto
 diretto e indiretto. Accettazione: chiave errata, contenitore chiuso, doppie
 posizioni e cicli rifiutati; invarianti del mondo testate su ogni transizione.
 
-## M3 — regole
+## M3 — implementato in 0.3.0a1
 
 ADR su ordine/esiti/effetti, rulebook, condizioni, tracing, sostituzioni limitate.
 Accettazione: ordine stabile, esiti distinti, loop diagnosticati, replay di una
@@ -41,8 +41,8 @@ solo come produttore di candidati; nessuna dipendenza del nucleo.
 
 ## Prossimi cinque task
 
-1. Definire esiti, priorità ed effetti delle regole M3 con esempi di conformità.
-2. Confrontare l'attuale parser con Lark su corpus di regole/espressioni prima di ampliarli.
-3. Introdurre espressioni e condizioni tipate, senza coercizioni implicite.
-4. Implementare rulebook e tracing deterministici mantenendo i transcript M1/M2.
-5. Specificare tipi autore/moduli e avvio esplicito prima di ampliare gli ambiti narrativi.
+1. Specificare tipi autore, moduli e avvio esplicito.
+2. Definire variabili locali e destinatari parametrici delle regole.
+3. Introdurre espressioni aritmetiche e funzioni con firme tipate.
+4. Progettare salvataggi versionati e test di soluzione.
+5. Ampliare vocabolari e disambiguazione del parser giocatore.

@@ -114,3 +114,8 @@ E109 proprietà duplicata; E110 proprietà sconosciuta; E111 valore o destinatar
 incompatibile; E112 assegnazione ripetuta; E201 vincolo narrativo (porta) non valido.
 E201 punta alla dichiarazione della porta; gli altri errori conservano lo span
 dell'istruzione interessata. Cataloghi API malformati producono ValueError.
+
+## Estensione M3
+
+La [specifica normativa M3](docs/linguaggio/milestone-3.md) aggiunge regole, condizioni
+e azioni transazionali. IR corrente: versione 4; le versioni precedenti non sono accettate.

@@ -1,0 +1,23 @@
+La Sala è una stanza.
+La leva è una cosa nella Sala.
+Lo scrigno è un contenitore nella Sala.
+La gemma è una cosa nello scrigno.
+La attiva è una proprietà logica.
+La punti è una proprietà numerica.
+La Sala ha descrizione "Una leva comanda la serratura dello scrigno.".
+
+Regola "serratura" per aprire "scrigno" nella fase verifica
+quando non "attiva" di "leva" è vero:
+    fallisci "La serratura resiste. Esamina la leva.";
+Fine regola.
+
+Regola "aziona la leva" per esaminare "leva" nella fase dopo:
+    imposta "attiva" di "leva" a vero;
+    dì "Muovi la leva: la serratura scatta.";
+Fine regola.
+
+Regola "premio" per prendere "gemma" nella fase dopo
+quando "punti" di "gemma" è 0:
+    aumenta "punti" di "gemma" di 10;
+    dì "Hai trovato la gemma: dieci punti!";
+Fine regola.

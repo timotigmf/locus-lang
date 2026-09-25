@@ -10,3 +10,5 @@
 
 Ogni ADR include contesto, alternative, conseguenze e criterio di revisione.
 Le fonti e le licenze sono nel [registro](../architettura/fonti.md).
+
+- [0006 — regole M3](0006-regole.md): fasi, transazioni, tracing e confronto parser.

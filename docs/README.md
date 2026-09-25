@@ -12,3 +12,5 @@
 
 - [Linguaggio M2](linguaggio/milestone-2.md) e [rapporto M2](rapporto-milestone-2.md).
 - [Riferimenti pubblici](architettura/confronto-linguaggi.md): studio mirato e licenze.
+
+- [Regole M3](linguaggio/milestone-3.md) e [rapporto M3](rapporto-milestone-3.md).

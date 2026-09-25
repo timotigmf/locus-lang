@@ -37,3 +37,10 @@ class PropertySpec:
 
     def accepts(self, value: Value) -> bool:
         return valid_value(self.value_kind, value) and (not self.choices or value in self.choices)
+
+
+@dataclass(frozen=True, slots=True)
+class ActionSpec:
+    id: str
+    min_args: int
+    max_args: int

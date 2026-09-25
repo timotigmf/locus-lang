@@ -6,13 +6,18 @@ from locus.stdlib.validation import property_value
 
 
 def render(transition: Transition) -> str:
+    if transition.outputs:
+        return "\n".join(
+            item if isinstance(item, str) else render(Transition(transition.session, item))
+            for item in transition.outputs
+        )
     world = transition.session.world
     entities = {entity.id: entity for entity in world.entities}
     names = [entities[ident].label for ident in transition.event.entities]
     kind = transition.event.kind
     if kind == "look":
         objects = ", ".join(names[1:]) if len(names) > 1 else "nessun oggetto"
-        description = property_value(world, transition.session.room_id, DESCRIPTION)
+        description = property_value(world, transition.event.entities[0], DESCRIPTION)
         detail = f"\n{description}" if description else ""
         return f"{names[0]}{detail}\nVedi: {objects}."
     if kind == "inventory":
@@ -42,6 +47,7 @@ def render(transition: Transition) -> str:
     if kind in named:
         return f"{named[kind]}: {names[0]}."
     messages = {
+        "rule": "Azione gestita dalle regole.",
         "already_carried": "Hai già questo oggetto.",
         "not_here": "Non trovi qui quell'oggetto.",
         "not_portable": "Non puoi prendere questo elemento.",

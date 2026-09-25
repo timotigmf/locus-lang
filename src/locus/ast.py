@@ -3,6 +3,7 @@
 from dataclasses import dataclass
 
 from locus.diagnostics import Span
+from locus.rule_model import Condition, EffectKind, Phase
 from locus.schema import Value, ValueKind
 
 
@@ -38,8 +39,42 @@ class Assignment:
 
 
 @dataclass(frozen=True, slots=True)
+class PropertyReference:
+    entity_name: str
+    property_name: str
+
+
+@dataclass(frozen=True, slots=True)
+class ActionSyntax:
+    name: str
+    target: str | None = None
+    indirect: str | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class EffectSyntax:
+    kind: EffectKind
+    value: Value | None
+    reference: PropertyReference | None
+    action: ActionSyntax | None
+    span: Span
+
+
+@dataclass(frozen=True, slots=True)
+class Rule:
+    name: str
+    phase: Phase
+    action: ActionSyntax
+    priority: int
+    condition: Condition[PropertyReference]
+    effects: tuple[EffectSyntax, ...]
+    span: Span
+
+
+@dataclass(frozen=True, slots=True)
 class Program:
     declarations: tuple[Declaration, ...]
     relations: tuple[Relation, ...] = ()
     properties: tuple[PropertyDeclaration, ...] = ()
     assignments: tuple[Assignment, ...] = ()
+    rules: tuple[Rule, ...] = ()

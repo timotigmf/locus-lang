@@ -1,6 +1,6 @@
 """Vocabolario narrativo sostituibile, esterno al compilatore."""
 
-from locus.schema import PropertySpec, RelationSpec
+from locus.schema import ActionSpec, PropertySpec, RelationSpec
 
 ROOM = "mondo.stanza"
 THING = "mondo.cosa"
@@ -38,4 +38,20 @@ def default_properties() -> dict[str, PropertySpec]:
     return {
         "descrizione": PropertySpec(DESCRIPTION, tuple(default_kinds().values()), "testo", ""),
         "stato": PropertySpec(STATE, OPENABLE, "testo", "chiuso", ("aperto", "chiuso", "bloccato")),
+    }
+
+
+def default_actions() -> dict[str, ActionSpec]:
+    return {
+        "guardare": ActionSpec("look", 0, 0),
+        "inventariare": ActionSpec("inventory", 0, 0),
+        "andare a nord": ActionSpec("north", 0, 0),
+        "andare a sud": ActionSpec("south", 0, 0),
+        "prendere": ActionSpec("take", 1, 1),
+        "aprire": ActionSpec("open", 1, 2),
+        "chiudere": ActionSpec("close", 1, 1),
+        "mettere": ActionSpec("put", 2, 2),
+        "lasciare": ActionSpec("drop", 1, 1),
+        "esaminare": ActionSpec("examine", 1, 1),
+        "bloccare": ActionSpec("lock", 2, 2),
     }

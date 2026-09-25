@@ -6,7 +6,9 @@ from typing import Literal
 
 from locus.diagnostics import CompileError, Span, canonical
 
-TokenKind = Literal["WORD", "APOSTROPHE", "DOT", "NUMBER", "STRING", "EOF"]
+TokenKind = Literal[
+    "WORD", "APOSTROPHE", "DOT", "NUMBER", "STRING", "COLON", "SEMI", "LPAR", "RPAR", "EOF"
+]
 
 
 @dataclass(frozen=True, slots=True)
@@ -84,6 +86,15 @@ def tokenize(text: str, source: str = "<memoria>") -> tuple[Token, ...]:
                 offset += 1
         elif char in "'’":
             kind = "APOSTROPHE"
+            offset += 1
+        elif char in ":;()":
+            punctuation: dict[str, TokenKind] = {
+                ":": "COLON",
+                ";": "SEMI",
+                "(": "LPAR",
+                ")": "RPAR",
+            }
+            kind = punctuation[char]
             offset += 1
         elif char == ".":
             kind = "DOT"

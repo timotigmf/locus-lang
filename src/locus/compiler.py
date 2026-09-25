@@ -7,7 +7,8 @@ from locus.diagnostics import CompileError, canonical
 from locus.graph import cycle_node
 from locus.ir import IR_VERSION, EntityIR, ProgramIR, PropertyIR, RelationIR
 from locus.parser import parse
-from locus.schema import PropertySpec, RelationSpec, Value, type_ids
+from locus.rule_compiler import lower_rules
+from locus.schema import ActionSpec, PropertySpec, RelationSpec, Value, type_ids
 
 
 def _validate_catalog(kinds: Mapping[str, str], relations: Mapping[str, RelationSpec]) -> None:
@@ -48,6 +49,7 @@ def analyze(
     *,
     relations: Mapping[str, RelationSpec] | None = None,
     properties: Mapping[str, PropertySpec] | None = None,
+    actions: Mapping[str, ActionSpec] | None = None,
 ) -> ProgramIR:
     catalog = relations if relations is not None else {}
     _validate_catalog(kinds, catalog)
@@ -171,6 +173,7 @@ def analyze(
         tuple(edges.values()),
         tuple(property_catalog.values()),
         tuple(values.values()),
+        lower_rules(program.rules, symbols, property_catalog, actions or {}),
     )
 
 
@@ -181,6 +184,7 @@ def compile_source(
     *,
     relations: Mapping[str, RelationSpec] | None = None,
     properties: Mapping[str, PropertySpec] | None = None,
+    actions: Mapping[str, ActionSpec] | None = None,
 ) -> ProgramIR:
     catalog = relations or {}
     _validate_catalog(kinds, catalog)
@@ -189,6 +193,7 @@ def compile_source(
         kinds,
         relations=relations,
         properties=properties,
+        actions=actions,
     )
 
 

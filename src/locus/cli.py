@@ -14,10 +14,10 @@ from locus.player import Intent, parse_command
 from locus.runtime import instantiate
 from locus.stdlib import default_relations
 from locus.stdlib.authoring import compile_story
-from locus.stdlib.game import start, step
+from locus.stdlib.game import Transition, start, step
 from locus.stdlib.render import render
 
-_USAGE = "uso: locus {controlla,ast,ir,compila,gioca} FILE\n"
+_USAGE = "uso: locus {controlla,ast,ir,compila,gioca,debug} FILE\n"
 _HELP = _USAGE + "\nControlla il sorgente o mostra AST/IR JSON. Opzioni: -h, --help.\n"
 
 
@@ -31,7 +31,7 @@ class _Arguments(argparse.ArgumentParser):
 
 def main(argv: list[str] | None = None) -> int:
     parser = _Arguments(prog="locus", allow_abbrev=False)
-    parser.add_argument("command", choices=("controlla", "ast", "ir", "compila", "gioca"))
+    parser.add_argument("command", choices=("controlla", "ast", "ir", "compila", "gioca", "debug"))
     parser.add_argument("file", type=Path)
     args = parser.parse_args(argv)
     try:
@@ -47,9 +47,11 @@ def main(argv: list[str] | None = None) -> int:
             )
         else:
             program = compile_story(text, str(args.file))
-            if args.command == "gioca":
+            if args.command in {"gioca", "debug"}:
                 session = start(instantiate(program))
-                print(render(step(session, Intent("look"))))
+                initial = step(session, Intent("look"))
+                session = initial.session
+                _show(initial, args.command == "debug")
                 while True:
                     try:
                         command = input("> " if sys.stdin.isatty() else "")
@@ -57,7 +59,7 @@ def main(argv: list[str] | None = None) -> int:
                         break
                     transition = step(session, parse_command(command))
                     session = transition.session
-                    print(render(transition))
+                    _show(transition, args.command == "debug")
                     if transition.event.kind == "quit":
                         break
             elif args.command == "controlla":
@@ -80,3 +82,14 @@ def main(argv: list[str] | None = None) -> int:
         print(f"Impossibile leggere il file UTF-8: {args.file}.", file=sys.stderr)
         return 1
     return 0
+
+
+def _show(transition: Transition, debug: bool) -> None:
+    print(render(transition))
+    if debug:
+        for item in transition.trace:
+            print(
+                f"[{item.phase}; priorità {item.priority}] {item.name}: {item.outcome} "
+                f"({item.origin.source}:{item.origin.line}:{item.origin.column})",
+                file=sys.stderr,
+            )

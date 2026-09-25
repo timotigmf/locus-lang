@@ -1,12 +1,15 @@
 """Transizioni IF pure con contenimento, stati e intenti a due oggetti."""
 
 from dataclasses import dataclass, replace
-from typing import Literal
+from typing import Literal, cast
 
 from locus.diagnostics import canonical
 from locus.ir import PropertyIR, RelationIR
-from locus.player import Intent
+from locus.player import Intent, Verb
+from locus.rule_model import ActionCall, Address, Trace
+from locus.rules import ActionResult, RuleError, execute
 from locus.runtime import Entity, World
+from locus.schema import Value
 from locus.stdlib import (
     CONTAINER,
     DOOR,
@@ -24,6 +27,7 @@ from locus.stdlib import (
 from locus.stdlib.validation import property_value, validate_world
 
 EventKind = Literal[
+    "rule",
     "look",
     "inventory",
     "taken",
@@ -72,6 +76,9 @@ class Event:
 class Transition:
     session: Session
     event: Event
+    outputs: tuple[Event | str, ...] = ()
+    trace: tuple[Trace, ...] = ()
+    result: Value | None = None
 
 
 def start(world: World) -> Session:
@@ -229,7 +236,7 @@ def _opening(session: Session, intent: Intent, entity: Entity) -> Transition:
     return _changed(_set_state(session, entity.id, value), kind, entity.id)
 
 
-def step(session: Session, intent: Intent) -> Transition:
+def _perform(session: Session, intent: Intent) -> Transition:
     if intent.verb == "look":
         return Transition(session, Event("look", (session.room_id, *visible(session))))
     if intent.verb == "inventory":
@@ -252,7 +259,7 @@ def step(session: Session, intent: Intent) -> Transition:
                     return Transition(session, Event("door_closed", (door.id,)))
         moved = replace(session, room_id=target)
         validate_world(moved.world, moved.inventory)
-        return step(moved, Intent("look"))
+        return _perform(moved, Intent("look"))
     if intent.verb == "quit":
         return Transition(session, Event("quit"))
     if intent.verb == "unknown" or not intent.noun:
@@ -301,3 +308,83 @@ def step(session: Session, intent: Intent) -> Transition:
             break
         current = parents[current]
     return _changed(_move(session, entity.id, target_entity.id), "put", entity.id, target_entity.id)
+
+
+class _RuleHost:
+    def read(self, state: Session, address: Address) -> Value:
+        for prop in state.world.properties:
+            if (prop.entity_id, prop.property_id) == (address.entity_id, address.property_id):
+                return prop.value
+        raise RuleError("Proprietà runtime assente.")
+
+    def write(self, state: Session, address: Address, value: Value) -> Session:
+        spec = next((p for p in state.world.property_specs if p.id == address.property_id), None)
+        entity = next((e for e in state.world.entities if e.id == address.entity_id), None)
+        if (
+            spec is None
+            or entity is None
+            or entity.type_id not in spec.owner_types
+            or not spec.accepts(value)
+        ):
+            raise RuleError("Valore non valido per la proprietà.")
+        props = tuple(
+            p
+            for p in state.world.properties
+            if (p.entity_id, p.property_id) != (address.entity_id, address.property_id)
+        )
+        updated = replace(
+            state,
+            world=replace(
+                state.world,
+                properties=(*props, PropertyIR(address.entity_id, address.property_id, value)),
+            ),
+        )
+        try:
+            validate_world(updated.world, updated.inventory)
+        except ValueError as error:
+            raise RuleError(str(error)) from error
+        return updated
+
+    def perform(self, state: Session, action: ActionCall) -> ActionResult[Session, Event]:
+        labels = {e.id: e.label for e in state.world.entities}
+        transition = _perform(
+            state,
+            Intent(
+                cast(Verb, action.action_id),
+                labels.get(action.target_id) if action.target_id else None,
+                labels.get(action.indirect_id) if action.indirect_id else None,
+            ),
+        )
+        success = transition.event.kind in {
+            "look",
+            "inventory",
+            "taken",
+            "opened",
+            "closed",
+            "lock_success",
+            "put",
+            "dropped",
+            "examined",
+        }
+        return ActionResult(transition.session, success, (transition.event,))
+
+
+def step(session: Session, intent: Intent) -> Transition:
+    if not session.world.rules or intent.verb in {"quit", "unknown"}:
+        return _perform(session, intent)
+    refs: list[str | None] = []
+    for name in (intent.noun, intent.indirect):
+        if name is None:
+            refs.append(None)
+        else:
+            resolved = _resolve(session, name)
+            if isinstance(resolved, Event):
+                return Transition(session, resolved)
+            refs.append(resolved.id)
+    execution = execute(session, ActionCall(intent.verb, *refs), session.world.rules, _RuleHost())
+    outputs = execution.outputs
+    if execution.value is not None:
+        value = execution.value
+        outputs = (*outputs, "vero" if value is True else "falso" if value is False else str(value))
+    event = next((item for item in reversed(outputs) if isinstance(item, Event)), Event("rule"))
+    return Transition(execution.state, event, outputs, execution.trace, execution.value)

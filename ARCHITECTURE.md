@@ -149,3 +149,11 @@ dopo ogni transizione riuscita; un fallimento restituisce la sessione originale.
 Il parser giocatore resta distinto dal lexer autore, incluse le sue virgolette.
 I verbi apri/chiudi/metti/blocca sono azioni della stdlib, non codice eseguito dal
 parser. Si consulti l'[ADR 0005](docs/adr/0005-proprieta-e-mondo.md) per le alternative.
+
+## Implementazione M3
+
+`rule_parser` produce AST, `rule_compiler` risolve e tipa i riferimenti; `rule_model`
+contiene record immutabili generici. `rules.execute` esegue rulebook attraverso
+un protocollo Host indipendente da IF. `stdlib.game` adatta sessioni e azioni;
+`Transition` espone output, trace e risultato. IR corrente versione 4.
+Vedere [ADR 0006](docs/adr/0006-regole.md).

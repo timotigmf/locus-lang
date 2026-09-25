@@ -2,9 +2,10 @@
 
 from collections.abc import Mapping
 
-from locus.ast import Assignment, Declaration, Program, PropertyDeclaration, Relation
+from locus.ast import Assignment, Declaration, Program, PropertyDeclaration, Relation, Rule
 from locus.diagnostics import CompileError, Span
 from locus.lexer import Token, tokenize
+from locus.rule_parser import RuleParser
 from locus.schema import Value, ValueKind
 
 _LOCATIONS = {"nella", "nel", "nello", "nell"}
@@ -119,7 +120,11 @@ class _Parser:
         relations: list[Relation] = []
         properties: list[PropertyDeclaration] = []
         assignments: list[Assignment] = []
+        rules: list[Rule] = []
         while self.current.kind != "EOF":
+            if self.current.normalized == "regola":
+                rules.append(RuleParser(self).rule())
+                continue
             start = self.current.span
             self.article(True)
             name = self.words()
@@ -182,7 +187,13 @@ class _Parser:
                             self.preposition(_LOCATIONS)
                             location = self.words()
                         declarations.append(Declaration(name, kind, self.finish(start), location))
-        return Program(tuple(declarations), tuple(relations), tuple(properties), tuple(assignments))
+        return Program(
+            tuple(declarations),
+            tuple(relations),
+            tuple(properties),
+            tuple(assignments),
+            tuple(rules),
+        )
 
 
 def parse(

@@ -5,7 +5,7 @@ Nome **LOCUS provvisorio**; il repository locale si chiama LOCUS.
 
 ## Stato reale
 
-Versione `0.2.0a1`: **proprietà tipate, contenitori, porte e chiavi**.
+Versione `0.3.0a1`: **regole tipate, priorità e azioni transazionali**.
 Proprietà numeriche/testuali/logiche definite dall’autore, contenimento annidato,
 accessibilità verificata e azioni con due oggetti. Nessuna dipendenza runtime esterna o servizio cloud.
 
@@ -26,7 +26,8 @@ python -m venv .venv
 . .venv/bin/activate
 # Windows PowerShell, in alternativa: .venv\Scripts\Activate.ps1
 python -m pip install -e '.[dev]'
-locus gioca examples/porte_e_contenitori.locus
+locus gioca examples/regole.locus
+locus debug examples/regole.locus
 locus controlla examples/dichiarazioni.locus
 locus ast examples/dichiarazioni.locus
 locus ir examples/dichiarazioni.locus
@@ -38,7 +39,8 @@ python -m mypy
 ```
 
 `python -m locus` equivale a `locus`. Il JSON è un dump sperimentale,
-non un formato caricabile o un eseguibile. Non esistono ancora regole autore, espressioni, ereditarietà e `studio`.
+non un formato caricabile o un eseguibile. Sono disponibili condizioni booleane e regole;
+non ancora espressioni aritmetiche generali, ereditarietà e `studio`.
 Per usare il sorgente senza installazione: `PYTHONPATH=src python -m locus`
 (sintassi della variabile da adattare su Windows).
 
@@ -79,3 +81,6 @@ Ctrl-C la interrompe. Vedi il [manuale](docs/manuale/README.md) per un transcrip
 Per la nuova storia: `apri scrigno`, `prendi chiave di ottone`,
 `apri porta rossa con chiave di ottone`, `nord`. Anche `esamina`, `chiudi`,
 `metti`, `lascia` e `blocca … con …` sono disponibili.
+
+Le [regole M3](docs/linguaggio/milestone-3.md) includono prima/invece/verifica/esegui/dopo/descrivi,
+sostituzioni limitate, risultati tipati e ripristino completo in caso di fallimento.
