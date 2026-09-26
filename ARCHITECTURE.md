@@ -163,3 +163,10 @@ Vedere [ADR 0006](docs/adr/0006-regole.md).
 `project.load_project` gestisce I/O e grafo delle inclusioni prima di `analyze`.
 AST espanso con span originali e ordine dei file; IR 5 con `entry_id` opzionale.
 La stdlib valida il tipo del punto iniziale. Vedere [ADR 0007](docs/adr/0007-progetti.md).
+
+## Studio M5
+
+`studio.Studio` è un adattatore JSON per progetti virtuali, compilazione e sessioni.
+Il frontend in `web/` usa CodeMirror e un module worker Pyodide; il compilatore
+e il runtime LOCUS sono gli stessi della CLI. Distribuzione statica ed export ZIP,
+senza caricamento di IR non fidata. Vedere [ADR 0008](docs/adr/0008-studio-web.md).

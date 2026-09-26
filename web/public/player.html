@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Storia LOCUS</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="release-page">
+      <header>
+        <div>
+          <span class="eyebrow">UNA STORIA INTERATTIVA</span>
+          <h1 id="storyTitle">LOCUS</h1>
+        </div>
+        <button id="restart">Ricomincia</button>
+      </header>
+      <div id="transcript" class="transcript" aria-live="polite">
+        Caricamento della storia…
+      </div>
+      <form id="commandForm">
+        <span>›</span
+        ><input
+          id="command"
+          aria-label="Comando di gioco"
+          autocomplete="off"
+          placeholder="Scrivi un comando"
+          disabled
+        /><button id="send" type="submit" class="primary" disabled>
+          Invia
+        </button>
+      </form>
+      <footer>
+        <span id="status">Preparazione del motore…</span> · Realizzato con LOCUS
+      </footer>
+    </main>
+    <script type="module" src="player.js"></script>
+  </body>
+</html>

@@ -11,3 +11,7 @@ dist/
 htmlcov/
 wheelhouse/
 .DS_Store
+web/node_modules/
+web/site/
+web/test-results/
+web/playwright-report/

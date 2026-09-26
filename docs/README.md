@@ -19,3 +19,5 @@
 
 - [Tutorial: il faro](tutorial/README.md), [da Inform a LOCUS](tutorial/da-inform-a-locus.md).
 - [Registro dei sei manuali forniti](architettura/materiali-didattici.md).
+
+- [Studio web](studio/README.md): editor, gioco, mappe, test e release.

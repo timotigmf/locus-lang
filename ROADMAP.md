@@ -51,3 +51,9 @@ solo come produttore di candidati; nessuna dipendenza del nucleo.
 3. Introdurre espressioni aritmetiche e funzioni con firme tipate.
 4. Progettare salvataggi versionati e test di soluzione.
 5. Ampliare vocabolari e disambiguazione del parser giocatore.
+
+## Studio M5 — 0.5.0a1
+
+Editor web, progetto virtuale, diagnostica con manuale, gioco, mappa SVG/JSON,
+indice, trace, copioni verificabili e release web con runtime incluso. Restano
+fuori scope collaborazione cloud, breakpoint, salvataggi del gioco ed eseguibili nativi.

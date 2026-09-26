@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#182f32" />
+    <title>LOCUS Studio · Scrivere mondi</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="./" aria-label="LOCUS Studio"
+        ><span class="logo">L</span><span>LOCUS <b>STUDIO</b></span></a
+      >
+      <div class="project-title">
+        <span class="dot"></span
+        ><input
+          id="title"
+          aria-label="Titolo del progetto"
+          maxlength="100"
+        /><span class="badge">EDIZIONE WEB</span>
+      </div>
+      <button id="toggleFiles" aria-expanded="false">Progetto</button
+      ><button id="manualButton" class="ghost">Manuale</button
+      ><button id="backup">Scarica progetto</button
+      ><button id="release" class="gold">Esporta release ↗</button>
+    </header>
+    <div class="workbench">
+      <aside class="sidebar">
+        <div class="section-title">
+          PROGETTO
+          <button id="addFile" title="Crea un file" aria-label="Crea un file">
+            ＋
+          </button>
+        </div>
+        <nav id="files" aria-label="File del progetto"></nav>
+        <div class="file-actions">
+          <button id="renameFile">Rinomina</button
+          ><button id="deleteFile">Elimina</button>
+        </div>
+        <label class="small-label" for="entry">FILE PRINCIPALE</label
+        ><select id="entry"></select>
+        <div class="sidebar-divider"></div>
+        <div class="section-title">BIBLIOTECA</div>
+        <button id="guideButton" class="nav-item">▤ Tutorial del faro</button
+        ><button id="languageButton" class="nav-item">
+          § Riferimento linguaggio</button
+        ><button id="newProject" class="nav-item">＋ Progetto vuoto</button
+        ><button id="demoButton" class="nav-item">
+          ◇ Apri esempio del faro</button
+        ><button id="importButton" class="nav-item">
+          ↥ Importa progetto / file</button
+        ><input
+          id="importFile"
+          type="file"
+          accept=".json,.locus"
+          multiple
+          hidden
+        />
+        <div class="sidebar-bottom">
+          <span class="version">LOCUS 0.5 · ANTEPRIMA</span>
+          <p>Il tuo laboratorio di<br />narrativa interattiva.</p>
+          <small id="saveStatus">Salvataggio locale nel browser</small>
+        </div>
+      </aside>
+      <main class="workspace">
+        <div class="toolbar">
+          <div>
+            <span class="eyebrow">LABORATORIO DI SCRITTURA</span>
+            <h1 id="projectHeading">Il tuo mondo, una frase alla volta.</h1>
+          </div>
+          <div class="run-actions">
+            <button id="cancel" title="Interrompi e riavvia il motore">
+              ■ Interrompi</button
+            ><button id="compile">✓ Compila</button
+            ><button id="play" class="primary">▶ Compila e prova</button>
+          </div>
+        </div>
+        <div class="split">
+          <section class="editor-pane" aria-label="Editor sorgente">
+            <div class="pane-bar">
+              <span
+                ><span class="file-icon">≡</span>
+                <strong id="activeFile"></strong></span
+              ><span class="muted">LOCUS · UTF-8</span>
+            </div>
+            <div id="editor"></div>
+            <div class="editor-footer">
+              <span id="cursor">Riga 1 · Colonna 1</span
+              ><span>Ctrl/⌘ Invio: compila e prova</span>
+            </div>
+          </section>
+          <section class="preview-pane">
+            <nav class="tabs" aria-label="Pannelli di lavoro">
+              <button data-tab="game" class="selected">Storia</button
+              ><button data-tab="map">Mappa</button
+              ><button data-tab="tests">Test</button
+              ><button data-tab="manual">Manuale</button>
+            </nav>
+            <div id="game" class="panel active">
+              <div class="panel-heading">
+                <span class="eyebrow">ANTEPRIMA INTERATTIVA</span
+                ><button id="restart">↻ Ricomincia</button>
+              </div>
+              <div id="transcript" class="transcript" aria-live="polite">
+                <div class="welcome">
+                  <span class="ornament">◇</span>
+                  <h2>Una storia aspetta<br />di prendere vita.</h2>
+                  <p>
+                    Scrivi nel sorgente e scegli
+                    <strong>Compila e prova</strong>.<br />Il tuo mondo apparirà
+                    qui.
+                  </p>
+                  <span class="tag"
+                    >UN SOLO MOTORE · DAL SORGENTE AL GIOCO</span
+                  >
+                </div>
+              </div>
+              <form id="commandForm">
+                <span aria-hidden="true">›</span
+                ><input
+                  id="command"
+                  aria-label="Comando di gioco"
+                  placeholder="Scrivi un comando, per esempio: guarda"
+                  autocomplete="off"
+                  disabled
+                /><button class="primary" type="submit" id="send" disabled>
+                  Invia ↵
+                </button>
+              </form>
+            </div>
+            <div id="map" class="panel">
+              <div class="panel-heading">
+                <div>
+                  <span class="eyebrow">ATLANTE DEL MONDO</span>
+                  <p id="mapSummary">Compila per generare la mappa.</p>
+                </div>
+                <button id="exportMap">Scarica SVG</button>
+              </div>
+              <div class="map-tools">
+                <button id="zoomOut" aria-label="Riduci mappa">−</button
+                ><button id="zoomIn" aria-label="Ingrandisci mappa">＋</button
+                ><button id="mapJSON">Dati JSON</button>
+              </div>
+              <div id="mapCanvas" class="map-canvas"></div>
+              <p class="panel-note">
+                Collegamenti nord/sud · Le etichette sui passaggi indicano le
+                porte. La mappa descrive il progetto compilato.
+              </p>
+            </div>
+            <div id="tests" class="panel">
+              <div class="panel-heading">
+                <span class="eyebrow">BANCO DI PROVA</span
+                ><button id="addTest">＋ Nuovo test</button>
+              </div>
+              <label for="testSelect">Copione</label
+              ><select id="testSelect"></select
+              ><label for="testName">Nome del test</label
+              ><input id="testName" /><label for="testCommands"
+                >Comandi · uno per riga</label
+              ><textarea
+                id="testCommands"
+                rows="6"
+                spellcheck="false"
+              ></textarea
+              ><label for="testExpected"
+                >Uscita attesa · include la descrizione iniziale</label
+              ><textarea
+                id="testExpected"
+                rows="5"
+                placeholder="Lascia vuoto per una prova esplorativa"
+                spellcheck="false"
+              ></textarea>
+              <div class="test-actions">
+                <button id="runTest" class="primary">Esegui test</button
+                ><button id="runAllTests">Esegui tutti</button
+                ><button id="deleteTest">Elimina test</button>
+              </div>
+              <div id="testResult" aria-live="polite"></div>
+              <button id="downloadTranscript">Scarica ultimo transcript</button>
+            </div>
+            <div id="manual" class="panel">
+              <div class="manual-tools">
+                <select
+                  id="manualSelect"
+                  aria-label="Capitolo del manuale"
+                ></select
+                ><input
+                  id="manualSearch"
+                  type="search"
+                  placeholder="Cerca nei capitoli"
+                  aria-label="Cerca nel manuale"
+                />
+              </div>
+              <article id="manualContent" class="prose"></article>
+            </div>
+          </section>
+        </div>
+        <section class="inspector">
+          <div class="inspector-bar">
+            <nav class="tabs" aria-label="Strumenti di ispezione">
+              <button data-inspector="diagnostics" class="selected">
+                Diagnostica <span id="errorCount">0</span></button
+              ><button data-inspector="trace">Regole e trace</button
+              ><button data-inspector="index">Indice del mondo</button>
+            </nav>
+            <span id="compileStatus">Non ancora compilato</span>
+          </div>
+          <div id="diagnostics" class="inspector-content active">
+            <p class="empty">
+              Le diagnosi appariranno qui: codice, file, riga e riferimento al
+              manuale.
+            </p>
+          </div>
+          <div id="trace" class="inspector-content">
+            <p class="empty">Esegui un'azione per osservare le regole.</p>
+          </div>
+          <div id="index" class="inspector-content">
+            <p class="empty">Compila per esplorare entità e proprietà.</p>
+          </div>
+        </section>
+        <footer class="statusbar">
+          <span id="engineStatus"
+            ><span class="dot"></span> Avvio del motore…</span
+          ><span id="fileCount"></span
+          ><span>Nessun sorgente inviato a un server</span>
+        </footer>
+      </main>
+    </div>
+    <div id="toast" role="status" hidden></div>
+    <dialog id="dialog">
+      <form method="dialog">
+        <h2 id="dialogTitle"></h2>
+        <p id="dialogText"></p>
+        <label id="dialogLabel" for="dialogInput"></label
+        ><input id="dialogInput" />
+        <div class="dialog-actions">
+          <button value="cancel">Annulla</button
+          ><button id="dialogConfirm" value="confirm" class="primary">
+            Conferma
+          </button>
+        </div>
+      </form>
+    </dialog>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>

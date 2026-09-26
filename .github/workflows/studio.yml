@@ -1,0 +1,41 @@
+name: Studio web
+on:
+  push:
+    branches: [codex/studio-web, main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - run: npm ci
+        working-directory: web
+      - run: npm run format:check
+        working-directory: web
+      - run: npm run build
+        working-directory: web
+      - run: npx playwright install --with-deps chromium
+        working-directory: web
+      - name: Test browser e release separata
+        working-directory: web
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 --directory site > /tmp/locus-server.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid"' EXIT
+          npm test
+      - name: Ricostruisci il sito senza i file dei test
+        working-directory: web
+        run: npm run build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: locus-studio-sito-statico
+          path: web/site
+          include-hidden-files: true

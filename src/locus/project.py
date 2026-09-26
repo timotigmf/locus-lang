@@ -14,6 +14,7 @@ def load_project(
     verbs: Mapping[str, str] | None = None,
     max_files: int = 256,
     max_depth: int = 64,
+    allowed_root: Path | None = None,
 ) -> Program:
     """Unione in postordine: dipendenze prima del file che le include."""
     if max_files < 1 or max_depth < 1:
@@ -31,6 +32,8 @@ def load_project(
             raise CompileError(
                 "E402", f"Impossibile leggere il file UTF-8: {candidate}.", location
             ) from error
+        if allowed_root is not None and not resolved.is_relative_to(allowed_root.resolve()):
+            raise CompileError("E404", "L'inclusione esce dai file del progetto.", location)
         if resolved in active:
             chain = " → ".join(str(item) for item in (*active, resolved))
             raise CompileError("E403", f"Inclusione ciclica: {chain}.", location)

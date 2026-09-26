@@ -19,8 +19,10 @@ def compile_story(text: str, source: str = "<memoria>") -> ProgramIR:
     return _compile(ast)
 
 
-def compile_story_file(path: Path) -> ProgramIR:
-    return _compile(load_project(path, verbs=relation_verbs(default_relations())))
+def compile_story_file(path: Path, *, allowed_root: Path | None = None) -> ProgramIR:
+    return _compile(
+        load_project(path, verbs=relation_verbs(default_relations()), allowed_root=allowed_root)
+    )
 
 
 def _compile(ast: Program) -> ProgramIR:

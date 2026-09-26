@@ -5,7 +5,7 @@ Nome **LOCUS provvisorio**; il repository locale si chiama LOCUS.
 
 ## Stato reale
 
-Versione `0.4.0a1`: **progetti su più file e punto iniziale esplicito**.
+Versione `0.5.0a1`: **Studio web, mappa, test ed esportazione di storie per il browser**.
 Proprietà numeriche/testuali/logiche definite dall’autore, contenimento annidato,
 accessibilità verificata e azioni con due oggetti. Nessuna dipendenza runtime esterna o servizio cloud.
 
@@ -40,7 +40,8 @@ python -m mypy
 
 `python -m locus` equivale a `locus`. Il JSON è un dump sperimentale,
 non un formato caricabile o un eseguibile. Sono disponibili condizioni booleane e regole;
-non ancora espressioni aritmetiche generali, ereditarietà e `studio`.
+non ancora espressioni aritmetiche generali ed ereditarietà. Lo Studio web è
+un’applicazione statica separata dalla CLI.
 Per usare il sorgente senza installazione: `PYTHONPATH=src python -m locus`
 (sintassi della variabile da adattare su Windows).
 
@@ -96,3 +97,8 @@ diagnostica che conserva il file originale. Ramo GitHub: `codex/milestone-4`.
 [Costruisci il faro di Selce](docs/tutorial/README.md): quattro lezioni, esercizi
 con soluzioni, esempi eseguibili e copione verificato automaticamente.
 [Materiali consultati e scelte](docs/architettura/materiali-didattici.md).
+
+## Studio nel browser
+
+[Manuale dello Studio](docs/studio/README.md): editor, progetti, diagnosi, gioco,
+mappe SVG, copioni e release ZIP per hosting statico. [Build e test web](web/README.md).

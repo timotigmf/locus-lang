@@ -14,3 +14,5 @@ Le fonti e le licenze sono nel [registro](../architettura/fonti.md).
 - [0006 — regole M3](0006-regole.md): fasi, transazioni, tracing e confronto parser.
 
 - [0007 — progetti M4](0007-progetti.md): inclusioni locali e punto iniziale.
+
+- [0008 — Studio web](0008-studio-web.md): stesso motore in WebAssembly e sito statico.

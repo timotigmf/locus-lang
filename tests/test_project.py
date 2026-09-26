@@ -211,3 +211,12 @@ def test_relation_order_uses_modules_not_local_offsets(tmp_path: Path) -> None:
     with pytest.raises(CompileError) as caught:
         compile_story_file(path)
     assert caught.value.span.source == str(path)
+
+
+def test_optional_project_boundary(tmp_path: Path) -> None:
+    outside = write(tmp_path, "outside.locus", "La Sala è una stanza.")
+    entry = write(tmp_path, "project/main.locus", 'Includi "../outside.locus".')
+    with pytest.raises(CompileError, match="E404"):
+        load_project(entry, allowed_root=entry.parent)
+    assert outside.exists()
+    assert len(load_project(entry).declarations) == 1
