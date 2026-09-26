@@ -34,5 +34,5 @@ per il codice originale LOCUS. Sorgente del runtime Pyodide:
 https://github.com/pyodide/pyodide/tree/314.0.7 ; sorgente Python:
 https://github.com/python/cpython/tree/v3.14.2 . Distribuiamo questi componenti senza
 modificarli. Il runtime include componenti del progetto CPython; si conservano le
-attribuzioni nel relativo testo di licenza. Il testo PSF archiviato è quello della
-release 3.14.0; il runtime Pyodide dichiara Python 3.14.2.
+attribuzioni nel relativo testo di licenza. Il testo PSF è stato verificato contro
+la release Python 3.14.2 dichiarata dal runtime Pyodide.
