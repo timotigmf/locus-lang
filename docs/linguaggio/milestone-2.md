@@ -47,7 +47,8 @@ la compilazione. Ogni chiave ha al massimo una destinazione M2; più chiavi poss
 abilitare lo stesso oggetto. Un contenitore può essere bloccato con la stessa
 semantica della porta. Le porte non sono oggetti trasportabili o collocabili.
 Devono collegare due stanze distinte già collegate da una direzione; una sola
-porta per coppia di stanze. I collegamenti direzionali sono ancora nord/sud.
+porta per coppia di stanze. I collegamenti direzionali sono nord/sud ed est/ovest,
+con inverso generato automaticamente.
 
 Una cosa, una chiave o un contenitore può essere dentro stanza o contenitore.
 Si accettano `nella`, `nel`, `nello`, `nell'` e la forma tipografica dell'apostrofo.
@@ -101,7 +102,8 @@ Articoli iniziali opzionali; virgolette per nomi che contengono delimitatori.
 Esempio: `metti "libro con note" nella scatola`.
 
 Compatibilità comandi del giocatore: `l`/`look`, `x`/`examine`,
-`i`/`inv`/`inventory`, `n`/`north`, `s`/`south`, `q`/`quit`, `get`/`take` e le
+`i`/`inv`/`inventory`, `n`/`north`, `s`/`south`, `e`/`east`,
+`o`/`w`/`west`, `q`/`quit`, `get`/`take` e le
 forme inglesi di apri, chiudi, lascia, metti e blocca. Sono alias d'ingresso;
 la sintassi autore, la narrazione e la documentazione restano italiane.
 

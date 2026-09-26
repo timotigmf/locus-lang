@@ -57,3 +57,7 @@ solo come produttore di candidati; nessuna dipendenza del nucleo.
 Editor web, progetto virtuale, diagnostica con manuale, gioco, mappa SVG/JSON,
 indice, trace, copioni verificabili e release web con runtime incluso. Restano
 fuori scope collaborazione cloud, breakpoint, salvataggi del gioco ed eseguibili nativi.
+
+Estensione compatibile completata: quattro direzioni cardinali, abbreviazioni
+classiche, nomi parziali non ambigui e disambiguazione esplicita. Diagonali,
+alto/basso, dentro/fuori e dialogo di chiarimento a più turni restano futuri.

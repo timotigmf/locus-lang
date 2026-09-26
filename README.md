@@ -76,7 +76,8 @@ Il ramo `main` viene mantenuto separato fino all'integrazione delle modifiche.
 
 ## Giocare
 
-Dopo l'avvio: `guarda`, `prendi la chiave`, `inventario`, `nord`, `sud`, `esci`.
+Dopo l'avvio: `guarda`, `prendi la chiave`, `inventario`, `nord`, `sud`, `est`,
+`ovest`, `esci`. Le direzioni si abbreviano in `n`, `s`, `e`, `o`.
 `Inizia nella "Sala".` sceglie il punto iniziale; in assenza, vale la prima stanza. EOF termina la sessione;
 Ctrl-C la interrompe. Vedi il [manuale](docs/manuale/README.md) per un transcript.
 
@@ -100,7 +101,7 @@ diagnostica che conserva il file originale. Ramo GitHub: `codex/milestone-4`.
 
 ## Tutorial in italiano
 
-[Costruisci il faro di Selce](docs/tutorial/README.md): quattro lezioni, esercizi
+[Costruisci il faro di Selce](docs/tutorial/README.md): cinque lezioni, esercizi
 con soluzioni, esempi eseguibili e copione verificato automaticamente.
 [Materiali consultati e scelte](docs/architettura/materiali-didattici.md).
 

@@ -33,7 +33,7 @@ def test_forward_references_and_inverse() -> None:
     [
         ("La D è a nord della A.", "E103"),
         ("La A è a nord della D.", "E103"),
-        ("La A è a est della B.", "E104"),
+        ("La A è a nordest della B.", "E104"),
         ("La chiave è una cosa. La chiave è a nord della A.", "E105"),
         ("La A è a nord della A.", "E107"),
         ("La B è a nord della A. La C è a nord della A.", "E106"),
@@ -57,6 +57,14 @@ def test_repeated_equivalent_links_are_idempotent() -> None:
     assert (
         len(compile_source(source, default_kinds(), relations=default_relations()).relations) == 2
     )
+
+
+def test_east_west_relations_are_inverse() -> None:
+    program = compile_source(
+        ROOMS + "La B è a est della A.", default_kinds(), relations=default_relations()
+    )
+    assert RelationIR("e1", "mondo.est", "e2") in program.relations
+    assert RelationIR("e2", "mondo.ovest", "e1") in program.relations
 
 
 def test_catalog_is_required_and_replaceable() -> None:

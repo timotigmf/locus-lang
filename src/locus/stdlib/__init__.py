@@ -12,6 +12,8 @@ OPENABLE = (CONTAINER, DOOR)
 INSIDE = "mondo.dentro"
 NORTH = "mondo.nord"
 SOUTH = "mondo.sud"
+EAST = "mondo.est"
+WEST = "mondo.ovest"
 SIDE_A = "mondo.lato_a"
 SIDE_B = "mondo.lato_b"
 UNLOCKS = "mondo.apre"
@@ -28,6 +30,8 @@ def default_relations() -> dict[str, RelationSpec]:
         "nella": RelationSpec(INSIDE, PORTABLE, (ROOM, CONTAINER), acyclic=True),
         "nord": RelationSpec(NORTH, ROOM, ROOM, reverse_operands=True, inverse_id=SOUTH),
         "sud": RelationSpec(SOUTH, ROOM, ROOM, reverse_operands=True, inverse_id=NORTH),
+        "est": RelationSpec(EAST, ROOM, ROOM, reverse_operands=True, inverse_id=WEST),
+        "ovest": RelationSpec(WEST, ROOM, ROOM, reverse_operands=True, inverse_id=EAST),
         "collega da": RelationSpec(SIDE_A, DOOR, ROOM),
         "collega a": RelationSpec(SIDE_B, DOOR, ROOM),
         "apre": RelationSpec(UNLOCKS, KEY, OPENABLE, verb="apre"),
@@ -47,6 +51,8 @@ def default_actions() -> dict[str, ActionSpec]:
         "inventariare": ActionSpec("inventory", 0, 0),
         "andare a nord": ActionSpec("north", 0, 0),
         "andare a sud": ActionSpec("south", 0, 0),
+        "andare a est": ActionSpec("east", 0, 0),
+        "andare a ovest": ActionSpec("west", 0, 0),
         "prendere": ActionSpec("take", 1, 1),
         "aprire": ActionSpec("open", 1, 2),
         "chiudere": ActionSpec("close", 1, 1),

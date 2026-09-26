@@ -7,7 +7,7 @@ compatibilità del sorgente o equivalenza del comportamento con Inform.
 | Concetto incontrato nei manuali | In LOCUS oggi | Differenza da ricordare |
 | --- | --- | --- |
 | Modello del mondo | Entità, proprietà e relazioni | La prosa descrittiva non crea il modello |
-| Luoghi e mappa | `stanza`, nord/sud | Solo queste due direzioni sono registrate nella stdlib |
+| Luoghi e mappa | `stanza`, nord/sud, est/ovest | Quattro direzioni cardinali; diagonali, alto e basso non sono ancora registrati |
 | Tipi e proprietà | Tipi della stdlib; proprietà numeriche, testuali, logiche | Tipi autore ed ereditarietà ancora da progettare |
 | Descrizione del luogo e oggetti visibili | `descrizione`, `guarda`, `esamina` | Niente scenery, supporter, trasparenza o locale priorities |
 | Controllo, modifica e resoconto | `verifica`, `esegui`, `dopo`, `descrivi` | Semantica propria, non traduzione diretta dei rulebook |

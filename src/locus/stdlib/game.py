@@ -13,6 +13,7 @@ from locus.schema import Value
 from locus.stdlib import (
     CONTAINER,
     DOOR,
+    EAST,
     INSIDE,
     NORTH,
     OPENABLE,
@@ -23,6 +24,7 @@ from locus.stdlib import (
     SOUTH,
     STATE,
     UNLOCKS,
+    WEST,
 )
 from locus.stdlib.validation import property_value, validate_world
 
@@ -247,8 +249,9 @@ def _perform(session: Session, intent: Intent) -> Transition:
         return Transition(session, Event("look", (session.room_id, *visible(session))))
     if intent.verb == "inventory":
         return Transition(session, Event("inventory", session.inventory))
-    if intent.verb in {"north", "south"}:
-        predicate = NORTH if intent.verb == "north" else SOUTH
+    directions = {"north": NORTH, "south": SOUTH, "east": EAST, "west": WEST}
+    if intent.verb in directions:
+        predicate = directions[intent.verb]
         target = next(
             (
                 edge.target_id
@@ -381,7 +384,10 @@ def step(session: Session, intent: Intent) -> Transition:
     if (
         not session.world.rules
         or intent.verb in {"quit", "unknown"}
-        or (intent.verb not in {"look", "inventory", "north", "south"} and not intent.noun)
+        or (
+            intent.verb not in {"look", "inventory", "north", "south", "east", "west"}
+            and not intent.noun
+        )
     ):
         return _perform(session, intent)
     refs: list[str | None] = []

@@ -6,6 +6,8 @@ Versione corrente `0.5.0a1`, IR versione 5. Le specifiche M2, M3 e M4
 estendono e, dove indicato, sostituiscono i limiti M1 sotto.
 La [specifica M2](docs/linguaggio/milestone-2.md) è normativa per proprietà,
 stringhe, nomi quotati, preposizioni, contenitori, porte e chiavi.
+La stdlib corrente estende inoltre i collegamenti cardinali a nord/sud ed
+est/ovest; le coppie inverse sono generate automaticamente.
 Le sezioni S0/S1 seguenti descrivono il nucleo storico, non l'intera versione.
 
 ## Dichiarazioni (S0, mantenute in 0.1.0a2)

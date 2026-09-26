@@ -20,7 +20,7 @@ accettate anche alcune convenzioni storiche delle avventure testuali in inglese.
 | `guarda` | `l`, `look` | Ripete la descrizione del luogo |
 | `esamina custodia` | `x custodia`, `examine custodia` | Mostra dettagli e stato |
 | `inventario` | `i`, `inv`, `inventory` | Elenca ciò che porti |
-| `nord`, `sud` | `n`, `s`, `north`, `south` | Si sposta sulla mappa |
+| `nord`, `sud`, `est`, `ovest` | `n`, `s`, `e`, `o`, `w` e forme inglesi | Si sposta sulla mappa |
 | `prendi chiave` | `get chiave`, `take chiave` | Prende un oggetto |
 | `esci` | `q`, `quit` | Termina la sessione |
 

@@ -18,7 +18,8 @@ frontend → parser giocatore → intento → dispatcher → runtime / regole
 La CLI è il punto di composizione: seleziona la stdlib e passa i cataloghi di tipi e relazioni
 al compilatore. Il compilatore non importa la stdlib né il runtime. Il runtime
 importa esclusivamente il contratto IR e i suoi modelli, mai il parser o l'AST.
-La stdlib fornisce `stanza`, `cosa`, containment e nord/sud, senza ereditarietà.
+La stdlib fornisce `stanza`, `cosa`, containment e quattro direzioni cardinali,
+senza ereditarietà.
 Un test compila tipi e relazioni non narrativi per verificare concretamente l'indipendenza del core.
 
 | Livello | Responsabilità e contratto | Stato |
@@ -170,3 +171,10 @@ La stdlib valida il tipo del punto iniziale. Vedere [ADR 0007](docs/adr/0007-pro
 Il frontend in `web/` usa CodeMirror e un module worker Pyodide; il compilatore
 e il runtime LOCUS sono gli stessi della CLI. Distribuzione statica ed export ZIP,
 senza caricamento di IR non fidata. Vedere [ADR 0008](docs/adr/0008-studio-web.md).
+
+## Direzioni cardinali
+
+La stdlib registra nord/sud ed est/ovest come due coppie inverse; il compilatore
+continua a vedere soltanto schemi di relazione generici. Il runtime seleziona
+l'arco dall'intento tipato e lo Studio proietta le direzioni nella mappa senza
+reinterpretare il testo narrativo. Vedere [ADR 0009](docs/adr/0009-direzioni-cardinali.md).

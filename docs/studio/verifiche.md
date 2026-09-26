@@ -10,13 +10,14 @@ Esportazione ZIP del giocatore statico con sorgente della storia e runtime inclu
 
 ## Controlli eseguiti
 
-- 311 test Python passati, inclusi alias classici, nomi parziali, ambiguità,
+- 322 test Python passati, inclusi quattro punti cardinali, alias classici,
+  nomi parziali, ambiguità,
   adapter Studio e confine del progetto virtuale.
 - Ruff, controllo formato e mypy strict passati.
 - Build wheel e sdist 0.5.0a1 riuscita; build web statica riuscita.
 - Quattro test browser reali passati in Chrome su macOS: flusso compilazione/gioco,
-  `x custodia`, `prendi chiave`, copione verificato, mappa esportata, ZIP estratto
-  e giocato su un percorso diverso;
+  `e`/`o` senza uscita, `x custodia`, `prendi chiave`, copione verificato, mappa
+  esportata, ZIP estratto e giocato su un percorso diverso;
   diagnosi E102 con file originale e manuale, persistenza, gestione file e backup,
   test negativo, menu mobile e assenza di overflow orizzontale.
 - Release provata bloccando tutte le richieste diverse dall'hosting locale:

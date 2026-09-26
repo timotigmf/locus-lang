@@ -15,6 +15,15 @@ test("progetto, compilazione, gioco, test e release statica", async ({
     .getByRole("button", { name: "▶ Compila e prova", exact: true })
     .click();
   await expect(page.locator("#transcript")).toContainText("Molo");
+  await page.locator("#command").fill("e");
+  await page.locator("#send").click();
+  const absentExit = page.locator(".story-output", {
+    hasText: "Non c'è alcun passaggio in quella direzione.",
+  });
+  await expect(absentExit).toHaveCount(1);
+  await page.locator("#command").fill("o");
+  await page.locator("#send").click();
+  await expect(absentExit).toHaveCount(2);
   await page.locator("#command").fill("apri custodia");
   await page.locator("#send").click();
   await expect(page.locator("#transcript")).toContainText(

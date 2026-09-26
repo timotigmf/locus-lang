@@ -11,7 +11,9 @@ La chiave è una cosa nella Cucina.
 
 Eseguire `locus gioca storia.locus`. Una copia è in `examples/prima_storia.locus`.
 La prima stanza dichiarata è l'inizio; la posizione nord genera automaticamente
-l'uscita sud nel senso opposto. Nomi e riferimenti possono precedere le dichiarazioni.
+l'uscita sud nel senso opposto. Allo stesso modo, est genera ovest. Nomi e
+riferimenti possono precedere le dichiarazioni. Nel gioco puoi abbreviare le
+direzioni con `n`, `s`, `e`, `o`; è accettato anche `w` per ovest.
 
 ```text
 Cucina

@@ -32,6 +32,13 @@ def make_session() -> Session:
         ("n", Intent("north")),
         ("sud", Intent("south")),
         ("s", Intent("south")),
+        ("est", Intent("east")),
+        ("e", Intent("east")),
+        ("east", Intent("east")),
+        ("ovest", Intent("west")),
+        ("o", Intent("west")),
+        ("w", Intent("west")),
+        ("west", Intent("west")),
         ("esci", Intent("quit")),
         ("q", Intent("quit")),
         ("prendi chiave", Intent("take", "chiave")),
@@ -75,7 +82,7 @@ def test_complete_solution_transcript_and_replay() -> None:
         "Hai già questo oggetto.",
         "Inventario: chiave.",
         "Corridoio\nVedi: nessun oggetto.",
-        "Non puoi andare in quella direzione.",
+        "Non c'è alcun passaggio in quella direzione.",
         "Cucina\nVedi: nessun oggetto.",
         "Cucina\nVedi: nessun oggetto.",
         "Inventario: chiave.",
@@ -104,6 +111,8 @@ def test_absent_and_unreachable_objects_do_not_change_state() -> None:
         ("prendi fantasma", "not_here"),
         ("prendi Cucina", "not_portable"),
         ("sud", "no_exit"),
+        ("e", "no_exit"),
+        ("o", "no_exit"),
         ("salta", "unknown"),
     ]:
         result = step(session, parse_command(command))
@@ -118,6 +127,23 @@ def test_sessions_are_independent() -> None:
     session = make_session()
     assert step(session, Intent("take", "chiave")).session.inventory
     assert make_session() == session
+
+
+def test_east_west_movement_and_inverse() -> None:
+    world = instantiate(
+        compile_source(
+            "La Sala è una stanza. La Serra è una stanza. La Serra è a est della Sala.",
+            default_kinds(),
+            relations=default_relations(),
+        )
+    )
+    current = start(world)
+    moved = step(current, parse_command("e"))
+    assert moved.event.kind == "look"
+    assert next(e.label for e in world.entities if e.id == moved.session.room_id) == "Serra"
+    returned = step(moved.session, parse_command("o"))
+    assert returned.event.kind == "look"
+    assert returned.session.room_id == current.room_id
 
 
 def test_world_without_rooms_compiles_but_cannot_start_game() -> None:

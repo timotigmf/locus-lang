@@ -21,9 +21,10 @@ quando non "attiva" di "leva" è vero:
 Fine regola.
 ```
 
-Azioni registrate dalla libreria narrativa: `guardare`, `inventariare`, `andare a nord`,
-`andare a sud`, `prendere`, `aprire`, `chiudere`, `mettere`, `lasciare`, `esaminare`,
-`bloccare`. Un selettore senza oggetti si applica a tutti gli oggetti; un oggetto
+Azioni registrate dalla libreria narrativa: `guardare`, `inventariare`,
+`andare a nord`, `andare a sud`, `andare a est`, `andare a ovest`, `prendere`,
+`aprire`, `chiudere`, `mettere`, `lasciare`, `esaminare`, `bloccare`.
+Un selettore senza oggetti si applica a tutti gli oggetti; un oggetto
 quotato restringe il destinatario, `con "nome"` restringe il secondo oggetto.
 La stessa sintassi specifica un'azione sostitutiva, ma lì gli oggetti obbligatori
 non possono essere omessi. `mettere` e `bloccare` richiedono due oggetti;

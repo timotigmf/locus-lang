@@ -16,3 +16,5 @@ Le fonti e le licenze sono nel [registro](../architettura/fonti.md).
 - [0007 — progetti M4](0007-progetti.md): inclusioni locali e punto iniziale.
 
 - [0008 — Studio web](0008-studio-web.md): stesso motore in WebAssembly e sito statico.
+
+- [0009 — direzioni cardinali](0009-direzioni-cardinali.md): nord/sud ed est/ovest dal sorgente alla mappa.

@@ -10,7 +10,7 @@ from locus.diagnostics import CompileError
 from locus.ir import ProgramIR
 from locus.player import Intent, parse_command
 from locus.runtime import instantiate
-from locus.stdlib import NORTH, ROOM, SIDE_A, SIDE_B
+from locus.stdlib import EAST, NORTH, ROOM, SIDE_A, SIDE_B
 from locus.stdlib.authoring import compile_story_file
 from locus.stdlib.game import Session, Transition, start, step
 from locus.stdlib.render import render
@@ -138,10 +138,15 @@ def validate_project(project: Any) -> dict[str, Any]:
 
 def map_data(program: ProgramIR) -> dict[str, Any]:
     rooms = [asdict(entity) for entity in program.entities if entity.type_id == ROOM]
+    link_directions = {NORTH: "nord", EAST: "est"}
     links = [
-        {"from": edge.source_id, "to": edge.target_id, "direction": "nord"}
+        {
+            "from": edge.source_id,
+            "to": edge.target_id,
+            "direction": link_directions[edge.predicate_id],
+        }
         for edge in program.relations
-        if edge.predicate_id == NORTH
+        if edge.predicate_id in link_directions
     ]
     doors = []
     for entity in program.entities:

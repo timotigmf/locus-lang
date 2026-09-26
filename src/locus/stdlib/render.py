@@ -56,11 +56,11 @@ def render(transition: Transition) -> str:
         "already_carried": "Hai già questo oggetto.",
         "not_here": "Non trovi qui quell'oggetto.",
         "not_portable": "Non puoi prendere questo elemento.",
-        "no_exit": "Non puoi andare in quella direzione.",
+        "no_exit": "Non c'è alcun passaggio in quella direzione.",
         "unknown": (
             "Comando non riconosciuto. Usa guarda, esamina, prendi, lascia, metti, "
-            "apri, chiudi, blocca, inventario, nord, sud o esci. Sono disponibili "
-            "anche le abbreviazioni l, x, i, n, s e q."
+            "apri, chiudi, blocca, inventario, nord, sud, est, ovest o esci. "
+            "Sono disponibili anche le abbreviazioni l, x, i, n, s, e, o e q."
         ),
         "missing_noun": "Indica quale oggetto vuoi esaminare o manipolare.",
         "quit": "A presto.",

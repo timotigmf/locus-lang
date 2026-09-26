@@ -6,6 +6,7 @@ from locus.schema import Value
 from locus.stdlib import (
     CONTAINER,
     DOOR,
+    EAST,
     INSIDE,
     NORTH,
     OPENABLE,
@@ -15,6 +16,7 @@ from locus.stdlib import (
     SIDE_B,
     SOUTH,
     STATE,
+    WEST,
 )
 
 
@@ -92,7 +94,7 @@ def validate_world(world: World, inventory: tuple[str, ...] = ()) -> None:
         if not any(
             edge.source_id == left
             and edge.target_id == right
-            and edge.predicate_id in {NORTH, SOUTH}
+            and edge.predicate_id in {NORTH, SOUTH, EAST, WEST}
             for edge in world.relations
         ):
             raise WorldError(

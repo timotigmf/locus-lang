@@ -13,8 +13,9 @@
 | gioca | compila e avvia la sessione IF dalla prima stanza dichiarata |
 
 `gioca`: guarda, esamina, prendi, lascia, metti, apri, chiudi, blocca,
-inventario, nord, sud, esci. Alias classici: l/look, x/examine,
-i/inv/inventory, n/north, s/south, q/quit, get/take, open, close, drop, put, lock.
+inventario, nord, sud, est, ovest, esci. Alias classici: l/look, x/examine,
+i/inv/inventory, n/north, s/south, e/east, o/w/west, q/quit, get/take,
+open, close, drop, put, lock.
 I nomi parziali sono accettati soltanto quando identificano un solo oggetto
 raggiungibile; altrimenti l'evento è `ambiguous` e contiene tutte le alternative.
 EOF termina senza errore, Ctrl-C termina con codice 130. Prompt soltanto su TTY,

@@ -94,6 +94,20 @@ def test_map_and_session_end() -> None:
         studio.command("guarda")
 
 
+def test_map_contains_north_and_east_links_once() -> None:
+    studio = Studio()
+    result = studio.compile(
+        project(
+            "La Sala è una stanza. La Torre è una stanza. La Serra è una stanza. "
+            "La Torre è a nord della Sala. La Serra è a est della Sala."
+        )
+    )
+    assert result["map"]["links"] == [
+        {"from": "e1", "to": "e2", "direction": "nord"},
+        {"from": "e1", "to": "e3", "direction": "est"},
+    ]
+
+
 def test_dispatch_errors_and_size_limit() -> None:
     studio = Studio()
     assert not json.loads(studio.dispatch("{"))["ok"]

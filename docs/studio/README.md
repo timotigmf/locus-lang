@@ -55,7 +55,7 @@ un sorgente nuovo. **Ricomincia** resetta la sessione del progetto compilato.
 
 ## Mappa e indice
 
-**Mappa** mostra luoghi, collegamenti nord/sud, porte e punto iniziale. Puoi
+**Mappa** mostra luoghi, collegamenti nord/sud ed est/ovest, porte e punto iniziale. Puoi
 allargare/ridurre la vista ed esportare SVG o dati JSON. L'SVG è un file vettoriale
 riutilizzabile e stampabile. È uno schema logico del progetto iniziale, non una
 mappa delle posizioni del giocatore né un impaginatore geografico: collegamenti
