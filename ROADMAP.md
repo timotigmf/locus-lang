@@ -44,13 +44,21 @@ Browser: confrontare runtime Python in WebAssembly e runtime autonomo dell'IR
 con le stesse suite di conformità, misurando avvio e dimensioni. NLP opzionale
 solo come produttore di candidati; nessuna dipendenza del nucleo.
 
-## Prossimi cinque task
+## Prossimi pacchetti dopo l'analisi Inform 7
 
-1. Specificare tipi autore e namespace dei moduli.
-2. Definire variabili locali e destinatari parametrici delle regole.
-3. Introdurre espressioni aritmetiche e funzioni con firme tipate.
-4. Progettare salvataggi versionati e test di soluzione.
-5. Ampliare vocabolari e disambiguazione del parser giocatore.
+L'[analisi architetturale](docs/architettura/audit-inform7.md) motiva l'ordine.
+Ogni pacchetto conserva il core indipendente dalla narrativa interattiva.
+
+1. Specificare gerarchia dei tipi e azioni definite dall'autore.
+2. Estendere `Comprendi` a grammatiche italiane con argomenti tipati e
+   disambiguazione a più turni.
+3. Introdurre relazioni dinamiche e visibilità, con un passaggio segreto reale
+   come criterio di accettazione.
+4. Aggiungere liste, tabelle ed effetti transazionali sulle collezioni.
+5. Costruire persone e dialoghi strutturati prima di scene, veicoli e commercio.
+
+Scene/tempo/punteggio, veicoli, valuta/commercio, multimedia e indici completi
+seguono in pacchetti separati. Non si importeranno codice o testi Inform.
 
 ## Studio M5 — 0.5.0a1
 

@@ -1,6 +1,6 @@
 # Riferimenti pubblici e obiettivi misurabili
 
-Consultazione mirata del 2026-09-25. Non è un audit completo, un benchmark o una
+Consultazioni del 25–27 settembre 2026. Non è un audit riga per riga, un benchmark o una
 prova di superiorità di LOCUS. Nessun codice esterno incorporato. «Dialogo» viene
 qui interpretato come **Dialog**, il linguaggio IF; altri progetti omonimi non
 sono stati identificati né assimilati automaticamente.
@@ -42,13 +42,17 @@ Repository pubblica [ganelson/inform](https://github.com/ganelson/inform), revis
 `5c7ba42b74db69b93b1290453c65189fa60cfc67`.
 [Licenza principale Artistic 2.0](https://github.com/ganelson/inform/blob/5c7ba42b74db69b93b1290453c65189fa60cfc67/LICENSE),
 salvo componenti con licenze proprie, come segnala il README.
-Esaminati [README e organizzazione](https://github.com/ganelson/inform/blob/5c7ba42b74db69b93b1290453c65189fa60cfc67/README.md)
-e la directory inform7; non è stato studiato integralmente il suo compilatore.
+Sono stati inventariati l'intero sottoprogetto `inform7`, test e documentazione;
+letti gli indici di tutti i moduli e campioni mirati dei contratti principali.
+Metodi, risultati e limiti sono registrati nell’[analisi architetturale
+completa](audit-inform7.md). Non si afferma una revisione riga per riga.
 
-La distribuzione distingue il compilatore, gli strumenti Inter e i kit runtime.
-Questo sostiene il confronto fra livelli di rappresentazione separati; non implica
-che l'IR di LOCUS sia equivalente a Inter né più potente. LOCUS mantiene il proprio
-formato strutturato e nessuna compatibilità binaria o riuso di codice Inform.
+La distribuzione distingue compilatore generico, conoscenza, strato IF, runtime,
+grammatica dei comandi, test e documentazione. Questo sostiene un piano concreto
+per tipi, azioni, lessico italiano, relazioni dinamiche, dialogo, scene, veicoli e
+commercio; non implica che l'IR di LOCUS sia equivalente a Inter né più potente.
+LOCUS mantiene il proprio formato strutturato e nessuna compatibilità binaria o
+riuso di codice Inform.
 
 ## Cosa significa migliorare LOCUS
 

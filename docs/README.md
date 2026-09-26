@@ -13,6 +13,7 @@
 
 - [Linguaggio M2](linguaggio/milestone-2.md) e [rapporto M2](rapporto-milestone-2.md).
 - [Riferimenti pubblici](architettura/confronto-linguaggi.md): studio mirato e licenze.
+- [Analisi del repository Inform 7](architettura/audit-inform7.md): architettura, lessico, mondo, test e piano LOCUS.
 
 - [Regole M3](linguaggio/milestone-3.md) e [rapporto M3](rapporto-milestone-3.md).
 
