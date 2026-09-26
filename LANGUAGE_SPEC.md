@@ -1,10 +1,11 @@
-# Linguaggio 0.1 — sottoinsieme eseguibile M1
+# LOCUS — specifiche incrementali
 
 ## Stato attuale
 
-Versione `0.2.0a1`: M2 estende e, dove indicato, sostituisce i limiti M1 sotto.
+Versione corrente `0.4.0a1`, IR versione 5. Le specifiche M2, M3 e M4
+estendono e, dove indicato, sostituiscono i limiti M1 sotto.
 La [specifica M2](docs/linguaggio/milestone-2.md) è normativa per proprietà,
-stringhe, nomi quotati, preposizioni, contenitori, porte e chiavi. IR versione 3.
+stringhe, nomi quotati, preposizioni, contenitori, porte e chiavi.
 Le sezioni S0/S1 seguenti descrivono il nucleo storico, non l'intera versione.
 
 ## Dichiarazioni (S0, mantenute in 0.1.0a2)
@@ -119,3 +120,8 @@ dell'istruzione interessata. Cataloghi API malformati producono ValueError.
 
 La [specifica normativa M3](docs/linguaggio/milestone-3.md) aggiunge regole, condizioni
 e azioni transazionali. IR corrente: versione 4; le versioni precedenti non sono accettate.
+
+## Estensione M4
+
+La [specifica normativa M4](docs/linguaggio/milestone-4.md) aggiunge inclusioni
+da file e punto iniziale esplicito. IR corrente versione 5.

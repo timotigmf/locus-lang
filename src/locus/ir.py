@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from locus.rule_model import RuleIR
 from locus.schema import PropertySpec, Value
 
-IR_VERSION = 4
+IR_VERSION = 5
 
 
 @dataclass(frozen=True, slots=True)
@@ -37,3 +37,4 @@ class ProgramIR:
     property_specs: tuple[PropertySpec, ...] = ()
     properties: tuple[PropertyIR, ...] = ()
     rules: tuple[RuleIR, ...] = ()
+    entry_id: str | None = None

@@ -157,3 +157,9 @@ contiene record immutabili generici. `rules.execute` esegue rulebook attraverso
 un protocollo Host indipendente da IF. `stdlib.game` adatta sessioni e azioni;
 `Transition` espone output, trace e risultato. IR corrente versione 4.
 Vedere [ADR 0006](docs/adr/0006-regole.md).
+
+## Implementazione M4
+
+`project.load_project` gestisce I/O e grafo delle inclusioni prima di `analyze`.
+AST espanso con span originali e ordine dei file; IR 5 con `entry_id` opzionale.
+La stdlib valida il tipo del punto iniziale. Vedere [ADR 0007](docs/adr/0007-progetti.md).

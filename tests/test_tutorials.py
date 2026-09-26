@@ -1,0 +1,76 @@
+import os
+import subprocess
+import sys
+from pathlib import Path
+
+import pytest
+
+from locus.player import parse_command
+from locus.runtime import instantiate
+from locus.stdlib.authoring import compile_story_file
+from locus.stdlib.game import Session, start, step
+from locus.stdlib.render import render
+from locus.stdlib.validation import property_value
+
+ROOT = Path(__file__).resolve().parents[1]
+TUTORIAL = ROOT / "examples" / "tutorial"
+
+
+@pytest.mark.parametrize("path", sorted(TUTORIAL.glob("*.locus")))
+def test_lessons_compile(path: Path) -> None:
+    start(instantiate(compile_story_file(path)))
+
+
+def test_cli_solution_transcript() -> None:
+    process = subprocess.run(
+        [sys.executable, "-m", "locus", "gioca", str(TUTORIAL / "04_faro.locus")],
+        input=(TUTORIAL / "04_faro.comandi").read_text(encoding="utf-8"),
+        text=True,
+        encoding="utf-8",
+        capture_output=True,
+        check=False,
+        env={**os.environ, "PYTHONUTF8": "1"},
+        timeout=10,
+    )
+    assert process.returncode == 0, process.stderr
+    assert not process.stderr
+    assert process.stdout == (TUTORIAL / "04_faro.atteso").read_text(encoding="utf-8")
+
+
+def property_of(session: Session, name: str, suffix: str) -> str | int | bool:
+    entity = next(e for e in session.world.entities if e.label == name)
+    spec = next(p for p in session.world.property_specs if p.id.endswith(suffix))
+    return property_value(session.world, entity.id, spec.id)
+
+
+def test_signal_reversibility_and_failed_repeat() -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "03_segnale.locus")))
+    initial_description = property_of(current, "Terrazza", "descrizione")
+    for _ in range(3):
+        opened = step(current, parse_command("apri lanterna"))
+        assert property_of(opened.session, "lanterna", "segnale") is True
+        assert "foschia" in render(step(opened.session, parse_command("guarda")))
+        repeat = step(opened.session, parse_command("apri lanterna"))
+        assert repeat.session is opened.session
+        assert not repeat.trace  # L'azione fallita non raggiunge le regole dopo.
+        current = step(opened.session, parse_command("chiudi lanterna")).session
+        assert property_of(current, "lanterna", "segnale") is False
+        assert property_of(current, "Terrazza", "descrizione") == initial_description
+
+
+def test_container_failed_put_preserves_inventory() -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "02_custodia.locus")))
+    for command in ["apri custodia", "prendi chiave di rame", "chiudi custodia"]:
+        current = step(current, parse_command(command)).session
+    failed = step(current, parse_command("metti chiave di rame nella custodia"))
+    assert failed.session is current
+    assert len(current.inventory) == 1
+
+
+def test_final_world_matches_story() -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "04_faro.locus")))
+    for command in (TUTORIAL / "04_faro.comandi").read_text(encoding="utf-8").splitlines():
+        current = step(current, parse_command(command)).session
+    assert property_of(current, "lanterna", "segnale") is False
+    assert len(current.inventory) == 1
+    assert next(e.label for e in current.world.entities if e.id == current.room_id) == "Terrazza"

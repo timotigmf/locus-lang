@@ -5,7 +5,7 @@ Nome **LOCUS provvisorio**; il repository locale si chiama LOCUS.
 
 ## Stato reale
 
-Versione `0.3.0a1`: **regole tipate, priorità e azioni transazionali**.
+Versione `0.4.0a1`: **progetti su più file e punto iniziale esplicito**.
 Proprietà numeriche/testuali/logiche definite dall’autore, contenimento annidato,
 accessibilità verificata e azioni con due oggetti. Nessuna dipendenza runtime esterna o servizio cloud.
 
@@ -26,7 +26,7 @@ python -m venv .venv
 . .venv/bin/activate
 # Windows PowerShell, in alternativa: .venv\Scripts\Activate.ps1
 python -m pip install -e '.[dev]'
-locus gioca examples/regole.locus
+locus gioca examples/progetto.locus
 locus debug examples/regole.locus
 locus controlla examples/dichiarazioni.locus
 locus ast examples/dichiarazioni.locus
@@ -70,7 +70,7 @@ Il ramo `main` viene mantenuto separato fino all'integrazione delle modifiche.
 ## Giocare
 
 Dopo l'avvio: `guarda`, `prendi la chiave`, `inventario`, `nord`, `sud`, `esci`.
-La prima stanza dichiarata è il punto iniziale provvisorio. EOF termina la sessione;
+`Inizia nella "Sala".` sceglie il punto iniziale; in assenza, vale la prima stanza. EOF termina la sessione;
 Ctrl-C la interrompe. Vedi il [manuale](docs/manuale/README.md) per un transcript.
 
 ## Espansione M2
@@ -84,3 +84,15 @@ Per la nuova storia: `apri scrigno`, `prendi chiave di ottone`,
 
 Le [regole M3](docs/linguaggio/milestone-3.md) includono prima/invece/verifica/esegui/dopo/descrivi,
 sostituzioni limitate, risultati tipati e ripristino completo in caso di fallimento.
+
+## Espansione M4
+
+[Specifica M4](docs/linguaggio/milestone-4.md), [rapporto M4](docs/rapporto-milestone-4.md).
+`Includi "moduli/mondo.locus".` compone file locali con controlli sui cicli e
+diagnostica che conserva il file originale. Ramo GitHub: `codex/milestone-4`.
+
+## Tutorial in italiano
+
+[Costruisci il faro di Selce](docs/tutorial/README.md): quattro lezioni, esercizi
+con soluzioni, esempi eseguibili e copione verificato automaticamente.
+[Materiali consultati e scelte](docs/architettura/materiali-didattici.md).

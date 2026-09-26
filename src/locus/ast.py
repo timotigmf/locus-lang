@@ -72,9 +72,24 @@ class Rule:
 
 
 @dataclass(frozen=True, slots=True)
+class Inclusion:
+    path: str
+    span: Span
+
+
+@dataclass(frozen=True, slots=True)
+class EntryPoint:
+    name: str
+    span: Span
+
+
+@dataclass(frozen=True, slots=True)
 class Program:
     declarations: tuple[Declaration, ...]
     relations: tuple[Relation, ...] = ()
     properties: tuple[PropertyDeclaration, ...] = ()
     assignments: tuple[Assignment, ...] = ()
     rules: tuple[Rule, ...] = ()
+    inclusions: tuple[Inclusion, ...] = ()
+    entries: tuple[EntryPoint, ...] = ()
+    source_order: tuple[str, ...] = ()

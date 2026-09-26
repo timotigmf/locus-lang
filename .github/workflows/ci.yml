@@ -40,3 +40,6 @@ jobs:
           locus controlla "$GITHUB_WORKSPACE/examples/porte_e_contenitori.locus"
           locus gioca "$GITHUB_WORKSPACE/examples/porte_e_contenitori.locus" < /dev/null
           locus debug "$GITHUB_WORKSPACE/examples/regole.locus" < /dev/null
+          locus debug "$GITHUB_WORKSPACE/examples/progetto.locus" < /dev/null
+          locus gioca "$GITHUB_WORKSPACE/examples/tutorial/04_faro.locus" < "$GITHUB_WORKSPACE/examples/tutorial/04_faro.comandi" > faro.txt
+          python -c "import os,pathlib; p=pathlib.Path; assert p('faro.txt').read_text(encoding='utf-8') == (p(os.environ['GITHUB_WORKSPACE']) / 'examples/tutorial/04_faro.atteso').read_text(encoding='utf-8')"

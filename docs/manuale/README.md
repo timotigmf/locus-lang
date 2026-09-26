@@ -45,3 +45,8 @@ porta. `esamina scrigno` mostra descrizione, stato e contenuto accessibile.
 
 `metti chiave di ottone nello scrigno` richiede lo scrigno aperto; chiuderlo rende
 la chiave inaccessibile. Vedi [sintassi e limiti M2](../linguaggio/milestone-2.md).
+
+## Percorso guidato
+
+Per iniziare da zero, segui le [quattro lezioni del faro](../tutorial/README.md),
+con prove di gioco e soluzioni.

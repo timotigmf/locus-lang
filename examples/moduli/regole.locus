@@ -1,0 +1,10 @@
+Includi "mondo.locus".
+
+Regola "raccolta" per prendere "chiave" nella fase dopo:
+    dì "La chiave porta inciso il nome del laboratorio.";
+Fine regola.
+
+Regola "ingresso" per andare a nord nella fase dopo:
+    aumenta "visite" di "Laboratorio" di 1;
+    dì "Il laboratorio si illumina al tuo ingresso.";
+Fine regola.

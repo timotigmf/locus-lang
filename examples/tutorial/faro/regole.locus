@@ -1,0 +1,13 @@
+Includi "mondo.locus".
+
+Regola "scopri il segnale" per aprire "lanterna" nella fase dopo:
+    imposta "segnale" di "lanterna" a vero;
+    imposta "descrizione" di "Terrazza" a "Il fascio della lanterna attraversa la foschia.";
+    dì "Il segnale raggiunge il mare.";
+Fine regola.
+
+Regola "nascondi il segnale" per chiudere "lanterna" nella fase dopo:
+    imposta "segnale" di "lanterna" a falso;
+    imposta "descrizione" di "Terrazza" a "La schermatura della lanterna nasconde il fascio luminoso.";
+    dì "La luce resta dietro la schermatura.";
+Fine regola.

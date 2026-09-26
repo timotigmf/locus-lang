@@ -2,7 +2,16 @@
 
 from collections.abc import Mapping
 
-from locus.ast import Assignment, Declaration, Program, PropertyDeclaration, Relation, Rule
+from locus.ast import (
+    Assignment,
+    Declaration,
+    EntryPoint,
+    Inclusion,
+    Program,
+    PropertyDeclaration,
+    Relation,
+    Rule,
+)
 from locus.diagnostics import CompileError, Span
 from locus.lexer import Token, tokenize
 from locus.rule_parser import RuleParser
@@ -121,7 +130,22 @@ class _Parser:
         properties: list[PropertyDeclaration] = []
         assignments: list[Assignment] = []
         rules: list[Rule] = []
+        inclusions: list[Inclusion] = []
+        entries: list[EntryPoint] = []
         while self.current.kind != "EOF":
+            if self.current.normalized in {"includi", "inizia"}:
+                start = self.current.span
+                directive = self.current.normalized
+                self.keyword(directive)
+                if directive == "inizia":
+                    self.keyword("nella")
+                name = RuleParser(self).quoted()
+                span = self.finish(start)
+                if directive == "includi":
+                    inclusions.append(Inclusion(name, span))
+                else:
+                    entries.append(EntryPoint(name, span))
+                continue
             if self.current.normalized == "regola":
                 rules.append(RuleParser(self).rule())
                 continue
@@ -193,6 +217,8 @@ class _Parser:
             tuple(properties),
             tuple(assignments),
             tuple(rules),
+            tuple(inclusions),
+            tuple(entries),
         )
 
 

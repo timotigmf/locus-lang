@@ -28,7 +28,12 @@ Accettazione: ordine stabile, esiti distinti, loop diagnosticati, replay di una
 sessione e trace verificabile. Migrazione delle azioni M1/M2 senza cambiarne
 silenziosamente la semantica.
 
-## Dopo M3 — senza promesse di data
+## M4 — implementato in 0.4.0a1
+
+Composizione di file con `Includi`, riferimenti fra moduli, diagnostica sorgente,
+deduplicazione e cicli. Punto iniziale esplicito. Namespace e tipi autore rinviati.
+
+## Dopo M4 — senza promesse di data
 
 Moduli e vocabolari; valori, funzioni, liste, tabelle ed enumerazioni; tempo,
 eventi, scene; persone, gruppi, regioni e conversazioni. Parser permissivo con
@@ -41,7 +46,7 @@ solo come produttore di candidati; nessuna dipendenza del nucleo.
 
 ## Prossimi cinque task
 
-1. Specificare tipi autore, moduli e avvio esplicito.
+1. Specificare tipi autore e namespace dei moduli.
 2. Definire variabili locali e destinatari parametrici delle regole.
 3. Introdurre espressioni aritmetiche e funzioni con firme tipate.
 4. Progettare salvataggi versionati e test di soluzione.

@@ -51,6 +51,16 @@ def analyze(
     properties: Mapping[str, PropertySpec] | None = None,
     actions: Mapping[str, ActionSpec] | None = None,
 ) -> ProgramIR:
+    if program.inclusions:
+        raise CompileError(
+            "E401",
+            "Le inclusioni richiedono il caricamento del progetto da file.",
+            program.inclusions[0].span,
+        )
+    if len(program.entries) > 1:
+        raise CompileError(
+            "E406", "Il progetto può dichiarare un solo punto iniziale.", program.entries[1].span
+        )
     catalog = relations if relations is not None else {}
     _validate_catalog(kinds, catalog)
     symbols: dict[str, EntityIR] = {}
@@ -65,13 +75,21 @@ def analyze(
             raise CompileError("E102", f"Tipo sconosciuto: {declaration.kind}.", declaration.span)
         symbols[name] = EntityIR(f"e{len(symbols) + 1}", declaration.name, kinds[kind])
 
+    entry_id = None
+    if program.entries:
+        entry = program.entries[0]
+        target = symbols.get(canonical(entry.name))
+        if target is None:
+            raise CompileError("E103", f"Entità iniziale non dichiarata: {entry.name}.", entry.span)
+        entry_id = target.id
     facts = list(program.relations)
     facts.extend(
         Relation(d.name, "nella", d.location, d.span)
         for d in program.declarations
         if d.location is not None
     )
-    facts.sort(key=lambda fact: fact.span.start)
+    source_order = {source: index for index, source in enumerate(program.source_order)}
+    facts.sort(key=lambda fact: (source_order.get(fact.span.source, 0), fact.span.start))
     edges: dict[tuple[str, str], RelationIR] = {}
     edge_facts: dict[tuple[str, str], Relation] = {}
     for fact in facts:
@@ -174,6 +192,7 @@ def analyze(
         tuple(property_catalog.values()),
         tuple(values.values()),
         lower_rules(program.rules, symbols, property_catalog, actions or {}),
+        entry_id,
     )
 
 

@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from locus.stdlib.authoring import compile_story
+from locus.stdlib.authoring import compile_story, compile_story_file
 
 ROOT = Path(__file__).resolve().parents[1]
 MARKDOWN = sorted(ROOT.glob("*.md")) + sorted((ROOT / "docs").rglob("*.md"))
@@ -24,7 +24,7 @@ def test_documentation_examples(source: str, path: str) -> None:
 
 @pytest.mark.parametrize("path", sorted((ROOT / "examples").glob("*.locus")))
 def test_example_files(path: Path) -> None:
-    compile_story(path.read_text(encoding="utf-8"), str(path))
+    compile_story_file(path)
 
 
 @pytest.mark.parametrize(

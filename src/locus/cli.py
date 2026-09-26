@@ -9,11 +9,11 @@ from typing import Never
 
 from locus.compiler import relation_verbs
 from locus.diagnostics import CompileError
-from locus.parser import parse
 from locus.player import Intent, parse_command
+from locus.project import load_project
 from locus.runtime import instantiate
 from locus.stdlib import default_relations
-from locus.stdlib.authoring import compile_story
+from locus.stdlib.authoring import compile_story_file
 from locus.stdlib.game import Transition, start, step
 from locus.stdlib.render import render
 
@@ -35,18 +35,16 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("file", type=Path)
     args = parser.parse_args(argv)
     try:
-        with args.file.open(encoding="utf-8", newline="") as source_file:
-            text = source_file.read()
         if args.command == "ast":
             print(
                 json.dumps(
-                    asdict(parse(text, str(args.file), verbs=relation_verbs(default_relations()))),
+                    asdict(load_project(args.file, verbs=relation_verbs(default_relations()))),
                     ensure_ascii=False,
                     indent=2,
                 )
             )
         else:
-            program = compile_story(text, str(args.file))
+            program = compile_story_file(args.file)
             if args.command in {"gioca", "debug"}:
                 session = start(instantiate(program))
                 initial = step(session, Intent("look"))

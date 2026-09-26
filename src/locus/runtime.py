@@ -21,6 +21,7 @@ class World:
     property_specs: tuple[PropertySpec, ...] = ()
     properties: tuple[PropertyIR, ...] = ()
     rules: tuple[RuleIR, ...] = ()
+    entry_id: str | None = None
 
 
 def instantiate(program: ProgramIR) -> World:
@@ -34,6 +35,8 @@ def instantiate(program: ProgramIR) -> World:
         for edge in program.relations
     ):
         raise ValueError("Riferimento a entità assente nell'IR.")
+    if program.entry_id is not None and program.entry_id not in identifiers:
+        raise ValueError("Entità iniziale assente nell’IR.")
     keys = {(edge.source_id, edge.predicate_id) for edge in program.relations}
     if len(keys) != len(program.relations):
         raise ValueError("Relazioni duplicate o in conflitto nell'IR.")
@@ -56,4 +59,5 @@ def instantiate(program: ProgramIR) -> World:
         program.property_specs,
         program.properties,
         program.rules,
+        program.entry_id,
     )

@@ -14,3 +14,8 @@
 - [Riferimenti pubblici](architettura/confronto-linguaggi.md): studio mirato e licenze.
 
 - [Regole M3](linguaggio/milestone-3.md) e [rapporto M3](rapporto-milestone-3.md).
+
+- [Progetti M4](linguaggio/milestone-4.md) e [rapporto M4](rapporto-milestone-4.md).
+
+- [Tutorial: il faro](tutorial/README.md), [da Inform a LOCUS](tutorial/da-inform-a-locus.md).
+- [Registro dei sei manuali forniti](architettura/materiali-didattici.md).

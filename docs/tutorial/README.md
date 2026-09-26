@@ -1,0 +1,30 @@
+# Imparare LOCUS costruendo un faro
+
+Un percorso originale in italiano, verificato con LOCUS 0.4.0a1. Ogni lezione
+ha un file completo da eseguire, un esperimento e un risultato controllabile.
+Non serve conoscere Inform. Le letture che hanno orientato il percorso sono
+registrate in [Materiali e scelte](../architettura/materiali-didattici.md).
+
+## Preparazione
+
+Dalla cartella principale del repository, dopo l'installazione descritta nel
+[README](../../README.md), usa `locus` oppure `.venv/bin/python -m locus` su macOS/Linux.
+Su Windows puoi usare `.venv\Scripts\python -m locus`. Non digitare i comandi shell
+al prompt della storia: lì si scrivono soltanto i comandi del giocatore.
+
+| Lezione | File da giocare | Obiettivo |
+| --- | --- | --- |
+| [1. Luoghi e mappa](01-luoghi.md) | `examples/tutorial/01_mappa.locus` | Distinguere mondo, descrizione e comandi |
+| [2. Oggetti e accesso](02-oggetti.md) | `examples/tutorial/02_custodia.locus` | Provare contenimento, visibilità e inventario |
+| [3. Regole e descrizioni](03-regole.md) | `examples/tutorial/03_segnale.locus` | Mantenere coerenti stato e racconto |
+| [4. Progetto e verifica](04-progetto.md) | `examples/tutorial/04_faro.locus` | Comporre un enigma completo su più file |
+
+Prima prova la versione fornita. Poi modifica un solo elemento e riesegui la
+sequenza di comandi. In caso di errore conserva il messaggio, il file sorgente e
+la sequenza minima che lo produce. Il [ricettario](../cookbook/README.md) e la
+[scheda per chi conosce Inform](da-inform-a-locus.md) aiutano a orientarsi.
+
+Gli esempi non sono traduzioni dei giochi presenti nei manuali. Non usano codice
+Inform, estensioni Inform, personaggi simulati, illuminazione fisica o sinonimi
+non implementati. La lanterna è modellata esplicitamente come un contenitore con
+schermatura: aprirla e chiuderla cambia il testo, non un motore della luce.

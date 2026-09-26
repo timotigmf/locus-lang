@@ -1,0 +1,18 @@
+La Terrazza è una stanza.
+Inizia nella "Terrazza".
+La Terrazza ha descrizione "La schermatura della lanterna nasconde il fascio luminoso.".
+La lanterna è un contenitore nella Terrazza.
+La lanterna ha descrizione "Una schermatura apribile protegge la luce.".
+La segnale è una proprietà logica.
+
+Regola "scopri il segnale" per aprire "lanterna" nella fase dopo:
+    imposta "segnale" di "lanterna" a vero;
+    imposta "descrizione" di "Terrazza" a "Il fascio della lanterna attraversa la foschia.";
+    dì "Il segnale raggiunge il mare.";
+Fine regola.
+
+Regola "nascondi il segnale" per chiudere "lanterna" nella fase dopo:
+    imposta "segnale" di "lanterna" a falso;
+    imposta "descrizione" di "Terrazza" a "La schermatura della lanterna nasconde il fascio luminoso.";
+    dì "La luce resta dietro la schermatura.";
+Fine regola.

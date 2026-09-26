@@ -4,8 +4,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "locus"
-version = "0.3.0a1"
-description = "Linguaggio controllato italiano per sistemi narrativi — regole tipate e transazioni narrative"
+version = "0.4.0a1"
+description = "Linguaggio controllato italiano per sistemi narrativi — progetti modulari e regole narrative"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = []

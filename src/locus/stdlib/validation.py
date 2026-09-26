@@ -37,6 +37,10 @@ def property_value(world: World, entity_id: str, property_id: str, default: Valu
 
 def validate_world(world: World, inventory: tuple[str, ...] = ()) -> None:
     entities = {entity.id: entity for entity in world.entities}
+    if world.entry_id is not None and (
+        world.entry_id not in entities or entities[world.entry_id].type_id != ROOM
+    ):
+        raise WorldError("Il punto iniziale deve essere una stanza.", world.entry_id)
     parents = {
         edge.source_id: edge.target_id for edge in world.relations if edge.predicate_id == INSIDE
     }

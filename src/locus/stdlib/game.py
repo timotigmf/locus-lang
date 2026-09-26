@@ -86,7 +86,7 @@ def start(world: World) -> Session:
     rooms = [entity.id for entity in world.entities if entity.type_id == ROOM]
     if not rooms:
         raise ValueError("Per giocare occorre dichiarare almeno una stanza.")
-    return Session(world, rooms[0])
+    return Session(world, world.entry_id or rooms[0])
 
 
 def _parents(session: Session) -> dict[str, str]:

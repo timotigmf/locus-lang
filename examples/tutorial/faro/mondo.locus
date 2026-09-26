@@ -1,0 +1,15 @@
+La Terrazza è una stanza.
+La Terrazza ha descrizione "La schermatura della lanterna nasconde il fascio luminoso.".
+La lanterna è un contenitore nella Terrazza.
+La lanterna ha descrizione "Una schermatura apribile protegge la luce.".
+La segnale è una proprietà logica.
+
+Il Molo è una stanza.
+La Terrazza è a nord del Molo.
+Il Molo ha descrizione "Il passaggio a nord conduce alla terrazza. Una custodia contiene la chiave.".
+La custodia è un contenitore nel Molo.
+La chiave di rame è una chiave nella custodia.
+Il portello è una porta.
+Il portello collega il Molo alla Terrazza.
+Il portello ha stato "bloccato".
+La chiave di rame apre il portello.
