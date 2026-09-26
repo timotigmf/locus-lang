@@ -15,3 +15,5 @@ web/node_modules/
 web/site/
 web/test-results/
 web/playwright-report/
+hosting/studio/
+hosting/studio-source/
