@@ -7,6 +7,7 @@ test("progetto, compilazione, gioco, test e release statica", async ({
 }) => {
   const errors = [];
   page.on("pageerror", (e) => errors.push(e.message));
+  await context.grantPermissions(["clipboard-read", "clipboard-write"]);
   await page.goto("/");
   await expect(page.locator("#compileStatus")).toContainText("compilato", {
     timeout: 90000,

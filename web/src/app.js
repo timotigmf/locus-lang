@@ -48,6 +48,23 @@ function notice(message) {
   clearTimeout(notice.timer);
   notice.timer = setTimeout(() => ($("toast").hidden = true), 7000);
 }
+async function copyText(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    return;
+  } catch {
+    const area = el("textarea", {
+      "aria-hidden": "true",
+      style: "position:fixed;left:-9999px;top:0",
+    });
+    area.value = text;
+    document.body.append(area);
+    area.select();
+    const copied = document.execCommand("copy");
+    area.remove();
+    if (!copied) throw new Error("Copia non disponibile");
+  }
+}
 function setBusy(value) {
   busy = value;
   for (const id of actionButtons) $(id).disabled = value || !ready;
@@ -769,7 +786,7 @@ function openManual(path) {
     );
     button.onclick = async () => {
       try {
-        await navigator.clipboard.writeText(pre.textContent);
+        await copyText(pre.textContent);
         button.textContent = "Copiato ✓";
         setTimeout(() => (button.textContent = "Copia codice"), 1800);
       } catch {
