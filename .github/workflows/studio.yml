@@ -39,3 +39,24 @@ jobs:
           name: locus-studio-sito-statico
           path: web/site
           include-hidden-files: true
+      - uses: actions/upload-pages-artifact@v3
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/codex/studio-web'
+        with:
+          path: web/site
+  deploy:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/codex/studio-web'
+    needs: browser
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    concurrency:
+      group: github-pages
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Pubblica LOCUS Studio
+        id: deployment
+        uses: actions/deploy-pages@v4
