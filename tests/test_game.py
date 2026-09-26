@@ -190,3 +190,20 @@ def test_missing_object_gets_a_specific_prompt() -> None:
     assert render(step(make_session(), parse_command("x"))) == (
         "Indica quale oggetto vuoi esaminare o manipolare."
     )
+
+
+def test_author_synonyms_resolve_in_scope_and_can_be_ambiguous() -> None:
+    source = (
+        "La Sala è una stanza. La custodia è una cosa nella Sala. "
+        "La cassa blu è una cosa nella Sala. "
+        'Comprendi "forziere" come "custodia". '
+        'Comprendi "cassa rossa" come "custodia". '
+        'Comprendi "baule" come "cassa blu".'
+    )
+    state = start(
+        instantiate(compile_source(source, default_kinds(), relations=default_relations()))
+    )
+    assert step(state, parse_command("x forziere")).event.entities == ("e2",)
+    assert step(state, parse_command("prendi baule")).event.entities == ("e3",)
+    ambiguous = step(state, parse_command("x cassa"))
+    assert ambiguous.event.kind == "ambiguous"

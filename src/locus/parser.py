@@ -7,10 +7,12 @@ from locus.ast import (
     Declaration,
     EntryPoint,
     Inclusion,
+    Metadata,
     Program,
     PropertyDeclaration,
     Relation,
     Rule,
+    Vocabulary,
 )
 from locus.diagnostics import CompileError, Span
 from locus.lexer import Token, tokenize
@@ -20,7 +22,17 @@ from locus.schema import Value, ValueKind
 _LOCATIONS = {"nella", "nel", "nello", "nell"}
 _GENITIVES = {"della", "del", "dello", "dell"}
 _TARGETS = {"alla", "al", "allo", "all", "a"}
-_RESERVED = {"è", "ha", "collega", *_LOCATIONS, *_GENITIVES}
+_RESERVED = {
+    "è",
+    "ha",
+    "collega",
+    "titolo",
+    "autore",
+    "comprendi",
+    "come",
+    *_LOCATIONS,
+    *_GENITIVES,
+}
 
 
 def decode_string(text: str) -> str:
@@ -132,7 +144,27 @@ class _Parser:
         rules: list[Rule] = []
         inclusions: list[Inclusion] = []
         entries: list[EntryPoint] = []
+        metadata: list[Metadata] = []
+        vocabulary: list[Vocabulary] = []
         while self.current.kind != "EOF":
+            if self.current.normalized in {"titolo", "autore"}:
+                start = self.current.span
+                name = self.current.normalized
+                self.keyword(name)
+                if self.current.kind != "COLON":
+                    self.fail("':'")
+                self.index += 1
+                metadata_value = RuleParser(self).quoted()
+                metadata.append(Metadata(name, metadata_value, self.finish(start)))
+                continue
+            if self.current.normalized == "comprendi":
+                start = self.current.span
+                self.keyword("comprendi")
+                alias = RuleParser(self).quoted()
+                self.keyword("come")
+                target = RuleParser(self).quoted()
+                vocabulary.append(Vocabulary(alias, target, self.finish(start)))
+                continue
             if self.current.normalized in {"includi", "inizia"}:
                 start = self.current.span
                 directive = self.current.normalized
@@ -156,8 +188,8 @@ class _Parser:
             if operator == "ha":
                 self.keyword("ha")
                 prop = self.words(value_follows=True)
-                value = self.value()
-                assignments.append(Assignment(name, prop, value, self.finish(start)))
+                assigned_value = self.value()
+                assignments.append(Assignment(name, prop, assigned_value, self.finish(start)))
             elif operator in self.verbs:
                 self.keyword(operator)
                 self.article(True)
@@ -212,13 +244,15 @@ class _Parser:
                             location = self.words()
                         declarations.append(Declaration(name, kind, self.finish(start), location))
         return Program(
-            tuple(declarations),
-            tuple(relations),
-            tuple(properties),
-            tuple(assignments),
-            tuple(rules),
-            tuple(inclusions),
-            tuple(entries),
+            declarations=tuple(declarations),
+            relations=tuple(relations),
+            properties=tuple(properties),
+            assignments=tuple(assignments),
+            rules=tuple(rules),
+            inclusions=tuple(inclusions),
+            entries=tuple(entries),
+            metadata=tuple(metadata),
+            vocabulary=tuple(vocabulary),
         )
 
 

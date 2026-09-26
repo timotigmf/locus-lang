@@ -5,7 +5,7 @@ from collections.abc import Mapping
 from locus.ast import Program, Relation
 from locus.diagnostics import CompileError, canonical
 from locus.graph import cycle_node
-from locus.ir import IR_VERSION, EntityIR, ProgramIR, PropertyIR, RelationIR
+from locus.ir import IR_VERSION, EntityIR, ProgramIR, PropertyIR, RelationIR, SynonymIR
 from locus.parser import parse
 from locus.rule_compiler import lower_rules
 from locus.schema import ActionSpec, PropertySpec, RelationSpec, Value, type_ids
@@ -74,6 +74,32 @@ def analyze(
         if kind not in kinds:
             raise CompileError("E102", f"Tipo sconosciuto: {declaration.kind}.", declaration.span)
         symbols[name] = EntityIR(f"e{len(symbols) + 1}", declaration.name, kinds[kind])
+
+    metadata: dict[str, str] = {}
+    for metadata_item in program.metadata:
+        if metadata_item.name in metadata:
+            raise CompileError(
+                "E408", f"Metadato ripetuto: {metadata_item.name}.", metadata_item.span
+            )
+        metadata[metadata_item.name] = metadata_item.value
+
+    synonyms: dict[str, SynonymIR] = {}
+    for vocabulary_item in program.vocabulary:
+        alias = canonical(vocabulary_item.alias)
+        target = symbols.get(canonical(vocabulary_item.target))
+        if target is None:
+            raise CompileError(
+                "E103",
+                f"Entità non dichiarata: {vocabulary_item.target}.",
+                vocabulary_item.span,
+            )
+        if not alias or alias in symbols or alias in synonyms:
+            raise CompileError(
+                "E409",
+                f"Sinonimo già usato come nome o sinonimo: {vocabulary_item.alias}.",
+                vocabulary_item.span,
+            )
+        synonyms[alias] = SynonymIR(vocabulary_item.alias, target.id)
 
     entry_id = None
     if program.entries:
@@ -186,13 +212,16 @@ def analyze(
         assigned.add(key)
         values[key] = PropertyIR(entity.id, prop.id, assignment.value)
     return ProgramIR(
-        IR_VERSION,
-        tuple(symbols.values()),
-        tuple(edges.values()),
-        tuple(property_catalog.values()),
-        tuple(values.values()),
-        lower_rules(program.rules, symbols, property_catalog, actions or {}),
-        entry_id,
+        version=IR_VERSION,
+        entities=tuple(symbols.values()),
+        relations=tuple(edges.values()),
+        property_specs=tuple(property_catalog.values()),
+        properties=tuple(values.values()),
+        rules=lower_rules(program.rules, symbols, property_catalog, actions or {}),
+        entry_id=entry_id,
+        synonyms=tuple(synonyms.values()),
+        title=metadata.get("titolo"),
+        author=metadata.get("autore"),
     )
 
 

@@ -18,3 +18,5 @@ Le fonti e le licenze sono nel [registro](../architettura/fonti.md).
 - [0008 — Studio web](0008-studio-web.md): stesso motore in WebAssembly e sito statico.
 
 - [0009 — direzioni cardinali](0009-direzioni-cardinali.md): nord/sud ed est/ovest dal sorgente alla mappa.
+
+- [0010 — metadati e vocabolario](0010-metadati-e-vocabolario.md): titolo e autore nel sorgente, sinonimi nominali dichiarativi.

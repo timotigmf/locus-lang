@@ -83,4 +83,6 @@ def load_project(
         rules=tuple(item for unit in units for item in unit.rules),
         entries=tuple(item for unit in units for item in unit.entries),
         source_order=tuple(sources),
+        metadata=tuple(item for unit in units for item in unit.metadata),
+        vocabulary=tuple(item for unit in units for item in unit.vocabulary),
     )

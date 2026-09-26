@@ -1,0 +1,35 @@
+Titolo: "Il sotterraneo dell'orologio".
+Autore: "Esempio LOCUS".
+
+L'Ingresso è una stanza.
+La Galleria è una stanza.
+La Cripta è una stanza.
+La Galleria è a nord dell'Ingresso.
+La Cripta è a est della Galleria.
+Inizia nella "Ingresso".
+
+L'Ingresso ha descrizione "Una scala scende sotto la città. La galleria continua a nord.".
+La Galleria ha descrizione "Un arco di pietra protegge la cripta a est.".
+La Cripta ha descrizione "Un idolo d'ambra riposa su un piedistallo.".
+
+La cassetta è un contenitore nell'Ingresso.
+La "chiave d'argento" è una chiave nella cassetta.
+La porta di pietra è una porta.
+La porta di pietra collega la Galleria alla Cripta.
+La porta di pietra ha stato "bloccato".
+La "chiave d'argento" apre la porta di pietra.
+Il "idolo d'ambra" è una cosa nella Cripta.
+
+Il registro è una cosa.
+La punti è una proprietà numerica.
+Il registro ha punti 0.
+
+Comprendi "scatola" come "cassetta".
+Comprendi "scrigno" come "cassetta".
+Comprendi "reliquia" come "idolo d'ambra".
+Comprendi "statua" come "idolo d'ambra".
+
+Regola "premio della cripta" per prendere "idolo d'ambra" nella fase dopo:
+    aumenta "punti" di "registro" di 10;
+    dì "Hai risolto l'enigma della cripta e ottenuto dieci punti.";
+Fine regola.

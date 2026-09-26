@@ -292,6 +292,13 @@ input:disabled {
   margin: 7px 0 0;
   letter-spacing: -0.4px;
 }
+.story-byline {
+  margin: 3px 0 0;
+  color: var(--muted);
+  font:
+    11px Georgia,
+    serif;
+}
 .run-actions {
   display: flex;
   gap: 8px;
@@ -711,6 +718,13 @@ input:disabled {
   padding: 14px;
   border-radius: 6px;
   font-size: 11px;
+}
+.copy-code {
+  float: right;
+  margin: 8px 0 -34px;
+  position: relative;
+  z-index: 1;
+  font-size: 9px;
 }
 .prose code {
   font-family: var(--mono);

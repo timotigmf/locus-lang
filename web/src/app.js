@@ -15,7 +15,7 @@ let project,
   ready = false,
   busy = false;
 let manual = {},
-  currentManual = "docs/tutorial/README.md",
+  currentManual = "docs/manuale/guida-autore.md",
   testIndex = 0,
   lastTranscript = "",
   mapSVG = "",
@@ -188,6 +188,16 @@ function validName(name) {
     name.split("/").every((p) => p && p !== "." && p !== "..")
   );
 }
+function sameFiles(left, right) {
+  const leftNames = Object.keys(left).sort();
+  const rightNames = Object.keys(right).sort();
+  return (
+    leftNames.length === rightNames.length &&
+    leftNames.every(
+      (name, index) => name === rightNames[index] && left[name] === right[name],
+    )
+  );
+}
 function setProject(p) {
   project = validate(p);
   editor.clear();
@@ -200,6 +210,7 @@ function setProject(p) {
   lastTranscript = "";
   $("title").value = project.title;
   $("projectHeading").textContent = project.title;
+  $("storyByline").hidden = true;
   stopGame();
   $("transcript").replaceChildren(
     el(
@@ -287,11 +298,6 @@ async function ask(title, text, initial = null) {
 $("toggleFiles").onclick = () => {
   const open = document.querySelector(".sidebar").classList.toggle("open");
   $("toggleFiles").setAttribute("aria-expanded", String(open));
-};
-$("title").oninput = () => {
-  project.title = $("title").value;
-  $("projectHeading").textContent = project.title || "Senza titolo";
-  save();
 };
 $("entry").onchange = () => {
   project.entry = $("entry").value;
@@ -405,7 +411,7 @@ $("newProject").onclick = () =>
         entry: "storia.locus",
         files: {
           "storia.locus":
-            'La Sala è una stanza.\nInizia nella "Sala".\nLa Sala ha descrizione "Qui comincia la tua storia.".\n',
+            'Titolo: "Una nuova storia".\nAutore: "Scrivi qui il tuo nome".\n\nLa Sala è una stanza.\nInizia nella "Sala".\nLa Sala ha descrizione "Qui comincia la tua storia.".\n',
         },
         tests: [],
       });
@@ -483,6 +489,14 @@ async function compileProject(play = false) {
   showDiagnostics([]);
   $("compileStatus").textContent =
     `${result.entities} entità · ${result.rules} regole · compilato`;
+  if (result.title) {
+    project.title = result.title;
+    $("title").value = result.title;
+    $("projectHeading").textContent = result.title;
+    save();
+  }
+  $("storyByline").textContent = result.author ? `di ${result.author}` : "";
+  $("storyByline").hidden = !result.author;
   mapSVG = drawMap(result.map);
   $("mapCanvas").innerHTML = mapSVG;
   $("mapSummary").textContent =
@@ -747,6 +761,23 @@ function openManual(path) {
       a.rel = "noopener noreferrer";
     }
   }
+  for (const pre of $("manualContent").querySelectorAll("pre")) {
+    const button = el(
+      "button",
+      { class: "copy-code", type: "button" },
+      "Copia codice",
+    );
+    button.onclick = async () => {
+      try {
+        await navigator.clipboard.writeText(pre.textContent);
+        button.textContent = "Copiato ✓";
+        setTimeout(() => (button.textContent = "Copia codice"), 1800);
+      } catch {
+        notice("Copia non disponibile: seleziona il codice nel riquadro.");
+      }
+    };
+    pre.before(button);
+  }
   tab("manual");
 }
 function renderManualOptions(filter = "") {
@@ -761,7 +792,7 @@ function renderManualOptions(filter = "") {
 }
 $("manualSelect").onchange = () => openManual($("manualSelect").value);
 $("manualSearch").oninput = () => renderManualOptions($("manualSearch").value);
-$("manualButton").onclick = () => openManual("docs/studio/README.md");
+$("manualButton").onclick = () => openManual("docs/manuale/guida-autore.md");
 $("guideButton").onclick = () => openManual("docs/tutorial/README.md");
 $("commandGuideButton").onclick = () =>
   openManual("docs/tutorial/05-comandi-e-nomi.md");
@@ -800,12 +831,29 @@ async function initialize() {
   setBusy(false);
   manual = await getJSON("manual.json");
   renderManualOptions();
-  openManual("docs/studio/README.md");
+  openManual("docs/manuale/guida-autore.md");
   tab("game");
   let saved;
   try {
     saved = localStorage.getItem(storageKey);
-    if (saved) project = validate(JSON.parse(saved));
+    if (saved) {
+      project = validate(JSON.parse(saved));
+      if (
+        project.title === "Il faro di Selce" &&
+        project.entry === "04_faro.locus"
+      ) {
+        const legacy = await getJSON("legacy-demo.json");
+        if (
+          sameFiles(project.files, legacy.files) &&
+          JSON.stringify(project.tests) === JSON.stringify(legacy.tests)
+        ) {
+          project = validate(await getJSON("demo.json"));
+          notice(
+            "L’esempio del faro è stato aggiornato al nuovo sorgente unico.",
+          );
+        }
+      }
+    }
   } catch {
     notice("Backup locale non valido: carico l’esempio.");
   }

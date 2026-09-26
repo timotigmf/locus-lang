@@ -55,15 +55,14 @@ for (const p of [
 }
 await writeFile(join(out, "manual.json"), JSON.stringify(docs));
 const demoFiles = {};
-for (const name of ["faro/mondo.locus", "faro/regole.locus", "04_faro.locus"])
-  demoFiles[name] = await readFile(
-    join(root, "examples/tutorial", name),
-    "utf8",
-  );
+demoFiles["storia.locus"] = await readFile(
+  join(root, "examples/tutorial/studio_faro.locus"),
+  "utf8",
+);
 const demo = {
   format: "locus-project-1",
   title: "Il faro di Selce",
-  entry: "04_faro.locus",
+  entry: "storia.locus",
   files: demoFiles,
   tests: [
     {
@@ -80,6 +79,22 @@ const demo = {
   ],
 };
 await writeFile(join(out, "demo.json"), JSON.stringify(demo));
+const legacyFiles = {};
+for (const name of ["faro/mondo.locus", "faro/regole.locus", "04_faro.locus"])
+  legacyFiles[name] = await readFile(
+    join(root, "examples/tutorial", name),
+    "utf8",
+  );
+await writeFile(
+  join(out, "legacy-demo.json"),
+  JSON.stringify({
+    format: "locus-project-1",
+    title: "Il faro di Selce",
+    entry: "04_faro.locus",
+    files: legacyFiles,
+    tests: demo.tests,
+  }),
+);
 let notices =
   "LOCUS Studio — componenti di terze parti\n\nPyodide 314.0.7 (MPL-2.0), non modificato. Sorgente: https://github.com/pyodide/pyodide/tree/314.0.7\nCPython (PSF): https://github.com/python/cpython\n\n";
 for (const name of [

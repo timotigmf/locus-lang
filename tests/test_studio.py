@@ -22,6 +22,19 @@ def test_bridge_matches_story_and_tests_do_not_mutate_session() -> None:
     assert studio.command("prendi chiave")["text"] == "Hai preso: chiave."
 
 
+def test_bridge_exposes_story_metadata_and_uses_vocabulary() -> None:
+    studio = Studio()
+    result = studio.compile(
+        project(
+            'Titolo: "Il laboratorio". Autore: "Ada". La Sala è una stanza. '
+            'La custodia è una cosa nella Sala. Comprendi "cassa" come "custodia".'
+        )
+    )
+    assert result["title"] == "Il laboratorio" and result["author"] == "Ada"
+    studio.restart()
+    assert studio.command("x cassa")["text"].startswith("custodia\n")
+
+
 def test_failed_compile_invalidates_previous_program() -> None:
     studio = Studio()
     studio.compile(project("La Sala è una stanza."))

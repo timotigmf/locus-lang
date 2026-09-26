@@ -4,7 +4,7 @@ import pytest
 
 from locus.compiler import compile_source
 from locus.diagnostics import CompileError
-from locus.ir import IR_VERSION, EntityIR, ProgramIR
+from locus.ir import IR_VERSION, EntityIR, ProgramIR, SynonymIR
 from locus.runtime import instantiate
 from locus.stdlib import default_kinds
 
@@ -73,8 +73,44 @@ def test_runtime_rejects_unknown_version_and_duplicate_ids() -> None:
     duplicate = EntityIR("e1", "A", "x")
     with pytest.raises(ValueError, match="duplicati"):
         instantiate(ProgramIR(IR_VERSION, (duplicate, duplicate)))
+    with pytest.raises(ValueError, match="Vocabolario"):
+        instantiate(ProgramIR(IR_VERSION, (duplicate,), synonyms=(SynonymIR("A", "e1"),)))
 
 
 def test_compound_type_name() -> None:
     program = compile_source("Il sensore è un dispositivo digitale.", {"dispositivo digitale": "x"})
     assert program.entities[0].type_id == "x"
+
+
+def test_story_metadata_and_vocabulary_are_compiled() -> None:
+    program = compile_source(
+        'Titolo: "La torre". Autore: "Ada". La custodia è una cosa. '
+        'Comprendi "cassa" come "custodia".',
+        default_kinds(),
+    )
+    assert program.title == "La torre"
+    assert program.author == "Ada"
+    assert program.synonyms[0].alias == "cassa"
+    assert program.synonyms[0].target_id == "e1"
+    world = instantiate(program)
+    assert world.title == "La torre" and world.author == "Ada"
+
+
+@pytest.mark.parametrize(
+    ("source", "code"),
+    [
+        ('Titolo: "A". Titolo: "B".', "E408"),
+        ('La cassa è una cosa. Comprendi "cassa" come "cassa".', "E409"),
+        ('La custodia è una cosa. Comprendi "" come "custodia".', "E002"),
+        (
+            'La custodia è una cosa. Comprendi "cassa" come "custodia". '
+            'Comprendi "CASSA" come "custodia".',
+            "E409",
+        ),
+        ('Comprendi "cassa" come "assente".', "E103"),
+    ],
+)
+def test_invalid_metadata_and_vocabulary(source: str, code: str) -> None:
+    with pytest.raises(CompileError) as caught:
+        compile_source(source, default_kinds())
+    assert caught.value.code == code

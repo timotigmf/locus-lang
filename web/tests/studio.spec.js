@@ -11,6 +11,14 @@ test("progetto, compilazione, gioco, test e release statica", async ({
   await expect(page.locator("#compileStatus")).toContainText("compilato", {
     timeout: 90000,
   });
+  await expect(page.locator("#files .file")).toHaveCount(1);
+  await expect(page.locator("#activeFile")).toHaveText("storia.locus");
+  await expect(page.locator(".cm-content")).toContainText(
+    'Titolo: "Il faro di Selce"',
+  );
+  await expect(page.locator(".cm-content")).not.toContainText("Includi");
+  await expect(page.locator("#title")).toHaveValue("Il faro di Selce");
+  await expect(page.locator("#storyByline")).toHaveText("di Esempio LOCUS");
   await page
     .getByRole("button", { name: "▶ Compila e prova", exact: true })
     .click();
@@ -29,7 +37,7 @@ test("progetto, compilazione, gioco, test e release statica", async ({
   await expect(page.locator("#transcript")).toContainText(
     "Hai aperto: custodia.",
   );
-  await page.locator("#command").fill("x custodia");
+  await page.locator("#command").fill("x scatola");
   await page.locator("#send").click();
   await expect(page.locator("#transcript")).toContainText("Stato: aperto.");
   await page.locator("#command").fill("prendi chiave");
@@ -81,6 +89,15 @@ test("progetto, compilazione, gioco, test e release statica", async ({
   await expect(page.locator("#manualContent")).toContainText(
     "Comandi, abbreviazioni e nomi degli oggetti",
   );
+  await page.locator("#manualButton").click();
+  await expect(page.locator("#manualContent")).toContainText(
+    "Manuale dell'autore LOCUS",
+  );
+  await expect(page.locator("#manualContent .copy-code").first()).toBeVisible();
+  await page.locator("#manualContent .copy-code").first().click();
+  await expect(page.locator("#manualContent .copy-code").first()).toHaveText(
+    "Copiato ✓",
+  );
   expect(errors).toEqual([]);
 });
 test("diagnosi precisa, manuale e persistenza", async ({ page }) => {
@@ -93,7 +110,7 @@ test("diagnosi precisa, manuale e persistenza", async ({ page }) => {
   await page.keyboard.insertText("\nLa Fantasma è un tipoignoto.");
   await page.locator("#compile").click();
   await expect(page.locator("#diagnostics")).toContainText("E102");
-  await expect(page.locator("#diagnostics")).toContainText("04_faro.locus");
+  await expect(page.locator("#diagnostics")).toContainText("storia.locus");
   await page.getByRole("button", { name: "Apri nel manuale ↗" }).click();
   await expect(page.locator("#manualContent")).toContainText("M2");
   await page.reload();
@@ -101,6 +118,45 @@ test("diagnosi precisa, manuale e persistenza", async ({ page }) => {
     timeout: 90000,
   });
   await expect(page.locator(".cm-content")).toContainText("tipoignoto");
+});
+test("migra soltanto l'esempio modulare distribuito", async ({ page }) => {
+  const files = {};
+  for (const name of [
+    "faro/mondo.locus",
+    "faro/regole.locus",
+    "04_faro.locus",
+  ]) {
+    files[name] = await readFile("../examples/tutorial/" + name, "utf8");
+  }
+  const tests = [
+    {
+      name: "Il segnale nella foschia",
+      commands: await readFile("../examples/tutorial/04_faro.comandi", "utf8"),
+      expected: await readFile("../examples/tutorial/04_faro.atteso", "utf8"),
+    },
+  ];
+  await page.addInitScript(
+    ({ legacyFiles, legacyTests }) => {
+      localStorage.setItem(
+        "locus-studio-project-v1",
+        JSON.stringify({
+          format: "locus-project-1",
+          title: "Il faro di Selce",
+          entry: "04_faro.locus",
+          files: legacyFiles,
+          tests: legacyTests,
+        }),
+      );
+    },
+    { legacyFiles: files, legacyTests: tests },
+  );
+  await page.goto("/");
+  await expect(page.locator("#compileStatus")).toContainText("compilato", {
+    timeout: 90000,
+  });
+  await expect(page.locator("#files .file")).toHaveCount(1);
+  await expect(page.locator("#activeFile")).toHaveText("storia.locus");
+  await expect(page.locator("#toast")).toContainText("sorgente unico");
 });
 test("gestione file, backup e confronto test negativo", async ({ page }) => {
   await page.goto("/");

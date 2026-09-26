@@ -10,6 +10,10 @@ import { tags } from "@lezer/highlight";
 import { autocompletion } from "@codemirror/autocomplete";
 import { setDiagnostics } from "@codemirror/lint";
 const words = [
+  "Titolo",
+  "Autore",
+  "Comprendi",
+  "come",
   "La",
   "Il",
   "Lo",

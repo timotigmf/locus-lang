@@ -8,8 +8,10 @@ Apri [LOCUS Studio online](https://timotigmf.github.io/locus-lang/).
 
 ## Primo progetto
 
-All'apertura trovi il faro di Selce, un esempio completo su più file. A sinistra
-scegli un file, al centro scrivi, a destra provi la storia. **Compila** verifica
+All'apertura trovi il faro di Selce completo in `storia.locus`. Il sorgente
+comincia con `Titolo:` e `Autore:`, poi descrive direttamente il mondo; `Includi`
+compare soltanto nel capitolo avanzato sui progetti. A sinistra scegli un file,
+al centro scrivi, a destra provi la storia. **Compila** verifica
 il progetto; **Compila e prova** avvia una nuova sessione. Puoi usare anche
 Ctrl+Invio o Cmd+Invio nell'editor. **Interrompi** riavvia il motore conservando
 il sorgente: ricompila prima di continuare.
@@ -18,7 +20,7 @@ L'editor offre colori per la sintassi LOCUS, numeri di riga, rientri, annulla/ri
 completamento delle parole chiave e ricerca/sostituzione (Ctrl/Cmd+F). Il controllo
 semantico avviene quando compili, non continuamente mentre scrivi.
 
-**Nuovo progetto** crea una stanza iniziale. Il pulsante **＋** aggiunge file;
+**Nuovo progetto** crea titolo, autore e stanza iniziale. Il pulsante **＋** aggiunge file;
 puoi rinominarli o eliminarli. Dopo una rinomina aggiorna le direttive `Includi`:
 non è un refactoring automatico. Il selettore del file principale stabilisce
 quale sorgente avvia il caricamento. Su schermi stretti apri il menu **Progetto**.
@@ -47,7 +49,9 @@ nel compilatore, non sono deduzioni di un modello generativo.
 Il compilatore si ferma al **primo errore**. Correggilo e ricompila per trovare
 il successivo. Non promettiamo correzioni automatiche della semantica. Gli span
 di alcune diagnosi coprono un'intera dichiarazione/regola, come nella CLI.
-Il manuale incorporato è ricercabile per capitolo; comprende specifiche e tutorial.
+Il manuale incorporato è ricercabile per capitolo; la guida dell'autore è la
+pagina iniziale e ogni blocco di codice offre **Copia codice**. Comprende un corso
+in sei lezioni, specifiche e tutorial.
 
 Quando modifichi il sorgente, il gioco precedente viene disabilitato e mappa e
 indice sono da ricompilare. Non si mescolano una versione vecchia della storia e

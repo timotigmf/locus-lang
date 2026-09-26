@@ -160,11 +160,26 @@ def _resolve(session: Session, name: str) -> Entity | Event:
     normalized = canonical(name)
     matches = [entity for entity in in_scope if canonical(entity.label) == normalized]
     if not matches:
+        exact_targets = {
+            synonym.target_id
+            for synonym in session.world.synonyms
+            if canonical(synonym.alias) == normalized
+        }
+        matches = [entity for entity in in_scope if entity.id in exact_targets]
+    if not matches:
         words = set(normalized.split())
+        partial_targets = {
+            synonym.target_id
+            for synonym in session.world.synonyms
+            if words and words.issubset(set(canonical(synonym.alias).split()))
+        }
         matches = [
             entity
             for entity in in_scope
-            if words and words.issubset(set(canonical(entity.label).split()))
+            if words
+            and (
+                words.issubset(set(canonical(entity.label).split())) or entity.id in partial_targets
+            )
         ]
     if not matches:
         return Event("not_here")

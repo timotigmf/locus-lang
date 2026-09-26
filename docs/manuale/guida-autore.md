@@ -1,0 +1,93 @@
+# Manuale dell'autore LOCUS
+
+Questa è la porta d'ingresso al linguaggio e allo Studio. Gli esempi sono
+eseguibili e hanno un pulsante **Copia codice**. Parti dal percorso breve, poi usa
+l'indice tematico per costruire una storia più complessa.
+
+## La prima storia in dieci minuti
+
+Scegli **Progetto vuoto** e sostituisci il sorgente con questo:
+
+```locus
+Titolo: "La casa sul promontorio".
+Autore: "Il tuo nome".
+
+L'Atrio è una stanza.
+Il Giardino è una stanza.
+Il Giardino è a est dell'Atrio.
+Inizia nella "Atrio".
+
+L'Atrio ha descrizione "Una porta a vetri conduce al giardino.".
+Il Giardino ha descrizione "Il vento piega l'erba alta.".
+La lanterna è una cosa nell'Atrio.
+Comprendi "lume" come "lanterna".
+```
+
+Premi **Compila e prova**. Scrivi `guarda`, `prendi lume`, `e`, `o`. Titolo e
+autore vengono letti dal sorgente; la barra superiore non è un secondo posto in
+cui riscriverli.
+
+## Come si usa il manuale nello Studio
+
+- **Manuale** apre questa pagina; il menu in alto cambia capitolo.
+- **Cerca nei capitoli** filtra i capitoli che contengono le parole digitate.
+- **Tutorial del faro** apre il corso progressivo con esercizi e risultati attesi.
+- **? Comandi** porta direttamente ai comandi del giocatore.
+- **Copia codice** copia un esempio completo; incollalo in `storia.locus`.
+- Le diagnosi hanno **Apri nel manuale** e portano al riferimento pertinente.
+
+`Includi` serve ai progetti avanzati divisi in più file. Il progetto iniziale e
+l'esempio principale usano un solo `storia.locus`, così puoi leggere la storia
+dall'alto verso il basso prima di studiare i moduli.
+
+## Corso progressivo
+
+1. [Luoghi, descrizioni e mappa](../tutorial/01-luoghi.md)
+2. [Oggetti, contenitori e accessibilità](../tutorial/02-oggetti.md)
+3. [Regole e descrizioni](../tutorial/03-regole.md)
+4. [Progetto su più file e verifica](../tutorial/04-progetto.md)
+5. [Comandi, abbreviazioni e nomi](../tutorial/05-comandi-e-nomi.md)
+6. [Sotterraneo, enigma, sinonimi e punti](../tutorial/06-sotterraneo-enigma-punti.md)
+
+## Indice per obiettivo
+
+| Voglio creare… | Supporto attuale | Da leggere |
+| --- | --- | --- |
+| Dungeon e mappe | Stanze, quattro direzioni, porte e contenitori | Lezioni 1 e 6 |
+| Enigmi con chiavi | Porte/contenitori bloccati, regole e rollback | Lezioni 2, 3 e 6 |
+| Punti | Proprietà numeriche e regole di incremento | Lezione 6 |
+| Oggetti complessi | Contenimento annidato, proprietà tipate, stati | Lezione 2 e specifica M2 |
+| Sinonimi | `Comprendi "alias" come "oggetto".` | Lezioni 5 e 6 |
+| Passaggi segreti dinamici | Non ancora: le relazioni non cambiano durante il gioco | Lezione 6 |
+| Dialoghi ramificati | Non ancora: mancano persone, argomenti e azione parlare | Roadmap |
+| Veicoli e vetture | Non ancora: manca il modello di entrata, uscita e movimento | Roadmap |
+| Denaro e acquisti | Proprietà numeriche disponibili; azioni compra/vendi non ancora | Roadmap |
+
+## Vocabolario italiano
+
+LOCUS normalizza maiuscole, accenti e spazi, usa nomi parziali quando non sono
+ambigui e permette sinonimi specifici per la storia:
+
+```locus
+L'Atrio è una stanza.
+La custodia impermeabile è un contenitore nell'Atrio.
+Comprendi "cassa" come "custodia impermeabile".
+Comprendi "scatola" come "custodia impermeabile".
+Comprendi "contenitore stagno" come "custodia impermeabile".
+```
+
+Un dizionario italiano completo non basta a comprendere “qualsiasi termine”:
+`banco`, per esempio, può indicare un mobile, una scuola, sabbia o pesci. La
+decisione appartiene all'autore e al contesto della storia. LOCUS evita scelte
+silenziose: se due oggetti corrispondono, chiede quale intendi.
+
+## Riferimenti
+
+- [Prima storia e comandi](README.md)
+- [Specifica incrementale](../../LANGUAGE_SPEC.md)
+- [Proprietà, contenitori, porte e vocabolario](../linguaggio/milestone-2.md)
+- [Regole, condizioni e transazioni](../linguaggio/milestone-3.md)
+- [File, inclusioni e punto iniziale](../linguaggio/milestone-4.md)
+- [Titolo, autore e sinonimi](../linguaggio/metadati-vocabolario.md)
+- [Ricettario](../cookbook/README.md)
+- [Da Inform a LOCUS](../tutorial/da-inform-a-locus.md)

@@ -84,6 +84,20 @@ class EntryPoint:
 
 
 @dataclass(frozen=True, slots=True)
+class Metadata:
+    name: str
+    value: str
+    span: Span
+
+
+@dataclass(frozen=True, slots=True)
+class Vocabulary:
+    alias: str
+    target: str
+    span: Span
+
+
+@dataclass(frozen=True, slots=True)
 class Program:
     declarations: tuple[Declaration, ...]
     relations: tuple[Relation, ...] = ()
@@ -93,3 +107,5 @@ class Program:
     inclusions: tuple[Inclusion, ...] = ()
     entries: tuple[EntryPoint, ...] = ()
     source_order: tuple[str, ...] = ()
+    metadata: tuple[Metadata, ...] = ()
+    vocabulary: tuple[Vocabulary, ...] = ()

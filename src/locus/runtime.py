@@ -2,7 +2,8 @@
 
 from dataclasses import dataclass
 
-from locus.ir import IR_VERSION, ProgramIR, PropertyIR, RelationIR
+from locus.diagnostics import canonical
+from locus.ir import IR_VERSION, ProgramIR, PropertyIR, RelationIR, SynonymIR
 from locus.rule_model import RuleIR
 from locus.schema import PropertySpec
 
@@ -22,6 +23,9 @@ class World:
     properties: tuple[PropertyIR, ...] = ()
     rules: tuple[RuleIR, ...] = ()
     entry_id: str | None = None
+    synonyms: tuple[SynonymIR, ...] = ()
+    title: str | None = None
+    author: str | None = None
 
 
 def instantiate(program: ProgramIR) -> World:
@@ -37,6 +41,15 @@ def instantiate(program: ProgramIR) -> World:
         raise ValueError("Riferimento a entità assente nell'IR.")
     if program.entry_id is not None and program.entry_id not in identifiers:
         raise ValueError("Entità iniziale assente nell’IR.")
+    aliases = [canonical(item.alias) for item in program.synonyms]
+    labels = {canonical(entity.label) for entity in program.entities}
+    if (
+        any(not alias for alias in aliases)
+        or len(set(aliases)) != len(aliases)
+        or any(alias in labels for alias in aliases)
+        or any(item.target_id not in identifiers for item in program.synonyms)
+    ):
+        raise ValueError("Vocabolario non valido nell'IR.")
     keys = {(edge.source_id, edge.predicate_id) for edge in program.relations}
     if len(keys) != len(program.relations):
         raise ValueError("Relazioni duplicate o in conflitto nell'IR.")
@@ -60,4 +73,7 @@ def instantiate(program: ProgramIR) -> World:
         program.properties,
         program.rules,
         program.entry_id,
+        program.synonyms,
+        program.title,
+        program.author,
     )

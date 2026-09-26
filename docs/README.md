@@ -1,7 +1,8 @@
 # Documentazione
 
 - [Linguaggio](linguaggio/README.md): grammatica, stabilità e proposte.
-- [Manuale](manuale/README.md): primo sorgente eseguibile.
+- [Manuale dell'autore](manuale/guida-autore.md): percorso completo ed esempi copiabili.
+- [Primo sorgente](manuale/README.md): riferimento rapido per iniziare.
 - [Reference](reference/README.md): CLI e API attuali.
 - [Architettura](../ARCHITECTURE.md) e [repository](architettura/repository.md).
 - [Cookbook](cookbook/README.md): catalogo estraneo alla IF.
@@ -16,6 +17,7 @@
 - [Regole M3](linguaggio/milestone-3.md) e [rapporto M3](rapporto-milestone-3.md).
 
 - [Progetti M4](linguaggio/milestone-4.md) e [rapporto M4](rapporto-milestone-4.md).
+- [Metadati e vocabolario](linguaggio/metadati-vocabolario.md): titolo, autore e sinonimi.
 
 - [Tutorial: il faro](tutorial/README.md), [da Inform a LOCUS](tutorial/da-inform-a-locus.md).
 - [Registro dei sei manuali forniti](architettura/materiali-didattici.md).

@@ -26,9 +26,9 @@ Un test compila tipi e relazioni non narrativi per verificare concretamente l'in
 | --- | --- | --- |
 | source / diagnostica | file, intervallo, codice stabile, testo italiano | implementato |
 | lexer | token, originale, posizione; nessuna risoluzione di nomi | implementato |
-| parser autore | grammatica → AST immutabile | dichiarazioni e relazioni |
+| parser autore | grammatica → AST immutabile | dichiarazioni, relazioni, regole, metadati e vocabolario |
 | semantica | nomi canonici, tipi noti, duplicati, ID risolti | implementato |
-| IR | programma immutabile senza articoli o sintassi | schema sperimentale 3 |
+| IR | programma immutabile senza articoli o sintassi | schema sperimentale 6 |
 | mondo | istanze indipendenti dai nodi AST | istanziazione minima |
 | regole | ordinamento, condizioni, esiti, tracing | solo progetto |
 | runtime | transizioni, eventi e servizi deterministici | transizioni IF nella stdlib |
@@ -38,8 +38,9 @@ Un test compila tipi e relazioni non narrativi per verificare concretamente l'in
 
 ## AST e modello semantico iniziali
 
-`Program(declarations, relations)` contiene `Declaration(name, kind, span, location)`
-e `Relation(subject, predicate, target, span)`. I nomi mantengono grafia e parole; l'AST non
+`Program` contiene dichiarazioni, relazioni, regole, metadati e vocabolario;
+fra i nodi di base restano `Declaration(name, kind, span, location)` e
+`Relation(subject, predicate, target, span)`. I nomi mantengono grafia e parole; l'AST non
 contiene oggetti runtime. `Span(source, start, end, line, column)` usa offset
 Unicode originali, fine esclusiva e riga/colonna da 1. Tab = un carattere, non
 una colonna visiva. L'intervallo della dichiarazione include il punto.
@@ -55,8 +56,9 @@ riferimenti in avanti. Il catalogo `RelationSpec` definisce tipi agli estremi,
 orientamento e inversi. Nessuna conoscenza di stanze o direzioni nel compilatore.
 Conflitti funzionali, auto-collegamenti e riferimenti non risolti sono diagnosticati.
 
-`ProgramIR(version, entities, relations)` contiene `EntityIR(id, label, type_id)`
-e `RelationIR(source_id, predicate_id, target_id)`; ID ordinali riproducibili per
+`ProgramIR` versione 6 contiene entità, relazioni, proprietà, regole, punto iniziale,
+titolo, autore e sinonimi risolti; i record di base sono `EntityIR(id, label, type_id)`
+e `RelationIR(source_id, predicate_id, target_id)`. Gli ID sono ordinali riproducibili per
 lo stesso sorgente, non persistenti fra modifiche. Nessuna serializzazione di
 oggetti Python o codice eseguibile. Il JSON è solo un dump.
 Source map separata e loader validante sono rinviati: non congelare un ABI ora.
@@ -178,3 +180,11 @@ La stdlib registra nord/sud ed est/ovest come due coppie inverse; il compilatore
 continua a vedere soltanto schemi di relazione generici. Il runtime seleziona
 l'arco dall'intento tipato e lo Studio proietta le direzioni nella mappa senza
 reinterpretare il testo narrativo. Vedere [ADR 0009](docs/adr/0009-direzioni-cardinali.md).
+
+## Metadati e vocabolario
+
+Titolo e autore appartengono al progetto compilato, non allo stato separato del
+frontend. Gli alias nominali vengono risolti verso ID in compilazione e usati
+dal dispatcher soltanto entro l'insieme raggiungibile. Questa struttura evita
+riscritture testuali e mantiene separati parser autore e parser giocatore. Vedere
+[ADR 0010](docs/adr/0010-metadati-e-vocabolario.md).

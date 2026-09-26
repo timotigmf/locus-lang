@@ -57,6 +57,16 @@ _ERROR_HELP = {
         "Verifica estremi e collegamenti della porta.",
         "docs/linguaggio/milestone-2.md",
     ),
+    "E408": (
+        "Metadato ripetuto",
+        "Dichiara Titolo e Autore una sola volta nell'intero progetto.",
+        "docs/linguaggio/metadati-vocabolario.md",
+    ),
+    "E409": (
+        "Sinonimo in conflitto",
+        "Scegli un alias che non sia già un nome o un altro sinonimo.",
+        "docs/linguaggio/metadati-vocabolario.md",
+    ),
 }
 
 
@@ -215,6 +225,8 @@ class Studio:
             "map": map_data(program),
             "entities": len(program.entities),
             "rules": len(program.rules),
+            "title": program.title,
+            "author": program.author,
         }
 
     def _output(self, transition: Transition) -> dict[str, Any]:

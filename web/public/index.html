@@ -18,6 +18,8 @@
           id="title"
           aria-label="Titolo del progetto"
           maxlength="100"
+          readonly
+          title="Il titolo viene letto dalla riga Titolo: del sorgente"
         /><span class="badge">EDIZIONE WEB</span>
       </div>
       <button id="toggleFiles" aria-expanded="false">Progetto</button
@@ -47,7 +49,7 @@
           § Riferimento linguaggio</button
         ><button id="newProject" class="nav-item">＋ Progetto vuoto</button
         ><button id="demoButton" class="nav-item">
-          ◇ Apri esempio del faro</button
+          ◇ Esempio del faro in un file</button
         ><button id="importButton" class="nav-item">
           ↥ Importa progetto / file</button
         ><input
@@ -68,6 +70,7 @@
           <div>
             <span class="eyebrow">LABORATORIO DI SCRITTURA</span>
             <h1 id="projectHeading">Il tuo mondo, una frase alla volta.</h1>
+            <p id="storyByline" class="story-byline" hidden></p>
           </div>
           <div class="run-actions">
             <button id="cancel" title="Interrompi e riavvia il motore">

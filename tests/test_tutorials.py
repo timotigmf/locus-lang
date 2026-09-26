@@ -77,6 +77,25 @@ def test_tutorial_accepts_classic_abbreviation_and_unique_partial_name() -> None
     assert "chiave di rame" in render(taken)
 
 
+def test_dungeon_tutorial_awards_points_once_after_the_puzzle() -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "06_sotterraneo.locus")))
+    for command in [
+        "apri scatola",
+        "prendi chiave",
+        "n",
+        "apri porta di pietra con chiave",
+        "e",
+        "prendi reliquia",
+    ]:
+        result = step(current, parse_command(command))
+        assert result.event.kind not in {"unknown", "not_found", "blocked"}
+        current = result.session
+    assert property_of(current, "registro", "punti") == 10
+    repeated = step(current, parse_command("prendi statua"))
+    assert repeated.session is current
+    assert property_of(repeated.session, "registro", "punti") == 10
+
+
 def test_final_world_matches_story() -> None:
     current = start(instantiate(compile_story_file(TUTORIAL / "04_faro.locus")))
     for command in (TUTORIAL / "04_faro.comandi").read_text(encoding="utf-8").splitlines():
