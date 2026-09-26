@@ -4,6 +4,8 @@ Lo Studio è l'ambiente web di LOCUS 0.5.0a1. Compilatore e gioco girano nel bro
 in un processo di lavoro separato dall'editor. Non occorre installare Python per
 usare il sito. I sorgenti non vengono inviati a un servizio di compilazione.
 
+Apri [LOCUS Studio online](https://timotigmf.github.io/locus-lang/).
+
 ## Primo progetto
 
 All'apertura trovi il faro di Selce, un esempio completo su più file. A sinistra

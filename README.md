@@ -16,6 +16,12 @@ Il Corridoio è a nord della Cucina.
 La chiave è una cosa nella Cucina.
 ```
 
+## Studio online
+
+[Apri LOCUS Studio](https://timotigmf.github.io/locus-lang/) per scrivere, compilare,
+provare ed esportare le storie nel browser. Consulta il [manuale dello Studio](docs/studio/README.md).
+I progetti sono salvati nel browser: usa **Scarica progetto** per conservarne una copia.
+
 ## Avvio
 
 Python 3.11–3.14. Dalla radice:
