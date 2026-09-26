@@ -37,3 +37,7 @@ I PDF e i relativi esempi non sono copiati nel repository.
 
 [Specifica](linguaggio/milestone-4.md), [ADR](adr/0007-progetti.md),
 [tutorial](tutorial/README.md), [materiali](architettura/materiali-didattici.md).
+
+La prima CI ha evidenziato una differenza Windows nel riconoscimento di `/percorso`:
+la validazione ora controlla esplicitamente sia la sintassi POSIX sia quella Windows,
+indipendentemente dal sistema ospite. Il caso è coperto da `test_nonportable_paths`.

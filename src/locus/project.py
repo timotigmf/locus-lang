@@ -1,7 +1,7 @@
 """Caricamento dei sorgenti locali; nessun I/O nel compilatore o nel runtime."""
 
 from collections.abc import Mapping
-from pathlib import Path, PureWindowsPath
+from pathlib import Path, PurePosixPath, PureWindowsPath
 
 from locus.ast import Program
 from locus.diagnostics import CompileError, Span
@@ -55,7 +55,7 @@ def load_project(
             name = inclusion.path
             # Percorsi portabili, mai espansi come shell, URL o variabili d'ambiente.
             if (
-                Path(name).is_absolute()
+                PurePosixPath(name).is_absolute()
                 or PureWindowsPath(name).drive
                 or "\\" in name
                 or ":" in name
