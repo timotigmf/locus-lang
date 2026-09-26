@@ -67,6 +67,16 @@ def test_container_failed_put_preserves_inventory() -> None:
     assert len(current.inventory) == 1
 
 
+def test_tutorial_accepts_classic_abbreviation_and_unique_partial_name() -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "02_custodia.locus")))
+    examined = step(current, parse_command("x custodia"))
+    assert examined.event.kind == "examined"
+    opened = step(examined.session, parse_command("open custodia"))
+    taken = step(opened.session, parse_command("take chiave"))
+    assert taken.event.kind == "taken"
+    assert "chiave di rame" in render(taken)
+
+
 def test_final_world_matches_story() -> None:
     current = start(instantiate(compile_story_file(TUTORIAL / "04_faro.locus")))
     for command in (TUTORIAL / "04_faro.comandi").read_text(encoding="utf-8").splitlines():

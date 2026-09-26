@@ -23,18 +23,30 @@ def make_session() -> Session:
     ("command", "intent"),
     [
         (" GUARDA ", Intent("look")),
+        ("l", Intent("look")),
+        ("look", Intent("look")),
         ("inventario", Intent("inventory")),
+        ("i", Intent("inventory")),
+        ("inv", Intent("inventory")),
         ("nord", Intent("north")),
+        ("n", Intent("north")),
         ("sud", Intent("south")),
+        ("s", Intent("south")),
         ("esci", Intent("quit")),
+        ("q", Intent("quit")),
         ("prendi chiave", Intent("take", "chiave")),
+        ("take the key", Intent("take", "key")),
+        ("get chiave", Intent("take", "chiave")),
+        ("x custodia", Intent("examine", "custodia")),
+        ("examine custodia", Intent("examine", "custodia")),
         ("prendi la chiave", Intent("take", "chiave")),
         ("prendi l’oggetto", Intent("take", "oggetto")),
         ("prendi il caffè", Intent("take", "caffè")),
         ("prendi lo scudo", Intent("take", "scudo")),
         ("prendi la chiave di ottone", Intent("take", "chiave di ottone")),
         ("prendi la", Intent("unknown")),
-        ("prendi", Intent("unknown")),
+        ("prendi", Intent("take")),
+        ("x", Intent("examine")),
         ("", Intent("unknown")),
         ("raccoglila", Intent("unknown")),
         ("nord sud", Intent("unknown")),
@@ -127,3 +139,28 @@ def test_ambiguous_intent_on_world_constructed_by_host() -> None:
     result = step(session, Intent("take", "chiave"))
     assert result.event.kind == "ambiguous"
     assert result.session is session
+
+
+def test_partial_name_resolves_only_when_unique_in_current_scope() -> None:
+    world = World(
+        (
+            Entity("r", "Sala", ROOM),
+            Entity("a", "chiave di rame", THING),
+            Entity("b", "chiave di ferro", THING),
+        )
+    )
+    one_key = Session(world, "r", ("a",))
+    taken = step(one_key, parse_command("prendi chiave"))
+    assert taken.event.kind == "already_carried"
+    assert taken.event.entities == ("a",)
+
+    two_keys = Session(world, "r", ("a", "b"))
+    ambiguous = step(two_keys, parse_command("prendi chiave"))
+    assert ambiguous.event.kind == "ambiguous"
+    assert render(ambiguous) == "Quale intendi: chiave di rame o chiave di ferro?"
+
+
+def test_missing_object_gets_a_specific_prompt() -> None:
+    assert render(step(make_session(), parse_command("x"))) == (
+        "Indica quale oggetto vuoi esaminare o manipolare."
+    )

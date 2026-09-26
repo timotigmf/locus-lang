@@ -763,6 +763,8 @@ $("manualSelect").onchange = () => openManual($("manualSelect").value);
 $("manualSearch").oninput = () => renderManualOptions($("manualSearch").value);
 $("manualButton").onclick = () => openManual("docs/studio/README.md");
 $("guideButton").onclick = () => openManual("docs/tutorial/README.md");
+$("commandGuideButton").onclick = () =>
+  openManual("docs/tutorial/05-comandi-e-nomi.md");
 $("languageButton").onclick = () => openManual("LANGUAGE_SPEC.md");
 $("release").onclick = () =>
   execute(async () => {

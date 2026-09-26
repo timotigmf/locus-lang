@@ -2,7 +2,7 @@
 
 ## Stato attuale
 
-Versione corrente `0.4.0a1`, IR versione 5. Le specifiche M2, M3 e M4
+Versione corrente `0.5.0a1`, IR versione 5. Le specifiche M2, M3 e M4
 estendono e, dove indicato, sostituiscono i limiti M1 sotto.
 La [specifica M2](docs/linguaggio/milestone-2.md) è normativa per proprietà,
 stringhe, nomi quotati, preposizioni, contenitori, porte e chiavi.
@@ -73,8 +73,9 @@ esplicito per evitare errori di battitura che creano oggetti.
 Comandi giocatore M1: `guarda`, `prendi [la] chiave`, `inventario`, `nord`, `sud`.
 Il parser giocatore produce intenzioni tipate senza riusare questa grammatica.
 Ambiguità, oggetto assente, oggetto già posseduto e uscita assente sono esiti distinti.
-`esci` termina la sessione. Maiuscole e spazi sono normalizzati; nomi esatti,
-nessuna abbreviazione, clitico o pronome. Gli articoli iniziali di `prendi` sono opzionali.
+`esci` termina la sessione. Questa limitazione storica è sostituita dalla
+[specifica M2 corrente](docs/linguaggio/milestone-2.md): sono disponibili alias
+classici e nomi parziali non ambigui. Clitici e pronomi restano esclusi.
 
 ## Diagnostica M1
 

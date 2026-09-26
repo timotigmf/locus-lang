@@ -46,17 +46,23 @@ def render(transition: Transition) -> str:
     }
     if kind in named:
         return f"{named[kind]}: {names[0]}."
+    if kind == "ambiguous":
+        alternatives = (
+            " o ".join(names) if len(names) < 3 else ", ".join(names[:-1]) + " o " + names[-1]
+        )
+        return f"Quale intendi: {alternatives}?"
     messages = {
         "rule": "Azione gestita dalle regole.",
         "already_carried": "Hai già questo oggetto.",
         "not_here": "Non trovi qui quell'oggetto.",
         "not_portable": "Non puoi prendere questo elemento.",
-        "ambiguous": "Il nome indica più oggetti: specifica meglio.",
         "no_exit": "Non puoi andare in quella direzione.",
         "unknown": (
             "Comando non riconosciuto. Usa guarda, esamina, prendi, lascia, metti, "
-            "apri, chiudi, blocca, inventario, nord, sud o esci."
+            "apri, chiudi, blocca, inventario, nord, sud o esci. Sono disponibili "
+            "anche le abbreviazioni l, x, i, n, s e q."
         ),
+        "missing_noun": "Indica quale oggetto vuoi esaminare o manipolare.",
         "quit": "A presto.",
         "locked": "È bloccato: serve una chiave adatta.",
         "already_open": "È già aperto.",

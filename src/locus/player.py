@@ -21,6 +21,44 @@ Verb = Literal[
     "lock",
 ]
 
+_SIMPLE_COMMANDS: dict[str, Verb] = {
+    "guarda": "look",
+    "l": "look",
+    "look": "look",
+    "inventario": "inventory",
+    "i": "inventory",
+    "inv": "inventory",
+    "inventory": "inventory",
+    "nord": "north",
+    "n": "north",
+    "north": "north",
+    "sud": "south",
+    "s": "south",
+    "south": "south",
+    "esci": "quit",
+    "q": "quit",
+    "quit": "quit",
+}
+
+_ACTION_COMMANDS: dict[str, Verb] = {
+    "prendi": "take",
+    "get": "take",
+    "take": "take",
+    "apri": "open",
+    "open": "open",
+    "chiudi": "close",
+    "close": "close",
+    "metti": "put",
+    "put": "put",
+    "lascia": "drop",
+    "drop": "drop",
+    "esamina": "examine",
+    "examine": "examine",
+    "x": "examine",
+    "blocca": "lock",
+    "lock": "lock",
+}
+
 
 @dataclass(frozen=True, slots=True)
 class Intent:
@@ -68,7 +106,7 @@ def _tokens(text: str) -> list[tuple[str, bool]] | None:
 def _noun(tokens: list[tuple[str, bool]]) -> str | None:
     if tokens and not tokens[0][1]:
         first = tokens[0][0]
-        if first in {"il", "lo", "la", "i", "gli", "le"}:
+        if first in {"il", "lo", "la", "i", "gli", "le", "the"}:
             tokens = tokens[1:]
         elif first.startswith("l'"):
             tokens = ([(first[2:], False)] if first[2:] else []) + tokens[1:]
@@ -79,34 +117,21 @@ def parse_command(text: str) -> Intent:
     tokens = _tokens(canonical(text).replace("’", "'"))
     if not tokens:
         return Intent("unknown")
-    simple: dict[str, Verb] = {
-        "guarda": "look",
-        "inventario": "inventory",
-        "nord": "north",
-        "sud": "south",
-        "esci": "quit",
-    }
     verb, quoted = tokens[0]
     if quoted:
         return Intent("unknown")
     if len(tokens) == 1:
-        return Intent(simple.get(verb, "unknown"))
-    actions: dict[str, Verb] = {
-        "prendi": "take",
-        "apri": "open",
-        "chiudi": "close",
-        "metti": "put",
-        "lascia": "drop",
-        "esamina": "examine",
-        "blocca": "lock",
-    }
-    if verb not in actions:
+        return Intent(_SIMPLE_COMMANDS.get(verb, _ACTION_COMMANDS.get(verb, "unknown")))
+    if verb not in _ACTION_COMMANDS:
         return Intent("unknown")
+    action = _ACTION_COMMANDS[verb]
     rest = tokens[1:]
-    delimiters = {"in", "nel", "nella", "nello", "nell'"} if verb == "metti" else {"con"}
+    delimiters = (
+        {"in", "into", "nel", "nella", "nello", "nell'"} if action == "put" else {"con", "with"}
+    )
     splits = [i for i, (word, quoted) in enumerate(rest) if not quoted and word in delimiters]
     indirect = None
-    if verb in {"metti", "apri", "blocca"} and splits:
+    if action in {"put", "open", "lock"} and splits:
         if len(splits) != 1:
             return Intent("unknown")
         index = splits[0]
@@ -116,6 +141,6 @@ def parse_command(text: str) -> Intent:
             return Intent("unknown")
     else:
         direct = _noun(rest)
-    if not direct or (verb in {"metti", "blocca"} and not indirect):
+    if not direct or (action in {"put", "lock"} and not indirect):
         return Intent("unknown")
-    return Intent(actions[verb], direct, indirect)
+    return Intent(action, direct, indirect)

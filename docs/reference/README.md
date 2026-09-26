@@ -12,7 +12,11 @@
 | ir / compila | JSON IR versione 3, dopo validazione |
 | gioca | compila e avvia la sessione IF dalla prima stanza dichiarata |
 
-`gioca`: guarda, prendi [articolo] nome, inventario, nord, sud, esci.
+`gioca`: guarda, esamina, prendi, lascia, metti, apri, chiudi, blocca,
+inventario, nord, sud, esci. Alias classici: l/look, x/examine,
+i/inv/inventory, n/north, s/south, q/quit, get/take, open, close, drop, put, lock.
+I nomi parziali sono accettati soltanto quando identificano un solo oggetto
+raggiungibile; altrimenti l'evento è `ambiguous` e contiene tutte le alternative.
 EOF termina senza errore, Ctrl-C termina con codice 130. Prompt soltanto su TTY,
 quindi si possono fornire comandi da stdin per script e transcript.
 Codici: 0 successo, 1 sorgente/file/avvio non valido, 2 invocazione errata.

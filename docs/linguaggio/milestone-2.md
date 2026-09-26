@@ -93,8 +93,17 @@ non ancora un sistema di moduli autore.
 Oltre a M1: esamina, apri, chiudi, blocca … con …, metti … nel …, lascia.
 Esempi: `apri scrigno`, `prendi chiave`, `apri porta rossa con chiave`,
 `chiudi porta rossa`, `blocca porta rossa con chiave`, `metti chiave nello scrigno`.
-Nomi esatti con articoli opzionali; virgolette per nomi che contengono delimitatori.
+Il nome completo ha priorità. Se non esiste una corrispondenza esatta, le parole
+digitate possono identificare un solo oggetto raggiungibile: `prendi chiave`
+seleziona `chiave di rame` quando è l'unica chiave nel campo d'azione. Più
+corrispondenze producono una domanda con le alternative e non modificano lo stato.
+Articoli iniziali opzionali; virgolette per nomi che contengono delimitatori.
 Esempio: `metti "libro con note" nella scatola`.
+
+Compatibilità comandi del giocatore: `l`/`look`, `x`/`examine`,
+`i`/`inv`/`inventory`, `n`/`north`, `s`/`south`, `q`/`quit`, `get`/`take` e le
+forme inglesi di apri, chiudi, lascia, metti e blocca. Sono alias d'ingresso;
+la sintassi autore, la narrazione e la documentazione restano italiane.
 
 Usare una chiave richiede possesso e accessibilità. Una chiave in una borsa
 trasportata ma chiusa non è utilizzabile. Metti richiede oggetto posseduto e

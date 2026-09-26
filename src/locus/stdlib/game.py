@@ -37,6 +37,7 @@ EventKind = Literal[
     "ambiguous",
     "no_exit",
     "unknown",
+    "missing_noun",
     "quit",
     "opened",
     "closed",
@@ -153,11 +154,16 @@ def visible(session: Session) -> tuple[str, ...]:
 
 
 def _resolve(session: Session, name: str) -> Entity | Event:
-    matches = [
-        entity
-        for entity in session.world.entities
-        if canonical(entity.label) == canonical(name) and reachable(session, entity.id)
-    ]
+    in_scope = [entity for entity in session.world.entities if reachable(session, entity.id)]
+    normalized = canonical(name)
+    matches = [entity for entity in in_scope if canonical(entity.label) == normalized]
+    if not matches:
+        words = set(normalized.split())
+        matches = [
+            entity
+            for entity in in_scope
+            if words and words.issubset(set(canonical(entity.label).split()))
+        ]
     if not matches:
         return Event("not_here")
     if len(matches) > 1:
@@ -262,8 +268,10 @@ def _perform(session: Session, intent: Intent) -> Transition:
         return _perform(moved, Intent("look"))
     if intent.verb == "quit":
         return Transition(session, Event("quit"))
-    if intent.verb == "unknown" or not intent.noun:
+    if intent.verb == "unknown":
         return Transition(session, Event("unknown"))
+    if not intent.noun:
+        return Transition(session, Event("missing_noun"))
     entity = _resolve(session, intent.noun)
     if isinstance(entity, Event):
         return Transition(session, entity)
@@ -370,7 +378,11 @@ class _RuleHost:
 
 
 def step(session: Session, intent: Intent) -> Transition:
-    if not session.world.rules or intent.verb in {"quit", "unknown"}:
+    if (
+        not session.world.rules
+        or intent.verb in {"quit", "unknown"}
+        or (intent.verb not in {"look", "inventory", "north", "south"} and not intent.noun)
+    ):
         return _perform(session, intent)
     refs: list[str | None] = []
     for name in (intent.noun, intent.indirect):

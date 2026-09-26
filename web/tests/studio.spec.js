@@ -20,6 +20,14 @@ test("progetto, compilazione, gioco, test e release statica", async ({
   await expect(page.locator("#transcript")).toContainText(
     "Hai aperto: custodia.",
   );
+  await page.locator("#command").fill("x custodia");
+  await page.locator("#send").click();
+  await expect(page.locator("#transcript")).toContainText("Stato: aperto.");
+  await page.locator("#command").fill("prendi chiave");
+  await page.locator("#send").click();
+  await expect(page.locator("#transcript")).toContainText(
+    "Hai preso: chiave di rame.",
+  );
   await page.getByRole("button", { name: "Test", exact: true }).click();
   await page.locator("#runTest").click();
   await expect(page.locator("#testResult")).toContainText("SUPERATO", {
@@ -59,6 +67,10 @@ test("progetto, compilazione, gioco, test e release statica", async ({
   await player.locator("#send").click();
   await expect(player.locator("#transcript")).toContainText(
     "Hai aperto: custodia.",
+  );
+  await page.locator("#commandGuideButton").click();
+  await expect(page.locator("#manualContent")).toContainText(
+    "Comandi, abbreviazioni e nomi degli oggetti",
   );
   expect(errors).toEqual([]);
 });

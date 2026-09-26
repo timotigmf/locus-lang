@@ -13,7 +13,7 @@ servono una dichiarazione e una collocazione.
 | `esamina custodia` | Descrizione e stato chiuso |
 | `apri custodia` | Apertura riuscita |
 | `esamina custodia` | Ora compare il contenuto |
-| `prendi chiave di rame` | Presa riuscita |
+| `prendi chiave` | Presa riuscita: il nome parziale identifica una sola chiave |
 | `inventario` | Compare la chiave |
 | `chiudi custodia` | La chiave resta con te |
 
@@ -32,3 +32,5 @@ sullo stesso oggetto: il compilatore segnala E112.
 
 Questo esercizio prova anche un caso negativo: un rifiuto corretto è parte del
 comportamento del gioco e merita una verifica quanto il percorso vincente.
+Continua con [Comandi, abbreviazioni e nomi](05-comandi-e-nomi.md) per provare
+`x custodia`, le forme classiche inglesi e la disambiguazione fra due chiavi.

@@ -65,8 +65,16 @@ def test_closed_container_hides_content_and_open_reveals_it() -> None:
     state = command(state, "apri scrigno", "opened")
     assert reachable(state, key)
     assert "chiave di ottone" in render(step(state, parse_command("esamina scrigno")))
+    state = command(state, "prendi chiave di ottone", "taken")
     state = command(state, "chiudi scrigno", "closed")
-    assert not reachable(state, key)
+    assert reachable(state, key)
+
+
+def test_partial_name_requires_disambiguation_when_two_keys_are_reachable() -> None:
+    state = command(session(), "apri scrigno", "opened")
+    result = step(state, parse_command("prendi chiave"))
+    assert result.event.kind == "ambiguous"
+    assert render(result) == "Quale intendi: chiave di ottone o chiave di ferro?"
 
 
 def test_nested_container_transport_put_drop_and_cycle_prevention() -> None:
