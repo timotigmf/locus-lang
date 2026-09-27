@@ -29,7 +29,7 @@ Un test compila tipi e relazioni non narrativi per verificare concretamente l'in
 | lexer | token, originale, posizione; nessuna risoluzione di nomi | implementato |
 | parser autore | grammatica → AST immutabile | dichiarazioni, relazioni, regole, metadati e vocabolario |
 | semantica | nomi canonici, tipi noti, duplicati, ID risolti | implementato |
-| IR | programma immutabile senza articoli o sintassi | schema sperimentale 7 |
+| IR | programma immutabile senza articoli o sintassi | schema sperimentale 8 |
 | mondo | istanze indipendenti dai nodi AST | istanziazione minima |
 | regole | ordinamento, condizioni, esiti, tracing | solo progetto |
 | runtime | transizioni, eventi e servizi deterministici | transizioni IF nella stdlib |
@@ -57,9 +57,10 @@ riferimenti in avanti. Il catalogo `RelationSpec` definisce tipi agli estremi,
 orientamento e inversi. Nessuna conoscenza di stanze o direzioni nel compilatore.
 Conflitti funzionali, auto-collegamenti e riferimenti non risolti sono diagnosticati.
 
-`ProgramIR` versione 7 contiene gerarchia dei tipi, entità, relazioni, proprietà,
+`ProgramIR` versione 8 contiene gerarchia dei tipi, azioni dell'autore, entità, relazioni, proprietà,
 regole, punto iniziale, titolo, autore e sinonimi risolti; i record di base sono
-`TypeIR(id, label, parent_id)`, `EntityIR(id, label, type_id)`
+`TypeIR(id, label, parent_id)`, `ActionIR(id, label, command, ...)`,
+`EntityIR(id, label, type_id)`
 e `RelationIR(source_id, predicate_id, target_id)`. Gli ID sono ordinali riproducibili per
 lo stesso sorgente, non persistenti fra modifiche. Nessuna serializzazione di
 oggetti Python o codice eseguibile. Il JSON è solo un dump.
@@ -160,7 +161,8 @@ parser. Si consulti l'[ADR 0005](docs/adr/0005-proprieta-e-mondo.md) per le alte
 `rule_parser` produce AST, `rule_compiler` risolve e tipa i riferimenti; `rule_model`
 contiene record immutabili generici. `rules.execute` esegue rulebook attraverso
 un protocollo Host indipendente da IF. `stdlib.game` adatta sessioni e azioni;
-`Transition` espone output, trace e risultato. IR corrente versione 4.
+`Transition` espone output, trace e risultato. Questi record furono introdotti
+con l'IR 4 e sono conservati nell'IR 8.
 Vedere [ADR 0006](docs/adr/0006-regole.md).
 
 ## Implementazione M4
@@ -197,3 +199,11 @@ Il parser produce dichiarazioni nominali separate dalle entità. L'analisi
 semantica raccoglie i nomi, risolve i genitori in un secondo passaggio e registra
 la gerarchia nell'IR 7. Schemi, regole, runtime e strumenti usano lo stesso
 confronto transitivo. Vedere [ADR 0011](docs/adr/0011-gerarchia-tipi.md).
+
+## Azioni definite dall'autore
+
+Le dichiarazioni di azione vengono unite al catalogo `ActionSpec` dell'host dopo
+la risoluzione dei tipi. L'IR 8 conserva comando, tipi degli argomenti e
+separatore. Il parser giocatore riceve questo catalogo compilato e produce ID di
+azione; il dispatcher usa le stesse fasi transazionali delle azioni standard.
+Vedere [ADR 0012](docs/adr/0012-azioni-autore.md).

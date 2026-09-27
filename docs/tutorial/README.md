@@ -21,6 +21,7 @@ al prompt della storia: lì si scrivono soltanto i comandi del giocatore.
 | [5. Comandi e nomi](05-comandi-e-nomi.md) | `examples/tutorial/02_custodia.locus` | Usare abbreviazioni, nomi parziali e ambiguità |
 | [6. Sotterraneo, enigma e punti](06-sotterraneo-enigma-punti.md) | `examples/tutorial/06_sotterraneo.locus` | Comporre mappa, chiave, sinonimi e premio |
 | [7. Tipi definiti dall'autore](07-tipi-autore.md) | `examples/tutorial/07_tipi.locus` | Creare categorie che ereditano capacità e proprietà |
+| [8. Azioni definite dall'autore](08-azioni-autore.md) | `examples/tutorial/08_azioni.locus` | Dichiarare comandi con zero, uno o due oggetti tipati |
 
 Prima prova la versione fornita. Poi modifica un solo elemento e riesegui la
 sequenza di comandi. In caso di errore conserva il messaggio, il file sorgente e

@@ -1,27 +1,12 @@
 """Parser dei comandi: nomi quotati, oggetto diretto e indiretto, nessun frontend autore."""
 
+from collections.abc import Sequence
 from dataclasses import dataclass
-from typing import Literal
 
 from locus.diagnostics import canonical
+from locus.ir import ActionIR
 
-Verb = Literal[
-    "look",
-    "inventory",
-    "take",
-    "north",
-    "south",
-    "east",
-    "west",
-    "quit",
-    "unknown",
-    "open",
-    "close",
-    "put",
-    "drop",
-    "examine",
-    "lock",
-]
+Verb = str
 
 _SIMPLE_COMMANDS: dict[str, Verb] = {
     "guarda": "look",
@@ -102,8 +87,9 @@ def _tokens(text: str) -> list[tuple[str, bool]] | None:
             while end < len(text) and not text[end].isspace() and text[end] != '"':
                 end += 1
             word = text[index:end]
-            if word.startswith("nell'"):
-                tokens.append(("nell'", False))
+            if word.startswith(("nell'", "all'")):
+                prefix = word[:5]
+                tokens.append((prefix, False))
                 if word[5:]:
                     tokens.append((word[5:], False))
             else:
@@ -122,15 +108,54 @@ def _noun(tokens: list[tuple[str, bool]]) -> str | None:
     return " ".join(token for token, _ in tokens) or None
 
 
-def parse_command(text: str) -> Intent:
+def standard_commands() -> frozenset[str]:
+    return frozenset((*_SIMPLE_COMMANDS, *_ACTION_COMMANDS))
+
+
+def _author_intent(action: ActionIR, tokens: list[tuple[str, bool]]) -> Intent:
+    rest = tokens[1:]
+    if action.target_type_id is None:
+        return Intent(action.id) if not rest else Intent("unknown")
+    if not rest:
+        return Intent(action.id)
+    if action.indirect_type_id is None:
+        direct = _noun(rest)
+        return Intent(action.id, direct) if direct else Intent("unknown")
+    assert action.separator is not None
+    separator = action.separator
+    separator_words = {
+        "a": {"a", "al", "alla", "allo", "all'"},
+        "in": {"in", "nel", "nella", "nello", "nell'"},
+        "di": {"di", "del", "della", "dello", "dell'"},
+    }.get(separator, {separator})
+    splits = [
+        index for index, (word, quoted) in enumerate(rest) if not quoted and word in separator_words
+    ]
+    if len(splits) != 1:
+        return Intent("unknown")
+    index = splits[0]
+    direct = _noun(rest[:index])
+    indirect = _noun(rest[index + 1 :])
+    return Intent(action.id, direct, indirect) if direct and indirect else Intent("unknown")
+
+
+def parse_command(text: str, actions: Sequence[ActionIR] = ()) -> Intent:
     tokens = _tokens(canonical(text).replace("’", "'"))
     if not tokens:
         return Intent("unknown")
     verb, quoted = tokens[0]
     if quoted:
         return Intent("unknown")
+    authored = next((action for action in actions if action.command == verb), None)
     if len(tokens) == 1:
-        return Intent(_SIMPLE_COMMANDS.get(verb, _ACTION_COMMANDS.get(verb, "unknown")))
+        standard = _SIMPLE_COMMANDS.get(verb, _ACTION_COMMANDS.get(verb))
+        return (
+            Intent(standard)
+            if standard is not None
+            else (_author_intent(authored, tokens) if authored is not None else Intent("unknown"))
+        )
+    if authored is not None and verb not in _ACTION_COMMANDS:
+        return _author_intent(authored, tokens)
     if verb not in _ACTION_COMMANDS:
         return Intent("unknown")
     action = _ACTION_COMMANDS[verb]

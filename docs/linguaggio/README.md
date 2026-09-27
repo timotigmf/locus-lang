@@ -11,3 +11,5 @@ La versione attuale è descritta nelle specifiche [M2](milestone-2.md),
 [Metadati e vocabolario](metadati-vocabolario.md). I
 [tipi definiti dall'autore](tipi-autore.md) aggiungono una gerarchia nominale a
 ereditarietà singola, usata in modo uniforme dal compilatore e dal runtime.
+Le [azioni definite dall'autore](azioni-autore.md) collegano comandi italiani,
+argomenti tipati e regole senza interpretazione testuale nel runtime.

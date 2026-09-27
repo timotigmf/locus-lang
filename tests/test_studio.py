@@ -136,6 +136,22 @@ def test_studio_exposes_author_types_and_maps_room_subtypes() -> None:
     assert any(item["label"] == "reliquia" for item in result["ir"]["types"])
 
 
+def test_studio_executes_and_exposes_author_actions() -> None:
+    studio = Studio()
+    result = studio.compile(
+        project(
+            "La Sala è una stanza. Il gong è una cosa nella Sala. "
+            'Azione "suonare" su una cosa con comando "suona". '
+            'Regola "gong" per suonare "gong" nella fase invece: '
+            'dì "Il gong risuona."; Fine regola.'
+        )
+    )
+    assert result["ok"] and result["actions"] == 1
+    assert result["ir"]["actions"][0]["command"] == "suona"
+    studio.restart()
+    assert studio.command("suona gong")["text"] == "Il gong risuona."
+
+
 def test_dispatch_errors_and_size_limit() -> None:
     studio = Studio()
     assert not json.loads(studio.dispatch("{"))["ok"]

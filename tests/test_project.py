@@ -50,6 +50,23 @@ def test_author_type_can_be_declared_in_an_included_file(tmp_path: Path) -> None
     assert program.entities[1].type_id == custom.id
 
 
+def test_author_action_can_be_declared_in_an_included_file(tmp_path: Path) -> None:
+    write(
+        tmp_path,
+        "azioni.locus",
+        'Azione "meditare" senza oggetti con comando "medita". '
+        'Regola "meditazione" per meditare nella fase invece: dì "Silenzio."; Fine regola.',
+    )
+    path = write(
+        tmp_path,
+        "storia.locus",
+        'Includi "azioni.locus". La Sala è una stanza.',
+    )
+    current = start(instantiate(compile_story_file(path)))
+    transition = step(current, parse_command("medita", current.world.actions))
+    assert render(transition) == "Silenzio."
+
+
 def test_diamond_includes_once_and_rule_order(tmp_path: Path) -> None:
     write(
         tmp_path,

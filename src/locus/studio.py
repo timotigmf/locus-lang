@@ -62,6 +62,16 @@ _ERROR_HELP = {
         "Ogni catena deve terminare in un tipo esistente senza tornare indietro.",
         "docs/linguaggio/tipi-autore.md",
     ),
+    "E310": (
+        "Azione duplicata",
+        "Scegli un nome che non appartenga già alla storia o alla libreria.",
+        "docs/linguaggio/azioni-autore.md",
+    ),
+    "E311": (
+        "Comando non valido",
+        "Usa una parola unica che non sia già un comando standard o dell'autore.",
+        "docs/linguaggio/azioni-autore.md",
+    ),
     "E201": (
         "Mondo incoerente",
         "Verifica estremi e collegamenti della porta.",
@@ -236,6 +246,7 @@ class Studio:
             "map": map_data(program),
             "entities": len(program.entities),
             "rules": len(program.rules),
+            "actions": len(program.actions),
             "title": program.title,
             "author": program.author,
         }
@@ -263,7 +274,7 @@ class Studio:
             raise ValueError("Avvia o riavvia la storia prima di inviare un comando.")
         if len(command) > 2000:
             raise ValueError("Comando troppo lungo.")
-        transition = step(self.session, parse_command(command))
+        transition = step(self.session, parse_command(command, self.session.world.actions))
         self.session = transition.session
         self.ended = transition.event.kind == "quit"
         return self._output(transition)

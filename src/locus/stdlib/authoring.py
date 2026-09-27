@@ -7,6 +7,7 @@ from locus.compiler import analyze, relation_verbs
 from locus.diagnostics import CompileError
 from locus.ir import ProgramIR
 from locus.parser import parse
+from locus.player import standard_commands
 from locus.project import load_project
 from locus.runtime import instantiate
 from locus.stdlib import (
@@ -39,6 +40,7 @@ def _compile(ast: Program) -> ProgramIR:
         properties=default_properties(),
         actions=default_actions(),
         kind_parents=default_kind_parents(),
+        reserved_commands=standard_commands(),
     )
     try:
         validate_world(instantiate(program))

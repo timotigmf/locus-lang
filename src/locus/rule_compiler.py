@@ -24,6 +24,12 @@ def lower_rules(
             or name != canonical(name)
             or not spec.id.strip()
             or not 0 <= spec.min_args <= spec.max_args <= 2
+            or (spec.target_types and spec.max_args < 1)
+            or (spec.indirect_types and spec.max_args < 2)
+            or any(
+                type_id not in type_parents
+                for type_id in (*spec.target_types, *spec.indirect_types)
+            )
         ):
             raise ValueError("Catalogo azioni non valido.")
 
@@ -55,10 +61,29 @@ def lower_rules(
             or (syntax.indirect is not None and syntax.target is None)
         ):
             raise CompileError("E306", "Numero di oggetti non valido per l'azione.", span)
+        target = entity(syntax.target, span) if syntax.target is not None else None
+        indirect = entity(syntax.indirect, span) if syntax.indirect is not None else None
+        if (
+            target is not None
+            and spec.target_types
+            and not any(
+                is_subtype(target.type_id, expected, type_parents) for expected in spec.target_types
+            )
+        ):
+            raise CompileError("E305", "Tipo del primo oggetto non compatibile.", span)
+        if (
+            indirect is not None
+            and spec.indirect_types
+            and not any(
+                is_subtype(indirect.type_id, expected, type_parents)
+                for expected in spec.indirect_types
+            )
+        ):
+            raise CompileError("E305", "Tipo del secondo oggetto non compatibile.", span)
         return ActionCall(
             spec.id,
-            entity(syntax.target, span).id if syntax.target is not None else None,
-            entity(syntax.indirect, span).id if syntax.indirect is not None else None,
+            target.id if target is not None else None,
+            indirect.id if indirect is not None else None,
         )
 
     def condition(node: Condition[PropertyReference], span: Span) -> Condition[Address]:

@@ -16,6 +16,7 @@ compatibilità del sorgente o equivalenza del comportamento con Inform.
 | Stop/fallimento | `interrompi` oppure `fallisci` | Il primo conserva gli effetti; il secondo annulla la transazione |
 | Descrizioni condizionali | Regole che cambiano proprietà testuali | Niente interpolazione Inform con parentesi quadre |
 | Oggetto dell'azione | Nomi quotati espliciti | Nessun equivalente parametrico generale di noun/second noun |
+| Azioni dell'autore | `Azione` con comando e zero, uno o due tipi | Una forma di una parola; niente pattern grammaticali arbitrari |
 | Estensioni | Inclusione di file locali | Nessun package manager, namespace o formato di estensione Inform |
 | Test e transcript | Copioni stdin, uscita attesa e pytest | Non esiste ancora una direttiva autore `Test ...` |
 | Tracing | `locus debug` | Mostra le regole autore considerate, non tutte le operazioni interne |

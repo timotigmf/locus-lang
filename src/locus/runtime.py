@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 from locus.diagnostics import canonical
 from locus.graph import cycle_node
-from locus.ir import IR_VERSION, ProgramIR, PropertyIR, RelationIR, SynonymIR, TypeIR
+from locus.ir import IR_VERSION, ActionIR, ProgramIR, PropertyIR, RelationIR, SynonymIR, TypeIR
 from locus.rule_model import RuleIR
 from locus.schema import PropertySpec, is_subtype
 
@@ -28,6 +28,7 @@ class World:
     title: str | None = None
     author: str | None = None
     types: tuple[TypeIR, ...] = ()
+    actions: tuple[ActionIR, ...] = ()
 
 
 def has_type(world: World, actual: str, expected: str) -> bool:
@@ -44,6 +45,12 @@ def instantiate(program: ProgramIR) -> World:
         (
             *(entity.type_id for entity in program.entities),
             *(owner for spec in program.property_specs for owner in spec.owner_types),
+            *(
+                type_id
+                for action in program.actions
+                for type_id in (action.target_type_id, action.indirect_type_id)
+                if type_id is not None
+            ),
         )
     )
     types = program.types or tuple(TypeIR(ident, ident) for ident in inferred_type_ids)
@@ -67,6 +74,40 @@ def instantiate(program: ProgramIR) -> World:
         raise ValueError("Tipo di entità assente nell'IR.")
     if any(owner not in type_ids for spec in program.property_specs for owner in spec.owner_types):
         raise ValueError("Tipo proprietario assente nell'IR.")
+    action_ids = {action.id for action in program.actions}
+    action_labels = [canonical(action.label) for action in program.actions]
+    commands = [action.command for action in program.actions]
+    if (
+        len(action_ids) != len(program.actions)
+        or len(set(action_labels)) != len(action_labels)
+        or len(set(commands)) != len(commands)
+        or any(
+            not action.id.strip()
+            or not canonical(action.label)
+            or action.command != canonical(action.command)
+            or len(action.command.split()) != 1
+            or not action.command.isalpha()
+            or (action.target_type_id is None and action.indirect_type_id is not None)
+            or (action.target_type_id is None and action.separator is not None)
+            or (action.indirect_type_id is None and action.separator is not None)
+            or (action.indirect_type_id is not None and action.separator is None)
+            or (
+                action.separator is not None
+                and (
+                    action.separator != canonical(action.separator)
+                    or len(action.separator.split()) != 1
+                    or not action.separator.isalpha()
+                    or action.separator == action.command
+                )
+            )
+            or any(
+                type_id is not None and type_id not in type_ids
+                for type_id in (action.target_type_id, action.indirect_type_id)
+            )
+            for action in program.actions
+        )
+    ):
+        raise ValueError("Catalogo delle azioni non valido nell'IR.")
     if any(
         edge.source_id not in identifiers or edge.target_id not in identifiers
         for edge in program.relations
@@ -113,4 +154,5 @@ def instantiate(program: ProgramIR) -> World:
         title=program.title,
         author=program.author,
         types=types,
+        actions=program.actions,
     )

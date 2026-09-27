@@ -20,6 +20,22 @@ La attiva è una proprietà logica.
 La punti è una proprietà numerica.
 """.replace("I punti", "La punti")
 
+AUTHOR_ACTIONS = """
+Una persona è un tipo di cosa.
+Il custode è una persona nella Sala.
+Il sigillo è una cosa nella Sala.
+Azione "attendere" senza oggetti con comando "attendi".
+Azione "salutare" su una persona con comando "saluta".
+Azione "mostrare" su una cosa con una persona con comando "mostra" e separatore "a".
+Regola "attesa" per attendere nella fase invece: dì "Il tempo passa."; Fine regola.
+Regola "saluto" per salutare "custode" nella fase invece:
+    dì "Il custode ricambia il saluto.";
+Fine regola.
+Regola "mostra sigillo" per mostrare "sigillo" con "custode" nella fase invece:
+    dì "Il custode riconosce il sigillo.";
+Fine regola.
+"""
+
 
 def rule(
     body: str, phase: str = "prima", name: str = "prova", action: str = "guardare", extra: str = ""
@@ -139,6 +155,38 @@ def test_selector_and_missing_target() -> None:
     assert not step(initial, parse_command("prendi assente")).trace
 
 
+def test_author_actions_with_zero_one_and_two_typed_objects() -> None:
+    current = session(AUTHOR_ACTIONS)
+
+    def run(command: str) -> str:
+        intent = parse_command(command, current.world.actions)
+        return render(step(current, intent))
+
+    assert run("attendi") == "Il tempo passa."
+    assert run("saluta il custode") == "Il custode ricambia il saluto."
+    assert run("mostra il sigillo al custode") == "Il custode riconosce il sigillo."
+    assert run("saluta sigillo") == "Questo comando non si applica a quell'elemento."
+    assert run("mostra custode a sigillo") == "Questo comando non si applica a quell'elemento."
+    assert parse_command("mostra sigillo", current.world.actions).verb == "unknown"
+
+
+def test_author_action_without_rules_has_an_explicit_default() -> None:
+    current = session('Azione "meditare" senza oggetti con comando "medita".')
+    result = step(current, parse_command("medita", current.world.actions))
+    assert render(result) == "Non accade nulla."
+    assert result.event.kind == "custom"
+
+
+def test_replacement_can_invoke_an_author_action() -> None:
+    source = AUTHOR_ACTIONS + rule(
+        'sostituisci con salutare "custode";',
+        name="delega saluto",
+    )
+    current = session(source)
+    result = step(current, parse_command("guarda", current.world.actions))
+    assert render(result) == "Il custode ricambia il saluto."
+
+
 @pytest.mark.parametrize(
     "source,code",
     [
@@ -159,6 +207,37 @@ def test_static_errors(source: str, code: str) -> None:
         compile_story(BASE + source, "regole.locus")
     assert caught.value.code == code
     assert caught.value.span.source == "regole.locus"
+
+
+@pytest.mark.parametrize(
+    ("source", "code"),
+    [
+        (
+            'Azione "salutare" senza oggetti con comando "saluta". '
+            'Azione "SALUTARE" senza oggetti con comando "inchina".',
+            "E310",
+        ),
+        ('Azione "parlare con" senza oggetti con comando "parla".', "E310"),
+        ('Azione "salutare" senza oggetti con comando "guarda".', "E311"),
+        (
+            'Azione "salutare" senza oggetti con comando "saluta". '
+            'Azione "inchinarsi" senza oggetti con comando "saluta".',
+            "E311",
+        ),
+        ('Azione "salutare" senza oggetti con comando "di buon giorno".', "E311"),
+        ('Azione "domare" su un drago con comando "doma".', "E102"),
+        (
+            "Una persona è un tipo di cosa. Il custode è una persona nella Sala. "
+            'Azione "salutare" su una persona con comando "saluta". '
+            'Regola "errata" per salutare "leva" nella fase invece: dì "x"; Fine regola.',
+            "E305",
+        ),
+    ],
+)
+def test_author_action_diagnostics(source: str, code: str) -> None:
+    with pytest.raises(CompileError) as caught:
+        compile_story(BASE + source, "azioni.locus")
+    assert caught.value.code == code
 
 
 @pytest.mark.parametrize(

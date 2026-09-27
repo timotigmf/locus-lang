@@ -29,7 +29,8 @@ quotato restringe il destinatario, `con "nome"` restringe il secondo oggetto.
 La stessa sintassi specifica un'azione sostitutiva, ma lì gli oggetti obbligatori
 non possono essere omessi. `mettere` e `bloccare` richiedono due oggetti;
 `aprire` accetta una chiave facoltativa. Il parser giocatore conserva `metti X in Y`.
-Nuovi verbi sono registrabili mediante API `ActionSpec`, non ancora nel sorgente.
+Nuovi verbi sono registrabili mediante API `ActionSpec`. La successiva specifica
+delle [azioni dell'autore](azioni-autore.md) li rende dichiarabili anche nel sorgente.
 
 ## Condizioni e istruzioni
 
@@ -103,6 +104,6 @@ intervallo. Gli errori sintattici comuni riutilizzano E002 e gli errori di rifer
 E103. I confronti puntano all'inizio della regola, gli effetti alla loro istruzione.
 
 Limiti: niente variabili locali, riferimenti al destinatario implicito, funzioni,
-espressioni aritmetiche generali, regole su relazioni, verbi dichiarabili dall'autore,
+espressioni aritmetiche generali, regole su relazioni,
 salvataggi o debugger interattivo. Le regole sono compilate in IR strutturata;
 non esiste un caricatore JSON per input esterno. Non è una parità funzionale con Inform.

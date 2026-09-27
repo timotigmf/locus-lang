@@ -505,7 +505,7 @@ async function compileProject(play = false) {
   compiledRevision = rev;
   showDiagnostics([]);
   $("compileStatus").textContent =
-    `${result.entities} entità · ${result.rules} regole · compilato`;
+    `${result.entities} entità · ${result.actions ?? 0} azioni autore · ${result.rules} regole · compilato`;
   if (result.title) {
     project.title = result.title;
     $("title").value = result.title;
@@ -554,7 +554,28 @@ function renderIndex(ir) {
       row.append(el("td", {}, t));
     table.append(row);
   }
-  $("index").replaceChildren(table);
+  const content = [table];
+  if ((ir.actions ?? []).length) {
+    content.push(el("h3", {}, "Azioni definite dall'autore"));
+    const actions = el("table", { class: "data" });
+    const actionHead = el("tr");
+    for (const label of ["Azione", "Comando", "Oggetti"])
+      actionHead.append(el("th", {}, label));
+    actions.append(actionHead);
+    for (const action of ir.actions) {
+      const row = el("tr");
+      const argumentsText = action.target_type_id
+        ? action.indirect_type_id
+          ? `${typePath(action.target_type_id)} + ${typePath(action.indirect_type_id)} (separatore «${action.separator}»)`
+          : typePath(action.target_type_id)
+        : "nessun oggetto";
+      for (const value of [action.label, action.command, argumentsText])
+        row.append(el("td", {}, value));
+      actions.append(row);
+    }
+    content.push(actions);
+  }
+  $("index").replaceChildren(...content);
 }
 function showTrace(trace) {
   $("trace").replaceChildren();

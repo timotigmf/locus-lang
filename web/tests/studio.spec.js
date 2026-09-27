@@ -210,3 +210,38 @@ test("mobile: menu progetto e nessun overflow orizzontale", async ({
     ),
   ).toBe(true);
 });
+
+test("azione tipata dell'autore nello Studio", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.locator("#compileStatus")).toContainText("compilato", {
+    timeout: 90000,
+  });
+  const source = `Titolo: "Il gong".
+La Sala è una stanza.
+Il gong è una cosa nella Sala.
+Azione "suonare" su una cosa con comando "suona".
+Regola "rintocco" per suonare "gong" nella fase invece:
+    dì "Il gong risuona nella sala.";
+Fine regola.`;
+  await page.locator(".cm-content").click();
+  await page.keyboard.press("ControlOrMeta+A");
+  await page.keyboard.insertText(source);
+  await page
+    .getByRole("button", { name: "▶ Compila e prova", exact: true })
+    .click();
+  await expect(page.locator("#transcript")).toContainText("Sala", {
+    timeout: 90000,
+  });
+  await page.locator("#command").fill("suona gong");
+  await page.locator("#send").click();
+  await expect(page.locator("#transcript")).toContainText(
+    "Il gong risuona nella sala.",
+  );
+  await page
+    .getByRole("button", { name: "Indice del mondo", exact: true })
+    .click();
+  await expect(page.locator("#index")).toContainText(
+    "Azioni definite dall'autore",
+  );
+  await expect(page.locator("#index")).toContainText("suona");
+});

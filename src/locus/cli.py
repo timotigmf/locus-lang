@@ -55,7 +55,7 @@ def main(argv: list[str] | None = None) -> int:
                         command = input("> " if sys.stdin.isatty() else "")
                     except EOFError:
                         break
-                    transition = step(session, parse_command(command))
+                    transition = step(session, parse_command(command, session.world.actions))
                     session = transition.session
                     _show(transition, args.command == "debug")
                     if transition.event.kind == "quit":

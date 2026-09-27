@@ -57,3 +57,5 @@ class ActionSpec:
     id: str
     min_args: int
     max_args: int
+    target_types: tuple[str, ...] = ()
+    indirect_types: tuple[str, ...] = ()

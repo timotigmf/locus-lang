@@ -23,6 +23,16 @@ class KindDeclaration:
 
 
 @dataclass(frozen=True, slots=True)
+class ActionDeclaration:
+    name: str
+    command: str
+    target_kind: str | None
+    indirect_kind: str | None
+    separator: str | None
+    span: Span
+
+
+@dataclass(frozen=True, slots=True)
 class Relation:
     subject: str
     predicate: str
@@ -117,3 +127,4 @@ class Program:
     metadata: tuple[Metadata, ...] = ()
     vocabulary: tuple[Vocabulary, ...] = ()
     kinds: tuple[KindDeclaration, ...] = ()
+    actions: tuple[ActionDeclaration, ...] = ()

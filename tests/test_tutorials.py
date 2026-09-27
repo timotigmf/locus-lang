@@ -96,6 +96,23 @@ def test_dungeon_tutorial_awards_points_once_after_the_puzzle() -> None:
     assert property_of(repeated.session, "registro", "punti") == 10
 
 
+def test_author_action_tutorial_checks_types_and_updates_state() -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "08_azioni.locus")))
+
+    def command(text: str) -> str:
+        nonlocal current
+        result = step(current, parse_command(text, current.world.actions))
+        current = result.session
+        return render(result)
+
+    assert "prudente" in command("saluta custode")
+    assert "riconosce il sigillo" in command("mostra sigillo al custode")
+    assert property_of(current, "custode", "fiducia") == 1
+    assert "ospite atteso" in command("saluta custode")
+    assert command("saluta sigillo") == "Questo comando non si applica a quell'elemento."
+    assert property_of(current, "custode", "fiducia") == 1
+
+
 def test_final_world_matches_story() -> None:
     current = start(instantiate(compile_story_file(TUTORIAL / "04_faro.locus")))
     for command in (TUTORIAL / "04_faro.comandi").read_text(encoding="utf-8").splitlines():

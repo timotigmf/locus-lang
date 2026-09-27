@@ -3,6 +3,7 @@
 from collections.abc import Mapping
 
 from locus.ast import (
+    ActionDeclaration,
     Assignment,
     Declaration,
     EntryPoint,
@@ -140,6 +141,7 @@ class _Parser:
     def program(self) -> Program:
         declarations: list[Declaration] = []
         kinds: list[KindDeclaration] = []
+        actions: list[ActionDeclaration] = []
         relations: list[Relation] = []
         properties: list[PropertyDeclaration] = []
         assignments: list[Assignment] = []
@@ -149,6 +151,43 @@ class _Parser:
         metadata: list[Metadata] = []
         vocabulary: list[Vocabulary] = []
         while self.current.kind != "EOF":
+            if self.current.normalized == "azione":
+                start = self.current.span
+                self.keyword("azione")
+                name = RuleParser(self).quoted()
+                target_kind = None
+                indirect_kind = None
+                separator = None
+                if self.current.normalized == "senza":
+                    self.keyword("senza")
+                    self.keyword("oggetti")
+                    self.keyword("con")
+                else:
+                    self.keyword("su")
+                    self.article(False)
+                    target_kind = self.words(stop={"con"})
+                    self.keyword("con")
+                    if self.current.normalized != "comando":
+                        self.article(False)
+                        indirect_kind = self.words(stop={"con"})
+                        self.keyword("con")
+                self.keyword("comando")
+                command = RuleParser(self).quoted()
+                if indirect_kind is not None:
+                    self.keyword("e")
+                    self.keyword("separatore")
+                    separator = RuleParser(self).quoted()
+                actions.append(
+                    ActionDeclaration(
+                        name,
+                        command,
+                        target_kind,
+                        indirect_kind,
+                        separator,
+                        self.finish(start),
+                    )
+                )
+                continue
             if self.current.kind == "WORD" and self.current.normalized in {"un", "uno", "una"}:
                 start = self.current.span
                 self.article(False)
@@ -267,6 +306,7 @@ class _Parser:
             entries=tuple(entries),
             metadata=tuple(metadata),
             vocabulary=tuple(vocabulary),
+            actions=tuple(actions),
         )
 
 

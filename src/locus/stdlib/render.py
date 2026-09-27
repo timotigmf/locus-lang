@@ -52,6 +52,8 @@ def render(transition: Transition) -> str:
             " o ".join(names) if len(names) < 3 else ", ".join(names[:-1]) + " o " + names[-1]
         )
         return f"Quale intendi: {alternatives}?"
+    if kind == "custom":
+        return "Non accade nulla."
     messages = {
         "rule": "Azione gestita dalle regole.",
         "already_carried": "Hai già questo oggetto.",
@@ -77,5 +79,6 @@ def render(transition: Transition) -> str:
         "not_container": "La destinazione non è un contenitore.",
         "cycle": "Un contenitore non può contenere sé stesso, nemmeno indirettamente.",
         "must_close": "Devi chiuderlo prima di bloccarlo.",
+        "wrong_kind": "Questo comando non si applica a quell'elemento.",
     }
     return messages[kind]

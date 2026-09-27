@@ -117,6 +117,29 @@ def test_game_cli_transcript(tmp_path: Path) -> None:
     ]
 
 
+def test_cli_executes_an_author_command(tmp_path: Path) -> None:
+    source = tmp_path / "azione.locus"
+    source.write_text(
+        "La Sala è una stanza. "
+        'Azione "meditare" senza oggetti con comando "medita". '
+        'Regola "meditazione" per meditare nella fase invece: '
+        'dì "Respiri lentamente."; Fine regola.',
+        encoding="utf-8",
+    )
+    result = subprocess.run(
+        [sys.executable, "-m", "locus", "gioca", str(source)],
+        input="medita\nesci\n",
+        cwd=tmp_path,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        env={**os.environ, "PYTHONUTF8": "1"},
+        check=False,
+    )
+    assert result.returncode == 0 and not result.stderr
+    assert "Respiri lentamente." in result.stdout
+
+
 def test_game_without_rooms(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
     source = tmp_path / "vuoto.locus"
     source.write_text("", encoding="utf-8")

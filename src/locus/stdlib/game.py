@@ -1,11 +1,11 @@
 """Transizioni IF pure con contenimento, stati e intenti a due oggetti."""
 
 from dataclasses import dataclass, replace
-from typing import Literal, cast
+from typing import Literal
 
 from locus.diagnostics import canonical
-from locus.ir import PropertyIR, RelationIR
-from locus.player import Intent, Verb
+from locus.ir import ActionIR, PropertyIR, RelationIR
+from locus.player import Intent
 from locus.rule_model import ActionCall, Address, Trace
 from locus.rules import ActionResult, RuleError, execute
 from locus.runtime import Entity, World, has_type
@@ -59,6 +59,8 @@ EventKind = Literal[
     "examined",
     "must_close",
     "lock_success",
+    "custom",
+    "wrong_kind",
 ]
 
 
@@ -259,6 +261,39 @@ def _opening(session: Session, intent: Intent, entity: Entity) -> Transition:
     return _changed(_set_state(session, entity.id, value), kind, entity.id)
 
 
+def _authored_action(session: Session, action_id: str) -> ActionIR | None:
+    return next((action for action in session.world.actions if action.id == action_id), None)
+
+
+def _authored_arguments(
+    session: Session, intent: Intent, action: ActionIR
+) -> tuple[Entity, ...] | Event:
+    expected = (action.target_type_id, action.indirect_type_id)
+    names = (intent.noun, intent.indirect)
+    resolved: list[Entity] = []
+    for name, type_id in zip(names, expected, strict=True):
+        if type_id is None:
+            if name is not None:
+                return Event("unknown")
+            continue
+        if name is None:
+            return Event("missing_noun")
+        entity = _resolve(session, name)
+        if isinstance(entity, Event):
+            return entity
+        if not has_type(session.world, entity.type_id, type_id):
+            return Event("wrong_kind", (entity.id,))
+        resolved.append(entity)
+    return tuple(resolved)
+
+
+def _perform_authored(session: Session, intent: Intent, action: ActionIR) -> Transition:
+    arguments = _authored_arguments(session, intent, action)
+    if isinstance(arguments, Event):
+        return Transition(session, arguments)
+    return Transition(session, Event("custom", tuple(entity.id for entity in arguments)))
+
+
 def _perform(session: Session, intent: Intent) -> Transition:
     if intent.verb == "look":
         return Transition(session, Event("look", (session.room_id, *visible(session))))
@@ -291,6 +326,9 @@ def _perform(session: Session, intent: Intent) -> Transition:
         return Transition(session, Event("quit"))
     if intent.verb == "unknown":
         return Transition(session, Event("unknown"))
+    authored = _authored_action(session, intent.verb)
+    if authored is not None:
+        return _perform_authored(session, intent, authored)
     if not intent.noun:
         return Transition(session, Event("missing_noun"))
     entity = _resolve(session, intent.noun)
@@ -381,7 +419,7 @@ class _RuleHost:
         transition = _perform(
             state,
             Intent(
-                cast(Verb, action.action_id),
+                action.action_id,
                 labels.get(action.target_id) if action.target_id else None,
                 labels.get(action.indirect_id) if action.indirect_id else None,
             ),
@@ -396,29 +434,39 @@ class _RuleHost:
             "put",
             "dropped",
             "examined",
+            "custom",
         }
         return ActionResult(transition.session, success, (transition.event,))
 
 
 def step(session: Session, intent: Intent) -> Transition:
+    authored = _authored_action(session, intent.verb)
     if (
         not session.world.rules
         or intent.verb in {"quit", "unknown"}
         or (
-            intent.verb not in {"look", "inventory", "north", "south", "east", "west"}
+            authored is None
+            and intent.verb not in {"look", "inventory", "north", "south", "east", "west"}
             and not intent.noun
         )
     ):
         return _perform(session, intent)
     refs: list[str | None] = []
-    for name in (intent.noun, intent.indirect):
-        if name is None:
-            refs.append(None)
-        else:
-            resolved = _resolve(session, name)
-            if isinstance(resolved, Event):
-                return Transition(session, resolved)
-            refs.append(resolved.id)
+    if authored is not None:
+        arguments = _authored_arguments(session, intent, authored)
+        if isinstance(arguments, Event):
+            return Transition(session, arguments)
+        refs.extend(entity.id for entity in arguments)
+        refs.extend([None] * (2 - len(refs)))
+    else:
+        for name in (intent.noun, intent.indirect):
+            if name is None:
+                refs.append(None)
+            else:
+                resolved = _resolve(session, name)
+                if isinstance(resolved, Event):
+                    return Transition(session, resolved)
+                refs.append(resolved.id)
     execution = execute(session, ActionCall(intent.verb, *refs), session.world.rules, _RuleHost())
     outputs = execution.outputs
     if execution.value is not None:

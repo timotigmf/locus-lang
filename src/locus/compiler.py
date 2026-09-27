@@ -1,11 +1,20 @@
 """Analisi a due passaggi e lowering di relazioni descritte da schemi esterni."""
 
-from collections.abc import Mapping
+from collections.abc import Collection, Mapping
 
 from locus.ast import Program, Relation
 from locus.diagnostics import CompileError, canonical
 from locus.graph import cycle_node
-from locus.ir import IR_VERSION, EntityIR, ProgramIR, PropertyIR, RelationIR, SynonymIR, TypeIR
+from locus.ir import (
+    IR_VERSION,
+    ActionIR,
+    EntityIR,
+    ProgramIR,
+    PropertyIR,
+    RelationIR,
+    SynonymIR,
+    TypeIR,
+)
 from locus.parser import parse
 from locus.rule_compiler import lower_rules
 from locus.schema import ActionSpec, PropertySpec, RelationSpec, Value, is_subtype, type_ids
@@ -65,6 +74,7 @@ def analyze(
     properties: Mapping[str, PropertySpec] | None = None,
     actions: Mapping[str, ActionSpec] | None = None,
     kind_parents: Mapping[str, str | None] | None = None,
+    reserved_commands: Collection[str] = (),
 ) -> ProgramIR:
     if program.inclusions:
         raise CompileError(
@@ -121,6 +131,92 @@ def analyze(
     type_records = tuple(
         TypeIR(ident, labels_by_id[ident], type_parents[ident]) for ident in type_parents
     )
+    command_names = {canonical(command) for command in reserved_commands}
+    if any(
+        command != canonical(command) or len(command.split()) != 1 or not command.isalpha()
+        for command in reserved_commands
+    ):
+        raise ValueError("I comandi riservati devono essere singole parole canoniche.")
+    action_catalog = dict(actions or {})
+    used_action_ids = {spec.id for spec in action_catalog.values()}
+    action_records: list[ActionIR] = []
+    next_action_id = 1
+    for declaration in program.actions:
+        name = canonical(declaration.name)
+        name_words = name.split()
+        if (
+            name in action_catalog
+            or not name_words
+            or any(not word.isalpha() or word in {"con", "nella"} for word in name_words)
+        ):
+            raise CompileError(
+                "E310",
+                f"Nome di azione non valido o già dichiarato: {declaration.name}.",
+                declaration.span,
+            )
+        command = canonical(declaration.command)
+        if len(command.split()) != 1 or not command.isalpha() or command in command_names:
+            raise CompileError(
+                "E311",
+                f"Comando non valido o già usato: {declaration.command}.",
+                declaration.span,
+            )
+        command_names.add(command)
+        target_type = (
+            kind_symbols.get(canonical(declaration.target_kind))
+            if declaration.target_kind is not None
+            else None
+        )
+        indirect_type = (
+            kind_symbols.get(canonical(declaration.indirect_kind))
+            if declaration.indirect_kind is not None
+            else None
+        )
+        missing_kind = (
+            declaration.target_kind
+            if declaration.target_kind is not None and target_type is None
+            else declaration.indirect_kind
+            if declaration.indirect_kind is not None and indirect_type is None
+            else None
+        )
+        if missing_kind is not None:
+            raise CompileError("E102", f"Tipo sconosciuto: {missing_kind}.", declaration.span)
+        separator = canonical(declaration.separator) if declaration.separator is not None else None
+        if indirect_type is not None and (
+            separator is None
+            or len(separator.split()) != 1
+            or not separator.isalpha()
+            or separator == command
+        ):
+            raise CompileError(
+                "E311",
+                "Il separatore deve essere una parola distinta dal comando.",
+                declaration.span,
+            )
+        ident = f"autore.a{next_action_id}"
+        while ident in used_action_ids:
+            next_action_id += 1
+            ident = f"autore.a{next_action_id}"
+        next_action_id += 1
+        used_action_ids.add(ident)
+        arity = int(target_type is not None) + int(indirect_type is not None)
+        action_catalog[name] = ActionSpec(
+            ident,
+            arity,
+            arity,
+            (target_type,) if target_type is not None else (),
+            (indirect_type,) if indirect_type is not None else (),
+        )
+        action_records.append(
+            ActionIR(
+                ident,
+                declaration.name,
+                command,
+                target_type,
+                indirect_type,
+                separator,
+            )
+        )
     symbols: dict[str, EntityIR] = {}
     for entity_declaration in program.declarations:
         name = canonical(entity_declaration.name)
@@ -287,12 +383,13 @@ def analyze(
         relations=tuple(edges.values()),
         property_specs=tuple(property_catalog.values()),
         properties=tuple(values.values()),
-        rules=lower_rules(program.rules, symbols, property_catalog, actions or {}, type_parents),
+        rules=lower_rules(program.rules, symbols, property_catalog, action_catalog, type_parents),
         entry_id=entry_id,
         synonyms=tuple(synonyms.values()),
         title=metadata.get("titolo"),
         author=metadata.get("autore"),
         types=type_records,
+        actions=tuple(action_records),
     )
 
 
@@ -305,6 +402,7 @@ def compile_source(
     properties: Mapping[str, PropertySpec] | None = None,
     actions: Mapping[str, ActionSpec] | None = None,
     kind_parents: Mapping[str, str | None] | None = None,
+    reserved_commands: Collection[str] = (),
 ) -> ProgramIR:
     catalog = relations or {}
     return analyze(
@@ -314,6 +412,7 @@ def compile_source(
         properties=properties,
         actions=actions,
         kind_parents=kind_parents,
+        reserved_commands=reserved_commands,
     )
 
 

@@ -4,7 +4,7 @@ import pytest
 
 from locus.compiler import compile_source
 from locus.diagnostics import CompileError
-from locus.ir import IR_VERSION, EntityIR, ProgramIR, SynonymIR, TypeIR
+from locus.ir import IR_VERSION, ActionIR, EntityIR, ProgramIR, SynonymIR, TypeIR
 from locus.parser import parse
 from locus.runtime import instantiate
 from locus.schema import RelationSpec
@@ -154,6 +154,40 @@ def test_runtime_rejects_invalid_type_hierarchy() -> None:
                 IR_VERSION,
                 (entity,),
                 types=(TypeIR("a", "A", "b"), TypeIR("b", "B", "a")),
+            )
+        )
+
+
+def test_author_action_is_compiled_by_the_generic_core() -> None:
+    source = 'Azione "calcolare" senza oggetti con comando "calcola".'
+    syntax = parse(source)
+    assert syntax.actions[0].name == "calcolare"
+    program = compile_source(source, {})
+    assert program.actions == (ActionIR("autore.a1", "calcolare", "calcola"),)
+
+
+def test_runtime_rejects_invalid_author_action_catalog() -> None:
+    entity = EntityIR("e1", "A", "a")
+    types = (TypeIR("a", "A"),)
+    with pytest.raises(ValueError, match="azioni"):
+        instantiate(
+            ProgramIR(
+                IR_VERSION,
+                (entity,),
+                types=types,
+                actions=(ActionIR("x", "prova", "prova", "assente"),),
+            )
+        )
+    with pytest.raises(ValueError, match="azioni"):
+        instantiate(
+            ProgramIR(
+                IR_VERSION,
+                (entity,),
+                types=types,
+                actions=(
+                    ActionIR("x", "prima", "prova"),
+                    ActionIR("y", "seconda", "prova"),
+                ),
             )
         )
 

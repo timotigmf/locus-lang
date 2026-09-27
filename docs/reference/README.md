@@ -9,7 +9,7 @@
 | --- | --- |
 | controlla | valida entità e relazioni; stampa numero di entità |
 | ast | JSON AST senza validazione semantica |
-| ir / compila | JSON IR versione 7, dopo validazione |
+| ir / compila | JSON IR versione 8, dopo validazione |
 | gioca | compila e avvia la sessione IF dalla prima stanza dichiarata |
 
 `gioca`: guarda, esamina, prendi, lascia, metti, apri, chiudi, blocca,
@@ -27,22 +27,22 @@ Diagnosi su stderr; nessuna scrittura implicita. Dump non caricabili come giochi
 
 - `lexer.tokenize(text, source='<memoria>')`: tuple Token con span originali e EOF.
 - `parser.parse(text, source='<memoria>')`: AST Program con tipi, entità, relazioni e regole.
-- `compiler.compile_source(text, kinds, source='<memoria>', *, relations=None, properties=None, actions=None, kind_parents=None)`: ProgramIR.
-- `compiler.analyze(program, kinds, *, relations=None, properties=None, actions=None, kind_parents=None)`: risoluzione a passaggi e lowering.
+- `compiler.compile_source(text, kinds, source='<memoria>', *, relations=None, properties=None, actions=None, kind_parents=None, reserved_commands=())`: ProgramIR.
+- `compiler.analyze(program, kinds, *, relations=None, properties=None, actions=None, kind_parents=None, reserved_commands=())`: risoluzione a passaggi e lowering.
 - `schema.RelationSpec(id, source_type, target_type, reverse_operands=False, inverse_id=None, acyclic=False, verb=None)`:
   contratto funzionale e irriflessivo di una relazione; tipi/ID già risolti.
 - `stdlib.default_kinds()` / `stdlib.default_kind_parents()` / `stdlib.default_relations()` / `stdlib.default_properties()`: cataloghi nuovi e sostituibili.
 - `runtime.instantiate(program)`: World immutabile con entità e relazioni.
-- `player.parse_command(text)`: Intent(verb, noun=None, indirect=None); verb sconosciuto = unknown.
+- `player.parse_command(text, actions=())`: Intent(verb, noun=None, indirect=None); riceve le azioni compilate del mondo e usa `unknown` per un comando sconosciuto.
 - `stdlib.game.start(world)`: Session; ValueError se mancano stanze.
 - `stdlib.game.visible(session)`: ID degli oggetti nella stanza e non posseduti.
 - `stdlib.game.step(session, intent)`: Transition(session, event), senza I/O.
 - `stdlib.render.render(transition)`: testo italiano di un evento.
 - `diagnostics.CompileError`: code, message, span; `canonical(text)`: NFC/casefold/spazi.
 
-Tutti i nomi sopra sono sotto `locus`. Program, KindDeclaration, Declaration,
-Relation, TypeIR, EntityIR, RelationIR, ProgramIR, Entity, World, Intent, Session,
-Event e Transition sono
+Tutti i nomi sopra sono sotto `locus`. Program, KindDeclaration,
+ActionDeclaration, Declaration, Relation, TypeIR, ActionIR, EntityIR, RelationIR,
+ProgramIR, Entity, World, Intent, Session, Event e Transition sono
 dataclass immutabili. Session e World costruite manualmente dal chiamante devono
 avere riferimenti coerenti; non sono un'API di caricamento di dati non fidati.
 
@@ -59,10 +59,18 @@ segue la catena senza ricorsione. `ProgramIR.types` e `World.types` contengono
 mondo. Il compilatore rifiuta cataloghi ciclici con `ValueError`; il sorgente usa
 `E113` per tipi duplicati ed `E114` per cicli dell'autore.
 
+`schema.ActionSpec` accetta inoltre `target_types` e `indirect_types`. Le azioni
+del sorgente vengono compilate in `ProgramIR.actions` e poi in `World.actions`.
+`reserved_commands` è iniettato dall'host; la stdlib passa le forme riconosciute
+dal parser standard. ID, tipi, comando e separatore di ogni `ActionIR` sono
+convalidati dal runtime. `E310` segnala nomi di azione duplicati; `E311` comandi
+non validi o in conflitto.
+
 Event.kind distingue look, inventory, taken, already_carried, not_here,
 not_portable, ambiguous, no_exit, unknown, quit. Event.entities contiene ID,
 mai frasi da reinterpretare. La sessione è pura: il chiamante adotta la nuova
 sessione solo dopo step; la precedente rimane invariata.
+Le azioni dell'autore aggiungono gli eventi `custom` e `wrong_kind`.
 
 ## API aggiunte M2
 

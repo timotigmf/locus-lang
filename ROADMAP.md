@@ -49,8 +49,8 @@ solo come produttore di candidati; nessuna dipendenza del nucleo.
 L'[analisi architetturale](docs/architettura/audit-inform7.md) motiva l'ordine.
 Ogni pacchetto conserva il core indipendente dalla narrativa interattiva.
 
-1. Gerarchia dei tipi implementata in IR 7; resta da specificare le azioni definite dall'autore.
-2. Estendere `Comprendi` a grammatiche italiane con argomenti tipati e
+1. Gerarchia dei tipi e azioni dell'autore implementate in IR 8.
+2. Estendere i comandi a grammatiche italiane con sinonimi, forme flesse e
    disambiguazione a più turni.
 3. Introdurre relazioni dinamiche e visibilità, con un passaggio segreto reale
    come criterio di accettazione.
