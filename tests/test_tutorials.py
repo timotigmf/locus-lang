@@ -113,6 +113,23 @@ def test_author_action_tutorial_checks_types_and_updates_state() -> None:
     assert property_of(current, "custode", "fiducia") == 1
 
 
+def test_action_synonym_tutorial_accepts_all_declared_forms() -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "09_sinonimi_azioni.locus")))
+
+    def command(text: str) -> str:
+        nonlocal current
+        result = step(current, parse_command(text, current.world.actions))
+        current = result.session
+        return render(result)
+
+    for text in ("saluta custode", "riverisci custode", "inchinati custode"):
+        assert "ricambia" in command(text)
+    assert "riconosce" in command("esibisci amuleto verso il custode")
+    assert property_of(current, "custode", "fiducia") == 1
+    assert "storia" in command("parla custode dell'amuleto")
+    assert "storia" in command("racconta custode sull'amuleto")
+
+
 def test_final_world_matches_story() -> None:
     current = start(instantiate(compile_story_file(TUTORIAL / "04_faro.locus")))
     for command in (TUTORIAL / "04_faro.comandi").read_text(encoding="utf-8").splitlines():

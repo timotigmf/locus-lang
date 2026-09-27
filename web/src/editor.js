@@ -15,6 +15,7 @@ const words = [
   "Comprendi",
   "Azione",
   "comando",
+  "sinonimo",
   "separatore",
   "senza",
   "oggetti",

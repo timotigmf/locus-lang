@@ -13,3 +13,5 @@ La versione attuale è descritta nelle specifiche [M2](milestone-2.md),
 ereditarietà singola, usata in modo uniforme dal compilatore e dal runtime.
 Le [azioni definite dall'autore](azioni-autore.md) collegano comandi italiani,
 argomenti tipati e regole senza interpretazione testuale nel runtime.
+La [grammatica dei comandi dell'autore](grammatica-comandi-autore.md) aggiunge
+sinonimi espliciti, separatori alternativi e preposizioni articolate nell'IR 9.

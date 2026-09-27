@@ -68,9 +68,9 @@ _ERROR_HELP = {
         "docs/linguaggio/azioni-autore.md",
     ),
     "E311": (
-        "Comando non valido",
-        "Usa una parola unica che non sia già un comando standard o dell'autore.",
-        "docs/linguaggio/azioni-autore.md",
+        "Forma di comando non valida",
+        "Controlla comandi, sinonimi e separatori: devono essere parole uniche e non duplicate.",
+        "docs/linguaggio/grammatica-comandi-autore.md",
     ),
     "E201": (
         "Mondo incoerente",

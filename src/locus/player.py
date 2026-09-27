@@ -87,7 +87,7 @@ def _tokens(text: str) -> list[tuple[str, bool]] | None:
             while end < len(text) and not text[end].isspace() and text[end] != '"':
                 end += 1
             word = text[index:end]
-            if word.startswith(("nell'", "all'")):
+            if word.startswith(("nell'", "all'", "dell'", "dall'", "sull'")):
                 prefix = word[:5]
                 tokens.append((prefix, False))
                 if word[5:]:
@@ -121,13 +121,17 @@ def _author_intent(action: ActionIR, tokens: list[tuple[str, bool]]) -> Intent:
     if action.indirect_type_id is None:
         direct = _noun(rest)
         return Intent(action.id, direct) if direct else Intent("unknown")
-    assert action.separator is not None
-    separator = action.separator
-    separator_words = {
-        "a": {"a", "al", "alla", "allo", "all'"},
-        "in": {"in", "nel", "nella", "nello", "nell'"},
-        "di": {"di", "del", "della", "dello", "dell'"},
-    }.get(separator, {separator})
+    separator_words: set[str] = set()
+    articulated = {
+        "a": {"a", "al", "alla", "allo", "ai", "agli", "alle", "all'"},
+        "in": {"in", "nel", "nella", "nello", "nei", "negli", "nelle", "nell'"},
+        "di": {"di", "del", "della", "dello", "dei", "degli", "delle", "dell'"},
+        "da": {"da", "dal", "dalla", "dallo", "dai", "dagli", "dalle", "dall'"},
+        "su": {"su", "sul", "sulla", "sullo", "sui", "sugli", "sulle", "sull'"},
+        "con": {"con", "col", "coi"},
+    }
+    for separator in action.separators:
+        separator_words.update(articulated.get(separator, {separator}))
     splits = [
         index for index, (word, quoted) in enumerate(rest) if not quoted and word in separator_words
     ]
@@ -146,7 +150,7 @@ def parse_command(text: str, actions: Sequence[ActionIR] = ()) -> Intent:
     verb, quoted = tokens[0]
     if quoted:
         return Intent("unknown")
-    authored = next((action for action in actions if action.command == verb), None)
+    authored = next((action for action in actions if verb in action.commands), None)
     if len(tokens) == 1:
         standard = _SIMPLE_COMMANDS.get(verb, _ACTION_COMMANDS.get(verb))
         return (

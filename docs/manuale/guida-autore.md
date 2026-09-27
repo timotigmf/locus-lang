@@ -50,6 +50,7 @@ dall'alto verso il basso prima di studiare i moduli.
 6. [Sotterraneo, enigma, sinonimi e punti](../tutorial/06-sotterraneo-enigma-punti.md)
 7. [Tipi definiti dall'autore](../tutorial/07-tipi-autore.md)
 8. [Azioni e comandi definiti dall'autore](../tutorial/08-azioni-autore.md)
+9. [Sinonimi e separatori delle azioni](../tutorial/09-sinonimi-azioni.md)
 
 ## Indice per obiettivo
 
@@ -61,7 +62,7 @@ dall'alto verso il basso prima di studiare i moduli.
 | Oggetti complessi | Contenimento annidato, proprietà tipate, stati | Lezione 2 e specifica M2 |
 | Categorie proprie | Tipi nominali con ereditarietà singola | Lezione 7 |
 | Verbi e comandi propri | Azioni con zero, uno o due oggetti tipati | Lezione 8 |
-| Sinonimi | `Comprendi "alias" come "oggetto".` | Lezioni 5 e 6 |
+| Sinonimi | Alias nominali e più forme per le azioni | Lezioni 5, 6 e 9 |
 | Passaggi segreti dinamici | Non ancora: le relazioni non cambiano durante il gioco | Lezione 6 |
 | Dialoghi ramificati | Non ancora: mancano persone, argomenti e azione parlare | Roadmap |
 | Veicoli e vetture | Non ancora: manca il modello di entrata, uscita e movimento | Roadmap |
@@ -95,5 +96,6 @@ silenziose: se due oggetti corrispondono, chiede quale intendi.
 - [Titolo, autore e sinonimi](../linguaggio/metadati-vocabolario.md)
 - [Tipi definiti dall'autore](../linguaggio/tipi-autore.md)
 - [Azioni definite dall'autore](../linguaggio/azioni-autore.md)
+- [Sinonimi e separatori delle azioni](../linguaggio/grammatica-comandi-autore.md)
 - [Ricettario](../cookbook/README.md)
 - [Da Inform a LOCUS](../tutorial/da-inform-a-locus.md)

@@ -154,14 +154,21 @@ def analyze(
                 f"Nome di azione non valido o già dichiarato: {declaration.name}.",
                 declaration.span,
             )
-        command = canonical(declaration.command)
-        if len(command.split()) != 1 or not command.isalpha() or command in command_names:
+        commands = tuple(canonical(command) for command in declaration.commands)
+        if (
+            not commands
+            or len(set(commands)) != len(commands)
+            or any(
+                len(command.split()) != 1 or not command.isalpha() or command in command_names
+                for command in commands
+            )
+        ):
             raise CompileError(
                 "E311",
-                f"Comando non valido o già usato: {declaration.command}.",
+                "Comando o sinonimo non valido, duplicato o già usato.",
                 declaration.span,
             )
-        command_names.add(command)
+        command_names.update(commands)
         target_type = (
             kind_symbols.get(canonical(declaration.target_kind))
             if declaration.target_kind is not None
@@ -181,16 +188,20 @@ def analyze(
         )
         if missing_kind is not None:
             raise CompileError("E102", f"Tipo sconosciuto: {missing_kind}.", declaration.span)
-        separator = canonical(declaration.separator) if declaration.separator is not None else None
-        if indirect_type is not None and (
-            separator is None
-            or len(separator.split()) != 1
-            or not separator.isalpha()
-            or separator == command
-        ):
+        separators = tuple(canonical(separator) for separator in declaration.separators)
+        invalid_separators = (
+            (indirect_type is None and bool(separators))
+            or (indirect_type is not None and not separators)
+            or len(set(separators)) != len(separators)
+            or any(
+                len(separator.split()) != 1 or not separator.isalpha() or separator in commands
+                for separator in separators
+            )
+        )
+        if invalid_separators:
             raise CompileError(
                 "E311",
-                "Il separatore deve essere una parola distinta dal comando.",
+                "I separatori devono essere parole distinte dai comandi e non duplicate.",
                 declaration.span,
             )
         ident = f"autore.a{next_action_id}"
@@ -211,10 +222,10 @@ def analyze(
             ActionIR(
                 ident,
                 declaration.name,
-                command,
+                commands,
                 target_type,
                 indirect_type,
-                separator,
+                separators,
             )
         )
     symbols: dict[str, EntityIR] = {}

@@ -566,10 +566,13 @@ function renderIndex(ir) {
       const row = el("tr");
       const argumentsText = action.target_type_id
         ? action.indirect_type_id
-          ? `${typePath(action.target_type_id)} + ${typePath(action.indirect_type_id)} (separatore «${action.separator}»)`
+          ? `${typePath(action.target_type_id)} + ${typePath(action.indirect_type_id)} (separatori ${action.separators.map((item) => `«${item}»`).join(", ")})`
           : typePath(action.target_type_id)
         : "nessun oggetto";
-      for (const value of [action.label, action.command, argumentsText])
+      const commandsText = action.commands
+        .map((item) => `«${item}»`)
+        .join(", ");
+      for (const value of [action.label, commandsText, argumentsText])
         row.append(el("td", {}, value));
       actions.append(row);
     }

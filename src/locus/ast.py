@@ -25,10 +25,10 @@ class KindDeclaration:
 @dataclass(frozen=True, slots=True)
 class ActionDeclaration:
     name: str
-    command: str
+    commands: tuple[str, ...]
     target_kind: str | None
     indirect_kind: str | None
-    separator: str | None
+    separators: tuple[str, ...]
     span: Span
 
 

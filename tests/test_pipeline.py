@@ -163,7 +163,7 @@ def test_author_action_is_compiled_by_the_generic_core() -> None:
     syntax = parse(source)
     assert syntax.actions[0].name == "calcolare"
     program = compile_source(source, {})
-    assert program.actions == (ActionIR("autore.a1", "calcolare", "calcola"),)
+    assert program.actions == (ActionIR("autore.a1", "calcolare", ("calcola",)),)
 
 
 def test_runtime_rejects_invalid_author_action_catalog() -> None:
@@ -175,7 +175,7 @@ def test_runtime_rejects_invalid_author_action_catalog() -> None:
                 IR_VERSION,
                 (entity,),
                 types=types,
-                actions=(ActionIR("x", "prova", "prova", "assente"),),
+                actions=(ActionIR("x", "prova", ("prova",), "assente"),),
             )
         )
     with pytest.raises(ValueError, match="azioni"):
@@ -185,11 +185,26 @@ def test_runtime_rejects_invalid_author_action_catalog() -> None:
                 (entity,),
                 types=types,
                 actions=(
-                    ActionIR("x", "prima", "prova"),
-                    ActionIR("y", "seconda", "prova"),
+                    ActionIR("x", "prima", ("prova",)),
+                    ActionIR("y", "seconda", ("prova",)),
                 ),
             )
         )
+
+
+def test_runtime_rejects_invalid_action_forms_and_separators() -> None:
+    entity = EntityIR("e1", "A", "a")
+    types = (TypeIR("a", "A"),)
+    invalid_actions = (
+        ActionIR("x", "vuota", ()),
+        ActionIR("x", "duplicata", ("prova", "prova")),
+        ActionIR("x", "senza secondo oggetto", ("prova",), separators=("a",)),
+        ActionIR("x", "senza separatore", ("prova",), "a", "a"),
+        ActionIR("x", "separatore duplicato", ("prova",), "a", "a", ("a", "a")),
+    )
+    for action in invalid_actions:
+        with pytest.raises(ValueError, match="azioni"):
+            instantiate(ProgramIR(IR_VERSION, (entity,), types=types, actions=(action,)))
 
 
 def test_story_metadata_and_vocabulary_are_compiled() -> None:

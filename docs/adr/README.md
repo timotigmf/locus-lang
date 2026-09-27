@@ -24,3 +24,5 @@ Le fonti e le licenze sono nel [registro](../architettura/fonti.md).
 - [0011 — gerarchia dei tipi](0011-gerarchia-tipi.md): tipi nominali dell'autore, ereditarietà singola e IR 7.
 
 - [0012 — azioni dell'autore](0012-azioni-autore.md): catalogo tipato, comandi compilati e IR 8.
+
+- [0013 — forme di comando](0013-forme-comando.md): sinonimi e separatori espliciti nell'IR 9.

@@ -9,7 +9,7 @@
 | --- | --- |
 | controlla | valida entità e relazioni; stampa numero di entità |
 | ast | JSON AST senza validazione semantica |
-| ir / compila | JSON IR versione 8, dopo validazione |
+| ir / compila | JSON IR versione 9, dopo validazione |
 | gioca | compila e avvia la sessione IF dalla prima stanza dichiarata |
 
 `gioca`: guarda, esamina, prendi, lascia, metti, apri, chiudi, blocca,
@@ -62,9 +62,11 @@ mondo. Il compilatore rifiuta cataloghi ciclici con `ValueError`; il sorgente us
 `schema.ActionSpec` accetta inoltre `target_types` e `indirect_types`. Le azioni
 del sorgente vengono compilate in `ProgramIR.actions` e poi in `World.actions`.
 `reserved_commands` è iniettato dall'host; la stdlib passa le forme riconosciute
-dal parser standard. ID, tipi, comando e separatore di ogni `ActionIR` sono
-convalidati dal runtime. `E310` segnala nomi di azione duplicati; `E311` comandi
-non validi o in conflitto.
+dal parser standard. ID, tipi, forme di comando e separatori di ogni `ActionIR`
+sono convalidati dal runtime. `ActionIR.commands` contiene la forma primaria e i
+sinonimi; `ActionIR.separators` contiene le forme ammesse fra i due oggetti.
+`E310` segnala nomi di azione duplicati; `E311` forme non valide, duplicate o in
+conflitto.
 
 Event.kind distingue look, inventory, taken, already_carried, not_here,
 not_portable, ambiguous, no_exit, unknown, quit. Event.entities contiene ID,

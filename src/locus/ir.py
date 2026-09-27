@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from locus.rule_model import RuleIR
 from locus.schema import PropertySpec, Value
 
-IR_VERSION = 8
+IR_VERSION = 9
 
 
 @dataclass(frozen=True, slots=True)
@@ -19,10 +19,10 @@ class TypeIR:
 class ActionIR:
     id: str
     label: str
-    command: str
+    commands: tuple[str, ...]
     target_type_id: str | None = None
     indirect_type_id: str | None = None
-    separator: str | None = None
+    separators: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True, slots=True)

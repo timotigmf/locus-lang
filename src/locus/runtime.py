@@ -76,7 +76,7 @@ def instantiate(program: ProgramIR) -> World:
         raise ValueError("Tipo proprietario assente nell'IR.")
     action_ids = {action.id for action in program.actions}
     action_labels = [canonical(action.label) for action in program.actions]
-    commands = [action.command for action in program.actions]
+    commands = [command for action in program.actions for command in action.commands]
     if (
         len(action_ids) != len(program.actions)
         or len(set(action_labels)) != len(action_labels)
@@ -84,21 +84,22 @@ def instantiate(program: ProgramIR) -> World:
         or any(
             not action.id.strip()
             or not canonical(action.label)
-            or action.command != canonical(action.command)
-            or len(action.command.split()) != 1
-            or not action.command.isalpha()
+            or not action.commands
+            or len(set(action.commands)) != len(action.commands)
+            or any(
+                command != canonical(command) or len(command.split()) != 1 or not command.isalpha()
+                for command in action.commands
+            )
             or (action.target_type_id is None and action.indirect_type_id is not None)
-            or (action.target_type_id is None and action.separator is not None)
-            or (action.indirect_type_id is None and action.separator is not None)
-            or (action.indirect_type_id is not None and action.separator is None)
-            or (
-                action.separator is not None
-                and (
-                    action.separator != canonical(action.separator)
-                    or len(action.separator.split()) != 1
-                    or not action.separator.isalpha()
-                    or action.separator == action.command
-                )
+            or (action.indirect_type_id is None and bool(action.separators))
+            or (action.indirect_type_id is not None and not action.separators)
+            or len(set(action.separators)) != len(action.separators)
+            or any(
+                separator != canonical(separator)
+                or len(separator.split()) != 1
+                or not separator.isalpha()
+                or separator in action.commands
+                for separator in action.separators
             )
             or any(
                 type_id is not None and type_id not in type_ids

@@ -56,7 +56,7 @@ la chiave inaccessibile. Vedi [sintassi e limiti M2](../linguaggio/milestone-2.m
 
 ## Percorso guidato
 
-Per iniziare da zero, segui le [otto lezioni del faro](../tutorial/README.md),
+Per iniziare da zero, segui le [nove lezioni del faro](../tutorial/README.md),
 con prove di gioco e soluzioni.
 La [quinta lezione](../tutorial/05-comandi-e-nomi.md) presenta le abbreviazioni
 classiche delle avventure testuali e spiega quando un nome parziale è sufficiente.
@@ -66,3 +66,5 @@ La [settima lezione](../tutorial/07-tipi-autore.md) introduce categorie proprie
 che ereditano il comportamento di stanza, cosa, contenitore e chiave.
 L'[ottava lezione](../tutorial/08-azioni-autore.md) crea verbi italiani con
 argomenti tipati e comportamento definito dalle regole.
+La [nona lezione](../tutorial/09-sinonimi-azioni.md) assegna più forme e
+preposizioni italiane alla stessa azione senza perdere il controllo statico.

@@ -157,7 +157,6 @@ class _Parser:
                 name = RuleParser(self).quoted()
                 target_kind = None
                 indirect_kind = None
-                separator = None
                 if self.current.normalized == "senza":
                     self.keyword("senza")
                     self.keyword("oggetti")
@@ -172,18 +171,26 @@ class _Parser:
                         indirect_kind = self.words(stop={"con"})
                         self.keyword("con")
                 self.keyword("comando")
-                command = RuleParser(self).quoted()
-                if indirect_kind is not None:
+                commands = [RuleParser(self).quoted()]
+                separators: list[str] = []
+                while self.current.normalized == "e":
                     self.keyword("e")
-                    self.keyword("separatore")
-                    separator = RuleParser(self).quoted()
+                    clause = self.current.normalized
+                    if clause == "sinonimo":
+                        self.keyword("sinonimo")
+                        commands.append(RuleParser(self).quoted())
+                    elif clause == "separatore":
+                        self.keyword("separatore")
+                        separators.append(RuleParser(self).quoted())
+                    else:
+                        self.fail("'sinonimo' o 'separatore'")
                 actions.append(
                     ActionDeclaration(
                         name,
-                        command,
+                        tuple(commands),
                         target_kind,
                         indirect_kind,
-                        separator,
+                        tuple(separators),
                         self.finish(start),
                     )
                 )

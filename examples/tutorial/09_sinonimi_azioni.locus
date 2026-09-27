@@ -1,0 +1,39 @@
+Titolo: "L'ambasceria dell'amuleto".
+Autore: "Esempio LOCUS".
+
+Una persona è un tipo di cosa.
+Una reliquia è un tipo di cosa.
+
+La Sala delle Insegne è una stanza.
+Inizia nella "Sala delle Insegne".
+La Sala delle Insegne ha descrizione "Un custode attende sotto cinque stendardi.".
+
+Il custode è una persona nella Sala delle Insegne.
+L'amuleto è una reliquia nella Sala delle Insegne.
+La fiducia è una proprietà numerica.
+Il custode ha fiducia 0.
+
+Azione "attendere" senza oggetti con comando "attendi" e sinonimo "aspetta".
+Azione "salutare" su una persona con comando "saluta"
+    e sinonimo "riverisci" e sinonimo "inchinati".
+Azione "mostrare" su una reliquia con una persona con comando "mostra"
+    e sinonimo "esibisci" e separatore "a" e separatore "verso".
+Azione "parlare" su una persona con una cosa con comando "parla"
+    e sinonimo "racconta" e separatore "di" e separatore "su".
+
+Regola "attesa" per attendere nella fase invece:
+    dì "Il custode attende senza perdere di vista l'amuleto.";
+Fine regola.
+
+Regola "saluto" per salutare "custode" nella fase invece:
+    dì "Il custode ricambia il saluto.";
+Fine regola.
+
+Regola "mostrare amuleto" per mostrare "amuleto" con "custode" nella fase invece:
+    aumenta "fiducia" di "custode" di 1;
+    dì "Il custode riconosce l'amuleto.";
+Fine regola.
+
+Regola "raccontare amuleto" per parlare "custode" con "amuleto" nella fase invece:
+    dì "Il custode ascolta la storia dell'amuleto.";
+Fine regola.

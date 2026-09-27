@@ -54,7 +54,7 @@ def test_author_action_can_be_declared_in_an_included_file(tmp_path: Path) -> No
     write(
         tmp_path,
         "azioni.locus",
-        'Azione "meditare" senza oggetti con comando "medita". '
+        'Azione "meditare" senza oggetti con comando "medita" e sinonimo "rifletti". '
         'Regola "meditazione" per meditare nella fase invece: dì "Silenzio."; Fine regola.',
     )
     path = write(
@@ -64,6 +64,8 @@ def test_author_action_can_be_declared_in_an_included_file(tmp_path: Path) -> No
     )
     current = start(instantiate(compile_story_file(path)))
     transition = step(current, parse_command("medita", current.world.actions))
+    assert render(transition) == "Silenzio."
+    transition = step(current, parse_command("rifletti", current.world.actions))
     assert render(transition) == "Silenzio."
 
 

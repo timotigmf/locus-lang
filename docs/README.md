@@ -21,6 +21,7 @@
 - [Metadati e vocabolario](linguaggio/metadati-vocabolario.md): titolo, autore e sinonimi.
 - [Tipi definiti dall'autore](linguaggio/tipi-autore.md): gerarchia nominale ed ereditarietà singola.
 - [Azioni definite dall'autore](linguaggio/azioni-autore.md): comandi italiani e argomenti tipati.
+- [Sinonimi e separatori delle azioni](linguaggio/grammatica-comandi-autore.md): più forme italiane per lo stesso verbo.
 
 - [Tutorial: il faro](tutorial/README.md), incluse le lezioni su tipi e azioni; [da Inform a LOCUS](tutorial/da-inform-a-locus.md).
 - [Registro dei sei manuali forniti](architettura/materiali-didattici.md).

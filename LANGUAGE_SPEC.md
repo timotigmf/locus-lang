@@ -2,7 +2,7 @@
 
 ## Stato attuale
 
-Versione corrente `0.5.0a1`, IR versione 8. Le specifiche M2, M3 e M4
+Versione corrente `0.5.0a1`, IR versione 9. Le specifiche M2, M3 e M4
 estendono e, dove indicato, sostituiscono i limiti M1 sotto.
 La [specifica M2](docs/linguaggio/milestone-2.md) è normativa per proprietà,
 stringhe, nomi quotati, preposizioni, contenitori, porte e chiavi.
@@ -14,6 +14,8 @@ La specifica dei [tipi definiti dall'autore](docs/linguaggio/tipi-autore.md)
 definisce la gerarchia nominale a ereditarietà singola.
 La specifica delle [azioni dell'autore](docs/linguaggio/azioni-autore.md)
 definisce comandi con zero, uno o due oggetti tipati.
+La specifica di [sinonimi e separatori](docs/linguaggio/grammatica-comandi-autore.md)
+definisce più forme italiane per la stessa azione.
 Le sezioni S0/S1 seguenti descrivono il nucleo storico, non l'intera versione.
 
 ## Dichiarazioni (S0, mantenute in 0.1.0a2)
@@ -141,7 +143,7 @@ da file e punto iniziale esplicito. IR corrente versione 5.
 sorgente. `Comprendi "alias" come "entità".` aggiunge un nome alternativo per i
 comandi del giocatore. Metadati duplicati producono `E408`; alias in conflitto
 producono `E409`. Questi campi sono stati introdotti con l'IR 6 e restano
-presenti nell'IR 8.
+presenti nell'IR 9.
 
 ## Tipi definiti dall'autore
 
@@ -150,7 +152,7 @@ avanti sono ammessi e ogni tipo ha al massimo un genitore. I sottotipi sono
 compatibili con proprietà, relazioni e capacità degli antenati. Ridefinizioni
 producono `E113`; cicli nella gerarchia producono `E114`. La specifica completa
 è in [tipi definiti dall'autore](docs/linguaggio/tipi-autore.md). La tabella dei
-tipi è stata introdotta nell'IR 7 e resta presente nell'IR 8.
+tipi è stata introdotta nell'IR 7 e resta presente nell'IR 9.
 
 ## Azioni e comandi definiti dall'autore
 
@@ -158,4 +160,6 @@ tipi è stata introdotta nell'IR 7 e resta presente nell'IR 8.
 tipata invocabile dal giocatore e dalle regole. Le forme con zero e due oggetti
 sono descritte nella [specifica delle azioni](docs/linguaggio/azioni-autore.md).
 Nomi duplicati producono `E310`; comandi non validi o in conflitto producono
-`E311`. L'IR corrente è la versione 8.
+`E311`. `e sinonimo "riverisci"` aggiunge una forma equivalente; più clausole
+`e separatore` definiscono le preposizioni di un'azione a due oggetti. L'IR
+corrente è la versione 9.
