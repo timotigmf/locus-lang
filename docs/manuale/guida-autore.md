@@ -54,6 +54,7 @@ dall'alto verso il basso prima di studiare i moduli.
 10. [Comandi composti da più parole](../tutorial/10-comandi-multiparola.md)
 11. [Separatori composti da più parole](../tutorial/11-separatori-multiparola.md)
 12. [Passaggi segreti e mappa dinamica](../tutorial/12-passaggi-segreti.md)
+13. [Scenario e oggetti nascosti](../tutorial/13-visibilita-scenario.md)
 
 ## Indice per obiettivo
 
@@ -66,7 +67,8 @@ dall'alto verso il basso prima di studiare i moduli.
 | Categorie proprie | Tipi nominali con ereditarietà singola | Lezione 7 |
 | Verbi e comandi propri | Azioni tipate con sinonimi e locuzioni multiparola | Lezioni 8–11 |
 | Sinonimi | Alias nominali e più forme per le azioni | Lezioni 5, 6 e 9 |
-| Passaggi segreti dinamici | Non ancora: le relazioni non cambiano durante il gioco | Lezione 6 |
+| Passaggi segreti dinamici | Uscite cardinali create o rimosse dalle regole | Lezione 12 |
+| Dettagli ambientali e oggetti nascosti | `scenario` non trasportabile e proprietà `visibile` | Lezione 13 |
 | Dialoghi ramificati | Non ancora: mancano persone, argomenti e azione parlare | Roadmap |
 | Veicoli e vetture | Non ancora: manca il modello di entrata, uscita e movimento | Roadmap |
 | Denaro e acquisti | Proprietà numeriche disponibili; azioni compra/vendi non ancora | Roadmap |

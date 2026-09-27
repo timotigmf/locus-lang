@@ -1,6 +1,6 @@
 # Forme di comando multiparola
 
-Stato: implementato in LOCUS 0.5.0a1, introdotto in IR 10 e conservato in IR 12.
+Stato: implementato in LOCUS 0.5.0a1, introdotto in IR 10 e conservato in IR 13.
 
 Una forma dichiarata con `comando` o `sinonimo` può contenere da una a quattro
 parole alfabetiche:

@@ -41,7 +41,7 @@ retroattivamente la semantica M3 per imitare quella di Inform.
 | Evoluzione | Motivo | Criterio di accettazione proposto |
 | --- | --- | --- |
 | Riferimenti parametrici agli oggetti delle azioni | Evitare una regola identica per ogni oggetto | Una regola applicata a due oggetti, secondo oggetto tipato, errori per argomenti assenti |
-| Oggetti di scenario e distinzione visibile/raggiungibile | Descrizioni ricche senza rendere trasportabile ogni dettaglio | Oggetto visibile ma irraggiungibile; scenario esaminabile ma non prendibile |
+| Oggetti di scenario e distinzione visibile/raggiungibile | Descrizioni ricche senza rendere trasportabile ogni dettaglio | `scenario` esaminabile ma non prendibile e proprietà `visibile`, implementati nell'IR 13 |
 | Test autore dichiarativi | Rendere riproducibili i racconti senza scrivere Python | Comandi, output e stato attesi; exit code non zero sul primo errore |
 | Tipi autore ed enumerazioni | Modelli più precisi senza booleani contraddittori | Sottotipi validati, proprietà applicabili, valori enum controllati |
 | Namespace e moduli versionati | Riutilizzo di biblioteche senza collisioni | Due moduli con nomi locali uguali e riferimenti qualificati non ambigui |

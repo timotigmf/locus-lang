@@ -31,5 +31,6 @@ La mappa dello Studio legge lo snapshot `World` corrente dopo ogni comando.
 
 L'IR sale alla versione 12. Le mutazioni sono ispezionabili, atomiche e
 indipendenti dalla sintassi italiana. Nuove relazioni dinamiche potranno essere
-registrate da cataloghi futuri senza modificare il motore. Cardinalità diverse,
-relazioni a senso unico e visibilità richiederanno ulteriori contratti.
+registrate da cataloghi futuri senza modificare il motore. Cardinalità diverse e
+relazioni a senso unico richiederanno ulteriori contratti. La visibilità degli
+oggetti è stata aggiunta successivamente dall'[ADR 0017](0017-visibilita-scenario.md).

@@ -179,6 +179,17 @@ def test_secret_passage_tutorial_changes_navigation_both_ways() -> None:
     assert step(hidden.session, parse_command("nord")).event.kind == "no_exit"
 
 
+def test_scenery_tutorial_reveals_a_real_object() -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "13_scenario_nascosto.locus")))
+    assert "chiave" not in render(step(current, parse_command("guarda")))
+    assert step(current, parse_command("prendi chiave")).event.kind == "not_here"
+    assert step(current, parse_command("prendi cielo")).event.kind == "not_portable"
+    revealed = step(current, parse_command("x cielo"))
+    assert "cade sul pavimento" in render(revealed)
+    assert "chiave d'argento" in render(step(revealed.session, parse_command("guarda")))
+    assert step(revealed.session, parse_command("prendi chiave")).event.kind == "taken"
+
+
 def test_final_world_matches_story() -> None:
     current = start(instantiate(compile_story_file(TUTORIAL / "04_faro.locus")))
     for command in (TUTORIAL / "04_faro.comandi").read_text(encoding="utf-8").splitlines():

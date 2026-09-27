@@ -21,3 +21,5 @@ I [separatori multiparola](separatori-multiparola.md) aggiungono locuzioni fisse
 fra due oggetti e articolazione dell'ultima preposizione nell'IR 11.
 Le [relazioni dinamiche](relazioni-dinamiche.md) permettono alle regole di creare
 o rimuovere passaggi cardinali transazionali nell'IR 12.
+La [visibilità esplicita](visibilita-scenario.md) aggiunge oggetti nascosti e il
+tipo ambientale non trasportabile `scenario` nell'IR 13.

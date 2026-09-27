@@ -8,6 +8,7 @@ from locus.stdlib import (
     DOOR,
     EAST,
     INSIDE,
+    LOCATABLE,
     NORTH,
     OPENABLE,
     PORTABLE,
@@ -56,7 +57,7 @@ def validate_world(world: World, inventory: tuple[str, ...] = ()) -> None:
         if child not in entities or parent not in entities:
             raise WorldError("Il contenimento riferisce un'entità inesistente.", child)
         if not any(
-            has_type(world, entities[child].type_id, expected) for expected in PORTABLE
+            has_type(world, entities[child].type_id, expected) for expected in LOCATABLE
         ) or not any(
             has_type(world, entities[parent].type_id, expected) for expected in (ROOM, CONTAINER)
         ):

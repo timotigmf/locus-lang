@@ -24,6 +24,7 @@ from locus.stdlib import (
     SOUTH,
     STATE,
     UNLOCKS,
+    VISIBLE,
     WEST,
 )
 from locus.stdlib.validation import property_value, validate_world
@@ -129,7 +130,11 @@ def carried(session: Session, entity_id: str) -> bool:
 
 
 def reachable(session: Session, entity_id: str) -> bool:
-    if entity_id == session.room_id or session.room_id in _sides(session, entity_id):
+    if entity_id == session.room_id:
+        return True
+    if property_value(session.world, entity_id, VISIBLE, True) is not True:
+        return False
+    if session.room_id in _sides(session, entity_id):
         return True
     parents = _parents(session)
     current = entity_id
@@ -141,7 +146,11 @@ def reachable(session: Session, entity_id: str) -> bool:
         parent = parents.get(current)
         if parent == session.room_id:
             return True
-        if parent is None or _state(session, parent) != "aperto":
+        if (
+            parent is None
+            or property_value(session.world, parent, VISIBLE, True) is not True
+            or _state(session, parent) != "aperto"
+        ):
             return False
         current = parent
     return False
@@ -298,7 +307,13 @@ def _perform(session: Session, intent: Intent) -> Transition:
     if intent.verb == "look":
         return Transition(session, Event("look", (session.room_id, *visible(session))))
     if intent.verb == "inventory":
-        return Transition(session, Event("inventory", session.inventory))
+        return Transition(
+            session,
+            Event(
+                "inventory",
+                tuple(ident for ident in session.inventory if reachable(session, ident)),
+            ),
+        )
     directions = {"north": NORTH, "south": SOUTH, "east": EAST, "west": WEST}
     if intent.verb in directions:
         predicate = directions[intent.verb]

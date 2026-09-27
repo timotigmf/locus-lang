@@ -283,3 +283,48 @@ Fine regola.`;
   await page.locator("#send").click();
   await expect(page.locator("#transcript")).toContainText("Sala");
 });
+
+test("scenario rivela un oggetto inizialmente invisibile", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.locator("#compileStatus")).toContainText("compilato", {
+    timeout: 90000,
+  });
+  const source = `Titolo: "Il mosaico".
+La Sala è una stanza.
+Il mosaico è uno scenario nella Sala.
+La chiave è una cosa nella Sala.
+La chiave ha visibile falso.
+Regola "rivela" per esaminare "mosaico" nella fase dopo:
+    imposta "visibile" di "chiave" a vero;
+    dì "Una chiave compare dietro il mosaico.";
+Fine regola.`;
+  await page.locator(".cm-content").click();
+  await page.keyboard.press("ControlOrMeta+A");
+  await page.keyboard.insertText(source);
+  await page
+    .getByRole("button", { name: "▶ Compila e prova", exact: true })
+    .click();
+  await expect(page.locator("#transcript")).toContainText("Vedi: mosaico.", {
+    timeout: 90000,
+  });
+  await page.locator("#command").fill("prendi chiave");
+  await page.locator("#send").click();
+  await expect(page.locator("#transcript")).toContainText(
+    "Non trovi qui quell'oggetto.",
+  );
+  await page.locator("#command").fill("prendi mosaico");
+  await page.locator("#send").click();
+  await expect(page.locator("#transcript")).toContainText(
+    "Non puoi prendere questo elemento.",
+  );
+  await page.locator("#command").fill("x mosaico");
+  await page.locator("#send").click();
+  await expect(page.locator("#transcript")).toContainText(
+    "Una chiave compare dietro il mosaico.",
+  );
+  await page.locator("#command").fill("guarda");
+  await page.locator("#send").click();
+  await expect(page.locator(".story-output").last()).toContainText(
+    "Vedi: mosaico, chiave.",
+  );
+});

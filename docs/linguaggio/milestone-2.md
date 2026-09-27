@@ -24,9 +24,11 @@ Proprietà autore applicabili a tutte le entità; duplicati e assegnazioni ripet
 sono errori, anche se identici. Ogni valore e schema sono presenti nell'IR.
 Numeri limitati a 1000 cifre per letterale; decimali ed espressioni non implementati.
 
-La stdlib offre `descrizione` testuale su tutti i tipi e `stato` su contenitori e
-porte. I valori di stato sono esattamente "aperto", "chiuso", "bloccato";
-il default è "chiuso". Un solo valore evita aperto e bloccato simultanei.
+La stdlib offre `descrizione` testuale su tutti i tipi, `stato` su contenitori e
+porte e, dall'IR 13, `visibile` logica su cose e scenari. I valori di stato sono esattamente "aperto", "chiuso", "bloccato";
+il default è "chiuso". Un solo valore evita aperto e bloccato simultanei. La
+visibilità predefinita è `vero`; la specifica estesa è in
+[visibilità e scenario](visibilita-scenario.md).
 
 ## Contenitori, porte e chiavi
 

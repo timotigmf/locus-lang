@@ -1,0 +1,26 @@
+Titolo: "La chiave nell'affresco".
+Autore: "Esempio LOCUS".
+
+La Sala delle Mappe è una stanza.
+Inizia nella "Sala delle Mappe".
+La Sala delle Mappe ha descrizione "Carte scolorite coprono i tavoli. Un cielo stellato occupa la parete orientale.".
+
+Un affresco è un tipo di scenario.
+Il cielo stellato è un affresco nella Sala delle Mappe.
+Il cielo stellato ha descrizione "Una tessera a forma di luna sembra leggermente sollevata.".
+
+La "chiave d'argento" è una chiave nella Sala delle Mappe.
+La "chiave d'argento" ha visibile falso.
+La scoperta è una proprietà logica.
+
+Regola "premi la luna" per esaminare "cielo stellato" nella fase dopo
+quando "scoperta" di "chiave d'argento" è falso:
+    imposta "visibile" di "chiave d'argento" a vero;
+    imposta "scoperta" di "chiave d'argento" a vero;
+    dì "La luna rientra nella parete e una chiave d'argento cade sul pavimento.";
+Fine regola.
+
+Regola "vano già aperto" per esaminare "cielo stellato" nella fase dopo
+quando "scoperta" di "chiave d'argento" è vero:
+    dì "Il piccolo vano dietro la luna è ormai vuoto.";
+Fine regola.

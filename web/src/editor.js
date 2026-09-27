@@ -29,6 +29,8 @@ const words = [
   "un",
   "uno",
   "tipo",
+  "scenario",
+  "visibile",
   "di",
   "nella",
   "nel",

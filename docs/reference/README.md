@@ -9,7 +9,7 @@
 | --- | --- |
 | controlla | valida entità e relazioni; stampa numero di entità |
 | ast | JSON AST senza validazione semantica |
-| ir / compila | JSON IR versione 12, dopo validazione |
+| ir / compila | JSON IR versione 13, dopo validazione |
 | gioca | compila e avvia la sessione IF dalla prima stanza dichiarata |
 
 `gioca`: guarda, esamina, prendi, lascia, metti, apri, chiudi, blocca,
@@ -29,13 +29,13 @@ Diagnosi su stderr; nessuna scrittura implicita. Dump non caricabili come giochi
 - `parser.parse(text, source='<memoria>')`: AST Program con tipi, entità, relazioni e regole.
 - `compiler.compile_source(text, kinds, source='<memoria>', *, relations=None, properties=None, actions=None, kind_parents=None, reserved_commands=())`: ProgramIR.
 - `compiler.analyze(program, kinds, *, relations=None, properties=None, actions=None, kind_parents=None, reserved_commands=())`: risoluzione a passaggi e lowering.
-- `schema.RelationSpec(id, source_type, target_type, reverse_operands=False, inverse_id=None, acyclic=False, verb=None)`:
+- `schema.RelationSpec(id, source_type, target_type, reverse_operands=False, inverse_id=None, acyclic=False, verb=None, mutable=False)`:
   contratto funzionale e irriflessivo di una relazione; tipi/ID già risolti.
 - `stdlib.default_kinds()` / `stdlib.default_kind_parents()` / `stdlib.default_relations()` / `stdlib.default_properties()`: cataloghi nuovi e sostituibili.
 - `runtime.instantiate(program)`: World immutabile con entità e relazioni.
 - `player.parse_command(text, actions=())`: Intent(verb, noun=None, indirect=None); riceve le azioni compilate del mondo e usa `unknown` per un comando sconosciuto.
 - `stdlib.game.start(world)`: Session; ValueError se mancano stanze.
-- `stdlib.game.visible(session)`: ID degli oggetti nella stanza e non posseduti.
+- `stdlib.game.visible(session)`: ID delle entità percepibili nella stanza e non possedute; considera `visibile`, contenimento e stato dei contenitori.
 - `stdlib.game.step(session, intent)`: Transition(session, event), senza I/O.
 - `stdlib.render.render(transition)`: testo italiano di un evento.
 - `diagnostics.CompileError`: code, message, span; `canonical(text)`: NFC/casefold/spazi.
@@ -87,7 +87,8 @@ Le azioni dell'autore aggiungono gli eventi `custom` e `wrong_kind`.
 - `schema.type_ids` normalizza singolo tipo/tupla; `valid_value` verifica tipi esatti.
 - `compiler.relation_verbs(catalog)`: mappa verbo → predicato per `parser.parse(..., verbs=...)`.
 - `graph.cycle_node(parents)`: rileva un ciclo in un grafo funzionale senza ricorsione.
-- `stdlib.game.reachable(session, id)` e `carried(session, id)`: controlli distinti.
+- `stdlib.game.reachable(session, id)` e `carried(session, id)`: controlli distinti;
+  il primo rifiuta entità con `visibile` falso e discendenti di contenitori invisibili o chiusi.
 - `stdlib.validation.validate_world(world, inventory=())`: invarianti narrative;
   `WorldError` ha entity_id e messaggio italiano. property_value legge un valore/default.
 

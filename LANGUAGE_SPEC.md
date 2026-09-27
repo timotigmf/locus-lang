@@ -2,7 +2,7 @@
 
 ## Stato attuale
 
-Versione corrente `0.5.0a1`, IR versione 12. Le specifiche M2, M3 e M4
+Versione corrente `0.5.0a1`, IR versione 13. Le specifiche M2, M3 e M4
 estendono e, dove indicato, sostituiscono i limiti M1 sotto.
 La [specifica M2](docs/linguaggio/milestone-2.md) è normativa per proprietà,
 stringhe, nomi quotati, preposizioni, contenitori, porte e chiavi.
@@ -22,6 +22,8 @@ La specifica dei [separatori multiparola](docs/linguaggio/separatori-multiparola
 definisce locuzioni deterministiche fra i due oggetti.
 La specifica delle [relazioni dinamiche](docs/linguaggio/relazioni-dinamiche.md)
 definisce passaggi cardinali creati o rimossi da effetti transazionali.
+La specifica di [visibilità e scenario](docs/linguaggio/visibilita-scenario.md)
+definisce oggetti nascosti e dettagli ambientali non trasportabili.
 Le sezioni S0/S1 seguenti descrivono il nucleo storico, non l'intera versione.
 
 ## Dichiarazioni (S0, mantenute in 0.1.0a2)
@@ -149,7 +151,7 @@ da file e punto iniziale esplicito. IR corrente versione 5.
 sorgente. `Comprendi "alias" come "entità".` aggiunge un nome alternativo per i
 comandi del giocatore. Metadati duplicati producono `E408`; alias in conflitto
 producono `E409`. Questi campi sono stati introdotti con l'IR 6 e restano
-presenti nell'IR 12.
+presenti nell'IR 13.
 
 ## Tipi definiti dall'autore
 
@@ -158,7 +160,7 @@ avanti sono ammessi e ogni tipo ha al massimo un genitore. I sottotipi sono
 compatibili con proprietà, relazioni e capacità degli antenati. Ridefinizioni
 producono `E113`; cicli nella gerarchia producono `E114`. La specifica completa
 è in [tipi definiti dall'autore](docs/linguaggio/tipi-autore.md). La tabella dei
-tipi è stata introdotta nell'IR 7 e resta presente nell'IR 12.
+tipi è stata introdotta nell'IR 7 e resta presente nell'IR 13.
 
 ## Azioni e comandi definiti dall'autore
 
@@ -169,7 +171,7 @@ Nomi duplicati producono `E310`; comandi non validi o in conflitto producono
 `E311`. `e sinonimo "riverisci"` aggiunge una forma equivalente; più clausole
 `e separatore` definiscono le locuzioni fra gli oggetti di un'azione a due
 oggetti. Comandi e separatori possono contenere fino a quattro parole e non
-possono avere prefissi ambigui. L'IR corrente è la versione 12.
+possono avere prefissi ambigui. L'IR corrente è la versione 13.
 
 ## Relazioni dinamiche
 
@@ -179,4 +181,12 @@ risolve gli ID, controlla tipi e mutabilità e incorpora le inverse nello stesso
 effetto. Il runtime applica il cambiamento nella transazione della regola. Gli
 usi non validi producono `E312`; si veda la
 [specifica completa](docs/linguaggio/relazioni-dinamiche.md). Questa estensione
-introduce l'IR 12.
+introduce l'IR 12 ed è conservata nell'IR 13.
+
+## Visibilità e scenario
+
+La proprietà standard `visibile` controlla se cose, contenitori, chiavi e
+scenari entrano nel campo d'azione del giocatore. Il nuovo tipo `scenario` è
+collocabile ed esaminabile, ma non trasportabile. Le regole cambiano la visibilità
+con `imposta`; il rollback resta quello degli altri effetti. La
+[specifica completa](docs/linguaggio/visibilita-scenario.md) introduce l'IR 13.

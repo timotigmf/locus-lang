@@ -4,10 +4,12 @@ from locus.schema import ActionSpec, PropertySpec, RelationSpec
 
 ROOM = "mondo.stanza"
 THING = "mondo.cosa"
+SCENERY = "mondo.scenario"
 CONTAINER = "mondo.contenitore"
 DOOR = "mondo.porta"
 KEY = "mondo.chiave"
 PORTABLE = (THING,)
+LOCATABLE = (THING, SCENERY)
 OPENABLE = (CONTAINER, DOOR)
 INSIDE = "mondo.dentro"
 NORTH = "mondo.nord"
@@ -19,19 +21,34 @@ SIDE_B = "mondo.lato_b"
 UNLOCKS = "mondo.apre"
 STATE = "mondo.stato"
 DESCRIPTION = "base.descrizione"
+VISIBLE = "mondo.visibile"
 
 
 def default_kinds() -> dict[str, str]:
-    return {"stanza": ROOM, "cosa": THING, "contenitore": CONTAINER, "porta": DOOR, "chiave": KEY}
+    return {
+        "stanza": ROOM,
+        "cosa": THING,
+        "scenario": SCENERY,
+        "contenitore": CONTAINER,
+        "porta": DOOR,
+        "chiave": KEY,
+    }
 
 
 def default_kind_parents() -> dict[str, str | None]:
-    return {ROOM: None, THING: None, CONTAINER: THING, DOOR: None, KEY: THING}
+    return {
+        ROOM: None,
+        THING: None,
+        SCENERY: None,
+        CONTAINER: THING,
+        DOOR: None,
+        KEY: THING,
+    }
 
 
 def default_relations() -> dict[str, RelationSpec]:
     return {
-        "nella": RelationSpec(INSIDE, PORTABLE, (ROOM, CONTAINER), acyclic=True),
+        "nella": RelationSpec(INSIDE, LOCATABLE, (ROOM, CONTAINER), acyclic=True),
         "nord": RelationSpec(
             NORTH, ROOM, ROOM, reverse_operands=True, inverse_id=SOUTH, mutable=True
         ),
@@ -52,6 +69,7 @@ def default_properties() -> dict[str, PropertySpec]:
     return {
         "descrizione": PropertySpec(DESCRIPTION, tuple(default_kinds().values()), "testo", ""),
         "stato": PropertySpec(STATE, OPENABLE, "testo", "chiuso", ("aperto", "chiuso", "bloccato")),
+        "visibile": PropertySpec(VISIBLE, LOCATABLE, "logico", True),
     }
 
 
