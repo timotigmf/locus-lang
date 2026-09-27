@@ -1,7 +1,7 @@
 """Vincoli del dominio narrativo, separati dal compilatore generale."""
 
 from locus.graph import cycle_node
-from locus.runtime import World
+from locus.runtime import World, has_type
 from locus.schema import Value
 from locus.stdlib import (
     CONTAINER,
@@ -40,7 +40,8 @@ def property_value(world: World, entity_id: str, property_id: str, default: Valu
 def validate_world(world: World, inventory: tuple[str, ...] = ()) -> None:
     entities = {entity.id: entity for entity in world.entities}
     if world.entry_id is not None and (
-        world.entry_id not in entities or entities[world.entry_id].type_id != ROOM
+        world.entry_id not in entities
+        or not has_type(world, entities[world.entry_id].type_id, ROOM)
     ):
         raise WorldError("Il punto iniziale deve essere una stanza.", world.entry_id)
     parents = {
@@ -54,28 +55,31 @@ def validate_world(world: World, inventory: tuple[str, ...] = ()) -> None:
     for child, parent in parents.items():
         if child not in entities or parent not in entities:
             raise WorldError("Il contenimento riferisce un'entità inesistente.", child)
-        if entities[child].type_id not in PORTABLE or entities[parent].type_id not in {
-            ROOM,
-            CONTAINER,
-        }:
+        if not any(
+            has_type(world, entities[child].type_id, expected) for expected in PORTABLE
+        ) or not any(
+            has_type(world, entities[parent].type_id, expected) for expected in (ROOM, CONTAINER)
+        ):
             raise WorldError("Tipi non validi per il contenimento.", child)
     inventory_seen: set[str] = set()
     for ident in inventory:
-        if ident not in entities or entities[ident].type_id not in PORTABLE:
+        if ident not in entities or not any(
+            has_type(world, entities[ident].type_id, expected) for expected in PORTABLE
+        ):
             raise WorldError("L'inventario contiene un elemento non trasportabile.", ident)
         if ident in parents or ident in inventory_seen:
             raise WorldError("Un oggetto non può avere due posizioni.", ident)
         inventory_seen.add(ident)
     passage_doors: set[frozenset[str]] = set()
     for entity in world.entities:
-        if entity.type_id in OPENABLE:
+        if any(has_type(world, entity.type_id, expected) for expected in OPENABLE):
             if property_value(world, entity.id, STATE, "chiuso") not in {
                 "aperto",
                 "chiuso",
                 "bloccato",
             }:
                 raise WorldError("Stato di apertura non valido.", entity.id)
-        if entity.type_id != DOOR:
+        if not has_type(world, entity.type_id, DOOR):
             continue
         sides = {
             edge.predicate_id: edge.target_id
@@ -85,7 +89,10 @@ def validate_world(world: World, inventory: tuple[str, ...] = ()) -> None:
         if len(sides) != 2 or sides[SIDE_A] == sides[SIDE_B]:
             raise WorldError("Una porta deve collegare due stanze distinte.", entity.id)
         left, right = sides[SIDE_A], sides[SIDE_B]
-        if any(side not in entities or entities[side].type_id != ROOM for side in (left, right)):
+        if any(
+            side not in entities or not has_type(world, entities[side].type_id, ROOM)
+            for side in (left, right)
+        ):
             raise WorldError("Gli estremi di una porta devono essere stanze.", entity.id)
         pair = frozenset((left, right))
         if pair in passage_doors:

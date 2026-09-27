@@ -7,7 +7,7 @@ THING = "mondo.cosa"
 CONTAINER = "mondo.contenitore"
 DOOR = "mondo.porta"
 KEY = "mondo.chiave"
-PORTABLE = (THING, CONTAINER, KEY)
+PORTABLE = (THING,)
 OPENABLE = (CONTAINER, DOOR)
 INSIDE = "mondo.dentro"
 NORTH = "mondo.nord"
@@ -23,6 +23,10 @@ DESCRIPTION = "base.descrizione"
 
 def default_kinds() -> dict[str, str]:
     return {"stanza": ROOM, "cosa": THING, "contenitore": CONTAINER, "porta": DOOR, "chiave": KEY}
+
+
+def default_kind_parents() -> dict[str, str | None]:
+    return {ROOM: None, THING: None, CONTAINER: THING, DOOR: None, KEY: THING}
 
 
 def default_relations() -> dict[str, RelationSpec]:

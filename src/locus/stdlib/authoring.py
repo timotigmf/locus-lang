@@ -9,7 +9,13 @@ from locus.ir import ProgramIR
 from locus.parser import parse
 from locus.project import load_project
 from locus.runtime import instantiate
-from locus.stdlib import default_actions, default_kinds, default_properties, default_relations
+from locus.stdlib import (
+    default_actions,
+    default_kind_parents,
+    default_kinds,
+    default_properties,
+    default_relations,
+)
 from locus.stdlib.validation import WorldError, validate_world
 
 
@@ -32,6 +38,7 @@ def _compile(ast: Program) -> ProgramIR:
         relations=default_relations(),
         properties=default_properties(),
         actions=default_actions(),
+        kind_parents=default_kind_parents(),
     )
     try:
         validate_world(instantiate(program))

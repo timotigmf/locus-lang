@@ -7,6 +7,7 @@ from locus.ast import (
     Declaration,
     EntryPoint,
     Inclusion,
+    KindDeclaration,
     Metadata,
     Program,
     PropertyDeclaration,
@@ -138,6 +139,7 @@ class _Parser:
 
     def program(self) -> Program:
         declarations: list[Declaration] = []
+        kinds: list[KindDeclaration] = []
         relations: list[Relation] = []
         properties: list[PropertyDeclaration] = []
         assignments: list[Assignment] = []
@@ -147,6 +149,17 @@ class _Parser:
         metadata: list[Metadata] = []
         vocabulary: list[Vocabulary] = []
         while self.current.kind != "EOF":
+            if self.current.kind == "WORD" and self.current.normalized in {"un", "uno", "una"}:
+                start = self.current.span
+                self.article(False)
+                name = self.words()
+                self.keyword("è")
+                self.article(False)
+                self.keyword("tipo")
+                self.keyword("di")
+                parent = self.words()
+                kinds.append(KindDeclaration(name, parent, self.finish(start)))
+                continue
             if self.current.normalized in {"titolo", "autore"}:
                 start = self.current.span
                 name = self.current.normalized
@@ -224,17 +237,17 @@ class _Parser:
                     self.article(False)
                     if self.current.normalized == "proprietà":
                         self.keyword("proprietà")
-                        kinds: dict[str, ValueKind] = {
+                        value_kinds: dict[str, ValueKind] = {
                             "numerica": "numero",
                             "testuale": "testo",
                             "logica": "logico",
                         }
                         adjective = self.current.normalized
-                        if adjective not in kinds:
+                        if adjective not in value_kinds:
                             self.fail("numerica, testuale o logica")
                         self.index += 1
                         properties.append(
-                            PropertyDeclaration(name, kinds[adjective], self.finish(start))
+                            PropertyDeclaration(name, value_kinds[adjective], self.finish(start))
                         )
                     else:
                         kind = self.words()
@@ -245,6 +258,7 @@ class _Parser:
                         declarations.append(Declaration(name, kind, self.finish(start), location))
         return Program(
             declarations=tuple(declarations),
+            kinds=tuple(kinds),
             relations=tuple(relations),
             properties=tuple(properties),
             assignments=tuple(assignments),

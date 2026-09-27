@@ -3,9 +3,10 @@
 from dataclasses import dataclass
 
 from locus.diagnostics import canonical
-from locus.ir import IR_VERSION, ProgramIR, PropertyIR, RelationIR, SynonymIR
+from locus.graph import cycle_node
+from locus.ir import IR_VERSION, ProgramIR, PropertyIR, RelationIR, SynonymIR, TypeIR
 from locus.rule_model import RuleIR
-from locus.schema import PropertySpec
+from locus.schema import PropertySpec, is_subtype
 
 
 @dataclass(frozen=True, slots=True)
@@ -26,6 +27,11 @@ class World:
     synonyms: tuple[SynonymIR, ...] = ()
     title: str | None = None
     author: str | None = None
+    types: tuple[TypeIR, ...] = ()
+
+
+def has_type(world: World, actual: str, expected: str) -> bool:
+    return is_subtype(actual, expected, {item.id: item.parent_id for item in world.types})
 
 
 def instantiate(program: ProgramIR) -> World:
@@ -34,6 +40,33 @@ def instantiate(program: ProgramIR) -> World:
     if len({entity.id for entity in program.entities}) != len(program.entities):
         raise ValueError("Identificatori di entità duplicati nell'IR.")
     identifiers = {entity.id for entity in program.entities}
+    inferred_type_ids = dict.fromkeys(
+        (
+            *(entity.type_id for entity in program.entities),
+            *(owner for spec in program.property_specs for owner in spec.owner_types),
+        )
+    )
+    types = program.types or tuple(TypeIR(ident, ident) for ident in inferred_type_ids)
+    type_ids = {item.id for item in types}
+    if len(type_ids) != len(types):
+        raise ValueError("Identificatori di tipo duplicati nell'IR.")
+    parents = {item.id: item.parent_id for item in types}
+    type_labels = [canonical(item.label) for item in types]
+    if (
+        any(
+            not item.id.strip() or not label for item, label in zip(types, type_labels, strict=True)
+        )
+        or len(set(type_labels)) != len(type_labels)
+        or any(parent is not None and parent not in type_ids for parent in parents.values())
+    ):
+        raise ValueError("Gerarchia dei tipi non valida nell'IR.")
+    hierarchy = {child: parent for child, parent in parents.items() if parent is not None}
+    if cycle_node(hierarchy) is not None:
+        raise ValueError("La gerarchia dei tipi contiene un ciclo nell'IR.")
+    if any(entity.type_id not in type_ids for entity in program.entities):
+        raise ValueError("Tipo di entità assente nell'IR.")
+    if any(owner not in type_ids for spec in program.property_specs for owner in spec.owner_types):
+        raise ValueError("Tipo proprietario assente nell'IR.")
     if any(
         edge.source_id not in identifiers or edge.target_id not in identifiers
         for edge in program.relations
@@ -63,17 +96,21 @@ def instantiate(program: ProgramIR) -> World:
         if key in seen or prop.entity_id not in entities or prop.property_id not in specs:
             raise ValueError("Proprietà duplicata o riferimento assente nell'IR.")
         spec = specs[prop.property_id]
-        if entities[prop.entity_id].type_id not in spec.owner_types or not spec.accepts(prop.value):
+        if not any(
+            is_subtype(entities[prop.entity_id].type_id, owner, parents)
+            for owner in spec.owner_types
+        ) or not spec.accepts(prop.value):
             raise ValueError("Valore di proprietà non valido nell'IR.")
         seen.add(key)
     return World(
-        tuple(Entity(item.id, item.label, item.type_id) for item in program.entities),
-        program.relations,
-        program.property_specs,
-        program.properties,
-        program.rules,
-        program.entry_id,
-        program.synonyms,
-        program.title,
-        program.author,
+        entities=tuple(Entity(item.id, item.label, item.type_id) for item in program.entities),
+        relations=program.relations,
+        property_specs=program.property_specs,
+        properties=program.properties,
+        rules=program.rules,
+        entry_id=program.entry_id,
+        synonyms=program.synonyms,
+        title=program.title,
+        author=program.author,
+        types=types,
     )

@@ -48,6 +48,7 @@ dall'alto verso il basso prima di studiare i moduli.
 4. [Progetto su più file e verifica](../tutorial/04-progetto.md)
 5. [Comandi, abbreviazioni e nomi](../tutorial/05-comandi-e-nomi.md)
 6. [Sotterraneo, enigma, sinonimi e punti](../tutorial/06-sotterraneo-enigma-punti.md)
+7. [Tipi definiti dall'autore](../tutorial/07-tipi-autore.md)
 
 ## Indice per obiettivo
 
@@ -57,6 +58,7 @@ dall'alto verso il basso prima di studiare i moduli.
 | Enigmi con chiavi | Porte/contenitori bloccati, regole e rollback | Lezioni 2, 3 e 6 |
 | Punti | Proprietà numeriche e regole di incremento | Lezione 6 |
 | Oggetti complessi | Contenimento annidato, proprietà tipate, stati | Lezione 2 e specifica M2 |
+| Categorie proprie | Tipi nominali con ereditarietà singola | Lezione 7 |
 | Sinonimi | `Comprendi "alias" come "oggetto".` | Lezioni 5 e 6 |
 | Passaggi segreti dinamici | Non ancora: le relazioni non cambiano durante il gioco | Lezione 6 |
 | Dialoghi ramificati | Non ancora: mancano persone, argomenti e azione parlare | Roadmap |
@@ -89,5 +91,6 @@ silenziose: se due oggetti corrispondono, chiede quale intendi.
 - [Regole, condizioni e transazioni](../linguaggio/milestone-3.md)
 - [File, inclusioni e punto iniziale](../linguaggio/milestone-4.md)
 - [Titolo, autore e sinonimi](../linguaggio/metadati-vocabolario.md)
+- [Tipi definiti dall'autore](../linguaggio/tipi-autore.md)
 - [Ricettario](../cookbook/README.md)
 - [Da Inform a LOCUS](../tutorial/da-inform-a-locus.md)

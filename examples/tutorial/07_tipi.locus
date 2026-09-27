@@ -1,0 +1,26 @@
+Titolo: "Il reliquiario della cripta".
+Autore: "Esempio LOCUS".
+
+Un santuario è un tipo di stanza.
+Un tesoro è un tipo di cosa.
+Una reliquia è un tipo di tesoro.
+Un reliquiario è un tipo di contenitore.
+Una chiave rituale è un tipo di chiave.
+
+La Cripta è un santuario.
+Inizia nella "Cripta".
+La Cripta ha descrizione "Una nicchia custodisce un antico cofano.".
+
+Il cofano è un reliquiario nella Cripta.
+Il cofano ha stato "bloccato".
+La chiave di bronzo è una chiave rituale nella Cripta.
+La chiave di bronzo apre il cofano.
+Il rubino è una reliquia nel cofano.
+
+Comprendi "scrigno" come "cofano".
+Comprendi "gemma" come "rubino".
+
+Regola "eco della reliquia" per prendere "rubino" nella fase dopo:
+    imposta "descrizione" di "Cripta" a "Il cofano vuoto riverbera nella cripta.";
+    dì "Il rubino accende riflessi rossi sulle pareti.";
+Fine regola.

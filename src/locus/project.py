@@ -77,6 +77,7 @@ def load_project(
     visit(path)
     return Program(
         declarations=tuple(item for unit in units for item in unit.declarations),
+        kinds=tuple(item for unit in units for item in unit.kinds),
         relations=tuple(item for unit in units for item in unit.relations),
         properties=tuple(item for unit in units for item in unit.properties),
         assignments=tuple(item for unit in units for item in unit.assignments),

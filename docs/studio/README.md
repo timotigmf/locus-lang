@@ -51,7 +51,7 @@ il successivo. Non promettiamo correzioni automatiche della semantica. Gli span
 di alcune diagnosi coprono un'intera dichiarazione/regola, come nella CLI.
 Il manuale incorporato è ricercabile per capitolo; la guida dell'autore è la
 pagina iniziale e ogni blocco di codice offre **Copia codice**. Comprende un corso
-in sei lezioni, specifiche e tutorial.
+in sette lezioni, specifiche e tutorial.
 
 Quando modifichi il sorgente, il gioco precedente viene disabilitato e mappa e
 indice sono da ricompilare. Non si mescolano una versione vecchia della storia e
@@ -65,7 +65,8 @@ riutilizzabile e stampabile. È uno schema logico del progetto iniziale, non una
 mappa delle posizioni del giocatore né un impaginatore geografico: collegamenti
 ciclici o complessi possono avere linee incrociate.
 
-**Indice del mondo** elenca entità, tipi e proprietà compilate. **Regole e trace**
+**Indice del mondo** elenca entità, gerarchie dei tipi e proprietà compilate.
+**Regole e trace**
 mostra le regole considerate nell'ultima azione, con esito e collegamento alla
 riga del sorgente. Non è ancora un debugger a passi con breakpoint.
 

@@ -8,4 +8,6 @@ richiederanno decisioni separate nei due parser.
 
 La versione attuale è descritta nelle specifiche [M2](milestone-2.md),
 [M3](milestone-3.md), [M4](milestone-4.md) e in
-[Metadati e vocabolario](metadati-vocabolario.md).
+[Metadati e vocabolario](metadati-vocabolario.md). I
+[tipi definiti dall'autore](tipi-autore.md) aggiungono una gerarchia nominale a
+ereditarietà singola, usata in modo uniforme dal compilatore e dal runtime.

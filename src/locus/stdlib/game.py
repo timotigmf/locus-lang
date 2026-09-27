@@ -8,7 +8,7 @@ from locus.ir import PropertyIR, RelationIR
 from locus.player import Intent, Verb
 from locus.rule_model import ActionCall, Address, Trace
 from locus.rules import ActionResult, RuleError, execute
-from locus.runtime import Entity, World
+from locus.runtime import Entity, World, has_type
 from locus.schema import Value
 from locus.stdlib import (
     CONTAINER,
@@ -86,7 +86,7 @@ class Transition:
 
 def start(world: World) -> Session:
     validate_world(world)
-    rooms = [entity.id for entity in world.entities if entity.type_id == ROOM]
+    rooms = [entity.id for entity in world.entities if has_type(world, entity.type_id, ROOM)]
     if not rooms:
         raise ValueError("Per giocare occorre dichiarare almeno una stanza.")
     return Session(world, world.entry_id or rooms[0])
@@ -234,7 +234,7 @@ def _key_error(session: Session, target_id: str, name: str) -> Event | None:
 
 
 def _opening(session: Session, intent: Intent, entity: Entity) -> Transition:
-    if entity.type_id not in OPENABLE:
+    if not any(has_type(session.world, entity.type_id, expected) for expected in OPENABLE):
         return Transition(session, Event("not_openable", (entity.id,)))
     state = _state(session, entity.id)
     if intent.verb == "close":
@@ -278,7 +278,10 @@ def _perform(session: Session, intent: Intent) -> Transition:
         if target is None:
             return Transition(session, Event("no_exit"))
         for door in session.world.entities:
-            if door.type_id == DOOR and _sides(session, door.id) == {session.room_id, target}:
+            if has_type(session.world, door.type_id, DOOR) and _sides(session, door.id) == {
+                session.room_id,
+                target,
+            }:
                 if _state(session, door.id) != "aperto":
                     return Transition(session, Event("door_closed", (door.id,)))
         moved = replace(session, room_id=target)
@@ -306,7 +309,7 @@ def _perform(session: Session, intent: Intent) -> Transition:
         return _opening(session, intent, entity)
     if intent.verb not in {"take", "put", "drop"}:
         return Transition(session, Event("unknown"))
-    if entity.type_id not in PORTABLE:
+    if not any(has_type(session.world, entity.type_id, expected) for expected in PORTABLE):
         return Transition(session, Event("not_portable", (entity.id,)))
     if intent.verb == "take":
         if entity.id in session.inventory:
@@ -321,7 +324,7 @@ def _perform(session: Session, intent: Intent) -> Transition:
     target_entity = _resolve(session, intent.indirect)
     if isinstance(target_entity, Event):
         return Transition(session, target_entity)
-    if target_entity.type_id != CONTAINER:
+    if not has_type(session.world, target_entity.type_id, CONTAINER):
         return Transition(session, Event("not_container", (target_entity.id,)))
     if _state(session, target_entity.id) != "aperto":
         return Transition(session, Event("container_closed", (target_entity.id,)))
@@ -349,7 +352,9 @@ class _RuleHost:
         if (
             spec is None
             or entity is None
-            or entity.type_id not in spec.owner_types
+            or not any(
+                has_type(state.world, entity.type_id, expected) for expected in spec.owner_types
+            )
             or not spec.accepts(value)
         ):
             raise RuleError("Valore non valido per la proprietà.")

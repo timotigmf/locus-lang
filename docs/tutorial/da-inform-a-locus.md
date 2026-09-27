@@ -1,6 +1,6 @@
 # Da Inform a LOCUS: concetti simili, contratti diversi
 
-Questa scheda riguarda LOCUS 0.4.0a1 e le copie dei manuali elencate nel
+Questa scheda riguarda LOCUS 0.5.0a1 e le copie dei manuali elencate nel
 [registro delle letture](../architettura/materiali-didattici.md). Non promette
 compatibilità del sorgente o equivalenza del comportamento con Inform.
 
@@ -8,7 +8,7 @@ compatibilità del sorgente o equivalenza del comportamento con Inform.
 | --- | --- | --- |
 | Modello del mondo | Entità, proprietà e relazioni | La prosa descrittiva non crea il modello |
 | Luoghi e mappa | `stanza`, nord/sud, est/ovest | Quattro direzioni cardinali; diagonali, alto e basso non sono ancora registrati |
-| Tipi e proprietà | Tipi della stdlib; proprietà numeriche, testuali, logiche | Tipi autore ed ereditarietà ancora da progettare |
+| Tipi e proprietà | Tipi dell'autore a ereditarietà singola; proprietà numeriche, testuali, logiche | Niente ereditarietà multipla o proprietà limitate a un tipo autore |
 | Descrizione del luogo e oggetti visibili | `descrizione`, `guarda`, `esamina` | Niente scenery, supporter, trasparenza o locale priorities |
 | Controllo, modifica e resoconto | `verifica`, `esegui`, `dopo`, `descrivi` | Semantica propria, non traduzione diretta dei rulebook |
 | Ordine delle regole | Priorità esplicita e ordine sorgente | Nessun ordinamento automatico per specificità |

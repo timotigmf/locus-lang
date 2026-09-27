@@ -527,6 +527,19 @@ async function compileProject(play = false) {
   return true;
 }
 function renderIndex(ir) {
+  const types = new Map((ir.types ?? []).map((item) => [item.id, item]));
+  function typePath(typeId) {
+    const labels = [];
+    const visited = new Set();
+    let current = typeId;
+    while (current && !visited.has(current)) {
+      visited.add(current);
+      const item = types.get(current);
+      labels.push(item?.label ?? current.split(".").at(-1));
+      current = item?.parent_id;
+    }
+    return labels.reverse().join(" › ");
+  }
   const table = el("table", { class: "data" });
   const head = el("tr");
   for (const s of ["Entità", "Tipo", "Proprietà"]) head.append(el("th", {}, s));
@@ -537,7 +550,7 @@ function renderIndex(ir) {
       .filter((p) => p.entity_id === entity.id)
       .map((p) => `${p.property_id.split(".").at(-1)}: ${String(p.value)}`)
       .join(" · ");
-    for (const t of [entity.label, entity.type_id.split(".").at(-1), props])
+    for (const t of [entity.label, typePath(entity.type_id), props])
       row.append(el("td", {}, t));
     table.append(row);
   }

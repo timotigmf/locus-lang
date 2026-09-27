@@ -38,6 +38,18 @@ def test_project_forward_references_and_explicit_start(tmp_path: Path) -> None:
     assert ir == compile_story_file(path)
 
 
+def test_author_type_can_be_declared_in_an_included_file(tmp_path: Path) -> None:
+    write(tmp_path, "tipi.locus", "Una reliquia è un tipo di cosa.")
+    path = write(
+        tmp_path,
+        "storia.locus",
+        'Includi "tipi.locus". La Sala è una stanza. Il rubino è una reliquia nella Sala.',
+    )
+    program = compile_story_file(path)
+    custom = next(item for item in program.types if item.label == "reliquia")
+    assert program.entities[1].type_id == custom.id
+
+
 def test_diamond_includes_once_and_rule_order(tmp_path: Path) -> None:
     write(
         tmp_path,

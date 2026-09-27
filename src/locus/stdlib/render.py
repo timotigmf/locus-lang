@@ -1,5 +1,6 @@
 """Presentazione italiana degli eventi narrativi, separata dalle transizioni."""
 
+from locus.runtime import has_type
 from locus.stdlib import CONTAINER, DESCRIPTION, OPENABLE, STATE
 from locus.stdlib.game import Transition
 from locus.stdlib.validation import property_value
@@ -31,9 +32,9 @@ def render(transition: Transition) -> str:
         description = property_value(world, ident, DESCRIPTION)
         lines = [names[0], str(description) if description else "Non noti nulla di particolare."]
         state = property_value(world, ident, STATE, "chiuso")
-        if entities[ident].type_id in OPENABLE:
+        if any(has_type(world, entities[ident].type_id, expected) for expected in OPENABLE):
             lines.append(f"Stato: {state}.")
-        if entities[ident].type_id == CONTAINER and state == "aperto":
+        if has_type(world, entities[ident].type_id, CONTAINER) and state == "aperto":
             lines.append(
                 "Contiene: " + (", ".join(names[1:]) if len(names) > 1 else "nessun oggetto") + "."
             )

@@ -19,8 +19,9 @@
 
 - [Progetti M4](linguaggio/milestone-4.md) e [rapporto M4](rapporto-milestone-4.md).
 - [Metadati e vocabolario](linguaggio/metadati-vocabolario.md): titolo, autore e sinonimi.
+- [Tipi definiti dall'autore](linguaggio/tipi-autore.md): gerarchia nominale ed ereditarietà singola.
 
-- [Tutorial: il faro](tutorial/README.md), [da Inform a LOCUS](tutorial/da-inform-a-locus.md).
+- [Tutorial: il faro](tutorial/README.md), inclusa la lezione sui tipi; [da Inform a LOCUS](tutorial/da-inform-a-locus.md).
 - [Registro dei sei manuali forniti](architettura/materiali-didattici.md).
 
 - [Studio web](studio/README.md): editor, gioco, mappe, test e release.

@@ -16,6 +16,13 @@ class Declaration:
 
 
 @dataclass(frozen=True, slots=True)
+class KindDeclaration:
+    name: str
+    parent: str
+    span: Span
+
+
+@dataclass(frozen=True, slots=True)
 class Relation:
     subject: str
     predicate: str
@@ -109,3 +116,4 @@ class Program:
     source_order: tuple[str, ...] = ()
     metadata: tuple[Metadata, ...] = ()
     vocabulary: tuple[Vocabulary, ...] = ()
+    kinds: tuple[KindDeclaration, ...] = ()

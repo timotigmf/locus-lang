@@ -1,5 +1,6 @@
 """Schemi di dominio iniettati nel compilatore, indipendenti dalla IF."""
 
+from collections.abc import Mapping
 from dataclasses import dataclass
 from typing import Literal
 
@@ -10,6 +11,18 @@ TypeSet = str | tuple[str, ...]
 
 def type_ids(types: TypeSet) -> tuple[str, ...]:
     return (types,) if isinstance(types, str) else types
+
+
+def is_subtype(actual: str, expected: str, parents: Mapping[str, str | None]) -> bool:
+    """Confronto iterativo; il chiamante convalida prima l'assenza di cicli."""
+    current: str | None = actual
+    seen: set[str] = set()
+    while current is not None and current not in seen:
+        if current == expected:
+            return True
+        seen.add(current)
+        current = parents.get(current)
+    return False
 
 
 def valid_value(kind: ValueKind, value: Value) -> bool:

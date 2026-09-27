@@ -9,7 +9,7 @@ from typing import Any
 from locus.diagnostics import CompileError
 from locus.ir import ProgramIR
 from locus.player import Intent, parse_command
-from locus.runtime import instantiate
+from locus.runtime import has_type, instantiate
 from locus.stdlib import EAST, NORTH, ROOM, SIDE_A, SIDE_B
 from locus.stdlib.authoring import compile_story_file
 from locus.stdlib.game import Session, Transition, start, step
@@ -44,13 +44,23 @@ _ERROR_HELP = {
     ),
     "E102": (
         "Tipo sconosciuto",
-        "Usa un tipo disponibile: stanza, cosa, contenitore, porta o chiave.",
-        "docs/linguaggio/milestone-2.md",
+        "Controlla il nome oppure dichiaralo con: Un nome è un tipo di cosa.",
+        "docs/linguaggio/tipi-autore.md",
     ),
     "E103": (
         "Riferimento non dichiarato",
         "Controlla il nome e l'inclusione del file che lo dichiara.",
         "docs/linguaggio/milestone-4.md",
+    ),
+    "E113": (
+        "Tipo duplicato",
+        "Scegli un nome nuovo: anche i tipi della libreria sono già dichiarati.",
+        "docs/linguaggio/tipi-autore.md",
+    ),
+    "E114": (
+        "Ciclo fra tipi",
+        "Ogni catena deve terminare in un tipo esistente senza tornare indietro.",
+        "docs/linguaggio/tipi-autore.md",
     ),
     "E201": (
         "Mondo incoerente",
@@ -147,7 +157,8 @@ def validate_project(project: Any) -> dict[str, Any]:
 
 
 def map_data(program: ProgramIR) -> dict[str, Any]:
-    rooms = [asdict(entity) for entity in program.entities if entity.type_id == ROOM]
+    world = instantiate(program)
+    rooms = [asdict(entity) for entity in program.entities if has_type(world, entity.type_id, ROOM)]
     link_directions = {NORTH: "nord", EAST: "est"}
     links = [
         {

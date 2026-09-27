@@ -59,9 +59,9 @@ riuso di codice Inform.
 | Capacità | Evidenza attuale | Passo necessario |
 | --- | --- | --- |
 | Sorgente italiano | esempi M1/M2 compilati nei test | ampliare sintassi con corpus positivo/negativo |
-| Tipi e valori | proprietà intere/testuali/logiche, niente coercizioni | espressioni, funzioni, collezioni |
+| Tipi e valori | gerarchia nominale, proprietà intere/testuali/logiche, niente coercizioni | proprietà per tipo, espressioni, funzioni, collezioni |
 | Indipendenza da IF | cataloghi e verbi di un dominio non narrativo nei test | moduli dichiarativi |
-| Mondo coerente | cicli, doppie posizioni, visibilità e porte verificati | supporti, persone, regioni, ereditarietà |
+| Mondo coerente | tipi, cicli, doppie posizioni, visibilità e porte verificati | supporti, persone e regioni |
 | Regole ispezionabili | architettura proposta | M3 con priorità, esiti, trace |
 | Portabilità | Python puro, CI su quattro piattaforme | conformità di un backend browser |
 | Italiano del giocatore | due oggetti, articoli, nomi quotati | sinonimi, anafore, clitici e disambiguazione interattiva |

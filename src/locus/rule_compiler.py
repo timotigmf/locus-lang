@@ -6,7 +6,7 @@ from locus.ast import ActionSyntax, PropertyReference, Rule
 from locus.diagnostics import CompileError, Span, canonical
 from locus.ir import EntityIR
 from locus.rule_model import ActionCall, Address, Condition, Effect, Origin, RuleIR
-from locus.schema import ActionSpec, PropertySpec
+from locus.schema import ActionSpec, PropertySpec, is_subtype
 
 
 def lower_rules(
@@ -14,6 +14,7 @@ def lower_rules(
     entities: Mapping[str, EntityIR],
     properties: Mapping[str, PropertySpec],
     actions: Mapping[str, ActionSpec],
+    type_parents: Mapping[str, str | None],
 ) -> tuple[RuleIR, ...]:
     if len({spec.id for spec in actions.values()}) != len(actions):
         raise ValueError("Identificatori di azione duplicati.")
@@ -37,7 +38,9 @@ def lower_rules(
         prop = properties.get(canonical(ref.property_name))
         if prop is None:
             raise CompileError("E304", f"Proprietà sconosciuta: {ref.property_name}.", span)
-        if owner.type_id not in prop.owner_types:
+        if not any(
+            is_subtype(owner.type_id, expected, type_parents) for expected in prop.owner_types
+        ):
             raise CompileError("E305", "Proprietà non applicabile a questa entità.", span)
         return Address(owner.id, prop.id), prop
 

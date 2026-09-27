@@ -56,9 +56,11 @@ la chiave inaccessibile. Vedi [sintassi e limiti M2](../linguaggio/milestone-2.m
 
 ## Percorso guidato
 
-Per iniziare da zero, segui le [sei lezioni del faro](../tutorial/README.md),
+Per iniziare da zero, segui le [sette lezioni del faro](../tutorial/README.md),
 con prove di gioco e soluzioni.
 La [quinta lezione](../tutorial/05-comandi-e-nomi.md) presenta le abbreviazioni
 classiche delle avventure testuali e spiega quando un nome parziale è sufficiente.
 La [sesta lezione](../tutorial/06-sotterraneo-enigma-punti.md) costruisce un
 sotterraneo con enigma, sinonimi e punteggio.
+La [settima lezione](../tutorial/07-tipi-autore.md) introduce categorie proprie
+che ereditano il comportamento di stanza, cosa, contenitore e chiave.

@@ -2,7 +2,7 @@
 
 ## Stato attuale
 
-Versione corrente `0.5.0a1`, IR versione 6. Le specifiche M2, M3 e M4
+Versione corrente `0.5.0a1`, IR versione 7. Le specifiche M2, M3 e M4
 estendono e, dove indicato, sostituiscono i limiti M1 sotto.
 La [specifica M2](docs/linguaggio/milestone-2.md) è normativa per proprietà,
 stringhe, nomi quotati, preposizioni, contenitori, porte e chiavi.
@@ -10,6 +10,8 @@ La stdlib corrente estende inoltre i collegamenti cardinali a nord/sud ed
 est/ovest; le coppie inverse sono generate automaticamente.
 La specifica di [metadati e vocabolario](docs/linguaggio/metadati-vocabolario.md)
 definisce titolo, autore e sinonimi nominali dichiarati dall'autore.
+La specifica dei [tipi definiti dall'autore](docs/linguaggio/tipi-autore.md)
+definisce la gerarchia nominale a ereditarietà singola.
 Le sezioni S0/S1 seguenti descrivono il nucleo storico, non l'intera versione.
 
 ## Dichiarazioni (S0, mantenute in 0.1.0a2)
@@ -136,4 +138,14 @@ da file e punto iniziale esplicito. IR corrente versione 5.
 `Titolo: "…".` e `Autore: "…".` identificano la storia direttamente nel
 sorgente. `Comprendi "alias" come "entità".` aggiunge un nome alternativo per i
 comandi del giocatore. Metadati duplicati producono `E408`; alias in conflitto
-producono `E409`. L'IR corrente è la versione 6.
+producono `E409`. Questi campi sono stati introdotti con l'IR 6 e restano
+presenti nell'IR 7.
+
+## Tipi definiti dall'autore
+
+`Un tesoro è un tipo di cosa.` introduce un tipo nominale. I riferimenti in
+avanti sono ammessi e ogni tipo ha al massimo un genitore. I sottotipi sono
+compatibili con proprietà, relazioni e capacità degli antenati. Ridefinizioni
+producono `E113`; cicli nella gerarchia producono `E114`. La specifica completa
+è in [tipi definiti dall'autore](docs/linguaggio/tipi-autore.md). L'IR corrente
+è la versione 7.

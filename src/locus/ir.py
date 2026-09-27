@@ -5,7 +5,14 @@ from dataclasses import dataclass
 from locus.rule_model import RuleIR
 from locus.schema import PropertySpec, Value
 
-IR_VERSION = 6
+IR_VERSION = 7
+
+
+@dataclass(frozen=True, slots=True)
+class TypeIR:
+    id: str
+    label: str
+    parent_id: str | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -47,3 +54,4 @@ class ProgramIR:
     synonyms: tuple[SynonymIR, ...] = ()
     title: str | None = None
     author: str | None = None
+    types: tuple[TypeIR, ...] = ()

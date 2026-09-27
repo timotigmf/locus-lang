@@ -1,4 +1,4 @@
-# Reference M2 — 0.2.0a1
+# Reference LOCUS — 0.5.0a1
 
 ## CLI
 
@@ -9,7 +9,7 @@
 | --- | --- |
 | controlla | valida entità e relazioni; stampa numero di entità |
 | ast | JSON AST senza validazione semantica |
-| ir / compila | JSON IR versione 3, dopo validazione |
+| ir / compila | JSON IR versione 7, dopo validazione |
 | gioca | compila e avvia la sessione IF dalla prima stanza dichiarata |
 
 `gioca`: guarda, esamina, prendi, lascia, metti, apri, chiudi, blocca,
@@ -26,12 +26,12 @@ Diagnosi su stderr; nessuna scrittura implicita. Dump non caricabili come giochi
 ## API Python
 
 - `lexer.tokenize(text, source='<memoria>')`: tuple Token con span originali e EOF.
-- `parser.parse(text, source='<memoria>')`: AST Program con declarations e relations.
-- `compiler.compile_source(text, kinds, source='<memoria>', *, relations=None, properties=None)`: ProgramIR.
-- `compiler.analyze(program, kinds, *, relations=None, properties=None)`: due passaggi e lowering.
+- `parser.parse(text, source='<memoria>')`: AST Program con tipi, entità, relazioni e regole.
+- `compiler.compile_source(text, kinds, source='<memoria>', *, relations=None, properties=None, actions=None, kind_parents=None)`: ProgramIR.
+- `compiler.analyze(program, kinds, *, relations=None, properties=None, actions=None, kind_parents=None)`: risoluzione a passaggi e lowering.
 - `schema.RelationSpec(id, source_type, target_type, reverse_operands=False, inverse_id=None, acyclic=False, verb=None)`:
   contratto funzionale e irriflessivo di una relazione; tipi/ID già risolti.
-- `stdlib.default_kinds()` / `stdlib.default_relations()` / `stdlib.default_properties()`: cataloghi nuovi e sostituibili.
+- `stdlib.default_kinds()` / `stdlib.default_kind_parents()` / `stdlib.default_relations()` / `stdlib.default_properties()`: cataloghi nuovi e sostituibili.
 - `runtime.instantiate(program)`: World immutabile con entità e relazioni.
 - `player.parse_command(text)`: Intent(verb, noun=None, indirect=None); verb sconosciuto = unknown.
 - `stdlib.game.start(world)`: Session; ValueError se mancano stanze.
@@ -40,8 +40,9 @@ Diagnosi su stderr; nessuna scrittura implicita. Dump non caricabili come giochi
 - `stdlib.render.render(transition)`: testo italiano di un evento.
 - `diagnostics.CompileError`: code, message, span; `canonical(text)`: NFC/casefold/spazi.
 
-Tutti i nomi sopra sono sotto `locus`. Program, Declaration, Relation, EntityIR,
-RelationIR, ProgramIR, Entity, World, Intent, Session, Event e Transition sono
+Tutti i nomi sopra sono sotto `locus`. Program, KindDeclaration, Declaration,
+Relation, TypeIR, EntityIR, RelationIR, ProgramIR, Entity, World, Intent, Session,
+Event e Transition sono
 dataclass immutabili. Session e World costruite manualmente dal chiamante devono
 avere riferimenti coerenti; non sono un'API di caricamento di dati non fidati.
 
@@ -50,6 +51,13 @@ incompatibili sollevano ValueError. `relations=None` supporta dichiarazioni senz
 relazioni; l'API non importa implicitamente la stdlib. instantiate verifica versione,
 ID duplicati, riferimenti inesistenti e conflitti funzionali, non sostituisce un
 futuro loader validante. Niente pickle o eval.
+
+`kind_parents` associa ID figlio a ID genitore o `None`; entrambi devono comparire
+in `kinds`. La funzione generica `schema.is_subtype(actual, expected, parents)`
+segue la catena senza ricorsione. `ProgramIR.types` e `World.types` contengono
+`TypeIR(id, label, parent_id)`. `runtime.has_type` applica la stessa relazione al
+mondo. Il compilatore rifiuta cataloghi ciclici con `ValueError`; il sorgente usa
+`E113` per tipi duplicati ed `E114` per cicli dell'autore.
 
 Event.kind distingue look, inventory, taken, already_carried, not_here,
 not_portable, ambiguous, no_exit, unknown, quit. Event.entities contiene ID,

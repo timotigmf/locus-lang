@@ -4,9 +4,12 @@ import pytest
 
 from locus.compiler import compile_source
 from locus.diagnostics import CompileError
-from locus.ir import IR_VERSION, EntityIR, ProgramIR, SynonymIR
+from locus.ir import IR_VERSION, EntityIR, ProgramIR, SynonymIR, TypeIR
+from locus.parser import parse
 from locus.runtime import instantiate
-from locus.stdlib import default_kinds
+from locus.schema import RelationSpec
+from locus.stdlib import THING, default_kinds
+from locus.stdlib.authoring import compile_story
 
 
 def test_pipeline_and_determinism() -> None:
@@ -80,6 +83,79 @@ def test_runtime_rejects_unknown_version_and_duplicate_ids() -> None:
 def test_compound_type_name() -> None:
     program = compile_source("Il sensore è un dispositivo digitale.", {"dispositivo digitale": "x"})
     assert program.entities[0].type_id == "x"
+
+
+def test_author_types_allow_forward_parents_and_inheritance() -> None:
+    source = (
+        "Una reliquia è un tipo di gioiello. "
+        "Un gioiello è un tipo di cosa. "
+        "Il rubino è una reliquia."
+    )
+    syntax = parse(source)
+    assert [(item.name, item.parent) for item in syntax.kinds] == [
+        ("reliquia", "gioiello"),
+        ("gioiello", "cosa"),
+    ]
+    program = compile_story(source)
+    types = {item.label: item for item in program.types}
+    assert types["reliquia"].parent_id == types["gioiello"].id
+    assert types["gioiello"].parent_id == THING
+    assert program.entities[0].type_id == types["reliquia"].id
+    world = instantiate(program)
+    assert next(item.label for item in world.types if item.id == THING) == "cosa"
+
+
+def test_author_subtype_works_in_a_non_narrative_catalog() -> None:
+    program = compile_source(
+        "Un sensore è un tipo di dispositivo. "
+        "Il radar è un sensore nella Zona. La Zona è una area.",
+        {"dispositivo": "lab.device", "area": "lab.area"},
+        relations={"nella": RelationSpec("lab.inside", "lab.device", "lab.area")},
+    )
+    assert program.relations[0].predicate_id == "lab.inside"
+    assert program.types[-1].parent_id == "lab.device"
+
+
+def test_author_type_ids_do_not_collide_with_host_ids() -> None:
+    program = compile_source(
+        "Un derivato è un tipo di base. Il valore è un derivato.",
+        {"base": "autore.t1"},
+    )
+    assert [item.id for item in program.types] == ["autore.t1", "autore.t2"]
+
+
+def test_apostrophe_article_in_author_type() -> None:
+    program = compile_story("Un'arma è un tipo di cosa. La sciabola è un'arma.")
+    assert program.entities[0].type_id == program.types[-1].id
+
+
+@pytest.mark.parametrize(
+    ("source", "code"),
+    [
+        ("Una cosa è un tipo di cosa.", "E113"),
+        ("Un gioiello è un tipo di cosa. Un GIOIELLO è un tipo di cosa.", "E113"),
+        ("Una reliquia è un tipo di tipo assente.", "E102"),
+        ("Un alfa è un tipo di beta. Un beta è un tipo di alfa.", "E114"),
+    ],
+)
+def test_invalid_author_type_hierarchy(source: str, code: str) -> None:
+    with pytest.raises(CompileError) as caught:
+        compile_story(source)
+    assert caught.value.code == code
+
+
+def test_runtime_rejects_invalid_type_hierarchy() -> None:
+    entity = EntityIR("e1", "A", "a")
+    with pytest.raises(ValueError, match="Gerarchia"):
+        instantiate(ProgramIR(IR_VERSION, (entity,), types=(TypeIR("a", "A", "b"),)))
+    with pytest.raises(ValueError, match="ciclo"):
+        instantiate(
+            ProgramIR(
+                IR_VERSION,
+                (entity,),
+                types=(TypeIR("a", "A", "b"), TypeIR("b", "B", "a")),
+            )
+        )
 
 
 def test_story_metadata_and_vocabulary_are_compiled() -> None:

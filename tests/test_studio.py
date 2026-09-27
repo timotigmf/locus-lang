@@ -121,6 +121,21 @@ def test_map_contains_north_and_east_links_once() -> None:
     ]
 
 
+def test_studio_exposes_author_types_and_maps_room_subtypes() -> None:
+    studio = Studio()
+    result = studio.compile(
+        project(
+            "Un osservatorio è un tipo di stanza. "
+            "Una reliquia è un tipo di cosa. "
+            "La Torre è un osservatorio. Il disco è una reliquia nella Torre."
+        )
+    )
+    assert result["ok"]
+    assert [room["label"] for room in result["map"]["rooms"]] == ["Torre"]
+    assert any(item["label"] == "osservatorio" for item in result["ir"]["types"])
+    assert any(item["label"] == "reliquia" for item in result["ir"]["types"])
+
+
 def test_dispatch_errors_and_size_limit() -> None:
     studio = Studio()
     assert not json.loads(studio.dispatch("{"))["ok"]

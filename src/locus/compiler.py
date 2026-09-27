@@ -5,19 +5,32 @@ from collections.abc import Mapping
 from locus.ast import Program, Relation
 from locus.diagnostics import CompileError, canonical
 from locus.graph import cycle_node
-from locus.ir import IR_VERSION, EntityIR, ProgramIR, PropertyIR, RelationIR, SynonymIR
+from locus.ir import IR_VERSION, EntityIR, ProgramIR, PropertyIR, RelationIR, SynonymIR, TypeIR
 from locus.parser import parse
 from locus.rule_compiler import lower_rules
-from locus.schema import ActionSpec, PropertySpec, RelationSpec, Value, type_ids
+from locus.schema import ActionSpec, PropertySpec, RelationSpec, Value, is_subtype, type_ids
 
 
-def _validate_catalog(kinds: Mapping[str, str], relations: Mapping[str, RelationSpec]) -> None:
+def _validate_catalog(
+    kinds: Mapping[str, str],
+    relations: Mapping[str, RelationSpec],
+    kind_parents: Mapping[str, str | None] | None,
+) -> dict[str, str | None]:
     if any(
         not name or canonical(name) != name or not ident.strip() for name, ident in kinds.items()
     ):
         raise ValueError("Il catalogo richiede nomi canonici e identificatori non vuoti.")
     if len(set(kinds.values())) != len(kinds):
         raise ValueError("Gli identificatori dei tipi devono essere univoci.")
+    identifiers = set(kinds.values())
+    parents: dict[str, str | None] = {ident: None for ident in kinds.values()}
+    for child, parent in (kind_parents or {}).items():
+        if child not in identifiers or (parent is not None and parent not in identifiers):
+            raise ValueError("La gerarchia dei tipi usa identificatori non dichiarati.")
+        parents[child] = parent
+    hierarchy = {child: parent for child, parent in parents.items() if parent is not None}
+    if cycle_node(hierarchy) is not None:
+        raise ValueError("La gerarchia dei tipi contiene un ciclo.")
     by_id = {spec.id: spec for spec in relations.values()}
     if len(by_id) != len(relations):
         raise ValueError("Gli identificatori delle relazioni devono essere univoci.")
@@ -41,6 +54,7 @@ def _validate_catalog(kinds: Mapping[str, str], relations: Mapping[str, Relation
                 set(type_ids(inverse.target_type)),
             ) != (spec.id, set(type_ids(spec.target_type)), set(type_ids(spec.source_type))):
                 raise ValueError("Le relazioni inverse devono essere reciproche e compatibili.")
+    return parents
 
 
 def analyze(
@@ -50,6 +64,7 @@ def analyze(
     relations: Mapping[str, RelationSpec] | None = None,
     properties: Mapping[str, PropertySpec] | None = None,
     actions: Mapping[str, ActionSpec] | None = None,
+    kind_parents: Mapping[str, str | None] | None = None,
 ) -> ProgramIR:
     if program.inclusions:
         raise CompileError(
@@ -62,18 +77,67 @@ def analyze(
             "E406", "Il progetto può dichiarare un solo punto iniziale.", program.entries[1].span
         )
     catalog = relations if relations is not None else {}
-    _validate_catalog(kinds, catalog)
+    type_parents = _validate_catalog(kinds, catalog, kind_parents)
+    kind_symbols = dict(kinds)
+    kind_spans = {}
+    next_author_id = 1
+    for kind_declaration in program.kinds:
+        name = canonical(kind_declaration.name)
+        if name in kind_symbols:
+            raise CompileError(
+                "E113", f"Tipo già dichiarato: {kind_declaration.name}.", kind_declaration.span
+            )
+        ident = f"autore.t{next_author_id}"
+        while ident in type_parents:
+            next_author_id += 1
+            ident = f"autore.t{next_author_id}"
+        next_author_id += 1
+        kind_symbols[name] = ident
+        kind_spans[ident] = kind_declaration.span
+    author_parents: dict[str, str] = {}
+    for kind_declaration in program.kinds:
+        ident = kind_symbols[canonical(kind_declaration.name)]
+        parent = kind_symbols.get(canonical(kind_declaration.parent))
+        if parent is None:
+            raise CompileError(
+                "E102",
+                f"Tipo sconosciuto: {kind_declaration.parent}.",
+                kind_declaration.span,
+            )
+        author_parents[ident] = parent
+    type_parents.update(author_parents)
+    cyclic_kind = cycle_node({child: parent for child, parent in type_parents.items() if parent})
+    if cyclic_kind is not None:
+        raise CompileError(
+            "E114", "La gerarchia dei tipi contiene un ciclo.", kind_spans[cyclic_kind]
+        )
+    labels_by_id = {ident: name for name, ident in kinds.items()}
+    labels_by_id.update(
+        {
+            kind_symbols[canonical(kind_declaration.name)]: kind_declaration.name
+            for kind_declaration in program.kinds
+        }
+    )
+    type_records = tuple(
+        TypeIR(ident, labels_by_id[ident], type_parents[ident]) for ident in type_parents
+    )
     symbols: dict[str, EntityIR] = {}
-    for declaration in program.declarations:
-        name = canonical(declaration.name)
+    for entity_declaration in program.declarations:
+        name = canonical(entity_declaration.name)
         if name in symbols:
             raise CompileError(
-                "E101", f"Nome già dichiarato: {declaration.name}.", declaration.span
+                "E101", f"Nome già dichiarato: {entity_declaration.name}.", entity_declaration.span
             )
-        kind = canonical(declaration.kind)
-        if kind not in kinds:
-            raise CompileError("E102", f"Tipo sconosciuto: {declaration.kind}.", declaration.span)
-        symbols[name] = EntityIR(f"e{len(symbols) + 1}", declaration.name, kinds[kind])
+        kind = canonical(entity_declaration.kind)
+        if kind not in kind_symbols:
+            raise CompileError(
+                "E102",
+                f"Tipo sconosciuto: {entity_declaration.kind}.",
+                entity_declaration.span,
+            )
+        symbols[name] = EntityIR(
+            f"e{len(symbols) + 1}", entity_declaration.name, kind_symbols[kind]
+        )
 
     metadata: dict[str, str] = {}
     for metadata_item in program.metadata:
@@ -129,8 +193,12 @@ def analyze(
             raise CompileError("E104", f"Relazione sconosciuta: {fact.predicate}.", fact.span)
         spec = catalog[predicate]
         source, target = reversed(operands) if spec.reverse_operands else operands
-        if source.type_id not in type_ids(spec.source_type) or target.type_id not in type_ids(
-            spec.target_type
+        if not any(
+            is_subtype(source.type_id, expected, type_parents)
+            for expected in type_ids(spec.source_type)
+        ) or not any(
+            is_subtype(target.type_id, expected, type_parents)
+            for expected in type_ids(spec.target_type)
         ):
             raise CompileError(
                 "E105", f"Tipi incompatibili per la relazione {predicate}.", fact.span
@@ -173,16 +241,16 @@ def analyze(
         defaults: dict[str, Value] = {"numero": 0, "testo": "", "logico": False}
         property_catalog[name] = PropertySpec(
             "autore." + name,
-            tuple(kinds.values()),
+            tuple(kind_symbols.values()),
             property_declaration.value_kind,
             defaults[property_declaration.value_kind],
         )
-    _validate_properties(property_catalog, kinds)
+    _validate_properties(property_catalog, set(type_parents))
     values = {
         (entity.id, spec.id): PropertyIR(entity.id, spec.id, spec.default)
         for entity in symbols.values()
         for spec in property_catalog.values()
-        if entity.type_id in spec.owner_types
+        if any(is_subtype(entity.type_id, owner, type_parents) for owner in spec.owner_types)
     }
     assigned: set[tuple[str, str]] = set()
     for assignment in program.assignments:
@@ -196,7 +264,9 @@ def analyze(
             raise CompileError(
                 "E110", f"Proprietà sconosciuta: {assignment.property_name}.", assignment.span
             )
-        if entity.type_id not in prop.owner_types or not prop.accepts(assignment.value):
+        if not any(
+            is_subtype(entity.type_id, owner, type_parents) for owner in prop.owner_types
+        ) or not prop.accepts(assignment.value):
             raise CompileError(
                 "E111",
                 f"Valore o destinatario incompatibile per {assignment.property_name}.",
@@ -217,11 +287,12 @@ def analyze(
         relations=tuple(edges.values()),
         property_specs=tuple(property_catalog.values()),
         properties=tuple(values.values()),
-        rules=lower_rules(program.rules, symbols, property_catalog, actions or {}),
+        rules=lower_rules(program.rules, symbols, property_catalog, actions or {}, type_parents),
         entry_id=entry_id,
         synonyms=tuple(synonyms.values()),
         title=metadata.get("titolo"),
         author=metadata.get("autore"),
+        types=type_records,
     )
 
 
@@ -233,15 +304,16 @@ def compile_source(
     relations: Mapping[str, RelationSpec] | None = None,
     properties: Mapping[str, PropertySpec] | None = None,
     actions: Mapping[str, ActionSpec] | None = None,
+    kind_parents: Mapping[str, str | None] | None = None,
 ) -> ProgramIR:
     catalog = relations or {}
-    _validate_catalog(kinds, catalog)
     return analyze(
         parse(text, source, verbs=relation_verbs(catalog)),
         kinds,
         relations=relations,
         properties=properties,
         actions=actions,
+        kind_parents=kind_parents,
     )
 
 
@@ -255,13 +327,15 @@ def relation_verbs(relations: Mapping[str, RelationSpec]) -> dict[str, str]:
     return result
 
 
-def _validate_properties(properties: Mapping[str, PropertySpec], kinds: Mapping[str, str]) -> None:
+def _validate_properties(
+    properties: Mapping[str, PropertySpec], type_identifiers: set[str]
+) -> None:
     if len({spec.id for spec in properties.values()}) != len(properties):
         raise ValueError("Identificatori di proprietà duplicati.")
     for name, spec in properties.items():
         if not name or canonical(name) != name or not spec.id.strip():
             raise ValueError("Proprietà con nome non canonico o ID vuoto.")
-        if any(owner not in kinds.values() for owner in spec.owner_types):
+        if any(owner not in type_identifiers for owner in spec.owner_types):
             raise ValueError("Proprietà con tipo destinatario sconosciuto.")
         if not spec.accepts(spec.default) or any(
             not spec.accepts(choice) for choice in spec.choices

@@ -6,6 +6,7 @@ from locus.compiler import compile_source
 from locus.player import Intent, parse_command
 from locus.runtime import Entity, World, instantiate
 from locus.stdlib import ROOM, THING, default_kinds, default_relations
+from locus.stdlib.authoring import compile_story
 from locus.stdlib.game import Session, start, step
 from locus.stdlib.render import render
 
@@ -150,6 +151,33 @@ def test_world_without_rooms_compiles_but_cannot_start_game() -> None:
     world = instantiate(compile_source("La chiave è una cosa.", default_kinds()))
     with pytest.raises(ValueError, match="almeno una stanza"):
         start(world)
+
+
+def test_author_room_container_key_and_thing_types_keep_their_capabilities() -> None:
+    source = (
+        "Un santuario è un tipo di stanza. "
+        "Un reliquiario è un tipo di contenitore. "
+        "Una chiave rituale è un tipo di chiave. "
+        "Una reliquia è un tipo di cosa. "
+        "La Cripta è un santuario. "
+        'Inizia nella "Cripta". '
+        'La Cripta ha descrizione "Una camera votiva.". '
+        "Il cofano è un reliquiario nella Cripta. "
+        'Il cofano ha stato "bloccato". '
+        "La chiave di bronzo è una chiave rituale nella Cripta. "
+        "La chiave di bronzo apre il cofano. "
+        "Il rubino è una reliquia nel cofano. "
+        'Regola "eco" per prendere "rubino" nella fase dopo: '
+        'imposta "descrizione" di "Cripta" a "Il cofano è vuoto."; Fine regola.'
+    )
+    current = start(instantiate(compile_story(source)))
+    assert "Una camera votiva." in render(step(current, parse_command("guarda")))
+    current = step(current, parse_command("prendi chiave")).session
+    current = step(current, parse_command("apri cofano con chiave")).session
+    taken = step(current, parse_command("prendi rubino"))
+    assert taken.event.kind == "taken"
+    assert "rubino" in render(taken)
+    assert "Il cofano è vuoto." in render(step(taken.session, parse_command("guarda")))
 
 
 def test_unplaced_objects_are_not_accessible() -> None:

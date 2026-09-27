@@ -18,8 +18,9 @@ frontend → parser giocatore → intento → dispatcher → runtime / regole
 La CLI è il punto di composizione: seleziona la stdlib e passa i cataloghi di tipi e relazioni
 al compilatore. Il compilatore non importa la stdlib né il runtime. Il runtime
 importa esclusivamente il contratto IR e i suoi modelli, mai il parser o l'AST.
-La stdlib fornisce `stanza`, `cosa`, containment e quattro direzioni cardinali,
-senza ereditarietà.
+La stdlib fornisce `stanza`, `cosa`, containment e quattro direzioni cardinali.
+Il core gestisce una gerarchia nominale generica; la stdlib dichiara contenitore
+e chiave come sottotipi di cosa.
 Un test compila tipi e relazioni non narrativi per verificare concretamente l'indipendenza del core.
 
 | Livello | Responsabilità e contratto | Stato |
@@ -28,7 +29,7 @@ Un test compila tipi e relazioni non narrativi per verificare concretamente l'in
 | lexer | token, originale, posizione; nessuna risoluzione di nomi | implementato |
 | parser autore | grammatica → AST immutabile | dichiarazioni, relazioni, regole, metadati e vocabolario |
 | semantica | nomi canonici, tipi noti, duplicati, ID risolti | implementato |
-| IR | programma immutabile senza articoli o sintassi | schema sperimentale 6 |
+| IR | programma immutabile senza articoli o sintassi | schema sperimentale 7 |
 | mondo | istanze indipendenti dai nodi AST | istanziazione minima |
 | regole | ordinamento, condizioni, esiti, tracing | solo progetto |
 | runtime | transizioni, eventi e servizi deterministici | transizioni IF nella stdlib |
@@ -38,7 +39,7 @@ Un test compila tipi e relazioni non narrativi per verificare concretamente l'in
 
 ## AST e modello semantico iniziali
 
-`Program` contiene dichiarazioni, relazioni, regole, metadati e vocabolario;
+`Program` contiene dichiarazioni, tipi, relazioni, regole, metadati e vocabolario;
 fra i nodi di base restano `Declaration(name, kind, span, location)` e
 `Relation(subject, predicate, target, span)`. I nomi mantengono grafia e parole; l'AST non
 contiene oggetti runtime. `Span(source, start, end, line, column)` usa offset
@@ -56,8 +57,9 @@ riferimenti in avanti. Il catalogo `RelationSpec` definisce tipi agli estremi,
 orientamento e inversi. Nessuna conoscenza di stanze o direzioni nel compilatore.
 Conflitti funzionali, auto-collegamenti e riferimenti non risolti sono diagnosticati.
 
-`ProgramIR` versione 6 contiene entità, relazioni, proprietà, regole, punto iniziale,
-titolo, autore e sinonimi risolti; i record di base sono `EntityIR(id, label, type_id)`
+`ProgramIR` versione 7 contiene gerarchia dei tipi, entità, relazioni, proprietà,
+regole, punto iniziale, titolo, autore e sinonimi risolti; i record di base sono
+`TypeIR(id, label, parent_id)`, `EntityIR(id, label, type_id)`
 e `RelationIR(source_id, predicate_id, target_id)`. Gli ID sono ordinali riproducibili per
 lo stesso sorgente, non persistenti fra modifiche. Nessuna serializzazione di
 oggetti Python o codice eseguibile. Il JSON è solo un dump.
@@ -66,10 +68,10 @@ Source map separata e loader validante sono rinviati: non congelare un ABI ora.
 ## Mondo e runtime previsti
 
 Il mondo generale sarà un grafo tipato: EntityId, TypeId, PropertyId, RelationId.
-Proprietà e relazioni avranno schemi, cardinalità e vincoli; containment sarà una
-relazione aciclica con destinazione unica. Stanze, porte, regioni e direzioni
-saranno vocabolario e vincoli della stdlib. Ereditarietà singola iniziale proposta;
-tratti e composizione da valutare prima di ereditarietà multipla.
+Proprietà e relazioni hanno schemi, cardinalità e vincoli; containment è una
+relazione aciclica con destinazione unica. Stanze, porte e direzioni sono
+vocabolario e vincoli della stdlib. L'ereditarietà singola è implementata;
+tratti e composizione vanno valutati prima dell'ereditarietà multipla.
 
 `World(entities, relations)` è uno snapshot immutabile iniziale. `stdlib.game`
 implementa `Session(world, room_id, inventory)` e transizioni pure da intenti a
@@ -188,3 +190,10 @@ frontend. Gli alias nominali vengono risolti verso ID in compilazione e usati
 dal dispatcher soltanto entro l'insieme raggiungibile. Questa struttura evita
 riscritture testuali e mantiene separati parser autore e parser giocatore. Vedere
 [ADR 0010](docs/adr/0010-metadati-e-vocabolario.md).
+
+## Gerarchia dei tipi
+
+Il parser produce dichiarazioni nominali separate dalle entità. L'analisi
+semantica raccoglie i nomi, risolve i genitori in un secondo passaggio e registra
+la gerarchia nell'IR 7. Schemi, regole, runtime e strumenti usano lo stesso
+confronto transitivo. Vedere [ADR 0011](docs/adr/0011-gerarchia-tipi.md).

@@ -56,6 +56,10 @@ test("progetto, compilazione, gioco, test e release statica", async ({
   const mapDownload = page.waitForEvent("download");
   await page.locator("#exportMap").click();
   expect((await mapDownload).suggestedFilename()).toBe("mappa-locus.svg");
+  await page
+    .getByRole("button", { name: "Indice del mondo", exact: true })
+    .click();
+  await expect(page.locator("#index")).toContainText("cosa › contenitore");
   await page.getByRole("button", { name: "Storia", exact: true }).click();
   await page.screenshot({ path: "test-results/studio.png", fullPage: true });
   const downloadPromise = page.waitForEvent("download");
@@ -113,7 +117,9 @@ test("diagnosi precisa, manuale e persistenza", async ({ page }) => {
   await expect(page.locator("#diagnostics")).toContainText("E102");
   await expect(page.locator("#diagnostics")).toContainText("storia.locus");
   await page.getByRole("button", { name: "Apri nel manuale ↗" }).click();
-  await expect(page.locator("#manualContent")).toContainText("M2");
+  await expect(page.locator("#manualContent")).toContainText(
+    "Tipi definiti dall'autore",
+  );
   await page.reload();
   await expect(page.locator("#diagnostics")).toContainText("E102", {
     timeout: 90000,

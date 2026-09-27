@@ -20,3 +20,5 @@ Le fonti e le licenze sono nel [registro](../architettura/fonti.md).
 - [0009 — direzioni cardinali](0009-direzioni-cardinali.md): nord/sud ed est/ovest dal sorgente alla mappa.
 
 - [0010 — metadati e vocabolario](0010-metadati-e-vocabolario.md): titolo e autore nel sorgente, sinonimi nominali dichiarativi.
+
+- [0011 — gerarchia dei tipi](0011-gerarchia-tipi.md): tipi nominali dell'autore, ereditarietà singola e IR 7.
