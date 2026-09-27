@@ -7,6 +7,7 @@ from typing import Literal
 Value = str | int | bool
 ValueKind = Literal["numero", "testo", "logico"]
 TypeSet = str | tuple[str, ...]
+MAX_COMMAND_WORDS = 4
 
 
 def type_ids(types: TypeSet) -> tuple[str, ...]:
@@ -27,6 +28,21 @@ def is_subtype(actual: str, expected: str, parents: Mapping[str, str | None]) ->
 
 def valid_value(kind: ValueKind, value: Value) -> bool:
     return type(value) is {"numero": int, "testo": str, "logico": bool}[kind]
+
+
+def valid_command_form(command: str) -> bool:
+    words = command.split()
+    return 1 <= len(words) <= MAX_COMMAND_WORDS and all(word.isalpha() for word in words)
+
+
+def command_forms_conflict(commands: tuple[str, ...]) -> bool:
+    """Vero se due forme sono uguali o una è prefisso token dell'altra."""
+    tokenized = [tuple(command.split()) for command in commands]
+    return any(
+        left[: len(right)] == right or right[: len(left)] == left
+        for index, left in enumerate(tokenized)
+        for right in tokenized[index + 1 :]
+    )
 
 
 @dataclass(frozen=True, slots=True)

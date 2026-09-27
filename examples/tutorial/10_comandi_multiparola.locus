@@ -1,0 +1,31 @@
+Titolo: "Il giuramento della Sala Verde".
+Autore: "Esempio LOCUS".
+
+Una persona è un tipo di cosa.
+Una reliquia è un tipo di cosa.
+
+La Sala Verde è una stanza.
+Inizia nella "Sala Verde".
+La Sala Verde ha descrizione "Il custode attende il gesto prescritto dal rituale.".
+
+Il custode è una persona nella Sala Verde.
+L'amuleto è una reliquia nella Sala Verde.
+
+Azione "tacere" senza oggetti con comando "fai silenzio"
+    e sinonimo "resta immobile".
+Azione "salutare" su una persona con comando "saluta solennemente"
+    e sinonimo "onora".
+Azione "mostrare" su una reliquia con una persona con comando "fai vedere"
+    e sinonimo "porta in vista" e separatore "a" e separatore "verso".
+
+Regola "silenzio rituale" per tacere nella fase invece:
+    dì "La sala sprofonda nel silenzio.";
+Fine regola.
+
+Regola "saluto rituale" per salutare "custode" nella fase invece:
+    dì "Il custode china il capo.";
+Fine regola.
+
+Regola "amuleto mostrato" per mostrare "amuleto" con "custode" nella fase invece:
+    dì "Il custode riconosce l'amuleto e apre il registro.";
+Fine regola.

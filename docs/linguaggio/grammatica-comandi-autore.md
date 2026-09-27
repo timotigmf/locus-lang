@@ -1,6 +1,6 @@
 # Sinonimi e separatori delle azioni
 
-Stato: implementato in LOCUS 0.5.0a1, IR 9.
+Stato: implementato in LOCUS 0.5.0a1, introdotto in IR 9 ed esteso in IR 10.
 
 Questa specifica estende le [azioni definite dall'autore](azioni-autore.md) con
 forme di comando equivalenti e separatori alternativi dichiarati esplicitamente.
@@ -20,8 +20,8 @@ Azione "salutare" su una persona con comando "saluta"
 ```
 
 `saluta custode`, `riverisci custode` e `inchinati custode` producono lo stesso
-ID di azione e attraversano le stesse regole. Le forme sono parole alfabetiche
-singole. La lista è esplicita perché l'imperativo italiano non si ricava in modo
+ID di azione e attraversano le stesse regole. Le forme contengono da una a quattro
+parole alfabetiche. La lista è esplicita perché l'imperativo italiano non si ricava in modo
 affidabile dall'infinito, soprattutto per verbi irregolari e pronominali.
 
 ## Separatori alternativi
@@ -57,14 +57,15 @@ con i comandi standard. Duplicati, forme non valide, collisioni e separatori
 duplicati o incoerenti producono `E311` sulla dichiarazione. La verifica avviene
 prima di compilare le regole.
 
-L'IR 9 sostituisce i campi singolari di `ActionIR` con `commands` e `separators`,
-entrambi tuple ordinate e non vuote quando richiesto dall'arità. Il runtime
+L'IR 9 ha sostituito i campi singolari di `ActionIR` con `commands` e `separators`;
+l'IR 10 ammette più token in ogni comando. Entrambi restano tuple ordinate e non
+vuote quando richiesto dall'arità. Il runtime
 convalida l'intero catalogo, inclusa l'unicità globale delle forme di comando.
 CLI, Studio e release web consumano direttamente questi record.
 
 ## Limiti
 
-Le forme e i separatori sono ancora singole parole. Non sono ancora disponibili
-pattern con parole fisse in più posizioni, pronomi e clitici, oggetti sottintesi
+I separatori restano singole parole. Non sono ancora disponibili pattern con
+parole fisse fra gli oggetti, pronomi e clitici, oggetti sottintesi
 o una domanda di chiarimento che continui nel turno successivo. L'ambiguità fra
 nomi di oggetto continua a produrre una richiesta esplicita con le alternative.

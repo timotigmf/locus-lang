@@ -23,6 +23,7 @@ al prompt della storia: lì si scrivono soltanto i comandi del giocatore.
 | [7. Tipi definiti dall'autore](07-tipi-autore.md) | `examples/tutorial/07_tipi.locus` | Creare categorie che ereditano capacità e proprietà |
 | [8. Azioni definite dall'autore](08-azioni-autore.md) | `examples/tutorial/08_azioni.locus` | Dichiarare comandi con zero, uno o due oggetti tipati |
 | [9. Sinonimi delle azioni](09-sinonimi-azioni.md) | `examples/tutorial/09_sinonimi_azioni.locus` | Accettare più forme e separatori italiani per la stessa azione |
+| [10. Comandi multiparola](10-comandi-multiparola.md) | `examples/tutorial/10_comandi_multiparola.locus` | Dichiarare locuzioni iniziali deterministiche fino a quattro parole |
 
 Prima prova la versione fornita. Poi modifica un solo elemento e riesegui la
 sequenza di comandi. In caso di errore conserva il messaggio, il file sorgente e

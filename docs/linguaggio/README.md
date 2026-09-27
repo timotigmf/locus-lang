@@ -15,3 +15,5 @@ Le [azioni definite dall'autore](azioni-autore.md) collegano comandi italiani,
 argomenti tipati e regole senza interpretazione testuale nel runtime.
 La [grammatica dei comandi dell'autore](grammatica-comandi-autore.md) aggiunge
 sinonimi espliciti, separatori alternativi e preposizioni articolate nell'IR 9.
+Le [forme multiparola](comandi-multiparola.md) aggiungono locuzioni iniziali
+deterministiche e diagnostica delle collisioni di prefisso nell'IR 10.

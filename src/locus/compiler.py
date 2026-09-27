@@ -17,7 +17,16 @@ from locus.ir import (
 )
 from locus.parser import parse
 from locus.rule_compiler import lower_rules
-from locus.schema import ActionSpec, PropertySpec, RelationSpec, Value, is_subtype, type_ids
+from locus.schema import (
+    ActionSpec,
+    PropertySpec,
+    RelationSpec,
+    Value,
+    command_forms_conflict,
+    is_subtype,
+    type_ids,
+    valid_command_form,
+)
 
 
 def _validate_catalog(
@@ -133,10 +142,10 @@ def analyze(
     )
     command_names = {canonical(command) for command in reserved_commands}
     if any(
-        command != canonical(command) or len(command.split()) != 1 or not command.isalpha()
+        command != canonical(command) or not valid_command_form(command)
         for command in reserved_commands
-    ):
-        raise ValueError("I comandi riservati devono essere singole parole canoniche.")
+    ) or command_forms_conflict(tuple(command_names)):
+        raise ValueError("I comandi riservati devono essere canonici e privi di conflitti.")
     action_catalog = dict(actions or {})
     used_action_ids = {spec.id for spec in action_catalog.values()}
     action_records: list[ActionIR] = []
@@ -157,15 +166,12 @@ def analyze(
         commands = tuple(canonical(command) for command in declaration.commands)
         if (
             not commands
-            or len(set(commands)) != len(commands)
-            or any(
-                len(command.split()) != 1 or not command.isalpha() or command in command_names
-                for command in commands
-            )
+            or any(not valid_command_form(command) for command in commands)
+            or command_forms_conflict(tuple(command_names) + commands)
         ):
             raise CompileError(
                 "E311",
-                "Comando o sinonimo non valido, duplicato o già usato.",
+                "Comando o sinonimo non valido, duplicato o in conflitto di prefisso.",
                 declaration.span,
             )
         command_names.update(commands)

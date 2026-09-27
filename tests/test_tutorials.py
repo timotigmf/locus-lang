@@ -130,6 +130,22 @@ def test_action_synonym_tutorial_accepts_all_declared_forms() -> None:
     assert "storia" in command("racconta custode sull'amuleto")
 
 
+def test_multiword_command_tutorial_consumes_fixed_prefixes() -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "10_comandi_multiparola.locus")))
+
+    def command(text: str) -> str:
+        result = step(current, parse_command(text, current.world.actions))
+        return render(result)
+
+    assert "silenzio" in command("fai silenzio")
+    assert "silenzio" in command("resta immobile")
+    assert "china il capo" in command("saluta solennemente custode")
+    assert "china il capo" in command("onora custode")
+    assert "riconosce" in command("fai vedere amuleto al custode")
+    assert "riconosce" in command("porta in vista amuleto verso il custode")
+    assert parse_command("fai", current.world.actions).verb == "unknown"
+
+
 def test_final_world_matches_story() -> None:
     current = start(instantiate(compile_story_file(TUTORIAL / "04_faro.locus")))
     for command in (TUTORIAL / "04_faro.comandi").read_text(encoding="utf-8").splitlines():

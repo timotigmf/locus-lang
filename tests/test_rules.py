@@ -27,7 +27,8 @@ Il sigillo è una cosa nella Sala.
 Azione "attendere" senza oggetti con comando "attendi" e sinonimo "aspetta".
 Azione "salutare" su una persona con comando "saluta" e sinonimo "riverisci".
 Azione "mostrare" su una cosa con una persona con comando "mostra"
-    e sinonimo "esibisci" e separatore "a" e separatore "verso".
+    e sinonimo "esibisci" e sinonimo "fai vedere"
+    e separatore "a" e separatore "verso".
 Regola "attesa" per attendere nella fase invece: dì "Il tempo passa."; Fine regola.
 Regola "saluto" per salutare "custode" nella fase invece:
     dì "Il custode ricambia il saluto.";
@@ -169,6 +170,7 @@ def test_author_actions_with_zero_one_and_two_typed_objects() -> None:
     assert run("riverisci il custode") == "Il custode ricambia il saluto."
     assert run("mostra il sigillo al custode") == "Il custode riconosce il sigillo."
     assert run("esibisci il sigillo verso il custode") == "Il custode riconosce il sigillo."
+    assert run("fai vedere il sigillo al custode") == "Il custode riconosce il sigillo."
     assert run("saluta sigillo") == "Questo comando non si applica a quell'elemento."
     assert run("mostra custode a sigillo") == "Questo comando non si applica a quell'elemento."
     assert parse_command("mostra sigillo", current.world.actions).verb == "unknown"
@@ -179,6 +181,18 @@ def test_author_action_without_rules_has_an_explicit_default() -> None:
     result = step(current, parse_command("medita", current.world.actions))
     assert render(result) == "Non accade nulla."
     assert result.event.kind == "custom"
+
+
+def test_multiword_zero_object_action_consumes_the_complete_form() -> None:
+    current = session(
+        'Azione "tacere" senza oggetti con comando "fai silenzio" '
+        'e sinonimo "resta immobile". '
+        'Regola "silenzio" per tacere nella fase invece: dì "Tutto tace."; Fine regola.'
+    )
+    for command in ("fai silenzio", "resta immobile"):
+        assert render(step(current, parse_command(command, current.world.actions))) == "Tutto tace."
+    assert parse_command("fai", current.world.actions).verb == "unknown"
+    assert parse_command("fai silenzio ora", current.world.actions).verb == "unknown"
 
 
 def test_author_action_expands_italian_articulated_separators() -> None:
@@ -246,13 +260,22 @@ def test_static_errors(source: str, code: str) -> None:
             'Azione "inchinarsi" senza oggetti con comando "saluta".',
             "E311",
         ),
-        ('Azione "salutare" senza oggetti con comando "di buon giorno".', "E311"),
+        ('Azione "salutare" senza oggetti con comando "di-buon-giorno".', "E311"),
         (
             'Azione "salutare" senza oggetti con comando "saluta" e sinonimo "x".',
             "E311",
         ),
         (
             'Azione "salutare" senza oggetti con comando "saluta" e sinonimo "SALUTA".',
+            "E311",
+        ),
+        (
+            'Azione "tacere" senza oggetti con comando "fai" e sinonimo "fai silenzio".',
+            "E311",
+        ),
+        ('Azione "osservare" senza oggetti con comando "guarda bene".', "E311"),
+        (
+            'Azione "tacere" senza oggetti con comando "questa forma contiene cinque parole".',
             "E311",
         ),
         (

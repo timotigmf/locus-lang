@@ -1,6 +1,6 @@
 # Azioni e comandi definiti dall'autore
 
-Stato: implementato in LOCUS 0.5.0a1, introdotto in IR 8 ed esteso in IR 9.
+Stato: implementato in LOCUS 0.5.0a1, introdotto in IR 8 ed esteso fino a IR 10.
 
 Questa specifica permette di dichiarare un'azione, assegnarle un comando italiano
 e indicare i tipi dei suoi oggetti. Le regole forniscono comportamento e testo.
@@ -31,8 +31,9 @@ azione = "Azione" stringa
 ```
 
 Il nome fra virgolette è l'infinito usato nelle regole. `comando` è la forma
-digitata dal giocatore. In IR 9 ogni comando e separatore è una singola parola
-alfabetica normalizzata. Un'azione con due oggetti richiede almeno un separatore.
+digitata dal giocatore. In IR 10 un comando contiene da una a quattro parole
+alfabetiche normalizzate; ogni separatore resta una parola. Un'azione con due
+oggetti richiede almeno un separatore.
 Il nome dell'azione contiene parole alfabetiche e non usa `con` o `nella`, che
 delimitano rispettivamente il secondo oggetto e la fase nelle regole.
 Con il separatore `a`, il parser accetta anche `al`, `alla`, `allo`, `ai`,
@@ -79,7 +80,7 @@ un rifiuto esplicito, senza eseguire regole né modificare lo stato.
 
 ## IR e separazione dei parser
 
-L'IR 9 usa `ActionIR(id, label, commands, target_type_id,
+L'IR 10 usa `ActionIR(id, label, commands, target_type_id,
 indirect_type_id, separators)`. Il runtime convalida ID, nomi, comandi, separatori
 e riferimenti ai tipi. Il parser autore produce dichiarazioni; il parser giocatore
 riceve soltanto i record compilati. CLI, Studio e release web usano lo stesso

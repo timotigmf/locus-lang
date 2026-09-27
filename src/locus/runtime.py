@@ -6,7 +6,7 @@ from locus.diagnostics import canonical
 from locus.graph import cycle_node
 from locus.ir import IR_VERSION, ActionIR, ProgramIR, PropertyIR, RelationIR, SynonymIR, TypeIR
 from locus.rule_model import RuleIR
-from locus.schema import PropertySpec, is_subtype
+from locus.schema import PropertySpec, command_forms_conflict, is_subtype, valid_command_form
 
 
 @dataclass(frozen=True, slots=True)
@@ -80,14 +80,13 @@ def instantiate(program: ProgramIR) -> World:
     if (
         len(action_ids) != len(program.actions)
         or len(set(action_labels)) != len(action_labels)
-        or len(set(commands)) != len(commands)
+        or command_forms_conflict(tuple(commands))
         or any(
             not action.id.strip()
             or not canonical(action.label)
             or not action.commands
-            or len(set(action.commands)) != len(action.commands)
             or any(
-                command != canonical(command) or len(command.split()) != 1 or not command.isalpha()
+                command != canonical(command) or not valid_command_form(command)
                 for command in action.commands
             )
             or (action.target_type_id is None and action.indirect_type_id is not None)

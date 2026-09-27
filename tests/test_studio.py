@@ -141,16 +141,17 @@ def test_studio_executes_and_exposes_author_actions() -> None:
     result = studio.compile(
         project(
             "La Sala è una stanza. Il gong è una cosa nella Sala. "
-            'Azione "suonare" su una cosa con comando "suona" e sinonimo "percuoti". '
+            'Azione "suonare" su una cosa con comando "suona" '
+            'e sinonimo "fai risuonare". '
             'Regola "gong" per suonare "gong" nella fase invece: '
             'dì "Il gong risuona."; Fine regola.'
         )
     )
     assert result["ok"] and result["actions"] == 1
-    assert result["ir"]["actions"][0]["commands"] == ("suona", "percuoti")
+    assert result["ir"]["actions"][0]["commands"] == ("suona", "fai risuonare")
     studio.restart()
     assert studio.command("suona gong")["text"] == "Il gong risuona."
-    assert studio.command("percuoti gong")["text"] == "Il gong risuona."
+    assert studio.command("fai risuonare gong")["text"] == "Il gong risuona."
 
 
 def test_dispatch_errors_and_size_limit() -> None:

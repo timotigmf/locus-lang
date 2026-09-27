@@ -57,7 +57,7 @@ riferimenti in avanti. Il catalogo `RelationSpec` definisce tipi agli estremi,
 orientamento e inversi. Nessuna conoscenza di stanze o direzioni nel compilatore.
 Conflitti funzionali, auto-collegamenti e riferimenti non risolti sono diagnosticati.
 
-`ProgramIR` versione 9 contiene gerarchia dei tipi, azioni dell'autore, entità, relazioni, proprietà,
+`ProgramIR` versione 10 contiene gerarchia dei tipi, azioni dell'autore, entità, relazioni, proprietà,
 regole, punto iniziale, titolo, autore e sinonimi risolti; i record di base sono
 `TypeIR(id, label, parent_id)`, `ActionIR(id, label, commands, ..., separators)`,
 `EntityIR(id, label, type_id)`
@@ -162,7 +162,7 @@ parser. Si consulti l'[ADR 0005](docs/adr/0005-proprieta-e-mondo.md) per le alte
 contiene record immutabili generici. `rules.execute` esegue rulebook attraverso
 un protocollo Host indipendente da IF. `stdlib.game` adatta sessioni e azioni;
 `Transition` espone output, trace e risultato. Questi record furono introdotti
-con l'IR 4 e sono conservati nell'IR 9.
+con l'IR 4 e sono conservati nell'IR 10.
 Vedere [ADR 0006](docs/adr/0006-regole.md).
 
 ## Implementazione M4
@@ -203,8 +203,10 @@ confronto transitivo. Vedere [ADR 0011](docs/adr/0011-gerarchia-tipi.md).
 ## Azioni definite dall'autore
 
 Le dichiarazioni di azione vengono unite al catalogo `ActionSpec` dell'host dopo
-la risoluzione dei tipi. L'IR 9 conserva forme di comando, tipi degli argomenti e
-separatori. Il parser giocatore riceve questo catalogo compilato e produce ID di
-azione; il dispatcher usa le stesse fasi transazionali delle azioni standard.
+la risoluzione dei tipi. L'IR 10 conserva forme di comando anche multiparola,
+tipi degli argomenti e separatori. Il parser giocatore riceve questo catalogo
+compilato e produce ID di azione; il dispatcher usa le stesse fasi transazionali
+delle azioni standard.
 Vedere [ADR 0012](docs/adr/0012-azioni-autore.md) e
-[ADR 0013](docs/adr/0013-forme-comando.md).
+[ADR 0013](docs/adr/0013-forme-comando.md), oltre ad
+[ADR 0014](docs/adr/0014-comandi-multiparola.md).

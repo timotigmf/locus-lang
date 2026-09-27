@@ -198,6 +198,8 @@ def test_runtime_rejects_invalid_action_forms_and_separators() -> None:
     invalid_actions = (
         ActionIR("x", "vuota", ()),
         ActionIR("x", "duplicata", ("prova", "prova")),
+        ActionIR("x", "prefisso", ("fai", "fai silenzio")),
+        ActionIR("x", "troppo lunga", ("una forma con cinque parole",)),
         ActionIR("x", "senza secondo oggetto", ("prova",), separators=("a",)),
         ActionIR("x", "senza separatore", ("prova",), "a", "a"),
         ActionIR("x", "separatore duplicato", ("prova",), "a", "a", ("a", "a")),
@@ -205,6 +207,20 @@ def test_runtime_rejects_invalid_action_forms_and_separators() -> None:
     for action in invalid_actions:
         with pytest.raises(ValueError, match="azioni"):
             instantiate(ProgramIR(IR_VERSION, (entity,), types=types, actions=(action,)))
+
+
+def test_runtime_rejects_prefix_conflicts_between_actions() -> None:
+    with pytest.raises(ValueError, match="azioni"):
+        instantiate(
+            ProgramIR(
+                IR_VERSION,
+                (),
+                actions=(
+                    ActionIR("x", "prima", ("fai silenzio",)),
+                    ActionIR("y", "seconda", ("fai silenzio ora",)),
+                ),
+            )
+        )
 
 
 def test_story_metadata_and_vocabulary_are_compiled() -> None:

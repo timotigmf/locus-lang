@@ -112,8 +112,24 @@ def standard_commands() -> frozenset[str]:
     return frozenset((*_SIMPLE_COMMANDS, *_ACTION_COMMANDS))
 
 
-def _author_intent(action: ActionIR, tokens: list[tuple[str, bool]]) -> Intent:
-    rest = tokens[1:]
+def _author_match(
+    actions: Sequence[ActionIR], tokens: list[tuple[str, bool]]
+) -> tuple[ActionIR, int] | None:
+    matches: list[tuple[ActionIR, int]] = []
+    for action in actions:
+        for command in action.commands:
+            words = command.split()
+            prefix = tokens[: len(words)]
+            if len(prefix) == len(words) and all(
+                not quoted and token == word
+                for (token, quoted), word in zip(prefix, words, strict=True)
+            ):
+                matches.append((action, len(words)))
+    return matches[0] if len(matches) == 1 else None
+
+
+def _author_intent(action: ActionIR, tokens: list[tuple[str, bool]], command_length: int) -> Intent:
+    rest = tokens[command_length:]
     if action.target_type_id is None:
         return Intent(action.id) if not rest else Intent("unknown")
     if not rest:
@@ -150,16 +166,20 @@ def parse_command(text: str, actions: Sequence[ActionIR] = ()) -> Intent:
     verb, quoted = tokens[0]
     if quoted:
         return Intent("unknown")
-    authored = next((action for action in actions if verb in action.commands), None)
+    authored = _author_match(actions, tokens)
     if len(tokens) == 1:
         standard = _SIMPLE_COMMANDS.get(verb, _ACTION_COMMANDS.get(verb))
         return (
             Intent(standard)
             if standard is not None
-            else (_author_intent(authored, tokens) if authored is not None else Intent("unknown"))
+            else (
+                _author_intent(authored[0], tokens, authored[1])
+                if authored is not None
+                else Intent("unknown")
+            )
         )
-    if authored is not None and verb not in _ACTION_COMMANDS:
-        return _author_intent(authored, tokens)
+    if authored is not None and verb not in _ACTION_COMMANDS and verb not in _SIMPLE_COMMANDS:
+        return _author_intent(authored[0], tokens, authored[1])
     if verb not in _ACTION_COMMANDS:
         return Intent("unknown")
     action = _ACTION_COMMANDS[verb]

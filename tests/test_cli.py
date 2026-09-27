@@ -121,14 +121,14 @@ def test_cli_executes_an_author_command(tmp_path: Path) -> None:
     source = tmp_path / "azione.locus"
     source.write_text(
         "La Sala è una stanza. "
-        'Azione "meditare" senza oggetti con comando "medita". '
+        'Azione "meditare" senza oggetti con comando "medita" e sinonimo "fai silenzio". '
         'Regola "meditazione" per meditare nella fase invece: '
         'dì "Respiri lentamente."; Fine regola.',
         encoding="utf-8",
     )
     result = subprocess.run(
         [sys.executable, "-m", "locus", "gioca", str(source)],
-        input="medita\nesci\n",
+        input="fai silenzio\nesci\n",
         cwd=tmp_path,
         capture_output=True,
         text=True,

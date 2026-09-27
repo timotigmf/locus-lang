@@ -219,7 +219,7 @@ test("azione tipata dell'autore nello Studio", async ({ page }) => {
   const source = `Titolo: "Il gong".
 La Sala è una stanza.
 Il gong è una cosa nella Sala.
-Azione "suonare" su una cosa con comando "suona" e sinonimo "percuoti".
+Azione "suonare" su una cosa con comando "suona" e sinonimo "fai risuonare".
 Regola "rintocco" per suonare "gong" nella fase invece:
     dì "Il gong risuona nella sala.";
 Fine regola.`;
@@ -232,7 +232,7 @@ Fine regola.`;
   await expect(page.locator("#transcript")).toContainText("Sala", {
     timeout: 90000,
   });
-  await page.locator("#command").fill("percuoti gong");
+  await page.locator("#command").fill("fai risuonare gong");
   await page.locator("#send").click();
   await expect(page.locator("#transcript")).toContainText(
     "Il gong risuona nella sala.",
@@ -244,5 +244,5 @@ Fine regola.`;
     "Azioni definite dall'autore",
   );
   await expect(page.locator("#index")).toContainText("suona");
-  await expect(page.locator("#index")).toContainText("percuoti");
+  await expect(page.locator("#index")).toContainText("fai risuonare");
 });

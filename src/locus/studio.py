@@ -69,8 +69,8 @@ _ERROR_HELP = {
     ),
     "E311": (
         "Forma di comando non valida",
-        "Controlla comandi, sinonimi e separatori: devono essere parole uniche e non duplicate.",
-        "docs/linguaggio/grammatica-comandi-autore.md",
+        "Usa da una a quattro parole e rimuovi duplicati o forme con lo stesso prefisso.",
+        "docs/linguaggio/comandi-multiparola.md",
     ),
     "E201": (
         "Mondo incoerente",
