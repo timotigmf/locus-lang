@@ -9,7 +9,7 @@
 | --- | --- |
 | controlla | valida entità e relazioni; stampa numero di entità |
 | ast | JSON AST senza validazione semantica |
-| ir / compila | JSON IR versione 10, dopo validazione |
+| ir / compila | JSON IR versione 11, dopo validazione |
 | gioca | compila e avvia la sessione IF dalla prima stanza dichiarata |
 
 `gioca`: guarda, esamina, prendi, lascia, metti, apri, chiudi, blocca,
@@ -65,7 +65,9 @@ del sorgente vengono compilate in `ProgramIR.actions` e poi in `World.actions`.
 dal parser standard. ID, tipi, forme di comando e separatori di ogni `ActionIR`
 sono convalidati dal runtime. `ActionIR.commands` contiene la forma primaria e i
 sinonimi, ciascuno da uno a quattro token; forme uguali o in rapporto di prefisso
-sono rifiutate. `ActionIR.separators` contiene le forme ammesse fra i due oggetti.
+sono rifiutate. `ActionIR.separators` contiene forme da uno a quattro token fra
+i due oggetti; l'ultima preposizione ammette le varianti articolate e duplicati o
+prefissi, anche dopo l'articolazione, sono rifiutati.
 `E310` segnala nomi di azione duplicati; `E311` forme non valide, duplicate o in
 conflitto.
 

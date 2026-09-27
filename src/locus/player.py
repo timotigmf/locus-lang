@@ -5,6 +5,7 @@ from dataclasses import dataclass
 
 from locus.diagnostics import canonical
 from locus.ir import ActionIR
+from locus.schema import separator_variants
 
 Verb = str
 
@@ -137,25 +138,23 @@ def _author_intent(action: ActionIR, tokens: list[tuple[str, bool]], command_len
     if action.indirect_type_id is None:
         direct = _noun(rest)
         return Intent(action.id, direct) if direct else Intent("unknown")
-    separator_words: set[str] = set()
-    articulated = {
-        "a": {"a", "al", "alla", "allo", "ai", "agli", "alle", "all'"},
-        "in": {"in", "nel", "nella", "nello", "nei", "negli", "nelle", "nell'"},
-        "di": {"di", "del", "della", "dello", "dei", "degli", "delle", "dell'"},
-        "da": {"da", "dal", "dalla", "dallo", "dai", "dagli", "dalle", "dall'"},
-        "su": {"su", "sul", "sulla", "sullo", "sui", "sugli", "sulle", "sull'"},
-        "con": {"con", "col", "coi"},
+    variants = {
+        variant for separator in action.separators for variant in separator_variants(separator)
     }
-    for separator in action.separators:
-        separator_words.update(articulated.get(separator, {separator}))
-    splits = [
-        index for index, (word, quoted) in enumerate(rest) if not quoted and word in separator_words
-    ]
+    splits: list[tuple[int, int]] = []
+    for index in range(len(rest)):
+        for variant in variants:
+            candidate = rest[index : index + len(variant)]
+            if len(candidate) == len(variant) and all(
+                not quoted and word == expected
+                for (word, quoted), expected in zip(candidate, variant, strict=True)
+            ):
+                splits.append((index, len(variant)))
     if len(splits) != 1:
         return Intent("unknown")
-    index = splits[0]
+    index, separator_length = splits[0]
     direct = _noun(rest[:index])
-    indirect = _noun(rest[index + 1 :])
+    indirect = _noun(rest[index + separator_length :])
     return Intent(action.id, direct, indirect) if direct and indirect else Intent("unknown")
 
 

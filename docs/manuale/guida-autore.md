@@ -52,6 +52,7 @@ dall'alto verso il basso prima di studiare i moduli.
 8. [Azioni e comandi definiti dall'autore](../tutorial/08-azioni-autore.md)
 9. [Sinonimi e separatori delle azioni](../tutorial/09-sinonimi-azioni.md)
 10. [Comandi composti da più parole](../tutorial/10-comandi-multiparola.md)
+11. [Separatori composti da più parole](../tutorial/11-separatori-multiparola.md)
 
 ## Indice per obiettivo
 
@@ -62,7 +63,7 @@ dall'alto verso il basso prima di studiare i moduli.
 | Punti | Proprietà numeriche e regole di incremento | Lezione 6 |
 | Oggetti complessi | Contenimento annidato, proprietà tipate, stati | Lezione 2 e specifica M2 |
 | Categorie proprie | Tipi nominali con ereditarietà singola | Lezione 7 |
-| Verbi e comandi propri | Azioni tipate con sinonimi e forme multiparola | Lezioni 8–10 |
+| Verbi e comandi propri | Azioni tipate con sinonimi e locuzioni multiparola | Lezioni 8–11 |
 | Sinonimi | Alias nominali e più forme per le azioni | Lezioni 5, 6 e 9 |
 | Passaggi segreti dinamici | Non ancora: le relazioni non cambiano durante il gioco | Lezione 6 |
 | Dialoghi ramificati | Non ancora: mancano persone, argomenti e azione parlare | Roadmap |
@@ -99,5 +100,6 @@ silenziose: se due oggetti corrispondono, chiede quale intendi.
 - [Azioni definite dall'autore](../linguaggio/azioni-autore.md)
 - [Sinonimi e separatori delle azioni](../linguaggio/grammatica-comandi-autore.md)
 - [Forme di comando multiparola](../linguaggio/comandi-multiparola.md)
+- [Separatori multiparola](../linguaggio/separatori-multiparola.md)
 - [Ricettario](../cookbook/README.md)
 - [Da Inform a LOCUS](../tutorial/da-inform-a-locus.md)

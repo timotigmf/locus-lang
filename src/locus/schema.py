@@ -8,6 +8,16 @@ Value = str | int | bool
 ValueKind = Literal["numero", "testo", "logico"]
 TypeSet = str | tuple[str, ...]
 MAX_COMMAND_WORDS = 4
+MAX_SEPARATOR_WORDS = 4
+
+_ARTICULATED_PREPOSITIONS: dict[str, tuple[str, ...]] = {
+    "a": ("a", "al", "alla", "allo", "ai", "agli", "alle", "all'"),
+    "in": ("in", "nel", "nella", "nello", "nei", "negli", "nelle", "nell'"),
+    "di": ("di", "del", "della", "dello", "dei", "degli", "delle", "dell'"),
+    "da": ("da", "dal", "dalla", "dallo", "dai", "dagli", "dalle", "dall'"),
+    "su": ("su", "sul", "sulla", "sullo", "sui", "sugli", "sulle", "sull'"),
+    "con": ("con", "col", "coi"),
+}
 
 
 def type_ids(types: TypeSet) -> tuple[str, ...]:
@@ -42,6 +52,29 @@ def command_forms_conflict(commands: tuple[str, ...]) -> bool:
         left[: len(right)] == right or right[: len(left)] == left
         for index, left in enumerate(tokenized)
         for right in tokenized[index + 1 :]
+    )
+
+
+def valid_separator_form(separator: str) -> bool:
+    words = separator.split()
+    return 1 <= len(words) <= MAX_SEPARATOR_WORDS and all(word.isalpha() for word in words)
+
+
+def separator_variants(separator: str) -> tuple[tuple[str, ...], ...]:
+    """Espande l'ultima preposizione nelle forme articolate italiane."""
+    words = separator.split()
+    if not words:
+        return ()
+    endings = _ARTICULATED_PREPOSITIONS.get(words[-1], (words[-1],))
+    return tuple((*words[:-1], ending) for ending in endings)
+
+
+def separator_forms_conflict(separators: tuple[str, ...]) -> bool:
+    variants = tuple(variant for item in separators for variant in separator_variants(item))
+    return any(
+        left[: len(right)] == right or right[: len(left)] == left
+        for index, left in enumerate(variants)
+        for right in variants[index + 1 :]
     )
 
 

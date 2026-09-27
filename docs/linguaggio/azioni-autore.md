@@ -1,6 +1,6 @@
 # Azioni e comandi definiti dall'autore
 
-Stato: implementato in LOCUS 0.5.0a1, introdotto in IR 8 ed esteso fino a IR 10.
+Stato: implementato in LOCUS 0.5.0a1, introdotto in IR 8 ed esteso fino a IR 11.
 
 Questa specifica permette di dichiarare un'azione, assegnarle un comando italiano
 e indicare i tipi dei suoi oggetti. Le regole forniscono comportamento e testo.
@@ -31,9 +31,9 @@ azione = "Azione" stringa
 ```
 
 Il nome fra virgolette è l'infinito usato nelle regole. `comando` è la forma
-digitata dal giocatore. In IR 10 un comando contiene da una a quattro parole
-alfabetiche normalizzate; ogni separatore resta una parola. Un'azione con due
-oggetti richiede almeno un separatore.
+digitata dal giocatore. In IR 11 comandi e separatori contengono da una a quattro
+parole alfabetiche normalizzate. Un'azione con due oggetti richiede almeno un
+separatore.
 Il nome dell'azione contiene parole alfabetiche e non usa `con` o `nella`, che
 delimitano rispettivamente il secondo oggetto e la fase nelle regole.
 Con il separatore `a`, il parser accetta anche `al`, `alla`, `allo`, `ai`,
@@ -80,7 +80,7 @@ un rifiuto esplicito, senza eseguire regole né modificare lo stato.
 
 ## IR e separazione dei parser
 
-L'IR 10 usa `ActionIR(id, label, commands, target_type_id,
+L'IR 11 usa `ActionIR(id, label, commands, target_type_id,
 indirect_type_id, separators)`. Il runtime convalida ID, nomi, comandi, separatori
 e riferimenti ai tipi. Il parser autore produce dichiarazioni; il parser giocatore
 riceve soltanto i record compilati. CLI, Studio e release web usano lo stesso
@@ -89,7 +89,7 @@ catalogo e lo stesso dispatcher.
 ## Limiti attuali
 
 La [grammatica dei comandi](grammatica-comandi-autore.md) permette più sinonimi e
-separatori espliciti. Mancano ancora pattern multiparola, clitici e argomenti
+separatori espliciti, anche multiparola. Mancano ancora pattern liberi, clitici e argomenti
 impliciti come “l'oggetto corrente” nel corpo di una regola generica. Le regole
 possono selezionare un'entità precisa oppure tutte le entità dell'azione, ma gli
 effetti continuano a nominare esplicitamente i propri destinatari.

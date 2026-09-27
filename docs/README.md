@@ -23,6 +23,7 @@
 - [Azioni definite dall'autore](linguaggio/azioni-autore.md): comandi italiani e argomenti tipati.
 - [Sinonimi e separatori delle azioni](linguaggio/grammatica-comandi-autore.md): più forme italiane per lo stesso verbo.
 - [Comandi multiparola](linguaggio/comandi-multiparola.md): locuzioni iniziali e collisioni di prefisso.
+- [Separatori multiparola](linguaggio/separatori-multiparola.md): locuzioni fra due oggetti e forme articolate.
 
 - [Tutorial: il faro](tutorial/README.md), incluse le lezioni su tipi e azioni; [da Inform a LOCUS](tutorial/da-inform-a-locus.md).
 - [Registro dei sei manuali forniti](architettura/materiali-didattici.md).

@@ -146,6 +146,22 @@ def test_multiword_command_tutorial_consumes_fixed_prefixes() -> None:
     assert parse_command("fai", current.world.actions).verb == "unknown"
 
 
+def test_multiword_separator_tutorial_accepts_articulated_endings() -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "11_separatori_multiparola.locus")))
+
+    def command(text: str) -> str:
+        nonlocal current
+        result = step(current, parse_command(text, current.world.actions))
+        current = result.session
+        return render(result)
+
+    assert "registra lo scambio" in command("scambia moneta in cambio della chiave di vetro")
+    assert "registra lo scambio" in command("dai in pegno moneta insieme alla chiave di vetro")
+    assert property_of(current, "mercante", "fiducia") == 2
+    assert "sigillo" in command("interroga mercante a proposito dell'amuleto")
+    assert parse_command("scambia moneta in chiave", current.world.actions).verb == "unknown"
+
+
 def test_final_world_matches_story() -> None:
     current = start(instantiate(compile_story_file(TUTORIAL / "04_faro.locus")))
     for command in (TUTORIAL / "04_faro.comandi").read_text(encoding="utf-8").splitlines():

@@ -24,8 +24,10 @@ from locus.schema import (
     Value,
     command_forms_conflict,
     is_subtype,
+    separator_forms_conflict,
     type_ids,
     valid_command_form,
+    valid_separator_form,
 )
 
 
@@ -198,16 +200,16 @@ def analyze(
         invalid_separators = (
             (indirect_type is None and bool(separators))
             or (indirect_type is not None and not separators)
-            or len(set(separators)) != len(separators)
+            or separator_forms_conflict(separators)
             or any(
-                len(separator.split()) != 1 or not separator.isalpha() or separator in commands
+                not valid_separator_form(separator) or separator in commands
                 for separator in separators
             )
         )
         if invalid_separators:
             raise CompileError(
                 "E311",
-                "I separatori devono essere parole distinte dai comandi e non duplicate.",
+                "I separatori non sono validi, sono duplicati o hanno prefissi ambigui.",
                 declaration.span,
             )
         ident = f"autore.a{next_action_id}"

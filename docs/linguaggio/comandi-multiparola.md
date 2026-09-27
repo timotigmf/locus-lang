@@ -1,6 +1,6 @@
 # Forme di comando multiparola
 
-Stato: implementato in LOCUS 0.5.0a1, IR 10.
+Stato: implementato in LOCUS 0.5.0a1, introdotto in IR 10 e conservato in IR 11.
 
 Una forma dichiarata con `comando` o `sinonimo` può contenere da una a quattro
 parole alfabetiche:
@@ -56,6 +56,7 @@ controlli nel browser. Trattini, cifre, punteggiatura e parole vuote producono
 può rappresentare una sequenza da uno a quattro token. Il runtime verifica forma,
 duplicati e collisioni di prefisso anche per IR costruite tramite API.
 
-Le parole fisse sono ammesse soltanto all'inizio. Non sono ancora disponibili
-pattern con parole fra gli oggetti, oggetti facoltativi, clitici come `prendilo`
-o una conversazione di disambiguazione proseguita nel turno successivo.
+Le forme descritte qui occupano l'inizio. IR 11 ammette inoltre
+[separatori multiparola](separatori-multiparola.md) fra due oggetti. Non sono
+ancora disponibili parole fisse dopo il secondo oggetto, oggetti facoltativi,
+clitici come `prendilo` o una disambiguazione proseguita nel turno successivo.

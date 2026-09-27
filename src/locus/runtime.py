@@ -6,7 +6,14 @@ from locus.diagnostics import canonical
 from locus.graph import cycle_node
 from locus.ir import IR_VERSION, ActionIR, ProgramIR, PropertyIR, RelationIR, SynonymIR, TypeIR
 from locus.rule_model import RuleIR
-from locus.schema import PropertySpec, command_forms_conflict, is_subtype, valid_command_form
+from locus.schema import (
+    PropertySpec,
+    command_forms_conflict,
+    is_subtype,
+    separator_forms_conflict,
+    valid_command_form,
+    valid_separator_form,
+)
 
 
 @dataclass(frozen=True, slots=True)
@@ -92,11 +99,10 @@ def instantiate(program: ProgramIR) -> World:
             or (action.target_type_id is None and action.indirect_type_id is not None)
             or (action.indirect_type_id is None and bool(action.separators))
             or (action.indirect_type_id is not None and not action.separators)
-            or len(set(action.separators)) != len(action.separators)
+            or separator_forms_conflict(action.separators)
             or any(
                 separator != canonical(separator)
-                or len(separator.split()) != 1
-                or not separator.isalpha()
+                or not valid_separator_form(separator)
                 or separator in action.commands
                 for separator in action.separators
             )

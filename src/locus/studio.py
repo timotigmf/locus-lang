@@ -69,8 +69,8 @@ _ERROR_HELP = {
     ),
     "E311": (
         "Forma di comando non valida",
-        "Usa da una a quattro parole e rimuovi duplicati o forme con lo stesso prefisso.",
-        "docs/linguaggio/comandi-multiparola.md",
+        "Usa da una a quattro parole e rimuovi duplicati o prefissi ambigui.",
+        "docs/linguaggio/separatori-multiparola.md",
     ),
     "E201": (
         "Mondo incoerente",

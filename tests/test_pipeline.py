@@ -203,6 +203,23 @@ def test_runtime_rejects_invalid_action_forms_and_separators() -> None:
         ActionIR("x", "senza secondo oggetto", ("prova",), separators=("a",)),
         ActionIR("x", "senza separatore", ("prova",), "a", "a"),
         ActionIR("x", "separatore duplicato", ("prova",), "a", "a", ("a", "a")),
+        ActionIR("x", "prefisso separatore", ("prova",), "a", "a", ("in", "in cambio di")),
+        ActionIR(
+            "x",
+            "separatore articolato ambiguo",
+            ("prova",),
+            "a",
+            "a",
+            ("a", "al posto di"),
+        ),
+        ActionIR(
+            "x",
+            "separatore troppo lungo",
+            ("prova",),
+            "a",
+            "a",
+            ("con una locuzione di cinque parole",),
+        ),
     )
     for action in invalid_actions:
         with pytest.raises(ValueError, match="azioni"):

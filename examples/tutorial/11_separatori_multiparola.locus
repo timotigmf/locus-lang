@@ -1,0 +1,34 @@
+Titolo: "Il banco degli scambi".
+Autore: "Esempio LOCUS".
+
+Una persona è un tipo di cosa.
+Una merce è un tipo di cosa.
+
+Il Banco è una stanza.
+Inizia nella "Banco".
+Il Banco ha descrizione "Il mercante registra pegni, scambi e domande.".
+
+Il mercante è una persona nella Banco.
+La moneta è una merce nella Banco.
+La chiave di vetro è una merce nella Banco.
+L'amuleto è una merce nella Banco.
+
+La fiducia è una proprietà numerica.
+Il mercante ha fiducia 0.
+
+Azione "scambiare" su una merce con una merce con comando "scambia"
+    e sinonimo "dai in pegno"
+    e separatore "in cambio di" e separatore "insieme a".
+Azione "consultare" su una persona con una merce con comando "interroga"
+    e separatore "a proposito di".
+
+Regola "baratto registrato" per scambiare "moneta" con "chiave di vetro"
+    nella fase invece:
+    aumenta "fiducia" di "mercante" di 1;
+    dì "Il mercante registra lo scambio e ripone la moneta.";
+Fine regola.
+
+Regola "domanda sull'amuleto" per consultare "mercante" con "amuleto"
+    nella fase invece:
+    dì "Il mercante indica il sigillo inciso sotto l'amuleto.";
+Fine regola.

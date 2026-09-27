@@ -213,6 +213,29 @@ Fine regola.
         )
 
 
+def test_author_action_accepts_multiword_separators() -> None:
+    source = """
+La moneta è una cosa nella Sala.
+La chiave di vetro è una cosa nella Sala.
+Azione "scambiare" su una cosa con una cosa con comando "scambia"
+    e separatore "in cambio di" e separatore "insieme a".
+Regola "baratto" per scambiare "moneta" con "chiave di vetro" nella fase invece:
+    dì "Lo scambio è concluso.";
+Fine regola.
+"""
+    current = session(source)
+    for command in (
+        "scambia moneta in cambio della chiave di vetro",
+        "scambia moneta insieme alla chiave di vetro",
+    ):
+        assert render(step(current, parse_command(command, current.world.actions))) == (
+            "Lo scambio è concluso."
+        )
+    assert parse_command("scambia moneta in chiave di vetro", current.world.actions).verb == (
+        "unknown"
+    )
+
+
 def test_replacement_can_invoke_an_author_action() -> None:
     source = AUTHOR_ACTIONS + rule(
         'sostituisci con salutare "custode";',
@@ -286,6 +309,21 @@ def test_static_errors(source: str, code: str) -> None:
             "Una persona è un tipo di cosa. "
             'Azione "mostrare" su una cosa con una persona con comando "mostra" '
             'e separatore "a" e separatore "A".',
+            "E311",
+        ),
+        (
+            'Azione "scambiare" su una cosa con una cosa con comando "scambia" '
+            'e separatore "in" e separatore "in cambio di".',
+            "E311",
+        ),
+        (
+            'Azione "scambiare" su una cosa con una cosa con comando "scambia" '
+            'e separatore "a" e separatore "al posto di".',
+            "E311",
+        ),
+        (
+            'Azione "scambiare" su una cosa con una cosa con comando "scambia" '
+            'e separatore "con una locuzione di cinque parole".',
             "E311",
         ),
         (

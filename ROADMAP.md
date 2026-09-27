@@ -50,8 +50,8 @@ L'[analisi architetturale](docs/architettura/audit-inform7.md) motiva l'ordine.
 Ogni pacchetto conserva il core indipendente dalla narrativa interattiva.
 
 1. Gerarchia dei tipi e azioni dell'autore implementate in IR 8.
-2. Sinonimi, separatori e locuzioni iniziali multiparola implementati in IR 10;
-   clitici, pattern intercalati e disambiguazione a più turni restano da completare.
+2. Sinonimi, locuzioni iniziali e separatori multiparola implementati in IR 11;
+   clitici, pattern liberi e disambiguazione a più turni restano da completare.
 3. Introdurre relazioni dinamiche e visibilità, con un passaggio segreto reale
    come criterio di accettazione.
 4. Aggiungere liste, tabelle ed effetti transazionali sulle collezioni.
