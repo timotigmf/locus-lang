@@ -217,7 +217,7 @@ imitare. La misura utile è coprire ogni contratto pubblico e ogni regressione.
 | --- | --- | --- |
 | 1 | gerarchia di tipi e azioni autore | nuovi tipi e azioni tipate senza dipendenza IF nel core |
 | 2 | grammatica italiana dei comandi | forme `Comprendi` con token tipati e ambiguità esplicite |
-| 3 | relazioni dinamiche e visibilità | passaggio segreto reale e mappa coerente con lo stato |
+| 3 | relazioni dinamiche cardinali implementate in IR 12; visibilità restante | passaggio segreto reale e mappa coerente con lo stato |
 | 4 | liste, tabelle ed effetti | inventari e dati strutturati modificati transazionalmente |
 | 5 | persone e dialogo | conversazione ramificata con trace e test dei nodi |
 | 6 | scene, tempo e punteggio | eventi temporali e premi registrati e riproducibili |

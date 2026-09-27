@@ -6,7 +6,7 @@ from typing import Literal
 from locus.diagnostics import canonical
 from locus.ir import ActionIR, PropertyIR, RelationIR
 from locus.player import Intent
-from locus.rule_model import ActionCall, Address, Trace
+from locus.rule_model import ActionCall, Address, RelationChange, Trace
 from locus.rules import ActionResult, RuleError, execute
 from locus.runtime import Entity, World, has_type
 from locus.schema import Value
@@ -408,6 +408,42 @@ class _RuleHost:
                 properties=(*props, PropertyIR(address.entity_id, address.property_id, value)),
             ),
         )
+        try:
+            validate_world(updated.world, updated.inventory)
+        except ValueError as error:
+            raise RuleError(str(error)) from error
+        return updated
+
+    def relate(self, state: Session, change: RelationChange, present: bool) -> Session:
+        requested = {(edge.source_id, edge.predicate_id, edge.target_id) for edge in change.edges}
+        existing = {
+            (edge.source_id, edge.predicate_id, edge.target_id) for edge in state.world.relations
+        }
+        if present:
+            keys = {(source, predicate) for source, predicate, _target in requested}
+            conflict = next(
+                (
+                    (source, predicate, target)
+                    for source, predicate, target in existing
+                    if (source, predicate) in keys and (source, predicate, target) not in requested
+                ),
+                None,
+            )
+            if conflict is not None:
+                raise RuleError("Esiste già una destinazione diversa per questa relazione.")
+            additions = tuple(
+                RelationIR(edge.source_id, edge.predicate_id, edge.target_id)
+                for edge in change.edges
+                if (edge.source_id, edge.predicate_id, edge.target_id) not in existing
+            )
+            merged = (*state.world.relations, *additions)
+        else:
+            merged = tuple(
+                edge
+                for edge in state.world.relations
+                if (edge.source_id, edge.predicate_id, edge.target_id) not in requested
+            )
+        updated = replace(state, world=replace(state.world, relations=tuple(merged)))
         try:
             validate_world(updated.world, updated.inventory)
         except ValueError as error:

@@ -30,3 +30,4 @@ Le fonti e le licenze sono nel [registro](../architettura/fonti.md).
 - [0014 — comandi multiparola](0014-comandi-multiparola.md): locuzioni iniziali senza collisioni di prefisso nell'IR 10.
 
 - [0015 — separatori multiparola](0015-separatori-multiparola.md): locuzioni fra due oggetti e articolazione finale nell'IR 11.
+- [0016 — relazioni dinamiche](0016-relazioni-dinamiche.md): effetti transazionali sul grafo e mappa dello stato corrente nell'IR 12.

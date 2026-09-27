@@ -162,6 +162,23 @@ def test_multiword_separator_tutorial_accepts_articulated_endings() -> None:
     assert parse_command("scambia moneta in chiave", current.world.actions).verb == "unknown"
 
 
+def test_secret_passage_tutorial_changes_navigation_both_ways() -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "12_passaggio_segreto.locus")))
+    assert step(current, parse_command("nord")).event.kind == "no_exit"
+    revealed = step(current, parse_command("x leva"))
+    assert "rivela un passaggio" in render(revealed)
+    assert len(revealed.session.world.relations) == len(current.world.relations) + 2
+    crypt = step(revealed.session, parse_command("nord"))
+    assert "camera nascosta" in render(crypt)
+    returned = step(crypt.session, parse_command("sud"))
+    hidden = step(
+        returned.session,
+        parse_command("nascondi passaggio", returned.session.world.actions),
+    )
+    assert "richiude" in render(hidden)
+    assert step(hidden.session, parse_command("nord")).event.kind == "no_exit"
+
+
 def test_final_world_matches_story() -> None:
     current = start(instantiate(compile_story_file(TUTORIAL / "04_faro.locus")))
     for command in (TUTORIAL / "04_faro.comandi").read_text(encoding="utf-8").splitlines():

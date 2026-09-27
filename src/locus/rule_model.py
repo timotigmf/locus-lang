@@ -11,7 +11,16 @@ Operator = Literal[
     "vero", "falso", "uguale", "diverso", "maggiore", "minore", "almeno", "massimo", "e", "o", "non"
 ]
 EffectKind = Literal[
-    "dì", "imposta", "aumenta", "continua", "interrompi", "fallisci", "sostituisci", "restituisci"
+    "dì",
+    "imposta",
+    "aumenta",
+    "continua",
+    "interrompi",
+    "fallisci",
+    "sostituisci",
+    "restituisci",
+    "crea_relazione",
+    "rimuovi_relazione",
 ]
 
 
@@ -37,6 +46,18 @@ class ActionCall:
 
 
 @dataclass(frozen=True, slots=True)
+class RelationEdge:
+    source_id: str
+    predicate_id: str
+    target_id: str
+
+
+@dataclass(frozen=True, slots=True)
+class RelationChange:
+    edges: tuple[RelationEdge, ...]
+
+
+@dataclass(frozen=True, slots=True)
 class Origin:
     source: str
     line: int
@@ -49,6 +70,7 @@ class Effect:
     value: Value | None = None
     address: Address | None = None
     action: ActionCall | None = None
+    relation: RelationChange | None = None
 
 
 @dataclass(frozen=True, slots=True)

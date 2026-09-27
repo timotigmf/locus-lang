@@ -3,7 +3,7 @@
 from dataclasses import dataclass, field
 from typing import Generic, Literal, Protocol, TypeVar
 
-from locus.rule_model import ActionCall, Address, Condition, Phase, RuleIR, Trace
+from locus.rule_model import ActionCall, Address, Condition, Phase, RelationChange, RuleIR, Trace
 from locus.schema import Value
 
 S = TypeVar("S")
@@ -25,6 +25,7 @@ class ActionResult(Generic[S, E]):
 class Host(Protocol[S, E]):
     def read(self, state: S, address: Address) -> Value: ...
     def write(self, state: S, address: Address, value: Value) -> S: ...
+    def relate(self, state: S, change: RelationChange, present: bool) -> S: ...
     def perform(self, state: S, action: ActionCall) -> ActionResult[S, E]: ...
 
 
@@ -131,6 +132,13 @@ class _Run(Generic[S, E]):
                                 raise RuleError("Aumento di un valore non numerico.")
                             value = old + value
                         self.state = self.host.write(self.state, effect.address, value)
+                    elif effect.kind in {"crea_relazione", "rimuovi_relazione"}:
+                        assert effect.relation is not None
+                        self.state = self.host.relate(
+                            self.state,
+                            effect.relation,
+                            effect.kind == "crea_relazione",
+                        )
                     else:
                         control = _Control(effect.kind, effect.value, effect.action)
                         break

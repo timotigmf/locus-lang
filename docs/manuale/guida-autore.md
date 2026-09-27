@@ -53,6 +53,7 @@ dall'alto verso il basso prima di studiare i moduli.
 9. [Sinonimi e separatori delle azioni](../tutorial/09-sinonimi-azioni.md)
 10. [Comandi composti da più parole](../tutorial/10-comandi-multiparola.md)
 11. [Separatori composti da più parole](../tutorial/11-separatori-multiparola.md)
+12. [Passaggi segreti e mappa dinamica](../tutorial/12-passaggi-segreti.md)
 
 ## Indice per obiettivo
 

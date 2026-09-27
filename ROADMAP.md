@@ -52,8 +52,8 @@ Ogni pacchetto conserva il core indipendente dalla narrativa interattiva.
 1. Gerarchia dei tipi e azioni dell'autore implementate in IR 8.
 2. Sinonimi, locuzioni iniziali e separatori multiparola implementati in IR 11;
    clitici, pattern liberi e disambiguazione a più turni restano da completare.
-3. Introdurre relazioni dinamiche e visibilità, con un passaggio segreto reale
-   come criterio di accettazione.
+3. Relazioni dinamiche cardinali e passaggio segreto reale implementati in IR 12;
+   visibilità condizionale di oggetti e scenari resta da completare.
 4. Aggiungere liste, tabelle ed effetti transazionali sulle collezioni.
 5. Costruire persone e dialoghi strutturati prima di scene, veicoli e commercio.
 

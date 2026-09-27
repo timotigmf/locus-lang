@@ -25,6 +25,7 @@ al prompt della storia: lì si scrivono soltanto i comandi del giocatore.
 | [9. Sinonimi delle azioni](09-sinonimi-azioni.md) | `examples/tutorial/09_sinonimi_azioni.locus` | Accettare più forme e separatori italiani per la stessa azione |
 | [10. Comandi multiparola](10-comandi-multiparola.md) | `examples/tutorial/10_comandi_multiparola.locus` | Dichiarare locuzioni iniziali deterministiche fino a quattro parole |
 | [11. Separatori multiparola](11-separatori-multiparola.md) | `examples/tutorial/11_separatori_multiparola.locus` | Collegare due oggetti con locuzioni e preposizioni articolate |
+| [12. Passaggi segreti](12-passaggi-segreti.md) | `examples/tutorial/12_passaggio_segreto.locus` | Creare e rimuovere uscite con rollback e mappa dinamica |
 
 Prima prova la versione fornita. Poi modifica un solo elemento e riesegui la
 sequenza di comandi. In caso di errore conserva il messaggio, il file sorgente e

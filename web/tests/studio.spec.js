@@ -249,3 +249,37 @@ Fine regola.`;
   await expect(page.locator("#index")).toContainText("fai risuonare");
   await expect(page.locator("#index")).toContainText("insieme a");
 });
+
+test("passaggio segreto aggiorna navigazione e mappa", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.locator("#compileStatus")).toContainText("compilato", {
+    timeout: 90000,
+  });
+  const source = `Titolo: "Il varco".
+La Sala è una stanza.
+La Cripta è una stanza.
+La leva è una cosa nella Sala.
+Regola "rivela" per esaminare "leva" nella fase dopo:
+    crea relazione "nord" da "Sala" a "Cripta";
+    dì "Il varco è aperto.";
+Fine regola.`;
+  await page.locator(".cm-content").click();
+  await page.keyboard.press("ControlOrMeta+A");
+  await page.keyboard.insertText(source);
+  await page
+    .getByRole("button", { name: "▶ Compila e prova", exact: true })
+    .click();
+  await expect(page.locator("#mapSummary")).toContainText("0 collegamenti", {
+    timeout: 90000,
+  });
+  await page.locator("#command").fill("x leva");
+  await page.locator("#send").click();
+  await expect(page.locator("#transcript")).toContainText("Il varco è aperto.");
+  await expect(page.locator("#mapSummary")).toContainText("1 collegamenti");
+  await page.locator("#command").fill("nord");
+  await page.locator("#send").click();
+  await expect(page.locator("#transcript")).toContainText("Cripta");
+  await page.locator("#command").fill("sud");
+  await page.locator("#send").click();
+  await expect(page.locator("#transcript")).toContainText("Sala");
+});

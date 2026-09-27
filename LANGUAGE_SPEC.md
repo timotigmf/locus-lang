@@ -2,7 +2,7 @@
 
 ## Stato attuale
 
-Versione corrente `0.5.0a1`, IR versione 11. Le specifiche M2, M3 e M4
+Versione corrente `0.5.0a1`, IR versione 12. Le specifiche M2, M3 e M4
 estendono e, dove indicato, sostituiscono i limiti M1 sotto.
 La [specifica M2](docs/linguaggio/milestone-2.md) è normativa per proprietà,
 stringhe, nomi quotati, preposizioni, contenitori, porte e chiavi.
@@ -20,6 +20,8 @@ La specifica dei [comandi multiparola](docs/linguaggio/comandi-multiparola.md)
 definisce locuzioni iniziali prive di collisioni di prefisso.
 La specifica dei [separatori multiparola](docs/linguaggio/separatori-multiparola.md)
 definisce locuzioni deterministiche fra i due oggetti.
+La specifica delle [relazioni dinamiche](docs/linguaggio/relazioni-dinamiche.md)
+definisce passaggi cardinali creati o rimossi da effetti transazionali.
 Le sezioni S0/S1 seguenti descrivono il nucleo storico, non l'intera versione.
 
 ## Dichiarazioni (S0, mantenute in 0.1.0a2)
@@ -147,7 +149,7 @@ da file e punto iniziale esplicito. IR corrente versione 5.
 sorgente. `Comprendi "alias" come "entità".` aggiunge un nome alternativo per i
 comandi del giocatore. Metadati duplicati producono `E408`; alias in conflitto
 producono `E409`. Questi campi sono stati introdotti con l'IR 6 e restano
-presenti nell'IR 11.
+presenti nell'IR 12.
 
 ## Tipi definiti dall'autore
 
@@ -156,7 +158,7 @@ avanti sono ammessi e ogni tipo ha al massimo un genitore. I sottotipi sono
 compatibili con proprietà, relazioni e capacità degli antenati. Ridefinizioni
 producono `E113`; cicli nella gerarchia producono `E114`. La specifica completa
 è in [tipi definiti dall'autore](docs/linguaggio/tipi-autore.md). La tabella dei
-tipi è stata introdotta nell'IR 7 e resta presente nell'IR 11.
+tipi è stata introdotta nell'IR 7 e resta presente nell'IR 12.
 
 ## Azioni e comandi definiti dall'autore
 
@@ -167,4 +169,14 @@ Nomi duplicati producono `E310`; comandi non validi o in conflitto producono
 `E311`. `e sinonimo "riverisci"` aggiunge una forma equivalente; più clausole
 `e separatore` definiscono le locuzioni fra gli oggetti di un'azione a due
 oggetti. Comandi e separatori possono contenere fino a quattro parole e non
-possono avere prefissi ambigui. L'IR corrente è la versione 11.
+possono avere prefissi ambigui. L'IR corrente è la versione 12.
+
+## Relazioni dinamiche
+
+Le regole possono usare `crea relazione "nord" da "Sala" a "Cripta";` e
+`rimuovi relazione ...;` per modificare i collegamenti cardinali. Il compilatore
+risolve gli ID, controlla tipi e mutabilità e incorpora le inverse nello stesso
+effetto. Il runtime applica il cambiamento nella transazione della regola. Gli
+usi non validi producono `E312`; si veda la
+[specifica completa](docs/linguaggio/relazioni-dinamiche.md). Questa estensione
+introduce l'IR 12.

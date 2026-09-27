@@ -514,10 +514,7 @@ async function compileProject(play = false) {
   }
   $("storyByline").textContent = result.author ? `di ${result.author}` : "";
   $("storyByline").hidden = !result.author;
-  mapSVG = drawMap(result.map);
-  $("mapCanvas").innerHTML = mapSVG;
-  $("mapSummary").textContent =
-    `${result.map.rooms.length} luoghi · ${result.map.links.length} collegamenti · ${result.map.doors.length} porte`;
+  showMap(result.map);
   zoom = 1;
   renderIndex(result.ir);
   if (play) {
@@ -525,6 +522,14 @@ async function compileProject(play = false) {
     tab("game");
   }
   return true;
+}
+function showMap(data) {
+  if (!data) return;
+  if (compiled) compiled.map = data;
+  mapSVG = drawMap(data);
+  $("mapCanvas").innerHTML = mapSVG;
+  $("mapSummary").textContent =
+    `${data.rooms.length} luoghi · ${data.links.length} collegamenti · ${data.doors.length} porte`;
 }
 function renderIndex(ir) {
   const types = new Map((ir.types ?? []).map((item) => [item.id, item]));
@@ -618,6 +623,7 @@ function appendOutput(result, command) {
   $("transcript").append(el("div", { class: "story-output" }, result.text));
   $("transcript").scrollTop = $("transcript").scrollHeight;
   showTrace(result.trace);
+  showMap(result.map);
   if (result.ended) stopGame();
 }
 async function restart() {

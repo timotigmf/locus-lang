@@ -87,6 +87,7 @@ class RelationSpec:
     inverse_id: str | None = None
     acyclic: bool = False
     verb: str | None = None
+    mutable: bool = False
 
 
 @dataclass(frozen=True, slots=True)

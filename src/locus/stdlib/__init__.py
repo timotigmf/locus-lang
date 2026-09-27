@@ -32,10 +32,16 @@ def default_kind_parents() -> dict[str, str | None]:
 def default_relations() -> dict[str, RelationSpec]:
     return {
         "nella": RelationSpec(INSIDE, PORTABLE, (ROOM, CONTAINER), acyclic=True),
-        "nord": RelationSpec(NORTH, ROOM, ROOM, reverse_operands=True, inverse_id=SOUTH),
-        "sud": RelationSpec(SOUTH, ROOM, ROOM, reverse_operands=True, inverse_id=NORTH),
-        "est": RelationSpec(EAST, ROOM, ROOM, reverse_operands=True, inverse_id=WEST),
-        "ovest": RelationSpec(WEST, ROOM, ROOM, reverse_operands=True, inverse_id=EAST),
+        "nord": RelationSpec(
+            NORTH, ROOM, ROOM, reverse_operands=True, inverse_id=SOUTH, mutable=True
+        ),
+        "sud": RelationSpec(
+            SOUTH, ROOM, ROOM, reverse_operands=True, inverse_id=NORTH, mutable=True
+        ),
+        "est": RelationSpec(EAST, ROOM, ROOM, reverse_operands=True, inverse_id=WEST, mutable=True),
+        "ovest": RelationSpec(
+            WEST, ROOM, ROOM, reverse_operands=True, inverse_id=EAST, mutable=True
+        ),
         "collega da": RelationSpec(SIDE_A, DOOR, ROOM),
         "collega a": RelationSpec(SIDE_B, DOOR, ROOM),
         "apre": RelationSpec(UNLOCKS, KEY, OPENABLE, verb="apre"),

@@ -2,7 +2,7 @@
 
 from typing import Protocol, cast
 
-from locus.ast import ActionSyntax, EffectSyntax, PropertyReference, Rule
+from locus.ast import ActionSyntax, EffectSyntax, PropertyReference, RelationSyntax, Rule
 from locus.diagnostics import CompileError, Span
 from locus.lexer import Token, TokenKind
 from locus.rule_model import Condition, EffectKind, Operator, Phase
@@ -116,6 +116,7 @@ class RuleParser:
         value: Value | None = None
         reference = None
         action = None
+        relation = None
         if word in {"dì", "fallisci"}:
             value = self.quoted(name=False)
         elif word in {"imposta", "aumenta", "diminuisci"}:
@@ -133,6 +134,15 @@ class RuleParser:
             action = self.action()
         elif word == "restituisci":
             value = self.cursor.value()
+        elif word in {"crea", "rimuovi"}:
+            self.cursor.keyword("relazione")
+            name = self.quoted()
+            self.cursor.keyword("da")
+            source = self.quoted()
+            self.cursor.keyword("a")
+            target = self.quoted()
+            relation = RelationSyntax(name, source, target)
+            word += "_relazione"
         elif word not in {"continua", "interrompi"}:
             raise CompileError("E302", "Istruzione di regola non riconosciuta.", start)
         end = self.cursor.current.span.end
@@ -142,6 +152,7 @@ class RuleParser:
             value,
             reference,
             action,
+            relation,
             Span(start.source, start.start, end, start.line, start.column),
         )
 

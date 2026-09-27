@@ -9,7 +9,7 @@ from typing import Any
 from locus.diagnostics import CompileError
 from locus.ir import ProgramIR
 from locus.player import Intent, parse_command
-from locus.runtime import has_type, instantiate
+from locus.runtime import World, has_type, instantiate
 from locus.stdlib import EAST, NORTH, ROOM, SIDE_A, SIDE_B
 from locus.stdlib.authoring import compile_story_file
 from locus.stdlib.game import Session, Transition, start, step
@@ -71,6 +71,11 @@ _ERROR_HELP = {
         "Forma di comando non valida",
         "Usa da una a quattro parole e rimuovi duplicati o prefissi ambigui.",
         "docs/linguaggio/separatori-multiparola.md",
+    ),
+    "E312": (
+        "Relazione dinamica non valida",
+        "Usa una direzione cardinale dinamica fra due stanze distinte.",
+        "docs/linguaggio/relazioni-dinamiche.md",
     ),
     "E201": (
         "Mondo incoerente",
@@ -166,9 +171,9 @@ def validate_project(project: Any) -> dict[str, Any]:
     return project
 
 
-def map_data(program: ProgramIR) -> dict[str, Any]:
-    world = instantiate(program)
-    rooms = [asdict(entity) for entity in program.entities if has_type(world, entity.type_id, ROOM)]
+def map_data(model: ProgramIR | World) -> dict[str, Any]:
+    world = instantiate(model) if isinstance(model, ProgramIR) else model
+    rooms = [asdict(entity) for entity in world.entities if has_type(world, entity.type_id, ROOM)]
     link_directions = {NORTH: "nord", EAST: "est"}
     links = [
         {
@@ -176,14 +181,14 @@ def map_data(program: ProgramIR) -> dict[str, Any]:
             "to": edge.target_id,
             "direction": link_directions[edge.predicate_id],
         }
-        for edge in program.relations
+        for edge in world.relations
         if edge.predicate_id in link_directions
     ]
     doors = []
-    for entity in program.entities:
+    for entity in world.entities:
         sides = {
             edge.predicate_id: edge.target_id
-            for edge in program.relations
+            for edge in world.relations
             if edge.source_id == entity.id and edge.predicate_id in {SIDE_A, SIDE_B}
         }
         if len(sides) == 2:
@@ -194,7 +199,7 @@ def map_data(program: ProgramIR) -> dict[str, Any]:
         "rooms": rooms,
         "links": links,
         "doors": doors,
-        "entry": program.entry_id or (rooms[0]["id"] if rooms else None),
+        "entry": world.entry_id or (rooms[0]["id"] if rooms else None),
     }
 
 
@@ -259,6 +264,7 @@ class Studio:
             "room": transition.session.room_id,
             "inventory": list(transition.session.inventory),
             "ended": transition.event.kind == "quit",
+            "map": map_data(transition.session.world),
         }
 
     def restart(self) -> dict[str, Any]:

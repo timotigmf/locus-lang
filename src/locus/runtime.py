@@ -133,6 +133,23 @@ def instantiate(program: ProgramIR) -> World:
     keys = {(edge.source_id, edge.predicate_id) for edge in program.relations}
     if len(keys) != len(program.relations):
         raise ValueError("Relazioni duplicate o in conflitto nell'IR.")
+    for rule in program.rules:
+        for effect in rule.effects:
+            relation = effect.relation
+            if effect.kind in {"crea_relazione", "rimuovi_relazione"}:
+                if relation is None or not relation.edges:
+                    raise ValueError("Mutazione di relazione incompleta nell'IR.")
+                relation_keys = {(edge.source_id, edge.predicate_id) for edge in relation.edges}
+                if len(relation_keys) != len(relation.edges) or any(
+                    edge.source_id not in identifiers
+                    or edge.target_id not in identifiers
+                    or edge.source_id == edge.target_id
+                    or not edge.predicate_id.strip()
+                    for edge in relation.edges
+                ):
+                    raise ValueError("Mutazione di relazione non valida nell'IR.")
+            elif relation is not None:
+                raise ValueError("Mutazione di relazione associata all'effetto errato nell'IR.")
     specs = {spec.id: spec for spec in program.property_specs}
     if len(specs) != len(program.property_specs):
         raise ValueError("Schemi di proprietà duplicati nell'IR.")

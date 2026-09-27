@@ -61,11 +61,9 @@ non duplicabile.
 
 ## Passaggi segreti e limiti attuali
 
-Puoi descrivere un passaggio come segreto e proteggerlo con una porta, ma LOCUS
-non aggiunge o rimuove ancora collegamenti durante una regola. Un vero passaggio
-che compare dopo una ricerca richiede relazioni dinamiche, funzione ancora da
-progettare. Non simulare questa capacità soltanto cambiando la descrizione: testo
-e mappa devono restare coerenti.
+Puoi descrivere un passaggio come segreto e proteggerlo con una porta. Per farlo
+comparire dopo una ricerca usa le relazioni dinamiche della
+[lezione 12](12-passaggi-segreti.md): testo, navigazione e mappa restano coerenti.
 
 Dialoghi ramificati, veicoli, compravendita e denaro spendibile richiedono azioni
 e modelli dedicati. La [guida dell'autore](../manuale/guida-autore.md) distingue

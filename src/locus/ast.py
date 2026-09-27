@@ -69,11 +69,19 @@ class ActionSyntax:
 
 
 @dataclass(frozen=True, slots=True)
+class RelationSyntax:
+    name: str
+    source: str
+    target: str
+
+
+@dataclass(frozen=True, slots=True)
 class EffectSyntax:
     kind: EffectKind
     value: Value | None
     reference: PropertyReference | None
     action: ActionSyntax | None
+    relation: RelationSyntax | None
     span: Span
 
 

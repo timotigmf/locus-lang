@@ -5,7 +5,7 @@ import pytest
 
 from locus.diagnostics import CompileError
 from locus.player import parse_command
-from locus.rule_model import ActionCall, Address
+from locus.rule_model import ActionCall, Address, RelationChange, RelationEdge
 from locus.rules import ActionResult, execute
 from locus.runtime import instantiate
 from locus.stdlib.authoring import compile_story
@@ -259,6 +259,14 @@ def test_replacement_can_invoke_an_author_action() -> None:
         (rule('continua; dì "x";'), "E308"),
         (rule('dì "x";', extra="priorità 1000001"), "E309"),
         (rule('dì "x";', extra="quando " + "non " * 66 + "vero"), "E302"),
+        (rule('crea relazione "ignota" da "Sala" a "Sala";'), "E312"),
+        (rule('crea relazione "nella" da "leva" a "Sala";'), "E312"),
+        (rule('crea relazione "nord" da "leva" a "Sala";'), "E305"),
+        (rule('crea relazione "nord" da "Sala" a "Sala";'), "E312"),
+        (
+            rule('crea relazione "nord" da "Sala" a "Sala";', phase="verifica"),
+            "E307",
+        ),
     ],
 )
 def test_static_errors(source: str, code: str) -> None:
@@ -371,6 +379,9 @@ def test_engine_works_without_narrative_state() -> None:
             assert type(value) is int
             return value
 
+        def relate(self, state: int, change: RelationChange, present: bool) -> int:
+            return state
+
         def perform(self, state: int, action: ActionCall) -> ActionResult[int, str]:
             return ActionResult(state + 1, True, ("eseguita",))
 
@@ -433,6 +444,86 @@ def test_runtime_write_error_rolls_back() -> None:
     assert result.trace[-1].outcome == "errore con ripristino"
 
 
+def test_secret_passage_adds_and_removes_both_directions() -> None:
+    source = """
+La Cripta è una stanza.
+Azione "sigillare" senza oggetti con comando "sigilla varco".
+Regola "rivela il passaggio" per esaminare "leva" nella fase dopo:
+    crea relazione "nord" da "Sala" a "Cripta";
+    dì "La parete scorre e rivela un passaggio.";
+Fine regola.
+Regola "sigilla il passaggio" per sigillare nella fase invece:
+    rimuovi relazione "nord" da "Sala" a "Cripta";
+    dì "La parete torna al suo posto.";
+Fine regola.
+"""
+    initial = session(source)
+    assert step(initial, parse_command("nord")).event.kind == "no_exit"
+
+    revealed = step(initial, parse_command("esamina leva"))
+    assert "rivela un passaggio" in render(revealed)
+    assert len(revealed.session.world.relations) == len(initial.world.relations) + 2
+    in_crypt = step(revealed.session, parse_command("nord"))
+    assert in_crypt.session.room_id != revealed.session.room_id
+    returned = step(in_crypt.session, parse_command("sud"))
+    assert returned.session.room_id == revealed.session.room_id
+
+    repeated = step(returned.session, parse_command("esamina leva"))
+    assert repeated.session.world.relations == returned.session.world.relations
+    hidden = step(
+        repeated.session,
+        parse_command("sigilla varco", repeated.session.world.actions),
+    )
+    assert len(hidden.session.world.relations) == len(initial.world.relations)
+    assert step(hidden.session, parse_command("nord")).event.kind == "no_exit"
+
+
+def test_relation_change_rolls_back_on_failure_and_conflict() -> None:
+    source = """
+La Cripta è una stanza.
+Regola "apri e annulla" per esaminare "leva" nella fase dopo:
+    crea relazione "nord" da "Sala" a "Cripta";
+    fallisci "Il meccanismo si blocca.";
+Fine regola.
+"""
+    initial = session(source)
+    failed = step(initial, parse_command("esamina leva"))
+    assert failed.session is initial
+    assert render(failed) == "Il meccanismo si blocca."
+
+    conflict_source = """
+La Cripta è una stanza.
+La Torre è una stanza.
+La Torre è a nord della Sala.
+Regola "destinazione incompatibile" per esaminare "leva" nella fase dopo:
+    crea relazione "nord" da "Sala" a "Cripta";
+Fine regola.
+"""
+    conflicted_initial = session(conflict_source)
+    conflicted = step(conflicted_initial, parse_command("esamina leva"))
+    assert conflicted.session is conflicted_initial
+    assert "destinazione diversa" in render(conflicted)
+    assert conflicted.trace[-1].outcome == "errore con ripristino"
+
+
+def test_dynamic_relation_is_structured_in_ir() -> None:
+    compiled = compile_story(
+        BASE
+        + """
+La Cripta è una stanza.
+Regola "rivela" per esaminare "leva" nella fase dopo:
+    crea relazione "nord" da "Sala" a "Cripta";
+Fine regola.
+"""
+    )
+    change = compiled.rules[0].effects[0].relation
+    assert change is not None
+    assert change.edges == (
+        RelationEdge("e1", "mondo.nord", "e4"),
+        RelationEdge("e4", "mondo.sud", "e1"),
+    )
+
+
 def test_debug_cli(
     tmp_path: "Path", monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
 ) -> None:
@@ -467,6 +558,9 @@ def test_generic_catalog_and_replacement_limit() -> None:
         def write(self, state: int, address: Address, value: str | int | bool) -> int:
             assert type(value) is int
             return value
+
+        def relate(self, state: int, change: RelationChange, present: bool) -> int:
+            return state
 
         def perform(self, state: int, action: ActionCall) -> ActionResult[int, str]:
             return ActionResult(state, True)

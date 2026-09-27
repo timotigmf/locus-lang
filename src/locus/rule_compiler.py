@@ -5,8 +5,17 @@ from collections.abc import Mapping
 from locus.ast import ActionSyntax, PropertyReference, Rule
 from locus.diagnostics import CompileError, Span, canonical
 from locus.ir import EntityIR
-from locus.rule_model import ActionCall, Address, Condition, Effect, Origin, RuleIR
-from locus.schema import ActionSpec, PropertySpec, is_subtype
+from locus.rule_model import (
+    ActionCall,
+    Address,
+    Condition,
+    Effect,
+    Origin,
+    RelationChange,
+    RelationEdge,
+    RuleIR,
+)
+from locus.schema import ActionSpec, PropertySpec, RelationSpec, is_subtype, type_ids
 
 
 def lower_rules(
@@ -14,6 +23,7 @@ def lower_rules(
     entities: Mapping[str, EntityIR],
     properties: Mapping[str, PropertySpec],
     actions: Mapping[str, ActionSpec],
+    relations: Mapping[str, RelationSpec],
     type_parents: Mapping[str, str | None],
 ) -> tuple[RuleIR, ...]:
     if len({spec.id for spec in actions.values()}) != len(actions):
@@ -100,6 +110,35 @@ def lower_rules(
             node.operator, operands=tuple(condition(child, span) for child in node.operands)
         )
 
+    def relation_change(
+        name: str, source_name: str, target_name: str, span: Span
+    ) -> RelationChange:
+        spec = relations.get(canonical(name))
+        if spec is None:
+            raise CompileError("E312", f"Relazione sconosciuta: {name}.", span)
+        if not spec.mutable:
+            raise CompileError(
+                "E312", f"La relazione {name} non può cambiare durante la storia.", span
+            )
+        source = entity(source_name, span)
+        target = entity(target_name, span)
+        if source.id == target.id:
+            raise CompileError(
+                "E312", "Una relazione non può collegare un'entità a sé stessa.", span
+            )
+        if not any(
+            is_subtype(source.type_id, expected, type_parents)
+            for expected in type_ids(spec.source_type)
+        ) or not any(
+            is_subtype(target.type_id, expected, type_parents)
+            for expected in type_ids(spec.target_type)
+        ):
+            raise CompileError("E305", f"Tipi incompatibili per la relazione {name}.", span)
+        edges = [RelationEdge(source.id, spec.id, target.id)]
+        if spec.inverse_id is not None:
+            edges.append(RelationEdge(target.id, spec.inverse_id, source.id))
+        return RelationChange(tuple(edges))
+
     result: list[RuleIR] = []
     names: set[str] = set()
     for order, rule in enumerate(rules):
@@ -118,7 +157,13 @@ def lower_rules(
                 raise CompileError(
                     "E308", "Istruzione irraggiungibile dopo un esito terminale.", syntax.span
                 )
-            if rule.phase == "verifica" and syntax.kind in {"imposta", "aumenta", "sostituisci"}:
+            if rule.phase == "verifica" and syntax.kind in {
+                "imposta",
+                "aumenta",
+                "sostituisci",
+                "crea_relazione",
+                "rimuovi_relazione",
+            }:
                 raise CompileError(
                     "E307",
                     "La fase verifica non può modificare lo stato o sostituire azioni.",
@@ -141,7 +186,25 @@ def lower_rules(
             replacement = (
                 action(syntax.action, syntax.span, selector=False) if syntax.action else None
             )
-            effects.append(Effect(syntax.kind, syntax.value, resolved, replacement))
+            changed_relation = (
+                relation_change(
+                    syntax.relation.name,
+                    syntax.relation.source,
+                    syntax.relation.target,
+                    syntax.span,
+                )
+                if syntax.relation is not None
+                else None
+            )
+            effects.append(
+                Effect(
+                    syntax.kind,
+                    syntax.value,
+                    resolved,
+                    replacement,
+                    changed_relation,
+                )
+            )
             terminal = syntax.kind in {
                 "continua",
                 "interrompi",

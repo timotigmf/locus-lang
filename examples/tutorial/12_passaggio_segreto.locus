@@ -1,0 +1,40 @@
+Titolo: "La parete dell'Anticamera".
+Autore: "Esempio LOCUS".
+
+L'Anticamera è una stanza.
+La Cripta è una stanza.
+Inizia nella "Anticamera".
+L'Anticamera ha descrizione "Una parete di pietra chiude il lato nord. Una leva sporge dal muro.".
+La Cripta ha descrizione "La camera nascosta custodisce il silenzio di molti secoli.".
+
+La leva è una cosa nella Anticamera.
+La leva ha descrizione "È consumata dall'uso, ma il meccanismo sembra ancora integro.".
+La rivelato è una proprietà logica.
+
+Azione "nascondere il passaggio" senza oggetti con comando "nascondi passaggio".
+
+Regola "rivela il passaggio" per esaminare "leva" nella fase dopo
+quando "rivelato" di "leva" è falso:
+    crea relazione "nord" da "Anticamera" a "Cripta";
+    imposta "rivelato" di "leva" a vero;
+    imposta "descrizione" di "Anticamera" a "La parete è scivolata di lato. Il passaggio conduce a nord.";
+    dì "La leva scatta: la parete scorre e rivela un passaggio a nord.";
+Fine regola.
+
+Regola "leva già azionata" per esaminare "leva" nella fase dopo
+quando "rivelato" di "leva" è vero:
+    dì "Il passaggio è già aperto.";
+Fine regola.
+
+Regola "nascondi il passaggio" per nascondere il passaggio nella fase invece
+quando "rivelato" di "leva" è vero:
+    rimuovi relazione "nord" da "Anticamera" a "Cripta";
+    imposta "rivelato" di "leva" a falso;
+    imposta "descrizione" di "Anticamera" a "Una parete di pietra chiude il lato nord. Una leva sporge dal muro.";
+    dì "Il passaggio si richiude senza lasciare traccia.";
+Fine regola.
+
+Regola "passaggio già nascosto" per nascondere il passaggio nella fase verifica
+quando "rivelato" di "leva" è falso:
+    fallisci "Il passaggio è già nascosto.";
+Fine regola.

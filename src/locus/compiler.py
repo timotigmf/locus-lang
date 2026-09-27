@@ -72,7 +72,13 @@ def _validate_catalog(
                 inverse.inverse_id,
                 set(type_ids(inverse.source_type)),
                 set(type_ids(inverse.target_type)),
-            ) != (spec.id, set(type_ids(spec.target_type)), set(type_ids(spec.source_type))):
+                inverse.mutable,
+            ) != (
+                spec.id,
+                set(type_ids(spec.target_type)),
+                set(type_ids(spec.source_type)),
+                spec.mutable,
+            ):
                 raise ValueError("Le relazioni inverse devono essere reciproche e compatibili.")
     return parents
 
@@ -402,7 +408,14 @@ def analyze(
         relations=tuple(edges.values()),
         property_specs=tuple(property_catalog.values()),
         properties=tuple(values.values()),
-        rules=lower_rules(program.rules, symbols, property_catalog, action_catalog, type_parents),
+        rules=lower_rules(
+            program.rules,
+            symbols,
+            property_catalog,
+            action_catalog,
+            catalog,
+            type_parents,
+        ),
         entry_id=entry_id,
         synonyms=tuple(synonyms.values()),
         title=metadata.get("titolo"),

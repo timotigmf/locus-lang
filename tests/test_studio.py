@@ -121,6 +121,39 @@ def test_map_contains_north_and_east_links_once() -> None:
     ]
 
 
+def test_map_updates_when_a_secret_passage_is_revealed() -> None:
+    studio = Studio()
+    result = studio.compile(
+        project(
+            "La Sala è una stanza. La Cripta è una stanza. "
+            "La leva è una cosa nella Sala. "
+            'Regola "rivela" per esaminare "leva" nella fase dopo: '
+            'crea relazione "nord" da "Sala" a "Cripta"; Fine regola.'
+        )
+    )
+    assert result["map"]["links"] == []
+    assert studio.restart()["map"]["links"] == []
+    revealed = studio.command("esamina leva")
+    assert revealed["map"]["links"] == [{"from": "e1", "to": "e2", "direction": "nord"}]
+    assert studio.command("nord")["room"] == "e2"
+
+
+def test_dynamic_relation_diagnostic_links_the_reference() -> None:
+    studio = Studio()
+    result = studio.compile(
+        project(
+            "La Sala è una stanza. La leva è una cosa nella Sala. "
+            'Regola "errata" per esaminare "leva" nella fase dopo: '
+            'crea relazione "nella" da "leva" a "Sala"; Fine regola.'
+        )
+    )
+    diagnostic = result["diagnostics"][0]
+    assert diagnostic["code"] == "E312"
+    assert diagnostic["title"] == "Relazione dinamica non valida"
+    assert diagnostic["manual"] == "docs/linguaggio/relazioni-dinamiche.md"
+    assert Path(diagnostic["manual"]).is_file()
+
+
 def test_studio_exposes_author_types_and_maps_room_subtypes() -> None:
     studio = Studio()
     result = studio.compile(

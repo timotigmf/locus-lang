@@ -51,7 +51,7 @@ il successivo. Non promettiamo correzioni automatiche della semantica. Gli span
 di alcune diagnosi coprono un'intera dichiarazione/regola, come nella CLI.
 Il manuale incorporato è ricercabile per capitolo; la guida dell'autore è la
 pagina iniziale e ogni blocco di codice offre **Copia codice**. Comprende un corso
-in undici lezioni, specifiche e tutorial.
+in dodici lezioni, specifiche e tutorial.
 
 Quando modifichi il sorgente, il gioco precedente viene disabilitato e mappa e
 indice sono da ricompilare. Non si mescolano una versione vecchia della storia e
@@ -59,9 +59,10 @@ un sorgente nuovo. **Ricomincia** resetta la sessione del progetto compilato.
 
 ## Mappa e indice
 
-**Mappa** mostra luoghi, collegamenti nord/sud ed est/ovest, porte e punto iniziale. Puoi
+**Mappa** mostra luoghi, collegamenti nord/sud ed est/ovest, porte e punto iniziale. I
+passaggi dinamici compaiono o scompaiono subito dopo il comando che li modifica. Puoi
 allargare/ridurre la vista ed esportare SVG o dati JSON. L'SVG è un file vettoriale
-riutilizzabile e stampabile. È uno schema logico del progetto iniziale, non una
+riutilizzabile e stampabile. È uno schema logico dello stato corrente, non una
 mappa delle posizioni del giocatore né un impaginatore geografico: collegamenti
 ciclici o complessi possono avere linee incrociate.
 

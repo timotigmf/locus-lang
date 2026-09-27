@@ -1,6 +1,6 @@
 # Architettura tecnica
 
-Stato: progetto della piattaforma; implementazione attuale: milestone M2, proprietà e mondo narrativo.
+Stato: Studio M5 e linguaggio incrementale fino all'IR 12.
 Le decisioni strutturali sono motivate negli [ADR](docs/adr/README.md).
 
 ## Pipeline e dipendenze
@@ -29,13 +29,13 @@ Un test compila tipi e relazioni non narrativi per verificare concretamente l'in
 | lexer | token, originale, posizione; nessuna risoluzione di nomi | implementato |
 | parser autore | grammatica → AST immutabile | dichiarazioni, relazioni, regole, metadati e vocabolario |
 | semantica | nomi canonici, tipi noti, duplicati, ID risolti | implementato |
-| IR | programma immutabile senza articoli o sintassi | schema sperimentale 11 |
-| mondo | istanze indipendenti dai nodi AST | istanziazione minima |
-| regole | ordinamento, condizioni, esiti, tracing | solo progetto |
+| IR | programma immutabile senza articoli o sintassi | schema sperimentale 12 |
+| mondo | istanze indipendenti dai nodi AST | snapshot validati e relazioni dinamiche |
+| regole | ordinamento, condizioni, esiti, tracing | implementato con rollback |
 | runtime | transizioni, eventi e servizi deterministici | transizioni IF nella stdlib |
-| parser giocatore | testo → intenzioni/candidati | comandi M1 separati |
+| parser giocatore | testo → intenzioni/candidati | standard, abbreviazioni e azioni autore |
 | stdlib | tipi, relazioni, azioni, lessico del dominio | tipi, schemi, sessione e renderer |
-| strumenti | CLI, dump, diagnostica | cinque comandi, incluso gioca |
+| strumenti | CLI, Studio web, dump e diagnostica | implementato |
 
 ## AST e modello semantico iniziali
 
@@ -57,58 +57,59 @@ riferimenti in avanti. Il catalogo `RelationSpec` definisce tipi agli estremi,
 orientamento e inversi. Nessuna conoscenza di stanze o direzioni nel compilatore.
 Conflitti funzionali, auto-collegamenti e riferimenti non risolti sono diagnosticati.
 
-`ProgramIR` versione 11 contiene gerarchia dei tipi, azioni dell'autore, entità, relazioni, proprietà,
+`ProgramIR` versione 12 contiene gerarchia dei tipi, azioni dell'autore, entità, relazioni, proprietà,
 regole, punto iniziale, titolo, autore e sinonimi risolti; i record di base sono
 `TypeIR(id, label, parent_id)`, `ActionIR(id, label, commands, ..., separators)`,
 `EntityIR(id, label, type_id)`
-e `RelationIR(source_id, predicate_id, target_id)`. Gli ID sono ordinali riproducibili per
+e `RelationIR(source_id, predicate_id, target_id)`. Gli effetti di relazione
+contengono archi già risolti e l'eventuale inversa, applicati atomicamente dal runtime.
+Gli ID sono ordinali riproducibili per
 lo stesso sorgente, non persistenti fra modifiche. Nessuna serializzazione di
 oggetti Python o codice eseguibile. Il JSON è solo un dump.
 Source map separata e loader validante sono rinviati: non congelare un ABI ora.
 
-## Mondo e runtime previsti
+## Mondo e runtime
 
-Il mondo generale sarà un grafo tipato: EntityId, TypeId, PropertyId, RelationId.
+Il mondo è un grafo tipato: EntityId, TypeId, PropertyId, RelationId.
 Proprietà e relazioni hanno schemi, cardinalità e vincoli; containment è una
 relazione aciclica con destinazione unica. Stanze, porte e direzioni sono
 vocabolario e vincoli della stdlib. L'ereditarietà singola è implementata;
 tratti e composizione vanno valutati prima dell'ereditarietà multipla.
 
-`World(entities, relations)` è uno snapshot immutabile iniziale. `stdlib.game`
+`World(entities, relations)` è uno snapshot immutabile. `stdlib.game`
 implementa `Session(world, room_id, inventory)` e transizioni pure da intenti a
 `Transition(session, event)`. `stdlib.render` traduce gli eventi in testo italiano.
 Il giocatore è stato di sessione distinto dalle entità. La presa sposta logicamente
-una cosa dalla sua collocazione iniziale all'inventario; l'IR non viene mutata.
+una cosa dalla sua collocazione iniziale all'inventario. Proprietà, contenimento
+e direzioni dinamiche producono un nuovo snapshot; l'IR iniziale non viene mutata.
 
 Nessun print nel core. `player.parse_command` produce intenti senza usare lexer
 o parser autore; la sessione controlla visibilità, tipo e possesso prima di una
-transizione. Nessun rule engine M3: le azioni M1 restano esplicite e sostituibili.
-Dettagli e limiti nell'[ADR 0004](docs/adr/0004-milestone-1.md).
+transizione. Le azioni della stdlib e dell'autore passano nel motore M3 quando
+esistono regole applicabili. Dettagli e limiti negli ADR
+[0004](docs/adr/0004-milestone-1.md), [0006](docs/adr/0006-regole.md) e
+[0016](docs/adr/0016-relazioni-dinamiche.md).
 
 Per replay: input semantici, seme casuale, clock logico, versione programma e
 ordine eventi; niente clock reale o casualità globale nel core. Salvataggi
 richiederanno schema validato, migrazioni e identità persistenti; niente pickle.
 Mappa, albero, proprietà e debugger leggeranno viste del mondo senza mutarlo.
 
-## Motore di regole proposto (M3, non implementato)
+## Motore di regole M3
 
-Rulebook distinti: prima, invece, verifica, esegui, dopo, descrivi. `quando` è
-un trigger di evento; `ogni turno` una sottoscrizione al clock, non ulteriori
-fasi della stessa azione. Il contratto di una regola includerà ID, provenienza,
-priorità intera, condizione pura e corpo con effetti espliciti.
+I rulebook sono distinti in prima, invece, verifica, esegui, dopo e descrivi.
+Il contratto di una regola include ID, provenienza, priorità intera, condizione
+pura e corpo con effetti espliciti. Eventi temporali e `ogni turno` restano futuri.
 
-Ordine proposto: priorità decrescente, poi ordine di dichiarazione stabile;
-nessuna euristica di specificità nascosta. Gli esiti saranno una somma tipata:
+L'ordine è priorità decrescente, poi ordine di dichiarazione stabile, senza
+euristiche di specificità nascoste. Gli esiti formano una somma tipata:
 continua, interrompi, fallisci(motivo), sostituisci(intento), risultato(valore).
-Verifica e condizioni non mutano lo stato; gli effetti della fase esegui saranno
-validati e applicati in una transizione. Politica di rollback delle altre fasi
-ancora aperta: da decidere prima di abilitarne effetti arbitrari.
+Verifica e condizioni non mutano lo stato; gli effetti sono validati e applicati
+nella transazione. Ogni fallimento ripristina lo snapshot ricevuto dall'azione.
 
-Sostituzioni avranno limite di profondità e rilevamento cicli; eventi avranno coda
-ordinata e budget per evitare loop. Trace per valutazione: regola, condizione,
-esito, variazioni e azione causale. I test dovranno precisare se dopo/descrivi
-si eseguono per azioni fallite o interrotte; proposta: solo in caso di successo,
-con evento di fallimento separato. Questa proposta richiede un ADR M3.
+Le sostituzioni hanno limite di profondità e rilevamento cicli. Il trace registra
+regola, condizione ed esito. Le fasi dopo e descrivi sono eseguite soltanto dopo
+un'azione riuscita. Eventi con coda e budget restano futuri.
 
 ## Moduli e strumenti futuri
 
@@ -162,7 +163,7 @@ parser. Si consulti l'[ADR 0005](docs/adr/0005-proprieta-e-mondo.md) per le alte
 contiene record immutabili generici. `rules.execute` esegue rulebook attraverso
 un protocollo Host indipendente da IF. `stdlib.game` adatta sessioni e azioni;
 `Transition` espone output, trace e risultato. Questi record furono introdotti
-con l'IR 4 e sono conservati nell'IR 11.
+con l'IR 4 e sono conservati nell'IR 12.
 Vedere [ADR 0006](docs/adr/0006-regole.md).
 
 ## Implementazione M4
@@ -185,6 +186,15 @@ continua a vedere soltanto schemi di relazione generici. Il runtime seleziona
 l'arco dall'intento tipato e lo Studio proietta le direzioni nella mappa senza
 reinterpretare il testo narrativo. Vedere [ADR 0009](docs/adr/0009-direzioni-cardinali.md).
 
+## Relazioni dinamiche
+
+`RelationSpec.mutable` separa gli archi che una regola può cambiare da quelli
+strutturali. Il lowering produce `RelationChange` con sorgente, predicato,
+destinazione e inversa già risolti. L'host applica il cambiamento a un nuovo
+`World`, controlla conflitti e invarianti e lascia al motore il rollback. La
+mappa dello Studio proietta lo snapshot della sessione dopo ogni comando. Vedere
+[ADR 0016](docs/adr/0016-relazioni-dinamiche.md).
+
 ## Metadati e vocabolario
 
 Titolo e autore appartengono al progetto compilato, non allo stato separato del
@@ -203,7 +213,7 @@ confronto transitivo. Vedere [ADR 0011](docs/adr/0011-gerarchia-tipi.md).
 ## Azioni definite dall'autore
 
 Le dichiarazioni di azione vengono unite al catalogo `ActionSpec` dell'host dopo
-la risoluzione dei tipi. L'IR 11 conserva forme di comando e separatori anche
+la risoluzione dei tipi. L'IR 12 conserva forme di comando e separatori anche
 multiparola, oltre ai tipi degli argomenti. Il parser giocatore riceve questo catalogo
 compilato e produce ID di azione; il dispatcher usa le stesse fasi transazionali
 delle azioni standard.

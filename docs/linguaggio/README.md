@@ -19,3 +19,5 @@ Le [forme multiparola](comandi-multiparola.md) aggiungono locuzioni iniziali
 deterministiche e diagnostica delle collisioni di prefisso nell'IR 10.
 I [separatori multiparola](separatori-multiparola.md) aggiungono locuzioni fisse
 fra due oggetti e articolazione dell'ultima preposizione nell'IR 11.
+Le [relazioni dinamiche](relazioni-dinamiche.md) permettono alle regole di creare
+o rimuovere passaggi cardinali transazionali nell'IR 12.
