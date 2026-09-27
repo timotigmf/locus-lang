@@ -6,10 +6,10 @@ import pytest
 
 from locus.diagnostics import CompileError
 from locus.player import parse_command
-from locus.rule_model import ActionCall, Address, RelationChange, RelationEdge
+from locus.rule_model import ActionCall, Address, RelationChange, RelationEdge, TableChange
 from locus.rules import ActionResult, Execution, execute
 from locus.runtime import instantiate
-from locus.schema import Value
+from locus.schema import Scalar, Value
 from locus.stdlib.authoring import compile_story
 from locus.stdlib.game import Session, start, step
 from locus.stdlib.render import render
@@ -444,6 +444,12 @@ def test_engine_works_without_narrative_state() -> None:
         def relate(self, state: int, change: RelationChange, present: bool) -> int:
             return state
 
+        def rows(self, state: int, table_id: str) -> tuple[tuple[Scalar, ...], ...]:
+            return ()
+
+        def change_table(self, state: int, change: TableChange, present: bool) -> int:
+            return state
+
         def perform(self, state: int, action: ActionCall) -> ActionResult[int, str]:
             return ActionResult(state + 1, True, ("eseguita",))
 
@@ -622,6 +628,12 @@ def test_generic_catalog_and_replacement_limit() -> None:
             return value
 
         def relate(self, state: int, change: RelationChange, present: bool) -> int:
+            return state
+
+        def rows(self, state: int, table_id: str) -> tuple[tuple[Scalar, ...], ...]:
+            return ()
+
+        def change_table(self, state: int, change: TableChange, present: bool) -> int:
             return state
 
         def perform(self, state: int, action: ActionCall) -> ActionResult[int, str]:

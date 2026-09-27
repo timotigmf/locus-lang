@@ -55,8 +55,8 @@ Ogni pacchetto conserva il core indipendente dalla narrativa interattiva.
 3. Relazioni dinamiche cardinali, passaggio segreto, visibilità esplicita e
    oggetti di scenario implementati fino all'IR 13. Luce, trasparenza e punti di
    vista multipli restano pacchetti separati.
-4. Elenchi tipati ed effetti transazionali implementati nell'IR 14; tabelle e
-   accesso avanzato alle collezioni restano da completare.
+4. Elenchi e tabelle tipate con effetti transazionali implementati nell'IR 15;
+   query per colonna e accesso avanzato alle collezioni restano da completare.
 5. Costruire persone e dialoghi strutturati prima di scene, veicoli e commercio.
 
 Scene/tempo/punteggio, veicoli, valuta/commercio, multimedia e indici completi

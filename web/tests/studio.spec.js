@@ -372,3 +372,43 @@ Fine regola.`;
     .click();
   await expect(page.locator("#index")).toContainText("orma");
 });
+
+test("tabella tipata aggiorna le righe nell'indice", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.locator("#compileStatus")).toContainText("compilato", {
+    timeout: 90000,
+  });
+  const source = `Titolo: "Il deposito".
+La Sala è una stanza.
+Azione "trasferire" senza oggetti con comando "trasferisci".
+Tabella "deposito":
+    Colonna "nome" testuale.
+    Colonna "valore" numerica.
+    Riga "astrolabio" 40.
+Fine tabella.
+Regola "trasferimento" per trasferire nella fase invece:
+    rimuovi riga "astrolabio" 40 da tabella "deposito";
+    aggiungi riga "maschera" 25 a tabella "deposito";
+    dì "Registro aggiornato.";
+Fine regola.`;
+  await page.locator(".cm-content").click();
+  await page.keyboard.press("ControlOrMeta+A");
+  await page.keyboard.insertText(source);
+  await page
+    .getByRole("button", { name: "▶ Compila e prova", exact: true })
+    .click();
+  await expect(page.locator("#transcript")).toContainText("Sala", {
+    timeout: 90000,
+  });
+  await page
+    .getByRole("button", { name: "Indice del mondo", exact: true })
+    .click();
+  await expect(page.locator("#index")).toContainText("astrolabio");
+  await page.locator("#command").fill("trasferisci");
+  await page.locator("#send").click();
+  await expect(page.locator("#transcript")).toContainText(
+    "Registro aggiornato.",
+  );
+  await expect(page.locator("#index")).toContainText("maschera");
+  await expect(page.locator("#index")).not.toContainText("astrolabio");
+});

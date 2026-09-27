@@ -1,6 +1,7 @@
 """Parser autore controllato: costrutti generici, verbi forniti dal chiamante."""
 
 from collections.abc import Mapping
+from typing import cast
 
 from locus.ast import (
     ActionDeclaration,
@@ -14,12 +15,15 @@ from locus.ast import (
     PropertyDeclaration,
     Relation,
     Rule,
+    TableColumnDeclaration,
+    TableDeclaration,
+    TableRowDeclaration,
     Vocabulary,
 )
 from locus.diagnostics import CompileError, Span
 from locus.lexer import Token, tokenize
 from locus.rule_parser import RuleParser
-from locus.schema import Value, ValueKind
+from locus.schema import Scalar, Value, ValueKind
 
 _LOCATIONS = {"nella", "nel", "nello", "nell"}
 _GENITIVES = {"della", "del", "dello", "dell"}
@@ -142,6 +146,7 @@ class _Parser:
         declarations: list[Declaration] = []
         kinds: list[KindDeclaration] = []
         actions: list[ActionDeclaration] = []
+        tables: list[TableDeclaration] = []
         relations: list[Relation] = []
         properties: list[PropertyDeclaration] = []
         assignments: list[Assignment] = []
@@ -151,6 +156,52 @@ class _Parser:
         metadata: list[Metadata] = []
         vocabulary: list[Vocabulary] = []
         while self.current.kind != "EOF":
+            if self.current.normalized == "tabella":
+                start = self.current.span
+                self.keyword("tabella")
+                name = RuleParser(self).quoted()
+                if self.current.kind != "COLON":
+                    self.fail("':'")
+                self.index += 1
+                columns: list[TableColumnDeclaration] = []
+                rows: list[TableRowDeclaration] = []
+                while self.current.normalized != "fine":
+                    item_start = self.current.span
+                    if self.current.normalized == "colonna":
+                        self.keyword("colonna")
+                        column_name = RuleParser(self).quoted()
+                        table_value_kinds: dict[str, ValueKind] = {
+                            "numerica": "numero",
+                            "testuale": "testo",
+                            "logica": "logico",
+                        }
+                        adjective = self.current.normalized
+                        if adjective not in table_value_kinds:
+                            self.fail("numerica, testuale o logica")
+                        self.index += 1
+                        columns.append(
+                            TableColumnDeclaration(
+                                column_name,
+                                table_value_kinds[adjective],
+                                self.finish(item_start),
+                            )
+                        )
+                    elif self.current.normalized == "riga":
+                        self.keyword("riga")
+                        values: list[Scalar] = []
+                        while self.current.kind != "DOT":
+                            value = self.value()
+                            assert type(value) in {str, int, bool}
+                            values.append(cast(Scalar, value))
+                        rows.append(TableRowDeclaration(tuple(values), self.finish(item_start)))
+                    else:
+                        self.fail("'Colonna', 'Riga' o 'Fine tabella'")
+                self.keyword("fine")
+                self.keyword("tabella")
+                tables.append(
+                    TableDeclaration(name, tuple(columns), tuple(rows), self.finish(start))
+                )
+                continue
             if self.current.normalized == "azione":
                 start = self.current.span
                 self.keyword("azione")
@@ -327,6 +378,7 @@ class _Parser:
             metadata=tuple(metadata),
             vocabulary=tuple(vocabulary),
             actions=tuple(actions),
+            tables=tuple(tables),
         )
 
 

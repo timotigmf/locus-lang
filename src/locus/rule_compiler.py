@@ -4,7 +4,7 @@ from collections.abc import Mapping
 
 from locus.ast import ActionSyntax, PropertyReference, Rule
 from locus.diagnostics import CompileError, Span, canonical
-from locus.ir import EntityIR
+from locus.ir import EntityIR, TableIR
 from locus.rule_model import (
     ActionCall,
     Address,
@@ -14,8 +14,17 @@ from locus.rule_model import (
     RelationChange,
     RelationEdge,
     RuleIR,
+    TableChange,
 )
-from locus.schema import ActionSpec, PropertySpec, RelationSpec, is_subtype, type_ids
+from locus.schema import (
+    ActionSpec,
+    PropertySpec,
+    RelationSpec,
+    Scalar,
+    is_subtype,
+    type_ids,
+    valid_value,
+)
 
 
 def lower_rules(
@@ -25,7 +34,9 @@ def lower_rules(
     actions: Mapping[str, ActionSpec],
     relations: Mapping[str, RelationSpec],
     type_parents: Mapping[str, str | None],
+    tables: Mapping[str, TableIR] | None = None,
 ) -> tuple[RuleIR, ...]:
+    table_catalog = tables or {}
     if len({spec.id for spec in actions.values()}) != len(actions):
         raise ValueError("Identificatori di azione duplicati.")
     for name, spec in actions.items():
@@ -97,6 +108,13 @@ def lower_rules(
         )
 
     def condition(node: Condition[PropertyReference], span: Span) -> Condition[Address]:
+        if node.table_id is not None:
+            changed = table_change(node.table_id, node.row, span)
+            return Condition(
+                "contiene_riga",
+                table_id=changed.table_id,
+                row=changed.row,
+            )
         if node.reference is not None:
             resolved, prop = address(node.reference, span)
             compatible = (
@@ -122,6 +140,21 @@ def lower_rules(
         return Condition(
             node.operator, operands=tuple(condition(child, span) for child in node.operands)
         )
+
+    def table_change(name: str, row: tuple[Scalar, ...], span: Span) -> TableChange:
+        table = table_catalog.get(canonical(name))
+        if table is None:
+            raise CompileError("E314", f"Tabella sconosciuta: {name}.", span)
+        if len(row) != len(table.columns) or any(
+            not valid_value(column.value_kind, value)
+            for column, value in zip(table.columns, row, strict=False)
+        ):
+            raise CompileError(
+                "E314",
+                f"La riga non rispetta lo schema della tabella {name}.",
+                span,
+            )
+        return TableChange(table.id, row)
 
     def relation_change(
         name: str, source_name: str, target_name: str, span: Span
@@ -178,6 +211,8 @@ def lower_rules(
                 "rimuovi_relazione",
                 "aggiungi",
                 "rimuovi",
+                "aggiungi_riga",
+                "rimuovi_riga",
             }:
                 raise CompileError(
                     "E307",
@@ -218,6 +253,15 @@ def lower_rules(
                 if syntax.relation is not None
                 else None
             )
+            changed_table = (
+                table_change(
+                    syntax.table_row.table_name,
+                    syntax.table_row.values,
+                    syntax.span,
+                )
+                if syntax.table_row is not None
+                else None
+            )
             effects.append(
                 Effect(
                     syntax.kind,
@@ -225,6 +269,7 @@ def lower_rules(
                     resolved,
                     replacement,
                     changed_relation,
+                    changed_table,
                 )
             )
             terminal = syntax.kind in {

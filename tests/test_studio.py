@@ -53,6 +53,27 @@ def test_bridge_exposes_current_list_values() -> None:
     )["value"] == ("orma",)
 
 
+def test_bridge_exposes_current_table_rows() -> None:
+    studio = Studio()
+    source = """
+La Sala è una stanza.
+Azione "trasferire" senza oggetti con comando "trasferisci".
+Tabella "deposito":
+    Colonna "nome" testuale.
+    Colonna "valore" numerica.
+    Riga "astrolabio" 40.
+Fine tabella.
+Regola "trasferimento" per trasferire nella fase invece:
+    rimuovi riga "astrolabio" 40 da tabella "deposito";
+    aggiungi riga "maschera" 25 a tabella "deposito";
+Fine regola.
+"""
+    compiled = studio.compile(project(source))
+    assert compiled["ok"] and compiled["ir"]["tables"][0]["rows"] == (("astrolabio", 40),)
+    assert studio.restart()["tables"][0]["rows"] == (("astrolabio", 40),)
+    assert studio.command("trasferisci")["tables"][0]["rows"] == (("maschera", 25),)
+
+
 def test_bridge_exposes_story_metadata_and_uses_vocabulary() -> None:
     studio = Studio()
     result = studio.compile(
@@ -199,6 +220,18 @@ def test_list_diagnostic_links_the_specific_reference() -> None:
     assert diagnostic["code"] == "E313"
     assert diagnostic["title"] == "Elemento di elenco non valido"
     assert diagnostic["manual"] == "docs/linguaggio/liste-tipate.md"
+    assert Path(diagnostic["manual"]).is_file()
+
+
+def test_table_diagnostic_links_the_specific_reference() -> None:
+    studio = Studio()
+    result = studio.compile(
+        project('Tabella "prezzi": Colonna "valore" numerica. Riga "dieci". Fine tabella.')
+    )
+    diagnostic = result["diagnostics"][0]
+    assert diagnostic["code"] == "E117"
+    assert diagnostic["title"] == "Riga di tabella non valida"
+    assert diagnostic["manual"] == "docs/linguaggio/tabelle-tipate.md"
     assert Path(diagnostic["manual"]).is_file()
 
 

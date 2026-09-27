@@ -25,3 +25,5 @@ La [visibilità esplicita](visibilita-scenario.md) aggiunge oggetti nascosti e i
 tipo ambientale non trasportabile `scenario` nell'IR 13.
 Gli [elenchi tipati](liste-tipate.md) aggiungono collezioni omogenee, condizioni
 di appartenenza ed effetti transazionali nell'IR 14.
+Le [tabelle tipate](tabelle-tipate.md) aggiungono colonne nominate, righe
+eterogenee e mutazioni atomiche nell'IR 15.

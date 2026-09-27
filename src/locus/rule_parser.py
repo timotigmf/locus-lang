@@ -2,11 +2,18 @@
 
 from typing import Protocol, cast
 
-from locus.ast import ActionSyntax, EffectSyntax, PropertyReference, RelationSyntax, Rule
+from locus.ast import (
+    ActionSyntax,
+    EffectSyntax,
+    PropertyReference,
+    RelationSyntax,
+    Rule,
+    TableRowSyntax,
+)
 from locus.diagnostics import CompileError, Span
 from locus.lexer import Token, TokenKind
 from locus.rule_model import Condition, EffectKind, Operator, Phase
-from locus.schema import Value
+from locus.schema import Scalar, Value
 
 PHASES = {"prima", "invece", "verifica", "esegui", "dopo", "descrivi"}
 
@@ -94,6 +101,22 @@ class RuleParser:
             boolean = cast(Operator, self.cursor.current.normalized)
             self.cursor.index += 1
             return Condition(boolean)
+        if self.cursor.current.normalized == "tabella":
+            self.cursor.keyword("tabella")
+            table_name = self.quoted()
+            self.cursor.keyword("contiene")
+            self.cursor.keyword("riga")
+            row: list[Scalar] = []
+            while self.cursor.current.kind in {"NUMBER", "STRING"} or (
+                self.cursor.current.kind == "WORD"
+                and self.cursor.current.normalized in {"vero", "falso"}
+            ):
+                value = self.cursor.value()
+                assert type(value) in {str, int, bool}
+                row.append(cast(Scalar, value))
+            if not row:
+                self.cursor.fail("almeno un valore di riga")
+            return Condition("contiene_riga", table_id=table_name, row=tuple(row))
         reference = self.reference()
         if self.cursor.current.normalized == "contiene":
             self.cursor.keyword("contiene")
@@ -120,6 +143,7 @@ class RuleParser:
         reference = None
         action = None
         relation = None
+        table_row = None
         if word in {"dì", "fallisci"}:
             value = self.quoted(name=False)
         elif word in {"imposta", "aumenta", "diminuisci"}:
@@ -132,6 +156,22 @@ class RuleParser:
                 assert type(value) is int
                 value = -value
                 word = "aumenta"
+        elif word in {"aggiungi", "rimuovi"} and self.cursor.current.normalized == "riga":
+            self.cursor.keyword("riga")
+            values: list[Scalar] = []
+            stop = "a" if word == "aggiungi" else "da"
+            while not (
+                self.cursor.current.kind == "WORD" and self.cursor.current.normalized == stop
+            ):
+                value = self.cursor.value()
+                assert type(value) in {str, int, bool}
+                values.append(cast(Scalar, value))
+            if not values:
+                self.cursor.fail("almeno un valore di riga")
+            self.cursor.keyword(stop)
+            self.cursor.keyword("tabella")
+            table_row = TableRowSyntax(self.quoted(), tuple(values))
+            word += "_riga"
         elif word == "aggiungi" or (
             word == "rimuovi" and self.cursor.current.normalized != "relazione"
         ):
@@ -162,6 +202,7 @@ class RuleParser:
             reference,
             action,
             relation,
+            table_row,
             Span(start.source, start.start, end, start.line, start.column),
         )
 

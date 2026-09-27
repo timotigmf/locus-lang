@@ -2,7 +2,7 @@
 
 ## Stato attuale
 
-Versione corrente `0.5.0a1`, IR versione 14. Le specifiche M2, M3 e M4
+Versione corrente `0.5.0a1`, IR versione 15. Le specifiche M2, M3 e M4
 estendono e, dove indicato, sostituiscono i limiti M1 sotto.
 La [specifica M2](docs/linguaggio/milestone-2.md) è normativa per proprietà,
 stringhe, nomi quotati, preposizioni, contenitori, porte e chiavi.
@@ -26,6 +26,8 @@ La specifica di [visibilità e scenario](docs/linguaggio/visibilita-scenario.md)
 definisce oggetti nascosti e dettagli ambientali non trasportabili.
 La specifica degli [elenchi tipati](docs/linguaggio/liste-tipate.md) definisce
 collezioni omogenee, appartenenza ed effetti transazionali.
+La specifica delle [tabelle tipate](docs/linguaggio/tabelle-tipate.md) definisce
+colonne nominate, righe eterogenee e mutazioni atomiche.
 Le sezioni S0/S1 seguenti descrivono il nucleo storico, non l'intera versione.
 
 ## Dichiarazioni (S0, mantenute in 0.1.0a2)
@@ -139,6 +141,8 @@ dell'istruzione interessata. Cataloghi API malformati producono ValueError.
 
 E313 segnala un uso di `contiene`, `aggiungi` o `rimuovi` con una proprietà non
 elenco o un elemento del tipo sbagliato.
+E115–E117 segnalano tabelle duplicate, schemi o righe iniziali non validi;
+E314 segnala condizioni ed effetti di tabella incompatibili.
 
 ## Estensione M3
 
@@ -156,7 +160,7 @@ da file e punto iniziale esplicito. IR corrente versione 5.
 sorgente. `Comprendi "alias" come "entità".` aggiunge un nome alternativo per i
 comandi del giocatore. Metadati duplicati producono `E408`; alias in conflitto
 producono `E409`. Questi campi sono stati introdotti con l'IR 6 e restano
-presenti nell'IR 14.
+presenti nell'IR 15.
 
 ## Tipi definiti dall'autore
 
@@ -165,7 +169,7 @@ avanti sono ammessi e ogni tipo ha al massimo un genitore. I sottotipi sono
 compatibili con proprietà, relazioni e capacità degli antenati. Ridefinizioni
 producono `E113`; cicli nella gerarchia producono `E114`. La specifica completa
 è in [tipi definiti dall'autore](docs/linguaggio/tipi-autore.md). La tabella dei
-tipi è stata introdotta nell'IR 7 e resta presente nell'IR 14.
+tipi è stata introdotta nell'IR 7 e resta presente nell'IR 15.
 
 ## Azioni e comandi definiti dall'autore
 
@@ -176,7 +180,7 @@ Nomi duplicati producono `E310`; comandi non validi o in conflitto producono
 `E311`. `e sinonimo "riverisci"` aggiunge una forma equivalente; più clausole
 `e separatore` definiscono le locuzioni fra gli oggetti di un'azione a due
 oggetti. Comandi e separatori possono contenere fino a quattro parole e non
-possono avere prefissi ambigui. L'IR corrente è la versione 14.
+possono avere prefissi ambigui. L'IR corrente è la versione 15.
 
 ## Relazioni dinamiche
 
@@ -186,7 +190,7 @@ risolve gli ID, controlla tipi e mutabilità e incorpora le inverse nello stesso
 effetto. Il runtime applica il cambiamento nella transazione della regola. Gli
 usi non validi producono `E312`; si veda la
 [specifica completa](docs/linguaggio/relazioni-dinamiche.md). Questa estensione
-introduce l'IR 12 ed è conservata nell'IR 14.
+introduce l'IR 12 ed è conservata nell'IR 15.
 
 ## Visibilità e scenario
 
@@ -204,3 +208,12 @@ regole usano `aggiungi VALORE a "proprietà" di "entità"`, `rimuovi VALORE da
 ...` e la condizione `"proprietà" di "entità" contiene VALORE`. Il compilatore
 controlla il tipo dell'elemento; le mutazioni rispettano il rollback dell'azione.
 La [specifica completa](docs/linguaggio/liste-tipate.md) introduce l'IR 14.
+
+## Tabelle tipate
+
+`Tabella "nome": ... Fine tabella.` dichiara colonne testuali, numeriche o
+logiche e righe controllate rispetto allo schema. Le condizioni verificano una
+riga completa; `aggiungi riga ... a tabella ...` e `rimuovi riga ... da tabella
+...` modificano lo stato con rollback. `E115`–`E117` diagnosticano dichiarazioni
+e righe iniziali; `E314` gli usi incompatibili nelle regole. La
+[specifica completa](docs/linguaggio/tabelle-tipate.md) introduce l'IR 15.

@@ -92,6 +92,31 @@ def test_clue_list_tutorial_collects_deduces_and_removes() -> None:
     )
 
 
+def test_table_tutorial_transfers_the_artifact_atomically() -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "15_tabelle_reperti.locus")))
+    before = step(current, parse_command("consulta deposito", current.world.actions))
+    assert "attende nel deposito" in render(before)
+    moved = step(
+        before.session,
+        parse_command("trasferisci astrolabio", before.session.world.actions),
+    )
+    assert "trasferito nella mostra" in render(moved)
+    assert moved.session.world.tables[0].rows == (("maschera", 25, False),)
+    assert moved.session.world.tables[1].rows == (("astrolabio", 40, True),)
+    assert "vetrina centrale" in render(
+        step(
+            moved.session,
+            parse_command("consulta mostra", moved.session.world.actions),
+        )
+    )
+    repeated = step(
+        moved.session,
+        parse_command("trasferisci astrolabio", moved.session.world.actions),
+    )
+    assert repeated.session is moved.session
+    assert render(repeated) == "L'astrolabio non è disponibile nel deposito."
+
+
 def test_tutorial_accepts_classic_abbreviation_and_unique_partial_name() -> None:
     current = start(instantiate(compile_story_file(TUTORIAL / "02_custodia.locus")))
     examined = step(current, parse_command("x custodia"))

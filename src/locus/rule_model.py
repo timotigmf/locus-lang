@@ -3,7 +3,7 @@
 from dataclasses import dataclass
 from typing import Generic, Literal, TypeVar
 
-from locus.schema import Value
+from locus.schema import Scalar, Value
 
 Ref = TypeVar("Ref")
 Phase = Literal["prima", "invece", "verifica", "esegui", "dopo", "descrivi"]
@@ -17,6 +17,7 @@ Operator = Literal[
     "almeno",
     "massimo",
     "contiene",
+    "contiene_riga",
     "e",
     "o",
     "non",
@@ -34,6 +35,8 @@ EffectKind = Literal[
     "rimuovi_relazione",
     "aggiungi",
     "rimuovi",
+    "aggiungi_riga",
+    "rimuovi_riga",
 ]
 
 
@@ -43,6 +46,8 @@ class Condition(Generic[Ref]):
     reference: Ref | None = None
     value: Value | None = None
     operands: tuple["Condition[Ref]", ...] = ()
+    table_id: str | None = None
+    row: tuple[Scalar, ...] = ()
 
 
 @dataclass(frozen=True, slots=True)
@@ -71,6 +76,12 @@ class RelationChange:
 
 
 @dataclass(frozen=True, slots=True)
+class TableChange:
+    table_id: str
+    row: tuple[Scalar, ...]
+
+
+@dataclass(frozen=True, slots=True)
 class Origin:
     source: str
     line: int
@@ -84,6 +95,7 @@ class Effect:
     address: Address | None = None
     action: ActionCall | None = None
     relation: RelationChange | None = None
+    table: TableChange | None = None
 
 
 @dataclass(frozen=True, slots=True)

@@ -3,8 +3,17 @@
 from dataclasses import dataclass, field
 from typing import Generic, Literal, Protocol, TypeVar, cast
 
-from locus.rule_model import ActionCall, Address, Condition, Phase, RelationChange, RuleIR, Trace
-from locus.schema import Value
+from locus.rule_model import (
+    ActionCall,
+    Address,
+    Condition,
+    Phase,
+    RelationChange,
+    RuleIR,
+    TableChange,
+    Trace,
+)
+from locus.schema import Scalar, Value
 
 S = TypeVar("S")
 E = TypeVar("E")
@@ -26,6 +35,8 @@ class Host(Protocol[S, E]):
     def read(self, state: S, address: Address) -> Value: ...
     def write(self, state: S, address: Address, value: Value) -> S: ...
     def relate(self, state: S, change: RelationChange, present: bool) -> S: ...
+    def rows(self, state: S, table_id: str) -> tuple[tuple[Scalar, ...], ...]: ...
+    def change_table(self, state: S, change: TableChange, present: bool) -> S: ...
     def perform(self, state: S, action: ActionCall) -> ActionResult[S, E]: ...
 
 
@@ -45,16 +56,22 @@ class _Control:
     replacement: ActionCall | None = None
 
 
-def evaluate(condition: Condition[Address], read: "Reader") -> bool:
+def evaluate(
+    condition: Condition[Address], read: "Reader", rows: "TableReader | None" = None
+) -> bool:
     op = condition.operator
     if op in {"vero", "falso"}:
         return op == "vero"
     if op == "e":
-        return all(evaluate(child, read) for child in condition.operands)
+        return all(evaluate(child, read, rows) for child in condition.operands)
     if op == "o":
-        return any(evaluate(child, read) for child in condition.operands)
+        return any(evaluate(child, read, rows) for child in condition.operands)
     if op == "non":
-        return not evaluate(condition.operands[0], read)
+        return not evaluate(condition.operands[0], read, rows)
+    if op == "contiene_riga":
+        if condition.table_id is None or rows is None:
+            raise RuleError("Condizione di tabella incompleta.")
+        return condition.row in rows(condition.table_id)
     if condition.reference is None:
         raise RuleError("Confronto senza riferimento di proprietà.")
     left, right = read(condition.reference), condition.value
@@ -82,6 +99,10 @@ class Reader(Protocol):
     def __call__(self, address: Address) -> Value: ...
 
 
+class TableReader(Protocol):
+    def __call__(self, table_id: str) -> tuple[tuple[Scalar, ...], ...]: ...
+
+
 @dataclass
 class _Run(Generic[S, E]):
     state: S
@@ -107,7 +128,9 @@ class _Run(Generic[S, E]):
             matched = False
             try:
                 matched = evaluate(
-                    rule.condition, lambda address: self.host.read(self.state, address)
+                    rule.condition,
+                    lambda address: self.host.read(self.state, address),
+                    lambda table_id: self.host.rows(self.state, table_id),
                 )
                 if not matched:
                     self.trace.append(
@@ -157,6 +180,13 @@ class _Run(Generic[S, E]):
                             self.state,
                             effect.relation,
                             effect.kind == "crea_relazione",
+                        )
+                    elif effect.kind in {"aggiungi_riga", "rimuovi_riga"}:
+                        assert effect.table is not None
+                        self.state = self.host.change_table(
+                            self.state,
+                            effect.table,
+                            effect.kind == "aggiungi_riga",
                         )
                     else:
                         control = _Control(effect.kind, effect.value, effect.action)

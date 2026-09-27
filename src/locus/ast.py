@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 from locus.diagnostics import Span
 from locus.rule_model import Condition, EffectKind, Phase
-from locus.schema import Value, ValueKind
+from locus.schema import Scalar, Value, ValueKind
 
 
 @dataclass(frozen=True, slots=True)
@@ -56,6 +56,27 @@ class Assignment:
 
 
 @dataclass(frozen=True, slots=True)
+class TableColumnDeclaration:
+    name: str
+    value_kind: ValueKind
+    span: Span
+
+
+@dataclass(frozen=True, slots=True)
+class TableRowDeclaration:
+    values: tuple[Scalar, ...]
+    span: Span
+
+
+@dataclass(frozen=True, slots=True)
+class TableDeclaration:
+    name: str
+    columns: tuple[TableColumnDeclaration, ...]
+    rows: tuple[TableRowDeclaration, ...]
+    span: Span
+
+
+@dataclass(frozen=True, slots=True)
 class PropertyReference:
     entity_name: str
     property_name: str
@@ -76,12 +97,19 @@ class RelationSyntax:
 
 
 @dataclass(frozen=True, slots=True)
+class TableRowSyntax:
+    table_name: str
+    values: tuple[Scalar, ...]
+
+
+@dataclass(frozen=True, slots=True)
 class EffectSyntax:
     kind: EffectKind
     value: Value | None
     reference: PropertyReference | None
     action: ActionSyntax | None
     relation: RelationSyntax | None
+    table_row: TableRowSyntax | None
     span: Span
 
 
@@ -136,3 +164,4 @@ class Program:
     vocabulary: tuple[Vocabulary, ...] = ()
     kinds: tuple[KindDeclaration, ...] = ()
     actions: tuple[ActionDeclaration, ...] = ()
+    tables: tuple[TableDeclaration, ...] = ()

@@ -1,11 +1,21 @@
 """Istanziazione minima: il runtime non conosce il linguaggio sorgente."""
 
 from dataclasses import dataclass
+from typing import Any
 
 from locus.diagnostics import canonical
 from locus.graph import cycle_node
-from locus.ir import IR_VERSION, ActionIR, ProgramIR, PropertyIR, RelationIR, SynonymIR, TypeIR
-from locus.rule_model import RuleIR
+from locus.ir import (
+    IR_VERSION,
+    ActionIR,
+    ProgramIR,
+    PropertyIR,
+    RelationIR,
+    SynonymIR,
+    TableIR,
+    TypeIR,
+)
+from locus.rule_model import Condition, RuleIR
 from locus.schema import (
     PropertySpec,
     command_forms_conflict,
@@ -13,6 +23,7 @@ from locus.schema import (
     separator_forms_conflict,
     valid_command_form,
     valid_separator_form,
+    valid_value,
 )
 
 
@@ -36,6 +47,7 @@ class World:
     author: str | None = None
     types: tuple[TypeIR, ...] = ()
     actions: tuple[ActionIR, ...] = ()
+    tables: tuple[TableIR, ...] = ()
 
 
 def has_type(world: World, actual: str, expected: str) -> bool:
@@ -133,7 +145,61 @@ def instantiate(program: ProgramIR) -> World:
     keys = {(edge.source_id, edge.predicate_id) for edge in program.relations}
     if len(keys) != len(program.relations):
         raise ValueError("Relazioni duplicate o in conflitto nell'IR.")
+    tables_by_id = {table.id: table for table in program.tables}
+    table_ids = set(tables_by_id)
+    table_labels = [canonical(table.label) for table in program.tables]
+    if (
+        len(program.tables) > 64
+        or len(table_ids) != len(program.tables)
+        or len(set(table_labels)) != len(table_labels)
+    ):
+        raise ValueError("Identificatori o nomi di tabella duplicati nell'IR.")
+    for table in program.tables:
+        column_ids = [column.id for column in table.columns]
+        column_labels = [canonical(column.label) for column in table.columns]
+        if (
+            not table.id.strip()
+            or not canonical(table.label)
+            or not 1 <= len(table.columns) <= 64
+            or len(set(column_ids)) != len(column_ids)
+            or len(set(column_labels)) != len(column_labels)
+            or any(
+                not column.id.strip()
+                or not canonical(column.label)
+                or column.value_kind not in {"numero", "testo", "logico"}
+                for column in table.columns
+            )
+            or len(table.rows) > 10_000
+            or any(
+                len(row) != len(table.columns)
+                or any(
+                    not valid_value(column.value_kind, value)
+                    for column, value in zip(table.columns, row, strict=False)
+                )
+                for row in table.rows
+            )
+        ):
+            raise ValueError("Schema o righe di tabella non validi nell'IR.")
+
+    def validate_table_condition(condition: Condition[Any]) -> None:
+        if condition.operator == "contiene_riga":
+            table = tables_by_id.get(condition.table_id or "")
+            if (
+                table is None
+                or len(condition.row) != len(table.columns)
+                or any(
+                    not valid_value(column.value_kind, value)
+                    for column, value in zip(table.columns, condition.row, strict=False)
+                )
+            ):
+                raise ValueError("Condizione di tabella non valida nell'IR.")
+        elif condition.table_id is not None or condition.row:
+            raise ValueError("Condizione di tabella associata all'operatore errato nell'IR.")
+        for child in condition.operands:
+            validate_table_condition(child)
+
     for rule in program.rules:
+        validate_table_condition(rule.condition)
         for effect in rule.effects:
             relation = effect.relation
             if effect.kind in {"crea_relazione", "rimuovi_relazione"}:
@@ -150,6 +216,23 @@ def instantiate(program: ProgramIR) -> World:
                     raise ValueError("Mutazione di relazione non valida nell'IR.")
             elif relation is not None:
                 raise ValueError("Mutazione di relazione associata all'effetto errato nell'IR.")
+            table_change = effect.table
+            if effect.kind in {"aggiungi_riga", "rimuovi_riga"}:
+                changed_table = tables_by_id.get(table_change.table_id if table_change else "")
+                if (
+                    table_change is None
+                    or changed_table is None
+                    or len(table_change.row) != len(changed_table.columns)
+                    or any(
+                        not valid_value(column.value_kind, value)
+                        for column, value in zip(
+                            changed_table.columns, table_change.row, strict=False
+                        )
+                    )
+                ):
+                    raise ValueError("Mutazione di tabella incompleta nell'IR.")
+            elif table_change is not None:
+                raise ValueError("Mutazione di tabella associata all'effetto errato nell'IR.")
     specs = {spec.id: spec for spec in program.property_specs}
     if len(specs) != len(program.property_specs):
         raise ValueError("Schemi di proprietà duplicati nell'IR.")
@@ -178,4 +261,5 @@ def instantiate(program: ProgramIR) -> World:
         author=program.author,
         types=types,
         actions=program.actions,
+        tables=program.tables,
     )

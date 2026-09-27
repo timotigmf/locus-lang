@@ -28,6 +28,7 @@ al prompt della storia: lì si scrivono soltanto i comandi del giocatore.
 | [12. Passaggi segreti](12-passaggi-segreti.md) | `examples/tutorial/12_passaggio_segreto.locus` | Creare e rimuovere uscite con rollback e mappa dinamica |
 | [13. Scenario e oggetti nascosti](13-visibilita-scenario.md) | `examples/tutorial/13_scenario_nascosto.locus` | Separare esistenza, visibilità e trasportabilità |
 | [14. Un taccuino di indizi](14-elenchi-indizi.md) | `examples/tutorial/14_taccuino_indizi.locus` | Raccogliere, verificare e rimuovere elementi tipati |
+| [15. Il registro dei reperti](15-tabelle-reperti.md) | `examples/tutorial/15_tabelle_reperti.locus` | Definire schemi e trasferire righe in una transazione |
 
 Prima prova la versione fornita. Poi modifica un solo elemento e riesegui la
 sequenza di comandi. In caso di errore conserva il messaggio, il file sorgente e

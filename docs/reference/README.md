@@ -9,7 +9,7 @@
 | --- | --- |
 | controlla | valida entità e relazioni; stampa numero di entità |
 | ast | JSON AST senza validazione semantica |
-| ir / compila | JSON IR versione 14, dopo validazione |
+| ir / compila | JSON IR versione 15, dopo validazione |
 | gioca | compila e avvia la sessione IF dalla prima stanza dichiarata |
 
 `gioca`: guarda, esamina, prendi, lascia, metti, apri, chiudi, blocca,
@@ -102,6 +102,11 @@ Gli elenchi autore nascono vuoti. `PropertySpec.accepts_item` convalida un
 elemento; `aggiungi` lo accoda, `rimuovi` elimina la prima occorrenza e
 `contiene` verifica l'appartenenza. Gli effetti sulle collezioni partecipano al
 rollback delle regole e sono vietati nella fase `verifica`.
+
+`ProgramIR.tables` e `World.tables` contengono `TableIR`: ID, etichetta,
+`TableColumnIR` ordinate e righe scalari immutabili. Le condizioni
+`contiene_riga` e gli effetti `aggiungi_riga`/`rimuovi_riga` conservano ID e
+valori già risolti. Il runtime ricontrolla schemi e riferimenti dell'IR.
 
 Event.kind aggiunge opened, closed, locked, already_open, already_closed,
 already_locked, not_openable, wrong_key, not_carried, container_closed,

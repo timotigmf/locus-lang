@@ -560,6 +560,32 @@ function renderIndex(ir) {
     table.append(row);
   }
   const content = [table];
+  if ((ir.tables ?? []).length) {
+    content.push(el("h3", {}, "Tabelle"));
+    for (const data of ir.tables) {
+      content.push(el("h4", {}, data.label));
+      const grid = el("table", { class: "data" });
+      const tableHead = el("tr");
+      for (const column of data.columns)
+        tableHead.append(
+          el("th", {}, `${column.label} · ${column.value_kind}`),
+        );
+      grid.append(tableHead);
+      for (const values of data.rows) {
+        const row = el("tr");
+        for (const value of values) row.append(el("td", {}, String(value)));
+        grid.append(row);
+      }
+      if (!data.rows.length) {
+        const row = el("tr");
+        row.append(
+          el("td", { colspan: String(data.columns.length) }, "Nessuna riga"),
+        );
+        grid.append(row);
+      }
+      content.push(grid);
+    }
+  }
   if ((ir.actions ?? []).length) {
     content.push(el("h3", {}, "Azioni definite dall'autore"));
     const actions = el("table", { class: "data" });
@@ -626,6 +652,7 @@ function appendOutput(result, command) {
   showMap(result.map);
   if (compiled && result.properties) {
     compiled.ir.properties = result.properties;
+    compiled.ir.tables = result.tables ?? compiled.ir.tables;
     renderIndex(compiled.ir);
   }
   if (result.ended) stopGame();

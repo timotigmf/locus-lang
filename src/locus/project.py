@@ -87,4 +87,5 @@ def load_project(
         metadata=tuple(item for unit in units for item in unit.metadata),
         vocabulary=tuple(item for unit in units for item in unit.vocabulary),
         actions=tuple(item for unit in units for item in unit.actions),
+        tables=tuple(item for unit in units for item in unit.tables),
     )

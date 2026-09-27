@@ -13,6 +13,8 @@ from locus.ir import (
     PropertyIR,
     RelationIR,
     SynonymIR,
+    TableColumnIR,
+    TableIR,
     TypeIR,
 )
 from locus.parser import parse
@@ -21,6 +23,7 @@ from locus.schema import (
     ActionSpec,
     PropertySpec,
     RelationSpec,
+    Scalar,
     Value,
     command_forms_conflict,
     is_subtype,
@@ -28,6 +31,7 @@ from locus.schema import (
     type_ids,
     valid_command_form,
     valid_separator_form,
+    valid_value,
 )
 
 
@@ -242,6 +246,57 @@ def analyze(
                 separators,
             )
         )
+    if len(program.tables) > 64:
+        raise CompileError(
+            "E116", "Un progetto ammette al massimo 64 tabelle.", program.tables[64].span
+        )
+    table_catalog: dict[str, TableIR] = {}
+    for index, table_declaration in enumerate(program.tables, 1):
+        name = canonical(table_declaration.name)
+        if name in table_catalog:
+            raise CompileError(
+                "E115",
+                f"Tabella già dichiarata: {table_declaration.name}.",
+                table_declaration.span,
+            )
+        if not 1 <= len(table_declaration.columns) <= 64:
+            raise CompileError(
+                "E116", "Una tabella richiede da 1 a 64 colonne.", table_declaration.span
+            )
+        column_names = [canonical(column.name) for column in table_declaration.columns]
+        if any(not column_name for column_name in column_names) or len(set(column_names)) != len(
+            column_names
+        ):
+            raise CompileError(
+                "E116",
+                "I nomi delle colonne devono essere univoci e non vuoti.",
+                table_declaration.span,
+            )
+        if len(table_declaration.rows) > 10_000:
+            raise CompileError(
+                "E117",
+                "Una tabella ammette al massimo 10000 righe.",
+                table_declaration.rows[10_000].span,
+            )
+        columns = tuple(
+            TableColumnIR(column_name, column.name, column.value_kind)
+            for column_name, column in zip(column_names, table_declaration.columns, strict=True)
+        )
+        rows: list[tuple[Scalar, ...]] = []
+        for row in table_declaration.rows:
+            if len(row.values) != len(columns) or any(
+                not valid_value(column.value_kind, value)
+                for column, value in zip(columns, row.values, strict=False)
+            ):
+                raise CompileError(
+                    "E117",
+                    "La riga deve avere un valore compatibile per ogni colonna.",
+                    row.span,
+                )
+            rows.append(row.values)
+        table_catalog[name] = TableIR(
+            f"autore.tabella.{index}", table_declaration.name, columns, tuple(rows)
+        )
     symbols: dict[str, EntityIR] = {}
     for entity_declaration in program.declarations:
         name = canonical(entity_declaration.name)
@@ -422,6 +477,7 @@ def analyze(
             action_catalog,
             catalog,
             type_parents,
+            table_catalog,
         ),
         entry_id=entry_id,
         synonyms=tuple(synonyms.values()),
@@ -429,6 +485,7 @@ def analyze(
         author=metadata.get("autore"),
         types=type_records,
         actions=tuple(action_records),
+        tables=tuple(table_catalog.values()),
     )
 
 

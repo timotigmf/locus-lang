@@ -3,9 +3,9 @@
 from dataclasses import dataclass
 
 from locus.rule_model import RuleIR
-from locus.schema import PropertySpec, Value
+from locus.schema import PropertySpec, Scalar, Value, ValueKind
 
-IR_VERSION = 14
+IR_VERSION = 15
 
 
 @dataclass(frozen=True, slots=True)
@@ -53,6 +53,21 @@ class SynonymIR:
 
 
 @dataclass(frozen=True, slots=True)
+class TableColumnIR:
+    id: str
+    label: str
+    value_kind: ValueKind
+
+
+@dataclass(frozen=True, slots=True)
+class TableIR:
+    id: str
+    label: str
+    columns: tuple[TableColumnIR, ...]
+    rows: tuple[tuple[Scalar, ...], ...] = ()
+
+
+@dataclass(frozen=True, slots=True)
 class ProgramIR:
     version: int
     entities: tuple[EntityIR, ...]
@@ -66,3 +81,4 @@ class ProgramIR:
     author: str | None = None
     types: tuple[TypeIR, ...] = ()
     actions: tuple[ActionIR, ...] = ()
+    tables: tuple[TableIR, ...] = ()

@@ -218,7 +218,7 @@ imitare. La misura utile è coprire ogni contratto pubblico e ogni regressione.
 | 1 | gerarchia di tipi e azioni autore | nuovi tipi e azioni tipate senza dipendenza IF nel core |
 | 2 | grammatica italiana dei comandi | forme `Comprendi` con token tipati e ambiguità esplicite |
 | 3 | relazioni dinamiche, visibilità e scenario implementati fino all'IR 13 | passaggio segreto reale, oggetto nascosto e mappa coerente con lo stato |
-| 4 | elenchi tipati ed effetti implementati nell'IR 14; tabelle ancora aperte | indizi e cronologie modificati transazionalmente |
+| 4 | elenchi e tabelle tipate con effetti implementati nell'IR 15 | indizi, cronologie e registri modificati transazionalmente |
 | 5 | persone e dialogo | conversazione ramificata con trace e test dei nodi |
 | 6 | scene, tempo e punteggio | eventi temporali e premi registrati e riproducibili |
 | 7 | veicoli | movimento atomico di conducente, passeggeri e veicolo |

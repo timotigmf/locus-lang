@@ -1,0 +1,55 @@
+Titolo: "Il registro dei reperti".
+Autore: "Esempio LOCUS".
+
+La "Sala del Registro" è una stanza.
+Inizia nella "Sala del Registro".
+La "Sala del Registro" ha descrizione "Due registri sorvegliano il passaggio dal deposito alla mostra.".
+
+Azione "consultare deposito" senza oggetti con comando "consulta deposito".
+Azione "consultare mostra" senza oggetti con comando "consulta mostra".
+Azione "trasferire astrolabio" senza oggetti con comando "trasferisci astrolabio".
+
+Tabella "deposito":
+    Colonna "nome" testuale.
+    Colonna "valore" numerica.
+    Colonna "fragile" logica.
+    Riga "astrolabio" 40 vero.
+    Riga "maschera" 25 falso.
+Fine tabella.
+
+Tabella "mostra":
+    Colonna "nome" testuale.
+    Colonna "valore" numerica.
+    Colonna "fragile" logica.
+Fine tabella.
+
+Regola "astrolabio in deposito" per consultare deposito nella fase invece
+quando tabella "deposito" contiene riga "astrolabio" 40 vero:
+    dì "L'astrolabio attende nel deposito.";
+Fine regola.
+
+Regola "astrolabio non disponibile" per consultare deposito nella fase invece
+quando non tabella "deposito" contiene riga "astrolabio" 40 vero:
+    dì "L'astrolabio non è più nel deposito.";
+Fine regola.
+
+Regola "astrolabio in mostra" per consultare mostra nella fase invece
+quando tabella "mostra" contiene riga "astrolabio" 40 vero:
+    dì "L'astrolabio è esposto nella vetrina centrale.";
+Fine regola.
+
+Regola "mostra ancora vuota" per consultare mostra nella fase invece
+quando non tabella "mostra" contiene riga "astrolabio" 40 vero:
+    dì "La vetrina centrale è ancora vuota.";
+Fine regola.
+
+Regola "trasferimento" per trasferire astrolabio nella fase invece priorità 10
+quando tabella "deposito" contiene riga "astrolabio" 40 vero:
+    rimuovi riga "astrolabio" 40 vero da tabella "deposito";
+    aggiungi riga "astrolabio" 40 vero a tabella "mostra";
+    dì "L'astrolabio è stato trasferito nella mostra.";
+Fine regola.
+
+Regola "trasferimento impossibile" per trasferire astrolabio nella fase verifica:
+    fallisci "L'astrolabio non è disponibile nel deposito.";
+Fine regola.

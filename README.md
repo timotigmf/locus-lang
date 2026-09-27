@@ -6,7 +6,7 @@ Nome **LOCUS provvisorio**; il repository locale si chiama LOCUS.
 ## Stato reale
 
 Versione `0.5.0a1`: **Studio web, mappa, test ed esportazione di storie per il browser**.
-Proprietà scalari ed elenchi tipati definiti dall’autore, contenimento annidato,
+Proprietà scalari, elenchi e tabelle tipate definiti dall’autore, contenimento annidato,
 accessibilità verificata, tipi dell'autore con ereditarietà singola e azioni con
 due oggetti. Relazioni cardinali dinamiche, oggetti nascosti e dettagli di
 `scenario` non trasportabili sono modellati nel mondo. Gli autori possono
@@ -106,7 +106,7 @@ diagnostica che conserva il file originale. Ramo GitHub: `codex/milestone-4`.
 
 ## Tutorial in italiano
 
-[Costruisci il faro di Selce](docs/tutorial/README.md): quattordici lezioni, esercizi
+[Costruisci il faro di Selce](docs/tutorial/README.md): quindici lezioni, esercizi
 con soluzioni, esempi eseguibili e copione verificato automaticamente.
 [Materiali consultati e scelte](docs/architettura/materiali-didattici.md).
 

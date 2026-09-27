@@ -4,12 +4,12 @@ from dataclasses import dataclass, replace
 from typing import Literal
 
 from locus.diagnostics import canonical
-from locus.ir import ActionIR, PropertyIR, RelationIR
+from locus.ir import ActionIR, PropertyIR, RelationIR, TableIR
 from locus.player import Intent
-from locus.rule_model import ActionCall, Address, RelationChange, Trace
+from locus.rule_model import ActionCall, Address, RelationChange, TableChange, Trace
 from locus.rules import ActionResult, RuleError, execute
 from locus.runtime import Entity, World, has_type
-from locus.schema import Value
+from locus.schema import Scalar, Value, valid_value
 from locus.stdlib import (
     CONTAINER,
     DOOR,
@@ -464,6 +464,36 @@ class _RuleHost:
         except ValueError as error:
             raise RuleError(str(error)) from error
         return updated
+
+    def rows(self, state: Session, table_id: str) -> tuple[tuple[Scalar, ...], ...]:
+        table = next((item for item in state.world.tables if item.id == table_id), None)
+        if table is None:
+            raise RuleError("Tabella runtime assente.")
+        return table.rows
+
+    def change_table(self, state: Session, change: TableChange, present: bool) -> Session:
+        table = next((item for item in state.world.tables if item.id == change.table_id), None)
+        if (
+            table is None
+            or len(change.row) != len(table.columns)
+            or any(
+                not valid_value(column.value_kind, value)
+                for column, value in zip(table.columns, change.row, strict=False)
+            )
+        ):
+            raise RuleError("Riga non valida per la tabella.")
+        if present:
+            rows = (*table.rows, change.row)
+        else:
+            mutable = list(table.rows)
+            try:
+                mutable.remove(change.row)
+            except ValueError:
+                pass
+            rows = tuple(mutable)
+        changed = TableIR(table.id, table.label, table.columns, rows)
+        tables = tuple(changed if item.id == table.id else item for item in state.world.tables)
+        return replace(state, world=replace(state.world, tables=tables))
 
     def perform(self, state: Session, action: ActionCall) -> ActionResult[Session, Event]:
         labels = {e.id: e.label for e in state.world.entities}

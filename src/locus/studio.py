@@ -62,6 +62,21 @@ _ERROR_HELP = {
         "Ogni catena deve terminare in un tipo esistente senza tornare indietro.",
         "docs/linguaggio/tipi-autore.md",
     ),
+    "E115": (
+        "Tabella duplicata",
+        "Scegli un nome univoco per ogni tabella del progetto.",
+        "docs/linguaggio/tabelle-tipate.md",
+    ),
+    "E116": (
+        "Schema di tabella non valido",
+        "Dichiara da 1 a 64 colonne con nomi univoci.",
+        "docs/linguaggio/tabelle-tipate.md",
+    ),
+    "E117": (
+        "Riga di tabella non valida",
+        "Fornisci un valore del tipo corretto per ogni colonna.",
+        "docs/linguaggio/tabelle-tipate.md",
+    ),
     "E310": (
         "Azione duplicata",
         "Scegli un nome che non appartenga già alla storia o alla libreria.",
@@ -81,6 +96,11 @@ _ERROR_HELP = {
         "Elemento di elenco non valido",
         "Controlla che la proprietà sia un elenco e che l'elemento abbia il tipo dichiarato.",
         "docs/linguaggio/liste-tipate.md",
+    ),
+    "E314": (
+        "Operazione di tabella non valida",
+        "Controlla nome della tabella, numero dei valori e tipi delle colonne.",
+        "docs/linguaggio/tabelle-tipate.md",
     ),
     "E201": (
         "Mondo incoerente",
@@ -271,6 +291,7 @@ class Studio:
             "ended": transition.event.kind == "quit",
             "map": map_data(transition.session.world),
             "properties": [asdict(item) for item in transition.session.world.properties],
+            "tables": [asdict(item) for item in transition.session.world.tables],
         }
 
     def restart(self) -> dict[str, Any]:

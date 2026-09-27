@@ -75,6 +75,6 @@ prove.
 
 Gli elenchi sono proprietà di entità e non valori annidabili. Non sono ancora
 disponibili indice, ordinamento, lunghezza, scorrimento, interpolazione nella
-narrazione, letterali, tabelle o record. Il giocatore non vede automaticamente
-il contenuto: l'autore lo racconta con regole e condizioni. Le tabelle avranno
-un contratto separato, perché richiedono colonne nominate e righe tipate.
+narrazione, letterali o collezioni annidate. Il giocatore non vede
+automaticamente il contenuto: l'autore lo racconta con regole e condizioni. Per
+record eterogenei sono disponibili le [tabelle tipate](tabelle-tipate.md).
