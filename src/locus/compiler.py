@@ -359,7 +359,14 @@ def analyze(
                 f"Proprietà già dichiarata: {property_declaration.name}.",
                 property_declaration.span,
             )
-        defaults: dict[str, Value] = {"numero": 0, "testo": "", "logico": False}
+        defaults: dict[str, Value] = {
+            "numero": 0,
+            "testo": "",
+            "logico": False,
+            "elenco_testi": (),
+            "elenco_numeri": (),
+            "elenco_logici": (),
+        }
         property_catalog[name] = PropertySpec(
             "autore." + name,
             tuple(kind_symbols.values()),

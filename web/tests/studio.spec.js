@@ -328,3 +328,47 @@ Fine regola.`;
     "Vedi: mosaico, chiave.",
   );
 });
+
+test("elenco tipato raccoglie indizi nello Studio", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.locator("#compileStatus")).toContainText("compilato", {
+    timeout: 90000,
+  });
+  const source = `Titolo: "Gli indizi".
+La Sala è una stanza.
+Il taccuino è uno scenario nella Sala.
+La indizi è una proprietà elenco di testi.
+Azione "annotare" senza oggetti con comando "annota".
+Azione "dedurre" senza oggetti con comando "deduci".
+Regola "annotazione" per annotare nella fase invece:
+    aggiungi "orma" a "indizi" di "taccuino";
+    dì "Indizio registrato.";
+Fine regola.
+Regola "deduzione" per dedurre nella fase invece
+quando "indizi" di "taccuino" contiene "orma":
+    dì "La traccia porta al cortile.";
+Fine regola.`;
+  await page.locator(".cm-content").click();
+  await page.keyboard.press("ControlOrMeta+A");
+  await page.keyboard.insertText(source);
+  await page
+    .getByRole("button", { name: "▶ Compila e prova", exact: true })
+    .click();
+  await expect(page.locator("#transcript")).toContainText("Sala", {
+    timeout: 90000,
+  });
+  await page.locator("#command").fill("annota");
+  await page.locator("#send").click();
+  await expect(page.locator("#transcript")).toContainText(
+    "Indizio registrato.",
+  );
+  await page.locator("#command").fill("deduci");
+  await page.locator("#send").click();
+  await expect(page.locator("#transcript")).toContainText(
+    "La traccia porta al cortile.",
+  );
+  await page
+    .getByRole("button", { name: "Indice del mondo", exact: true })
+    .click();
+  await expect(page.locator("#index")).toContainText("orma");
+});

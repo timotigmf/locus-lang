@@ -25,6 +25,7 @@
 - [Comandi multiparola](linguaggio/comandi-multiparola.md): locuzioni iniziali e collisioni di prefisso.
 - [Separatori multiparola](linguaggio/separatori-multiparola.md): locuzioni fra due oggetti e forme articolate.
 - [Relazioni dinamiche](linguaggio/relazioni-dinamiche.md) e [visibilità](linguaggio/visibilita-scenario.md): passaggi segreti, oggetti nascosti e scenario.
+- [Elenchi tipati](linguaggio/liste-tipate.md): raccolte omogenee, appartenenza e rollback.
 
 - [Tutorial: il faro](tutorial/README.md), incluse le lezioni su tipi e azioni; [da Inform a LOCUS](tutorial/da-inform-a-locus.md).
 - [Registro dei sei manuali forniti](architettura/materiali-didattici.md).

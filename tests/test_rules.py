@@ -1,13 +1,15 @@
 from dataclasses import replace
 from pathlib import Path
+from typing import cast
 
 import pytest
 
 from locus.diagnostics import CompileError
 from locus.player import parse_command
 from locus.rule_model import ActionCall, Address, RelationChange, RelationEdge
-from locus.rules import ActionResult, execute
+from locus.rules import ActionResult, Execution, execute
 from locus.runtime import instantiate
+from locus.schema import Value
 from locus.stdlib.authoring import compile_story
 from locus.stdlib.game import Session, start, step
 from locus.stdlib.render import render
@@ -52,7 +54,17 @@ def session(source: str) -> Session:
 def points(state: Session) -> int:
     entity = next(e for e in state.world.entities if e.label == "leva")
     spec = next(p for p in state.world.property_specs if p.id.endswith("punti"))
-    return int(property_value(state.world, entity.id, spec.id))
+    value = property_value(state.world, entity.id, spec.id)
+    assert type(value) is int
+    return value
+
+
+def clues(state: Session) -> tuple[str, ...]:
+    entity = next(e for e in state.world.entities if e.label == "leva")
+    spec = next(p for p in state.world.property_specs if p.id.endswith("indizi"))
+    value = property_value(state.world, entity.id, spec.id)
+    assert type(value) is tuple and all(type(item) is str for item in value)
+    return cast(tuple[str, ...], value)
 
 
 def test_priority_order_and_continue() -> None:
@@ -95,6 +107,41 @@ def test_mutation_and_interruption() -> None:
     assert points(result.session) == 2
     assert points(initial) == 0
     assert result.event.kind == "rule"
+
+
+def test_typed_list_mutation_membership_and_single_removal() -> None:
+    source = "La indizi è una proprietà elenco di testi."
+    source += rule(
+        'aggiungi "orma" a "indizi" di "leva"; '
+        'aggiungi "fibra" a "indizi" di "leva"; '
+        'aggiungi "orma" a "indizi" di "leva";',
+        name="raccogli",
+    )
+    source += rule(
+        'rimuovi "orma" da "indizi" di "leva";',
+        phase="dopo",
+        name="scarta",
+        extra='quando "indizi" di "leva" contiene "fibra"',
+    )
+    source += rule(
+        'dì "Resta un\'orma.";',
+        phase="descrivi",
+        name="verifica indizio",
+        extra='quando "indizi" di "leva" contiene "orma"',
+    )
+    result = step(session(source), parse_command("guarda"))
+    assert clues(result.session) == ("fibra", "orma")
+    assert "Resta un'orma." in render(result)
+
+
+def test_list_mutation_rolls_back_with_rule_failure() -> None:
+    source = "La indizi è una proprietà elenco di testi."
+    source += rule('aggiungi "orma" a "indizi" di "leva"; fallisci "Indagine annullata";')
+    initial = session(source)
+    result = step(initial, parse_command("guarda"))
+    assert result.session is initial
+    assert clues(result.session) == ()
+    assert render(result) == "Indagine annullata"
 
 
 @pytest.mark.parametrize("phase", ["prima", "verifica", "esegui", "dopo", "descrivi"])
@@ -263,6 +310,21 @@ def test_replacement_can_invoke_an_author_action() -> None:
         (rule('crea relazione "nella" da "leva" a "Sala";'), "E312"),
         (rule('crea relazione "nord" da "leva" a "Sala";'), "E305"),
         (rule('crea relazione "nord" da "Sala" a "Sala";'), "E312"),
+        (rule('aggiungi "x" a "punti" di "leva";'), "E313"),
+        (
+            "La indizi è una proprietà elenco di testi." + rule('aggiungi 1 a "indizi" di "leva";'),
+            "E313",
+        ),
+        (
+            "La indizi è una proprietà elenco di testi."
+            + rule('dì "x";', extra='quando "indizi" di "leva" contiene 1'),
+            "E313",
+        ),
+        (
+            "La indizi è una proprietà elenco di testi."
+            + rule('aggiungi "x" a "indizi" di "leva";', phase="verifica"),
+            "E307",
+        ),
         (
             rule('crea relazione "nord" da "Sala" a "Sala";', phase="verifica"),
             "E307",
@@ -375,7 +437,7 @@ def test_engine_works_without_narrative_state() -> None:
         def read(self, state: int, address: Address) -> int:
             return state
 
-        def write(self, state: int, address: Address, value: str | int | bool) -> int:
+        def write(self, state: int, address: Address, value: Value) -> int:
             assert type(value) is int
             return value
 
@@ -387,7 +449,7 @@ def test_engine_works_without_narrative_state() -> None:
 
     compiled = compile_story(BASE + rule('aumenta "punti" di "leva" di 5;'))
     custom = replace(compiled.rules[0], selector=ActionCall("incremento"))
-    result = execute(10, ActionCall("incremento"), (custom,), CounterHost())
+    result: Execution[int, str] = execute(10, ActionCall("incremento"), (custom,), CounterHost())
     assert result.state == 16
     assert result.outputs == ("eseguita",)
 
@@ -555,7 +617,7 @@ def test_generic_catalog_and_replacement_limit() -> None:
         def read(self, state: int, address: Address) -> int:
             return state
 
-        def write(self, state: int, address: Address, value: str | int | bool) -> int:
+        def write(self, state: int, address: Address, value: Value) -> int:
             assert type(value) is int
             return value
 
@@ -565,7 +627,7 @@ def test_generic_catalog_and_replacement_limit() -> None:
         def perform(self, state: int, action: ActionCall) -> ActionResult[int, str]:
             return ActionResult(state, True)
 
-    result = execute(0, ActionCall("calcolo"), compiled.rules, Host())
+    result: Execution[int, str] = execute(0, ActionCall("calcolo"), compiled.rules, Host())
     assert result.value == 42
     rules = tuple(
         replace(

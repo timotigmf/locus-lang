@@ -8,7 +8,18 @@ from locus.schema import Value
 Ref = TypeVar("Ref")
 Phase = Literal["prima", "invece", "verifica", "esegui", "dopo", "descrivi"]
 Operator = Literal[
-    "vero", "falso", "uguale", "diverso", "maggiore", "minore", "almeno", "massimo", "e", "o", "non"
+    "vero",
+    "falso",
+    "uguale",
+    "diverso",
+    "maggiore",
+    "minore",
+    "almeno",
+    "massimo",
+    "contiene",
+    "e",
+    "o",
+    "non",
 ]
 EffectKind = Literal[
     "dì",
@@ -21,6 +32,8 @@ EffectKind = Literal[
     "restituisci",
     "crea_relazione",
     "rimuovi_relazione",
+    "aggiungi",
+    "rimuovi",
 ]
 
 

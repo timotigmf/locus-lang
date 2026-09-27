@@ -624,6 +624,10 @@ function appendOutput(result, command) {
   $("transcript").scrollTop = $("transcript").scrollHeight;
   showTrace(result.trace);
   showMap(result.map);
+  if (compiled && result.properties) {
+    compiled.ir.properties = result.properties;
+    renderIndex(compiled.ir);
+  }
   if (result.ended) stopGame();
 }
 async function restart() {

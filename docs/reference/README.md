@@ -9,7 +9,7 @@
 | --- | --- |
 | controlla | valida entità e relazioni; stampa numero di entità |
 | ast | JSON AST senza validazione semantica |
-| ir / compila | JSON IR versione 13, dopo validazione |
+| ir / compila | JSON IR versione 14, dopo validazione |
 | gioca | compila e avvia la sessione IF dalla prima stanza dichiarata |
 
 `gioca`: guarda, esamina, prendi, lascia, metti, apri, chiudi, blocca,
@@ -83,7 +83,8 @@ Le azioni dell'autore aggiungono gli eventi `custom` e `wrong_kind`.
   della stdlib con validazione della topologia narrativa; usata dalla CLI.
 - `schema.PropertySpec(id, owner_types, value_kind, default, choices=())`: schema
   immutabile; accepts verifica tipo esatto e appartenenza alle scelte.
-- `schema.Value`: str | int | bool; `ValueKind`: numero/testo/logico.
+- `schema.Value`: str | int | bool oppure tupla omogenea di uno di questi tipi;
+  `ValueKind`: numero/testo/logico ed elenco_testi/elenco_numeri/elenco_logici.
 - `schema.type_ids` normalizza singolo tipo/tupla; `valid_value` verifica tipi esatti.
 - `compiler.relation_verbs(catalog)`: mappa verbo → predicato per `parser.parse(..., verbs=...)`.
 - `graph.cycle_node(parents)`: rileva un ciclo in un grafo funzionale senza ricorsione.
@@ -96,6 +97,11 @@ AST aggiunge PropertyDeclaration e Assignment. ProgramIR/World aggiungono
 property_specs e properties (tuple di PropertySpec e PropertyIR). Il parser produce
 valori già decodificati, non stringhe da valutare. runtime.instantiate rifiuta
 riferimenti di proprietà mancanti, duplicati e valori fuori tipo.
+
+Gli elenchi autore nascono vuoti. `PropertySpec.accepts_item` convalida un
+elemento; `aggiungi` lo accoda, `rimuovi` elimina la prima occorrenza e
+`contiene` verifica l'appartenenza. Gli effetti sulle collezioni partecipano al
+rollback delle regole e sono vietati nella fase `verifica`.
 
 Event.kind aggiunge opened, closed, locked, already_open, already_closed,
 already_locked, not_openable, wrong_key, not_carried, container_closed,

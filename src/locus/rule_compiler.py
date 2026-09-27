@@ -99,9 +99,22 @@ def lower_rules(
     def condition(node: Condition[PropertyReference], span: Span) -> Condition[Address]:
         if node.reference is not None:
             resolved, prop = address(node.reference, span)
-            if node.value is None or not prop.accepts(node.value):
+            compatible = (
+                prop.accepts_item(node.value)
+                if node.operator == "contiene" and node.value is not None
+                else node.value is not None and prop.accepts(node.value)
+            )
+            if not compatible:
+                if node.operator == "contiene":
+                    raise CompileError(
+                        "E313",
+                        "Contiene richiede un elenco e un elemento compatibile.",
+                        span,
+                    )
                 raise CompileError("E305", "Confronto con valore incompatibile.", span)
-            if node.operator not in {"uguale", "diverso"} and prop.value_kind != "numero":
+            if node.operator not in {"uguale", "diverso", "contiene"} and (
+                prop.value_kind != "numero"
+            ):
                 raise CompileError(
                     "E305", "Il confronto ordinato richiede una proprietà numerica.", span
                 )
@@ -163,6 +176,8 @@ def lower_rules(
                 "sostituisci",
                 "crea_relazione",
                 "rimuovi_relazione",
+                "aggiungi",
+                "rimuovi",
             }:
                 raise CompileError(
                     "E307",
@@ -177,6 +192,13 @@ def lower_rules(
                         raise CompileError(
                             "E305",
                             "Aumenta/diminuisci richiede una proprietà numerica.",
+                            syntax.span,
+                        )
+                elif syntax.kind in {"aggiungi", "rimuovi"}:
+                    if syntax.value is None or not prop.accepts_item(syntax.value):
+                        raise CompileError(
+                            "E313",
+                            "Aggiungi/rimuovi richiede un elenco e un elemento compatibile.",
                             syntax.span,
                         )
                 elif syntax.value is None or not prop.accepts(syntax.value):

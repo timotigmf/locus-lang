@@ -95,6 +95,9 @@ class RuleParser:
             self.cursor.index += 1
             return Condition(boolean)
         reference = self.reference()
+        if self.cursor.current.normalized == "contiene":
+            self.cursor.keyword("contiene")
+            return Condition("contiene", reference, self.cursor.value())
         self.cursor.keyword("è")
         operator = "uguale"
         if self.cursor.current.normalized in {"maggiore", "minore", "almeno", "al", "diverso"}:
@@ -129,6 +132,12 @@ class RuleParser:
                 assert type(value) is int
                 value = -value
                 word = "aumenta"
+        elif word == "aggiungi" or (
+            word == "rimuovi" and self.cursor.current.normalized != "relazione"
+        ):
+            value = self.cursor.value()
+            self.cursor.keyword("a" if word == "aggiungi" else "da")
+            reference = self.reference()
         elif word == "sostituisci":
             self.cursor.keyword("con")
             action = self.action()

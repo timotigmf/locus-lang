@@ -1,7 +1,7 @@
 """Rulebook deterministici e transazionali; nessuna dipendenza da IF o sorgente."""
 
 from dataclasses import dataclass, field
-from typing import Generic, Literal, Protocol, TypeVar
+from typing import Generic, Literal, Protocol, TypeVar, cast
 
 from locus.rule_model import ActionCall, Address, Condition, Phase, RelationChange, RuleIR, Trace
 from locus.schema import Value
@@ -58,6 +58,10 @@ def evaluate(condition: Condition[Address], read: "Reader") -> bool:
     if condition.reference is None:
         raise RuleError("Confronto senza riferimento di proprietà.")
     left, right = read(condition.reference), condition.value
+    if op == "contiene":
+        if type(left) is not tuple or right is None:
+            raise RuleError("La condizione contiene richiede un elenco e un elemento.")
+        return any(type(item) is type(right) and item == right for item in left)
     if type(left) is not type(right):
         raise RuleError("Il valore runtime non rispetta il tipo del confronto.")
     if op == "uguale":
@@ -131,6 +135,21 @@ class _Run(Generic[S, E]):
                             if type(old) is not int or type(value) is not int:
                                 raise RuleError("Aumento di un valore non numerico.")
                             value = old + value
+                        self.state = self.host.write(self.state, effect.address, value)
+                    elif effect.kind in {"aggiungi", "rimuovi"}:
+                        assert effect.address is not None and effect.value is not None
+                        old = self.host.read(self.state, effect.address)
+                        if type(old) is not tuple:
+                            raise RuleError("Modifica di elenco applicata a un valore non elenco.")
+                        if effect.kind == "aggiungi":
+                            value = (*old, effect.value)
+                        else:
+                            items = list(old)
+                            try:
+                                items.remove(effect.value)
+                            except ValueError:
+                                pass
+                            value = cast(Value, tuple(items))
                         self.state = self.host.write(self.state, effect.address, value)
                     elif effect.kind in {"crea_relazione", "rimuovi_relazione"}:
                         assert effect.relation is not None

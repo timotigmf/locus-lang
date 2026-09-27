@@ -32,3 +32,4 @@ Le fonti e le licenze sono nel [registro](../architettura/fonti.md).
 - [0015 — separatori multiparola](0015-separatori-multiparola.md): locuzioni fra due oggetti e articolazione finale nell'IR 11.
 - [0016 — relazioni dinamiche](0016-relazioni-dinamiche.md): effetti transazionali sul grafo e mappa dello stato corrente nell'IR 12.
 - [0017 — visibilità e scenario](0017-visibilita-scenario.md): campo d'azione esplicito e dettagli ambientali non trasportabili nell'IR 13.
+- [0018 — elenchi tipati](0018-elenchi-tipati.md): collezioni omogenee e mutazioni transazionali nell'IR 14.

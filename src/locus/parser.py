@@ -283,18 +283,31 @@ class _Parser:
                     self.article(False)
                     if self.current.normalized == "proprietà":
                         self.keyword("proprietà")
-                        value_kinds: dict[str, ValueKind] = {
-                            "numerica": "numero",
-                            "testuale": "testo",
-                            "logica": "logico",
-                        }
-                        adjective = self.current.normalized
-                        if adjective not in value_kinds:
-                            self.fail("numerica, testuale o logica")
-                        self.index += 1
-                        properties.append(
-                            PropertyDeclaration(name, value_kinds[adjective], self.finish(start))
-                        )
+                        if self.current.normalized == "elenco":
+                            self.keyword("elenco")
+                            self.keyword("di")
+                            list_kinds: dict[str, ValueKind] = {
+                                "testi": "elenco_testi",
+                                "numeri": "elenco_numeri",
+                                "logici": "elenco_logici",
+                            }
+                            item_kind = self.current.normalized
+                            if item_kind not in list_kinds:
+                                self.fail("testi, numeri o logici")
+                            self.index += 1
+                            value_kind = list_kinds[item_kind]
+                        else:
+                            value_kinds: dict[str, ValueKind] = {
+                                "numerica": "numero",
+                                "testuale": "testo",
+                                "logica": "logico",
+                            }
+                            adjective = self.current.normalized
+                            if adjective not in value_kinds:
+                                self.fail("numerica, testuale, logica o elenco")
+                            self.index += 1
+                            value_kind = value_kinds[adjective]
+                        properties.append(PropertyDeclaration(name, value_kind, self.finish(start)))
                     else:
                         kind = self.words()
                         location = None

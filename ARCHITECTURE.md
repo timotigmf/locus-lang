@@ -1,6 +1,6 @@
 # Architettura tecnica
 
-Stato: Studio M5 e linguaggio incrementale fino all'IR 13.
+Stato: Studio M5 e linguaggio incrementale fino all'IR 14.
 Le decisioni strutturali sono motivate negli [ADR](docs/adr/README.md).
 
 ## Pipeline e dipendenze
@@ -57,7 +57,7 @@ riferimenti in avanti. Il catalogo `RelationSpec` definisce tipi agli estremi,
 orientamento e inversi. Nessuna conoscenza di stanze o direzioni nel compilatore.
 Conflitti funzionali, auto-collegamenti e riferimenti non risolti sono diagnosticati.
 
-`ProgramIR` versione 13 contiene gerarchia dei tipi, azioni dell'autore, entità, relazioni, proprietà,
+`ProgramIR` versione 14 contiene gerarchia dei tipi, azioni dell'autore, entità, relazioni, proprietà,
 regole, punto iniziale, titolo, autore e sinonimi risolti; i record di base sono
 `TypeIR(id, label, parent_id)`, `ActionIR(id, label, commands, ..., separators)`,
 `EntityIR(id, label, type_id)`
@@ -163,7 +163,7 @@ parser. Si consulti l'[ADR 0005](docs/adr/0005-proprieta-e-mondo.md) per le alte
 contiene record immutabili generici. `rules.execute` esegue rulebook attraverso
 un protocollo Host indipendente da IF. `stdlib.game` adatta sessioni e azioni;
 `Transition` espone output, trace e risultato. Questi record furono introdotti
-con l'IR 4 e sono conservati nell'IR 13.
+con l'IR 4 e sono conservati nell'IR 14.
 Vedere [ADR 0006](docs/adr/0006-regole.md).
 
 ## Implementazione M4
@@ -204,6 +204,14 @@ leggono lo stesso snapshot. Gli scenari possono essere collocati, descritti e
 usati nei selettori delle regole, ma il controllo `PORTABLE` li esclude da
 `prendere`. Vedere [ADR 0017](docs/adr/0017-visibilita-scenario.md).
 
+## Elenchi tipati
+
+Gli elenchi sono valori immutabili e omogenei dello schema delle proprietà. Il
+compilatore risolve l'indirizzo e controlla il tipo dell'elemento prima di
+produrre gli effetti `aggiungi` e `rimuovi`; il rulebook costruisce un nuovo
+valore nella transazione corrente. `contiene` legge lo stesso snapshot e non
+interpreta testo sorgente. Vedere [ADR 0018](docs/adr/0018-elenchi-tipati.md).
+
 ## Metadati e vocabolario
 
 Titolo e autore appartengono al progetto compilato, non allo stato separato del
@@ -222,7 +230,7 @@ confronto transitivo. Vedere [ADR 0011](docs/adr/0011-gerarchia-tipi.md).
 ## Azioni definite dall'autore
 
 Le dichiarazioni di azione vengono unite al catalogo `ActionSpec` dell'host dopo
-la risoluzione dei tipi. L'IR 13 conserva forme di comando e separatori anche
+la risoluzione dei tipi. L'IR 14 conserva forme di comando e separatori anche
 multiparola, oltre ai tipi degli argomenti. Il parser giocatore riceve questo catalogo
 compilato e produce ID di azione; il dispatcher usa le stesse fasi transazionali
 delle azioni standard.

@@ -4,8 +4,17 @@ from collections.abc import Mapping
 from dataclasses import dataclass
 from typing import Literal
 
-Value = str | int | bool
-ValueKind = Literal["numero", "testo", "logico"]
+Scalar = str | int | bool
+ListValue = tuple[str, ...] | tuple[int, ...] | tuple[bool, ...]
+Value = Scalar | ListValue
+ValueKind = Literal[
+    "numero",
+    "testo",
+    "logico",
+    "elenco_testi",
+    "elenco_numeri",
+    "elenco_logici",
+]
 TypeSet = str | tuple[str, ...]
 MAX_COMMAND_WORDS = 4
 MAX_SEPARATOR_WORDS = 4
@@ -37,7 +46,26 @@ def is_subtype(actual: str, expected: str, parents: Mapping[str, str | None]) ->
 
 
 def valid_value(kind: ValueKind, value: Value) -> bool:
-    return type(value) is {"numero": int, "testo": str, "logico": bool}[kind]
+    scalar_types = {"numero": int, "testo": str, "logico": bool}
+    if kind in scalar_types:
+        return type(value) is scalar_types[kind]
+    if type(value) is not tuple:
+        return False
+    item_type = {
+        "elenco_testi": str,
+        "elenco_numeri": int,
+        "elenco_logici": bool,
+    }[kind]
+    return all(type(item) is item_type for item in value)
+
+
+def valid_list_item(kind: ValueKind, value: Value) -> bool:
+    item_kinds: dict[ValueKind, ValueKind] = {
+        "elenco_testi": "testo",
+        "elenco_numeri": "numero",
+        "elenco_logici": "logico",
+    }
+    return kind in item_kinds and valid_value(item_kinds[kind], value)
 
 
 def valid_command_form(command: str) -> bool:
@@ -100,6 +128,9 @@ class PropertySpec:
 
     def accepts(self, value: Value) -> bool:
         return valid_value(self.value_kind, value) and (not self.choices or value in self.choices)
+
+    def accepts_item(self, value: Value) -> bool:
+        return valid_list_item(self.value_kind, value)
 
 
 @dataclass(frozen=True, slots=True)

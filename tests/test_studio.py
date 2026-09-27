@@ -22,6 +22,37 @@ def test_bridge_matches_story_and_tests_do_not_mutate_session() -> None:
     assert studio.command("prendi chiave")["text"] == "Hai preso: chiave."
 
 
+def test_bridge_exposes_current_list_values() -> None:
+    studio = Studio()
+    source = (
+        "La Sala è una stanza. Il taccuino è una cosa nella Sala. "
+        "La indizi è una proprietà elenco di testi. "
+        'Azione "annotare" senza oggetti con comando "annota". '
+        'Regola "annota" per annotare nella fase invece: '
+        'aggiungi "orma" a "indizi" di "taccuino"; Fine regola.'
+    )
+    compiled = studio.compile(project(source))
+    assert compiled["ok"]
+    notebook_id = next(
+        item["id"] for item in compiled["ir"]["entities"] if item["label"] == "taccuino"
+    )
+    restarted = studio.restart()
+    assert (
+        next(
+            item
+            for item in restarted["properties"]
+            if item["entity_id"] == notebook_id and item["property_id"].endswith("indizi")
+        )["value"]
+        == ()
+    )
+    changed = studio.command("annota")
+    assert next(
+        item
+        for item in changed["properties"]
+        if item["entity_id"] == notebook_id and item["property_id"].endswith("indizi")
+    )["value"] == ("orma",)
+
+
 def test_bridge_exposes_story_metadata_and_uses_vocabulary() -> None:
     studio = Studio()
     result = studio.compile(
@@ -151,6 +182,23 @@ def test_dynamic_relation_diagnostic_links_the_reference() -> None:
     assert diagnostic["code"] == "E312"
     assert diagnostic["title"] == "Relazione dinamica non valida"
     assert diagnostic["manual"] == "docs/linguaggio/relazioni-dinamiche.md"
+    assert Path(diagnostic["manual"]).is_file()
+
+
+def test_list_diagnostic_links_the_specific_reference() -> None:
+    studio = Studio()
+    result = studio.compile(
+        project(
+            "La Sala è una stanza. Il taccuino è una cosa nella Sala. "
+            "La indizi è una proprietà elenco di testi. "
+            'Regola "errata" per guardare nella fase dopo: '
+            'aggiungi 1 a "indizi" di "taccuino"; Fine regola.'
+        )
+    )
+    diagnostic = result["diagnostics"][0]
+    assert diagnostic["code"] == "E313"
+    assert diagnostic["title"] == "Elemento di elenco non valido"
+    assert diagnostic["manual"] == "docs/linguaggio/liste-tipate.md"
     assert Path(diagnostic["manual"]).is_file()
 
 

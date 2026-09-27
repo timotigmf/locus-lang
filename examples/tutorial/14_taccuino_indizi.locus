@@ -1,0 +1,61 @@
+Titolo: "Il taccuino dell'archivio".
+Autore: "Esempio LOCUS".
+
+L'Archivio è una stanza.
+Inizia nella "Archivio".
+L'Archivio ha descrizione "Scaffali polverosi circondano un tavolo da lavoro.".
+
+L'impronta è uno scenario nell'Archivio.
+L'impronta ha descrizione "Una piccola orma fangosa interrompe la polvere.".
+La lettera strappata è uno scenario nell'Archivio.
+La lettera strappata ha descrizione "Sul bordo della carta è impigliata una fibra rossa.".
+Il taccuino è uno scenario nell'Archivio.
+Il taccuino ha descrizione "Il taccuino raccoglie le tue osservazioni.".
+
+La indizi è una proprietà elenco di testi.
+
+Azione "dedurre" senza oggetti con comando "deduci" e sinonimo "formula deduzione".
+Azione "dimenticare orma" senza oggetti con comando "dimentica impronta".
+
+Regola "annota l'orma" per esaminare "impronta" nella fase dopo
+quando non "indizi" di "taccuino" contiene "orma":
+    aggiungi "orma" a "indizi" di "taccuino";
+    dì "Annoti l'orma nel taccuino.";
+Fine regola.
+
+Regola "orma già annotata" per esaminare "impronta" nella fase dopo
+quando "indizi" di "taccuino" contiene "orma":
+    dì "L'orma è già annotata.";
+Fine regola.
+
+Regola "annota la fibra" per esaminare "lettera strappata" nella fase dopo
+quando non "indizi" di "taccuino" contiene "fibra rossa":
+    aggiungi "fibra rossa" a "indizi" di "taccuino";
+    dì "Annoti la fibra rossa nel taccuino.";
+Fine regola.
+
+Regola "fibra già annotata" per esaminare "lettera strappata" nella fase dopo
+quando "indizi" di "taccuino" contiene "fibra rossa":
+    dì "La fibra rossa è già annotata.";
+Fine regola.
+
+Regola "deduzione completa" per dedurre nella fase invece priorità 10
+quando "indizi" di "taccuino" contiene "orma"
+e "indizi" di "taccuino" contiene "fibra rossa":
+    dì "L'orma e la fibra conducono alla serra del custode.";
+Fine regola.
+
+Regola "deduzione incompleta" per dedurre nella fase verifica:
+    fallisci "Non hai ancora raccolto indizi sufficienti.";
+Fine regola.
+
+Regola "dimentica l'orma" per dimenticare orma nella fase invece
+quando "indizi" di "taccuino" contiene "orma":
+    rimuovi "orma" da "indizi" di "taccuino";
+    dì "Cancelli dal taccuino l'annotazione sull'orma.";
+Fine regola.
+
+Regola "nessuna orma da dimenticare" per dimenticare orma nella fase invece
+quando non "indizi" di "taccuino" contiene "orma":
+    dì "Nel taccuino non c'è alcuna annotazione sull'orma.";
+Fine regola.

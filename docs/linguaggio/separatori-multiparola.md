@@ -1,6 +1,6 @@
 # Separatori composti da più parole
 
-Stato: implementato in LOCUS 0.5.0a1, introdotto in IR 11 e conservato in IR 13.
+Stato: implementato in LOCUS 0.5.0a1, introdotto in IR 11 e conservato in IR 14.
 
 Un'azione con due oggetti separa il primo nome dal secondo mediante una o più
 forme dichiarate. Ogni forma può contenere da una a quattro parole alfabetiche:

@@ -23,3 +23,5 @@ Le [relazioni dinamiche](relazioni-dinamiche.md) permettono alle regole di crear
 o rimuovere passaggi cardinali transazionali nell'IR 12.
 La [visibilità esplicita](visibilita-scenario.md) aggiunge oggetti nascosti e il
 tipo ambientale non trasportabile `scenario` nell'IR 13.
+Gli [elenchi tipati](liste-tipate.md) aggiungono collezioni omogenee, condizioni
+di appartenenza ed effetti transazionali nell'IR 14.

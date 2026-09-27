@@ -2,6 +2,7 @@ import os
 import subprocess
 import sys
 from pathlib import Path
+from typing import cast
 
 import pytest
 
@@ -40,7 +41,9 @@ def test_cli_solution_transcript() -> None:
 def property_of(session: Session, name: str, suffix: str) -> str | int | bool:
     entity = next(e for e in session.world.entities if e.label == name)
     spec = next(p for p in session.world.property_specs if p.id.endswith(suffix))
-    return property_value(session.world, entity.id, spec.id)
+    value = property_value(session.world, entity.id, spec.id)
+    assert type(value) in {str, int, bool}
+    return cast(str | int | bool, value)
 
 
 def test_signal_reversibility_and_failed_repeat() -> None:
@@ -65,6 +68,28 @@ def test_container_failed_put_preserves_inventory() -> None:
     failed = step(current, parse_command("metti chiave di rame nella custodia"))
     assert failed.session is current
     assert len(current.inventory) == 1
+
+
+def test_clue_list_tutorial_collects_deduces_and_removes() -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "14_taccuino_indizi.locus")))
+    failed = step(current, parse_command("deduci", current.world.actions))
+    assert render(failed) == "Non hai ancora raccolto indizi sufficienti."
+    for command in ("x impronta", "x lettera"):
+        transition = step(current, parse_command(command, current.world.actions))
+        current = transition.session
+    solved = step(current, parse_command("formula deduzione", current.world.actions))
+    assert "conducono alla serra" in render(solved)
+    forgotten = step(
+        solved.session,
+        parse_command("dimentica impronta", solved.session.world.actions),
+    )
+    assert "Cancelli" in render(forgotten)
+    assert "sufficienti" in render(
+        step(
+            forgotten.session,
+            parse_command("deduci", forgotten.session.world.actions),
+        )
+    )
 
 
 def test_tutorial_accepts_classic_abbreviation_and_unique_partial_name() -> None:

@@ -77,6 +77,11 @@ _ERROR_HELP = {
         "Usa una direzione cardinale dinamica fra due stanze distinte.",
         "docs/linguaggio/relazioni-dinamiche.md",
     ),
+    "E313": (
+        "Elemento di elenco non valido",
+        "Controlla che la proprietà sia un elenco e che l'elemento abbia il tipo dichiarato.",
+        "docs/linguaggio/liste-tipate.md",
+    ),
     "E201": (
         "Mondo incoerente",
         "Verifica estremi e collegamenti della porta.",
@@ -265,6 +270,7 @@ class Studio:
             "inventory": list(transition.session.inventory),
             "ended": transition.event.kind == "quit",
             "map": map_data(transition.session.world),
+            "properties": [asdict(item) for item in transition.session.world.properties],
         }
 
     def restart(self) -> dict[str, Any]:

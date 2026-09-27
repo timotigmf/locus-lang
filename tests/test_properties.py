@@ -29,6 +29,22 @@ def test_user_properties_forward_assignment_defaults_and_types() -> None:
     assert instantiate(program).properties == program.properties
 
 
+def test_typed_list_properties_start_empty() -> None:
+    program = compile_source(
+        "La scheda è un documento. "
+        "La parole è una proprietà elenco di testi. "
+        "La misure è una proprietà elenco di numeri. "
+        "La verifiche è una proprietà elenco di logici.",
+        {"documento": "document"},
+    )
+    assert {item.value for item in program.properties} == {()}
+    assert {spec.value_kind for spec in program.property_specs} == {
+        "elenco_testi",
+        "elenco_numeri",
+        "elenco_logici",
+    }
+
+
 @pytest.mark.parametrize(
     ("source", "code"),
     [
@@ -45,6 +61,7 @@ def test_user_properties_forward_assignment_defaults_and_types() -> None:
         ('La X è una cosa. La X ha stato "aperto".', "E111"),
         ('La X è un contenitore. La X ha stato "socchiuso".', "E111"),
         ("La stato è una proprietà testuale.", "E109"),
+        ('La indizi è una proprietà elenco di testi. La X è una cosa. La X ha indizi "x".', "E111"),
     ],
 )
 def test_invalid_properties(source: str, code: str) -> None:
@@ -95,6 +112,7 @@ def test_integer_size_limit_is_diagnostic_not_python_error() -> None:
         PropertySpec("x", ("object",), "numero", True),
         PropertySpec("x", ("object",), "testo", "missing", ("other",)),
         PropertySpec("x", ("object",), "numero", 0, (0, False)),
+        PropertySpec("x", ("object",), "elenco_numeri", (1, True)),
     ],
 )
 def test_property_catalog_validation(spec: PropertySpec) -> None:

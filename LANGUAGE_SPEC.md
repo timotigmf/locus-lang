@@ -2,7 +2,7 @@
 
 ## Stato attuale
 
-Versione corrente `0.5.0a1`, IR versione 13. Le specifiche M2, M3 e M4
+Versione corrente `0.5.0a1`, IR versione 14. Le specifiche M2, M3 e M4
 estendono e, dove indicato, sostituiscono i limiti M1 sotto.
 La [specifica M2](docs/linguaggio/milestone-2.md) è normativa per proprietà,
 stringhe, nomi quotati, preposizioni, contenitori, porte e chiavi.
@@ -24,6 +24,8 @@ La specifica delle [relazioni dinamiche](docs/linguaggio/relazioni-dinamiche.md)
 definisce passaggi cardinali creati o rimossi da effetti transazionali.
 La specifica di [visibilità e scenario](docs/linguaggio/visibilita-scenario.md)
 definisce oggetti nascosti e dettagli ambientali non trasportabili.
+La specifica degli [elenchi tipati](docs/linguaggio/liste-tipate.md) definisce
+collezioni omogenee, appartenenza ed effetti transazionali.
 Le sezioni S0/S1 seguenti descrivono il nucleo storico, non l'intera versione.
 
 ## Dichiarazioni (S0, mantenute in 0.1.0a2)
@@ -135,6 +137,9 @@ incompatibile; E112 assegnazione ripetuta; E201 vincolo narrativo (porta) non va
 E201 punta alla dichiarazione della porta; gli altri errori conservano lo span
 dell'istruzione interessata. Cataloghi API malformati producono ValueError.
 
+E313 segnala un uso di `contiene`, `aggiungi` o `rimuovi` con una proprietà non
+elenco o un elemento del tipo sbagliato.
+
 ## Estensione M3
 
 La [specifica normativa M3](docs/linguaggio/milestone-3.md) aggiunge regole, condizioni
@@ -151,7 +156,7 @@ da file e punto iniziale esplicito. IR corrente versione 5.
 sorgente. `Comprendi "alias" come "entità".` aggiunge un nome alternativo per i
 comandi del giocatore. Metadati duplicati producono `E408`; alias in conflitto
 producono `E409`. Questi campi sono stati introdotti con l'IR 6 e restano
-presenti nell'IR 13.
+presenti nell'IR 14.
 
 ## Tipi definiti dall'autore
 
@@ -160,7 +165,7 @@ avanti sono ammessi e ogni tipo ha al massimo un genitore. I sottotipi sono
 compatibili con proprietà, relazioni e capacità degli antenati. Ridefinizioni
 producono `E113`; cicli nella gerarchia producono `E114`. La specifica completa
 è in [tipi definiti dall'autore](docs/linguaggio/tipi-autore.md). La tabella dei
-tipi è stata introdotta nell'IR 7 e resta presente nell'IR 13.
+tipi è stata introdotta nell'IR 7 e resta presente nell'IR 14.
 
 ## Azioni e comandi definiti dall'autore
 
@@ -171,7 +176,7 @@ Nomi duplicati producono `E310`; comandi non validi o in conflitto producono
 `E311`. `e sinonimo "riverisci"` aggiunge una forma equivalente; più clausole
 `e separatore` definiscono le locuzioni fra gli oggetti di un'azione a due
 oggetti. Comandi e separatori possono contenere fino a quattro parole e non
-possono avere prefissi ambigui. L'IR corrente è la versione 13.
+possono avere prefissi ambigui. L'IR corrente è la versione 14.
 
 ## Relazioni dinamiche
 
@@ -181,7 +186,7 @@ risolve gli ID, controlla tipi e mutabilità e incorpora le inverse nello stesso
 effetto. Il runtime applica il cambiamento nella transazione della regola. Gli
 usi non validi producono `E312`; si veda la
 [specifica completa](docs/linguaggio/relazioni-dinamiche.md). Questa estensione
-introduce l'IR 12 ed è conservata nell'IR 13.
+introduce l'IR 12 ed è conservata nell'IR 14.
 
 ## Visibilità e scenario
 
@@ -190,3 +195,12 @@ scenari entrano nel campo d'azione del giocatore. Il nuovo tipo `scenario` è
 collocabile ed esaminabile, ma non trasportabile. Le regole cambiano la visibilità
 con `imposta`; il rollback resta quello degli altri effetti. La
 [specifica completa](docs/linguaggio/visibilita-scenario.md) introduce l'IR 13.
+
+## Elenchi tipati
+
+`La indizi è una proprietà elenco di testi.` dichiara una collezione omogenea
+inizialmente vuota. Sono disponibili anche elenchi di numeri e di logici. Le
+regole usano `aggiungi VALORE a "proprietà" di "entità"`, `rimuovi VALORE da
+...` e la condizione `"proprietà" di "entità" contiene VALORE`. Il compilatore
+controlla il tipo dell'elemento; le mutazioni rispettano il rollback dell'azione.
+La [specifica completa](docs/linguaggio/liste-tipate.md) introduce l'IR 14.
