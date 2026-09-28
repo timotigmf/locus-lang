@@ -9,13 +9,16 @@
 | --- | --- |
 | controlla | valida entità e relazioni; stampa numero di entità |
 | ast | JSON AST senza validazione semantica |
-| ir / compila | JSON IR versione 15, dopo validazione |
+| ir / compila | JSON IR versione 16, dopo validazione |
 | gioca | compila e avvia la sessione IF dalla prima stanza dichiarata |
 
 `gioca`: guarda, esamina, prendi, lascia, metti, apri, chiudi, blocca,
 inventario, nord, sud, est, ovest, esci. Alias classici: l/look, x/examine,
 i/inv/inventory, n/north, s/south, e/east, o/w/west, q/quit, get/take,
 open, close, drop, put, lock.
+Quando la storia contiene dialoghi sono disponibili anche `parla con persona`,
+`p persona`, `talk to persona`, il numero della scelta, `scegli testo`, `basta`
+e `fine dialogo`.
 I nomi parziali sono accettati soltanto quando identificano un solo oggetto
 raggiungibile; altrimenti l'evento è `ambiguous` e contiene tutte le alternative.
 EOF termina senza errore, Ctrl-C termina con codice 130. Prompt soltanto su TTY,
@@ -27,13 +30,13 @@ Diagnosi su stderr; nessuna scrittura implicita. Dump non caricabili come giochi
 
 - `lexer.tokenize(text, source='<memoria>')`: tuple Token con span originali e EOF.
 - `parser.parse(text, source='<memoria>')`: AST Program con tipi, entità, relazioni e regole.
-- `compiler.compile_source(text, kinds, source='<memoria>', *, relations=None, properties=None, actions=None, kind_parents=None, reserved_commands=())`: ProgramIR.
-- `compiler.analyze(program, kinds, *, relations=None, properties=None, actions=None, kind_parents=None, reserved_commands=())`: risoluzione a passaggi e lowering.
+- `compiler.compile_source(text, kinds, source='<memoria>', *, relations=None, properties=None, actions=None, kind_parents=None, reserved_commands=(), dialogue_actor_types=())`: ProgramIR.
+- `compiler.analyze(program, kinds, *, relations=None, properties=None, actions=None, kind_parents=None, reserved_commands=(), dialogue_actor_types=())`: risoluzione a passaggi e lowering.
 - `schema.RelationSpec(id, source_type, target_type, reverse_operands=False, inverse_id=None, acyclic=False, verb=None, mutable=False)`:
   contratto funzionale e irriflessivo di una relazione; tipi/ID già risolti.
 - `stdlib.default_kinds()` / `stdlib.default_kind_parents()` / `stdlib.default_relations()` / `stdlib.default_properties()`: cataloghi nuovi e sostituibili.
 - `runtime.instantiate(program)`: World immutabile con entità e relazioni.
-- `player.parse_command(text, actions=())`: Intent(verb, noun=None, indirect=None); riceve le azioni compilate del mondo e usa `unknown` per un comando sconosciuto.
+- `player.parse_command(text, actions=(), dialogue_enabled=False)`: Intent(verb, noun=None, indirect=None); riceve le azioni compilate del mondo, abilita esplicitamente i comandi di conversazione e usa `unknown` per un comando sconosciuto.
 - `stdlib.game.start(world)`: Session; ValueError se mancano stanze.
 - `stdlib.game.visible(session)`: ID delle entità percepibili nella stanza e non possedute; considera `visibile`, contenimento e stato dei contenitori.
 - `stdlib.game.step(session, intent)`: Transition(session, event), senza I/O.
@@ -45,6 +48,13 @@ ActionDeclaration, Declaration, Relation, TypeIR, ActionIR, EntityIR, RelationIR
 ProgramIR, Entity, World, Intent, Session, Event e Transition sono
 dataclass immutabili. Session e World costruite manualmente dal chiamante devono
 avere riferimenti coerenti; non sono un'API di caricamento di dati non fidati.
+
+`ProgramIR.dialogues` e `World.dialogues` contengono `DialogueIR`, composto da
+`DialogueNodeIR` e `DialogueChoiceIR`. Tutti i riferimenti sono ID risolti. La
+stdlib passa `mondo.persona` fra `dialogue_actor_types`; il core non assume il
+significato narrativo di alcun tipo. `Session` conserva dialogo e nodo attivi e
+l'insieme ordinato dei nodi visitati. `Transition.dialogue` espone il trace delle
+battute e delle scelte senza ricostruire testo sorgente.
 
 Cataloghi con nomi non canonici, ID vuoti/duplicati, tipi sconosciuti o inversi
 incompatibili sollevano ValueError. `relations=None` supporta dichiarazioni senza

@@ -5,11 +5,12 @@ from locus.schema import ActionSpec, PropertySpec, RelationSpec
 ROOM = "mondo.stanza"
 THING = "mondo.cosa"
 SCENERY = "mondo.scenario"
+PERSON = "mondo.persona"
 CONTAINER = "mondo.contenitore"
 DOOR = "mondo.porta"
 KEY = "mondo.chiave"
 PORTABLE = (THING,)
-LOCATABLE = (THING, SCENERY)
+LOCATABLE = (THING, SCENERY, PERSON)
 OPENABLE = (CONTAINER, DOOR)
 INSIDE = "mondo.dentro"
 NORTH = "mondo.nord"
@@ -29,6 +30,7 @@ def default_kinds() -> dict[str, str]:
         "stanza": ROOM,
         "cosa": THING,
         "scenario": SCENERY,
+        "persona": PERSON,
         "contenitore": CONTAINER,
         "porta": DOOR,
         "chiave": KEY,
@@ -40,6 +42,7 @@ def default_kind_parents() -> dict[str, str | None]:
         ROOM: None,
         THING: None,
         SCENERY: None,
+        PERSON: THING,
         CONTAINER: THING,
         DOOR: None,
         KEY: THING,

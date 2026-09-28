@@ -11,6 +11,7 @@ from locus.stdlib import (
     LOCATABLE,
     NORTH,
     OPENABLE,
+    PERSON,
     PORTABLE,
     ROOM,
     SIDE_A,
@@ -48,6 +49,13 @@ def validate_world(world: World, inventory: tuple[str, ...] = ()) -> None:
     parents = {
         edge.source_id: edge.target_id for edge in world.relations if edge.predicate_id == INSIDE
     }
+    for dialogue in world.dialogues:
+        speaker = entities.get(dialogue.speaker_id)
+        if speaker is None or not has_type(world, speaker.type_id, PERSON):
+            raise WorldError(
+                "Il partecipante di un dialogo deve essere una persona.",
+                dialogue.speaker_id,
+            )
     if len(parents) != sum(edge.predicate_id == INSIDE for edge in world.relations):
         raise WorldError("Un oggetto non può avere due posizioni.", next(iter(parents)))
     cyclic = cycle_node(parents)
@@ -64,8 +72,10 @@ def validate_world(world: World, inventory: tuple[str, ...] = ()) -> None:
             raise WorldError("Tipi non validi per il contenimento.", child)
     inventory_seen: set[str] = set()
     for ident in inventory:
-        if ident not in entities or not any(
-            has_type(world, entities[ident].type_id, expected) for expected in PORTABLE
+        if (
+            ident not in entities
+            or has_type(world, entities[ident].type_id, PERSON)
+            or not any(has_type(world, entities[ident].type_id, expected) for expected in PORTABLE)
         ):
             raise WorldError("L'inventario contiene un elemento non trasportabile.", ident)
         if ident in parents or ident in inventory_seen:

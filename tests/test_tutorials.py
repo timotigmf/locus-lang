@@ -240,6 +240,26 @@ def test_scenery_tutorial_reveals_a_real_object() -> None:
     assert step(revealed.session, parse_command("prendi chiave")).event.kind == "taken"
 
 
+def test_dialogue_tutorial_branches_cycles_and_ends() -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "16_dialogo_guardiana.locus")))
+
+    def command(text: str) -> str:
+        nonlocal current
+        transition = step(
+            current,
+            parse_command(text, current.world.actions, dialogue_enabled=True),
+        )
+        current = transition.session
+        return render(transition)
+
+    assert "Chiedi della tempesta" in command("parla con guardiana")
+    assert "tre notti" in command("1")
+    assert "posa il registro" in command("scegli torna alle domande")
+    assert "sotto la campana" in command("scegli chiave")
+    assert current.dialogue_id is None
+    assert len(current.visited_dialogue_nodes) == 3
+
+
 def test_final_world_matches_story() -> None:
     current = start(instantiate(compile_story_file(TUTORIAL / "04_faro.locus")))
     for command in (TUTORIAL / "04_faro.comandi").read_text(encoding="utf-8").splitlines():

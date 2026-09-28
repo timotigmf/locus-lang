@@ -235,6 +235,21 @@ def test_table_diagnostic_links_the_specific_reference() -> None:
     assert Path(diagnostic["manual"]).is_file()
 
 
+def test_dialogue_diagnostic_links_the_specific_reference() -> None:
+    studio = Studio()
+    result = studio.compile(
+        project(
+            "La Sala è una stanza. La guida è una persona nella Sala. "
+            'Dialogo "incompleto" con "guida": Fine dialogo.'
+        )
+    )
+    diagnostic = result["diagnostics"][0]
+    assert diagnostic["code"] == "E119"
+    assert diagnostic["title"] == "Grafo del dialogo non valido"
+    assert diagnostic["manual"] == "docs/linguaggio/dialoghi-strutturati.md"
+    assert Path(diagnostic["manual"]).is_file()
+
+
 def test_studio_exposes_author_types_and_maps_room_subtypes() -> None:
     studio = Studio()
     result = studio.compile(
@@ -268,6 +283,31 @@ def test_studio_executes_and_exposes_author_actions() -> None:
     studio.restart()
     assert studio.command("suona gong insieme al martello")["text"] == "Il gong risuona."
     assert studio.command("fai risuonare gong insieme al martello")["text"] == ("Il gong risuona.")
+
+
+def test_studio_exposes_and_executes_dialogue_graphs() -> None:
+    studio = Studio()
+    source = Path("examples/tutorial/16_dialogo_guardiana.locus").read_text(encoding="utf-8")
+    compiled = studio.compile(project(source))
+    assert compiled["ok"] and compiled["dialogues"] == 1
+    dialogue = compiled["ir"]["dialogues"][0]
+    assert dialogue["label"] == "memorie della guardiana"
+    assert len(dialogue["nodes"]) == 3
+
+    studio.restart()
+    opened = studio.command("parla con guardiana")
+    assert "1. Chiedi della tempesta" in opened["text"]
+    assert opened["active_dialogue"] == dialogue["id"]
+    assert opened["dialogue"][0]["node_label"] == "inizio"
+
+    storm = studio.command("1")
+    assert "spense la luce" in storm["text"]
+    assert storm["dialogue"][0]["choice_label"] == "Chiedi della tempesta"
+    assert len(storm["visited_dialogue_nodes"]) == 2
+
+    ended = studio.command("basta")
+    assert ended["active_dialogue"] is None
+    assert "termina" in ended["text"]
 
 
 def test_dispatch_errors_and_size_limit() -> None:

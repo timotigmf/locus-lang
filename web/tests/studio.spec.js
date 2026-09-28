@@ -412,3 +412,55 @@ Fine regola.`;
   await expect(page.locator("#index")).toContainText("maschera");
   await expect(page.locator("#index")).not.toContainText("astrolabio");
 });
+
+test("dialogo strutturato nello Studio con indice e trace", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await expect(page.locator("#compileStatus")).toContainText("compilato", {
+    timeout: 90000,
+  });
+  const source = `Titolo: "La guardiana".
+La Sala è una stanza.
+La guardiana è una persona nella Sala.
+Dialogo "segreti" con "guardiana":
+    Nodo "inizio" dice "La guardiana attende.":
+        Scelta "Chiedi della torre" porta a "torre".
+        Scelta "Saluta" termina.
+    Fine nodo.
+    Nodo "torre" dice "La torre custodisce il fuoco.":
+    Fine nodo.
+Fine dialogo.`;
+  await page.locator(".cm-content").click();
+  await page.keyboard.press("ControlOrMeta+A");
+  await page.keyboard.insertText(source);
+  await page
+    .getByRole("button", { name: "▶ Compila e prova", exact: true })
+    .click();
+  await expect(page.locator("#compileStatus")).toContainText("1 dialoghi", {
+    timeout: 90000,
+  });
+  await page
+    .getByRole("button", { name: "Indice del mondo", exact: true })
+    .click();
+  await expect(page.locator("#index")).toContainText("Dialoghi");
+  await expect(page.locator("#index")).toContainText("segreti");
+  await expect(page.locator("#index")).toContainText("guardiana");
+  await page.getByRole("button", { name: "Storia", exact: true }).click();
+  await page.locator("#command").fill("parla con guardiana");
+  await page.locator("#send").click();
+  await expect(page.locator("#transcript")).toContainText(
+    "1. Chiedi della torre",
+  );
+  await expect(page.locator("#trace")).toContainText(
+    "Dialogo «segreti» · nodo «inizio»",
+  );
+  await page.locator("#command").fill("1");
+  await page.locator("#send").click();
+  await expect(page.locator("#transcript")).toContainText(
+    "La torre custodisce il fuoco.",
+  );
+  await expect(page.locator("#trace")).toContainText(
+    "scelta «Chiedi della torre» · concluso",
+  );
+});

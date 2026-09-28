@@ -1,6 +1,6 @@
 # Architettura tecnica
 
-Stato: Studio M5 e linguaggio incrementale fino all'IR 15.
+Stato: Studio M5 e linguaggio incrementale fino all'IR 16.
 Le decisioni strutturali sono motivate negli [ADR](docs/adr/README.md).
 
 ## Pipeline e dipendenze
@@ -57,8 +57,8 @@ riferimenti in avanti. Il catalogo `RelationSpec` definisce tipi agli estremi,
 orientamento e inversi. Nessuna conoscenza di stanze o direzioni nel compilatore.
 Conflitti funzionali, auto-collegamenti e riferimenti non risolti sono diagnosticati.
 
-`ProgramIR` versione 15 contiene gerarchia dei tipi, azioni dell'autore, entità, relazioni, proprietà,
-tabelle, regole, punto iniziale, titolo, autore e sinonimi risolti; i record di base sono
+`ProgramIR` versione 16 contiene gerarchia dei tipi, azioni dell'autore, entità, relazioni, proprietà,
+tabelle, dialoghi, regole, punto iniziale, titolo, autore e sinonimi risolti; i record di base sono
 `TypeIR(id, label, parent_id)`, `ActionIR(id, label, commands, ..., separators)`,
 `EntityIR(id, label, type_id)`
 e `RelationIR(source_id, predicate_id, target_id)`. Gli effetti di relazione
@@ -163,7 +163,7 @@ parser. Si consulti l'[ADR 0005](docs/adr/0005-proprieta-e-mondo.md) per le alte
 contiene record immutabili generici. `rules.execute` esegue rulebook attraverso
 un protocollo Host indipendente da IF. `stdlib.game` adatta sessioni e azioni;
 `Transition` espone output, trace e risultato. Questi record furono introdotti
-con l'IR 4 e sono conservati nell'IR 15.
+con l'IR 4 e sono conservati nell'IR 16.
 Vedere [ADR 0006](docs/adr/0006-regole.md).
 
 ## Implementazione M4
@@ -220,6 +220,14 @@ l'host espone lettura e sostituzione strutturate dello snapshot. Lo Studio
 proietta lo stato corrente senza ricostruire dati dal testo. Vedere
 [ADR 0019](docs/adr/0019-tabelle-tipate.md).
 
+## Persone e dialoghi
+
+`DialogueIR` conserva partecipante, nodo iniziale, nodi e scelte con riferimenti
+risolti. Il compilatore riceve dall'host i tipi ammessi, mentre il runtime
+generico convalida struttura e raggiungibilità senza conoscere la narrativa.
+La stdlib conserva nodo attivo e visite nella sessione e produce trace separato
+dalle regole. Vedere [ADR 0020](docs/adr/0020-dialoghi-strutturati.md).
+
 ## Metadati e vocabolario
 
 Titolo e autore appartengono al progetto compilato, non allo stato separato del
@@ -238,7 +246,7 @@ confronto transitivo. Vedere [ADR 0011](docs/adr/0011-gerarchia-tipi.md).
 ## Azioni definite dall'autore
 
 Le dichiarazioni di azione vengono unite al catalogo `ActionSpec` dell'host dopo
-la risoluzione dei tipi. L'IR 15 conserva forme di comando e separatori anche
+la risoluzione dei tipi. L'IR 16 conserva forme di comando e separatori anche
 multiparola, oltre ai tipi degli argomenti. Il parser giocatore riceve questo catalogo
 compilato e produce ID di azione; il dispatcher usa le stesse fasi transazionali
 delle azioni standard.

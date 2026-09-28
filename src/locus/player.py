@@ -109,8 +109,11 @@ def _noun(tokens: list[tuple[str, bool]]) -> str | None:
     return " ".join(token for token, _ in tokens) or None
 
 
-def standard_commands() -> frozenset[str]:
-    return frozenset((*_SIMPLE_COMMANDS, *_ACTION_COMMANDS))
+def standard_commands(*, include_dialogue: bool = False) -> frozenset[str]:
+    dialogue_commands = (
+        ("parla", "p", "talk", "scegli", "basta", "fine dialogo") if include_dialogue else ()
+    )
+    return frozenset((*_SIMPLE_COMMANDS, *_ACTION_COMMANDS, *dialogue_commands))
 
 
 def _author_match(
@@ -158,13 +161,31 @@ def _author_intent(action: ActionIR, tokens: list[tuple[str, bool]], command_len
     return Intent(action.id, direct, indirect) if direct and indirect else Intent("unknown")
 
 
-def parse_command(text: str, actions: Sequence[ActionIR] = ()) -> Intent:
+def parse_command(
+    text: str, actions: Sequence[ActionIR] = (), *, dialogue_enabled: bool = False
+) -> Intent:
     tokens = _tokens(canonical(text).replace("’", "'"))
     if not tokens:
         return Intent("unknown")
     verb, quoted = tokens[0]
     if quoted:
         return Intent("unknown")
+    if dialogue_enabled:
+        if len(tokens) == 1 and verb.isdecimal():
+            return Intent("dialogue_choice", verb)
+        if verb == "scegli":
+            choice = _noun(tokens[1:])
+            return Intent("dialogue_choice", choice) if choice else Intent("unknown")
+        if verb == "basta" or (
+            verb == "fine" and len(tokens) == 2 and tokens[1] == ("dialogo", False)
+        ):
+            return Intent("end_dialogue")
+        if verb in {"parla", "p", "talk"}:
+            rest = tokens[1:]
+            if rest and not rest[0][1] and rest[0][0] in {"con", "to"}:
+                rest = rest[1:]
+            direct = _noun(rest)
+            return Intent("talk", direct) if direct else Intent("missing_noun")
     authored = _author_match(actions, tokens)
     if len(tokens) == 1:
         standard = _SIMPLE_COMMANDS.get(verb, _ACTION_COMMANDS.get(verb))

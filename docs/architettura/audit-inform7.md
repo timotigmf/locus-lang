@@ -129,14 +129,17 @@ verrà simulato soltanto cambiando una descrizione.
 ### Persone e dialoghi
 
 Inform tratta il dialogo come valori strutturati: battute, blocchi, scelte,
-soggetti e condizioni. Per LOCUS servono prima persone e azioni con attore;
-successivamente il dialogo dovrà avere:
+soggetti e condizioni. LOCUS IR 16 introduce il tipo standard `persona` e grafi
+di dialogo compilati con:
 
-- battute con parlante, testo, condizioni ed effetti;
 - nodi e scelte con identità stabile;
-- argomenti di conversazione e conoscenze dei personaggi;
-- stato eseguito/non eseguito e ripetibilità;
-- trace della scelta e controllo di cicli o nodi irraggiungibili.
+- destinazioni risolte, cicli ammessi e nodi irraggiungibili rifiutati;
+- stato multi-turno, conclusione esplicita e memoria dei nodi visitati;
+- trace della battuta, del nodo e della scelta nello Studio.
+
+Restano da aggiungere condizioni ed effetti sulle scelte, argomenti di
+conversazione, conoscenze dei personaggi e più dialoghi selezionabili per la
+stessa persona.
 
 ### Veicoli
 
@@ -219,7 +222,7 @@ imitare. La misura utile è coprire ogni contratto pubblico e ogni regressione.
 | 2 | grammatica italiana dei comandi | forme `Comprendi` con token tipati e ambiguità esplicite |
 | 3 | relazioni dinamiche, visibilità e scenario implementati fino all'IR 13 | passaggio segreto reale, oggetto nascosto e mappa coerente con lo stato |
 | 4 | elenchi e tabelle tipate con effetti implementati nell'IR 15 | indizi, cronologie e registri modificati transazionalmente |
-| 5 | persone e dialogo | conversazione ramificata con trace e test dei nodi |
+| 5 | persone e dialoghi strutturati implementati nell'IR 16 | conversazione ramificata con trace e test dei nodi |
 | 6 | scene, tempo e punteggio | eventi temporali e premi registrati e riproducibili |
 | 7 | veicoli | movimento atomico di conducente, passeggeri e veicolo |
 | 8 | valuta e commercio | acquisto/vendita atomici con unità e fondi verificati |

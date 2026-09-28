@@ -57,7 +57,8 @@ Ogni pacchetto conserva il core indipendente dalla narrativa interattiva.
    vista multipli restano pacchetti separati.
 4. Elenchi e tabelle tipate con effetti transazionali implementati nell'IR 15;
    query per colonna e accesso avanzato alle collezioni restano da completare.
-5. Costruire persone e dialoghi strutturati prima di scene, veicoli e commercio.
+5. Persone e grafi di dialogo multi-turno implementati nell'IR 16; condizioni,
+   effetti e conoscenze dei personaggi restano estensioni successive.
 
 Scene/tempo/punteggio, veicoli, valuta/commercio, multimedia e indici completi
 seguono in pacchetti separati. Non si importeranno codice o testi Inform.

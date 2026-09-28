@@ -8,6 +8,9 @@ from locus.graph import cycle_node
 from locus.ir import (
     IR_VERSION,
     ActionIR,
+    DialogueChoiceIR,
+    DialogueIR,
+    DialogueNodeIR,
     EntityIR,
     ProgramIR,
     PropertyIR,
@@ -96,6 +99,7 @@ def analyze(
     actions: Mapping[str, ActionSpec] | None = None,
     kind_parents: Mapping[str, str | None] | None = None,
     reserved_commands: Collection[str] = (),
+    dialogue_actor_types: Collection[str] = (),
 ) -> ProgramIR:
     if program.inclusions:
         raise CompileError(
@@ -109,6 +113,8 @@ def analyze(
         )
     catalog = relations if relations is not None else {}
     type_parents = _validate_catalog(kinds, catalog, kind_parents)
+    if any(type_id not in type_parents for type_id in dialogue_actor_types):
+        raise ValueError("I tipi ammessi nei dialoghi devono essere dichiarati nel catalogo.")
     kind_symbols = dict(kinds)
     kind_spans = {}
     next_author_id = 1
@@ -315,6 +321,125 @@ def analyze(
             f"e{len(symbols) + 1}", entity_declaration.name, kind_symbols[kind]
         )
 
+    if len(program.dialogues) > 64:
+        raise CompileError(
+            "E118", "Un progetto ammette al massimo 64 dialoghi.", program.dialogues[64].span
+        )
+    dialogue_names: set[str] = set()
+    dialogue_speakers: set[str] = set()
+    dialogue_records: list[DialogueIR] = []
+    for dialogue_index, dialogue_declaration in enumerate(program.dialogues, 1):
+        dialogue_name = canonical(dialogue_declaration.name)
+        if not dialogue_name or dialogue_name in dialogue_names:
+            raise CompileError(
+                "E118",
+                f"Dialogo già dichiarato: {dialogue_declaration.name}.",
+                dialogue_declaration.span,
+            )
+        speaker = symbols.get(canonical(dialogue_declaration.speaker))
+        if speaker is None:
+            raise CompileError(
+                "E120",
+                f"Persona non dichiarata: {dialogue_declaration.speaker}.",
+                dialogue_declaration.span,
+            )
+        if not dialogue_actor_types or not any(
+            is_subtype(speaker.type_id, expected, type_parents) for expected in dialogue_actor_types
+        ):
+            raise CompileError(
+                "E120",
+                f"Il partecipante del dialogo non è una persona: {dialogue_declaration.speaker}.",
+                dialogue_declaration.span,
+            )
+        if speaker.id in dialogue_speakers:
+            raise CompileError(
+                "E118",
+                f"Esiste già un dialogo per {dialogue_declaration.speaker}.",
+                dialogue_declaration.span,
+            )
+        if not 1 <= len(dialogue_declaration.nodes) <= 128:
+            raise CompileError(
+                "E119", "Un dialogo richiede da 1 a 128 nodi.", dialogue_declaration.span
+            )
+        node_names = [canonical(node.name) for node in dialogue_declaration.nodes]
+        if any(not name for name in node_names) or len(set(node_names)) != len(node_names):
+            raise CompileError(
+                "E119",
+                "I nomi dei nodi devono essere univoci e non vuoti.",
+                dialogue_declaration.span,
+            )
+        dialogue_id = f"autore.dialogo.{dialogue_index}"
+        node_ids = {
+            name: f"{dialogue_id}.nodo.{node_index}"
+            for node_index, name in enumerate(node_names, 1)
+        }
+        nodes: list[DialogueNodeIR] = []
+        for node, node_name in zip(dialogue_declaration.nodes, node_names, strict=True):
+            if not node.text.strip() or len(node.choices) > 32:
+                raise CompileError(
+                    "E119",
+                    "Ogni nodo richiede una battuta non vuota e al massimo 32 scelte.",
+                    node.span,
+                )
+            choice_names = [canonical(choice.label) for choice in node.choices]
+            if any(not name for name in choice_names) or len(set(choice_names)) != len(
+                choice_names
+            ):
+                raise CompileError(
+                    "E119", "Le scelte di un nodo devono essere univoche e non vuote.", node.span
+                )
+            choices: list[DialogueChoiceIR] = []
+            for choice_index, choice in enumerate(node.choices, 1):
+                target_id = (
+                    node_ids.get(canonical(choice.target)) if choice.target is not None else None
+                )
+                if choice.target is not None and target_id is None:
+                    raise CompileError(
+                        "E119",
+                        f"Nodo di destinazione sconosciuto: {choice.target}.",
+                        choice.span,
+                    )
+                choices.append(
+                    DialogueChoiceIR(
+                        f"{node_ids[node_name]}.scelta.{choice_index}",
+                        choice.label,
+                        target_id,
+                    )
+                )
+            nodes.append(DialogueNodeIR(node_ids[node_name], node.name, node.text, tuple(choices)))
+        nodes_by_id = {node.id: node for node in nodes}
+        reachable = {nodes[0].id}
+        pending = [nodes[0].id]
+        while pending:
+            current = nodes_by_id[pending.pop()]
+            for edge_choice in current.choices:
+                if (
+                    edge_choice.target_node_id is not None
+                    and edge_choice.target_node_id not in reachable
+                ):
+                    reachable.add(edge_choice.target_node_id)
+                    pending.append(edge_choice.target_node_id)
+        if len(reachable) != len(nodes):
+            unreachable = next(
+                node
+                for node in dialogue_declaration.nodes
+                if node_ids[canonical(node.name)] not in reachable
+            )
+            raise CompileError(
+                "E119", f"Nodo irraggiungibile: {unreachable.name}.", unreachable.span
+            )
+        dialogue_names.add(dialogue_name)
+        dialogue_speakers.add(speaker.id)
+        dialogue_records.append(
+            DialogueIR(
+                dialogue_id,
+                dialogue_declaration.name,
+                speaker.id,
+                nodes[0].id,
+                tuple(nodes),
+            )
+        )
+
     metadata: dict[str, str] = {}
     for metadata_item in program.metadata:
         if metadata_item.name in metadata:
@@ -486,6 +611,7 @@ def analyze(
         types=type_records,
         actions=tuple(action_records),
         tables=tuple(table_catalog.values()),
+        dialogues=tuple(dialogue_records),
     )
 
 
@@ -499,6 +625,7 @@ def compile_source(
     actions: Mapping[str, ActionSpec] | None = None,
     kind_parents: Mapping[str, str | None] | None = None,
     reserved_commands: Collection[str] = (),
+    dialogue_actor_types: Collection[str] = (),
 ) -> ProgramIR:
     catalog = relations or {}
     return analyze(
@@ -509,6 +636,7 @@ def compile_source(
         actions=actions,
         kind_parents=kind_parents,
         reserved_commands=reserved_commands,
+        dialogue_actor_types=dialogue_actor_types,
     )
 
 

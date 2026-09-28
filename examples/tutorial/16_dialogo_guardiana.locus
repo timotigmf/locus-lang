@@ -1,0 +1,22 @@
+Titolo: "La guardiana del faro".
+Autore: "Esempio LOCUS".
+
+La Sala è una stanza.
+Inizia nella "Sala".
+La Sala ha descrizione "Un registro aperto riposa davanti alla campana del faro.".
+
+La guardiana è una persona nella Sala.
+La guardiana ha descrizione "Porta al collo il sigillo dei custodi.".
+
+Dialogo "memorie della guardiana" con "guardiana":
+    Nodo "inizio" dice "La guardiana posa il registro sul tavolo.":
+        Scelta "Chiedi della tempesta" porta a "tempesta".
+        Scelta "Chiedi della chiave" porta a "chiave".
+        Scelta "Saluta e concludi" termina.
+    Fine nodo.
+    Nodo "tempesta" dice "La tempesta spense la luce per tre notti.":
+        Scelta "Torna alle domande" porta a "inizio".
+    Fine nodo.
+    Nodo "chiave" dice "La chiave è nascosta sotto la campana.":
+    Fine nodo.
+Fine dialogo.

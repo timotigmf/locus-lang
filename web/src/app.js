@@ -505,7 +505,7 @@ async function compileProject(play = false) {
   compiledRevision = rev;
   showDiagnostics([]);
   $("compileStatus").textContent =
-    `${result.entities} entità · ${result.actions ?? 0} azioni autore · ${result.rules} regole · compilato`;
+    `${result.entities} entità · ${result.actions ?? 0} azioni autore · ${result.rules} regole · ${result.dialogues ?? 0} dialoghi · compilato`;
   if (result.title) {
     project.title = result.title;
     $("title").value = result.title;
@@ -586,6 +586,30 @@ function renderIndex(ir) {
       content.push(grid);
     }
   }
+  if ((ir.dialogues ?? []).length) {
+    const entities = new Map(ir.entities.map((item) => [item.id, item.label]));
+    content.push(el("h3", {}, "Dialoghi"));
+    const dialogues = el("table", { class: "data" });
+    const dialogueHead = el("tr");
+    for (const label of ["Dialogo", "Persona", "Nodi", "Inizio"])
+      dialogueHead.append(el("th", {}, label));
+    dialogues.append(dialogueHead);
+    for (const dialogue of ir.dialogues) {
+      const row = el("tr");
+      const start = dialogue.nodes.find(
+        (node) => node.id === dialogue.start_node_id,
+      );
+      for (const value of [
+        dialogue.label,
+        entities.get(dialogue.speaker_id) ?? dialogue.speaker_id,
+        String(dialogue.nodes.length),
+        start?.label ?? "",
+      ])
+        row.append(el("td", {}, value));
+      dialogues.append(row);
+    }
+    content.push(dialogues);
+  }
   if ((ir.actions ?? []).length) {
     content.push(el("h3", {}, "Azioni definite dall'autore"));
     const actions = el("table", { class: "data" });
@@ -611,9 +635,9 @@ function renderIndex(ir) {
   }
   $("index").replaceChildren(...content);
 }
-function showTrace(trace) {
+function showTrace(trace, dialogue = []) {
   $("trace").replaceChildren();
-  if (!trace.length) {
+  if (!trace.length && !dialogue.length) {
     $("trace").append(
       el(
         "p",
@@ -623,23 +647,35 @@ function showTrace(trace) {
     );
     return;
   }
-  const table = el("table", { class: "data" });
-  const h = el("tr");
-  for (const s of ["Regola", "Fase", "Priorità", "Esito", "Sorgente"])
-    h.append(el("th", {}, s));
-  table.append(h);
-  for (const t of trace) {
-    const row = el("tr");
-    for (const v of [t.name, t.phase, String(t.priority), t.outcome])
-      row.append(el("td", {}, v));
-    const cell = el("td");
-    const b = el("button", {}, `${t.origin.source}:${t.origin.line}`);
-    b.onclick = () => openFile(t.origin.source, t.origin.line, t.origin.column);
-    cell.append(b);
-    row.append(cell);
-    table.append(row);
+  if (trace.length) {
+    const table = el("table", { class: "data" });
+    const h = el("tr");
+    for (const s of ["Regola", "Fase", "Priorità", "Esito", "Sorgente"])
+      h.append(el("th", {}, s));
+    table.append(h);
+    for (const t of trace) {
+      const row = el("tr");
+      for (const v of [t.name, t.phase, String(t.priority), t.outcome])
+        row.append(el("td", {}, v));
+      const cell = el("td");
+      const b = el("button", {}, `${t.origin.source}:${t.origin.line}`);
+      b.onclick = () =>
+        openFile(t.origin.source, t.origin.line, t.origin.column);
+      cell.append(b);
+      row.append(cell);
+      table.append(row);
+    }
+    $("trace").append(table);
   }
-  $("trace").append(table);
+  for (const item of dialogue) {
+    $("trace").append(
+      el(
+        "p",
+        { class: "empty" },
+        `Dialogo «${item.dialogue_label}» · nodo «${item.node_label}»${item.choice_label ? ` · scelta «${item.choice_label}»` : ""}${item.ended ? " · concluso" : ""}`,
+      ),
+    );
+  }
 }
 function appendOutput(result, command) {
   if (command)
@@ -648,7 +684,7 @@ function appendOutput(result, command) {
     );
   $("transcript").append(el("div", { class: "story-output" }, result.text));
   $("transcript").scrollTop = $("transcript").scrollHeight;
-  showTrace(result.trace);
+  showTrace(result.trace, result.dialogue ?? []);
   showMap(result.map);
   if (compiled && result.properties) {
     compiled.ir.properties = result.properties;

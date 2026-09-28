@@ -29,6 +29,7 @@ al prompt della storia: lì si scrivono soltanto i comandi del giocatore.
 | [13. Scenario e oggetti nascosti](13-visibilita-scenario.md) | `examples/tutorial/13_scenario_nascosto.locus` | Separare esistenza, visibilità e trasportabilità |
 | [14. Un taccuino di indizi](14-elenchi-indizi.md) | `examples/tutorial/14_taccuino_indizi.locus` | Raccogliere, verificare e rimuovere elementi tipati |
 | [15. Il registro dei reperti](15-tabelle-reperti.md) | `examples/tutorial/15_tabelle_reperti.locus` | Definire schemi e trasferire righe in una transazione |
+| [16. La guardiana del faro](16-dialogo-guardiana.md) | `examples/tutorial/16_dialogo_guardiana.locus` | Costruire una conversazione a nodi, scelte e cicli |
 
 Prima prova la versione fornita. Poi modifica un solo elemento e riesegui la
 sequenza di comandi. In caso di errore conserva il messaggio, il file sorgente e
@@ -39,7 +40,8 @@ Ogni lezione combina un esempio eseguibile, una prova guidata, almeno un caso
 negativo e un esercizio. La quinta lezione mostra come trasformare un
 transcript esplorativo in un test ripetibile direttamente nello Studio.
 
-Gli esempi non sono traduzioni dei giochi presenti nei manuali. Non usano codice
-Inform, estensioni Inform, personaggi simulati, illuminazione fisica o sinonimi
-non implementati. La lanterna è modellata esplicitamente come un contenitore con
-schermatura: aprirla e chiuderla cambia il testo, non un motore della luce.
+Gli esempi non sono traduzioni dei giochi presenti nei manuali e non usano codice
+o estensioni Inform. Persone e dialoghi sono strutture LOCUS compilate; la luce
+fisica e i sinonimi non documentati non sono simulati. La lanterna è modellata
+esplicitamente come un contenitore con schermatura: aprirla e chiuderla cambia il
+testo, non un motore della luce.

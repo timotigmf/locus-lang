@@ -54,17 +54,32 @@ def render(transition: Transition) -> str:
         return f"Quale intendi: {alternatives}?"
     if kind == "custom":
         return "Non accade nulla."
+    if kind == "dialogue":
+        return f"La conversazione con {names[0]} continua."
+    if kind == "dialogue_end":
+        return f"La conversazione con {names[0]} termina." if names else "La conversazione termina."
+    if kind == "no_dialogue":
+        return f"{names[0]} non ha ancora un dialogo definito."
+    if kind == "invalid_choice":
+        return "Scegli una delle opzioni indicate, usando il numero o il testo della scelta."
+    if kind == "dialogue_active":
+        return "La conversazione è in corso: scegli un'opzione oppure scrivi «basta»."
+    if kind == "no_active_dialogue":
+        return "Non c'è una conversazione in corso."
+    unknown = (
+        "Comando non riconosciuto. Usa guarda, esamina, prendi, lascia, metti, "
+        "apri, chiudi, blocca, inventario, nord, sud, est, ovest o esci. "
+        "Sono disponibili anche le abbreviazioni l, x, i, n, s, e, o e q."
+    )
+    if world.dialogues:
+        unknown += " Per conversare usa parla con NOME."
     messages = {
         "rule": "Azione gestita dalle regole.",
         "already_carried": "Hai già questo oggetto.",
         "not_here": "Non trovi qui quell'oggetto.",
         "not_portable": "Non puoi prendere questo elemento.",
         "no_exit": "Non c'è alcun passaggio in quella direzione.",
-        "unknown": (
-            "Comando non riconosciuto. Usa guarda, esamina, prendi, lascia, metti, "
-            "apri, chiudi, blocca, inventario, nord, sud, est, ovest o esci. "
-            "Sono disponibili anche le abbreviazioni l, x, i, n, s, e, o e q."
-        ),
+        "unknown": unknown,
         "missing_noun": "Indica quale oggetto vuoi esaminare o manipolare.",
         "quit": "A presto.",
         "locked": "È bloccato: serve una chiave adatta.",

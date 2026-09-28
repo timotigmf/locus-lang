@@ -34,3 +34,4 @@ Le fonti e le licenze sono nel [registro](../architettura/fonti.md).
 - [0017 — visibilità e scenario](0017-visibilita-scenario.md): campo d'azione esplicito e dettagli ambientali non trasportabili nell'IR 13.
 - [0018 — elenchi tipati](0018-elenchi-tipati.md): collezioni omogenee e mutazioni transazionali nell'IR 14.
 - [0019 — tabelle tipate](0019-tabelle-tipate.md): colonne nominate e righe transazionali nell'IR 15.
+- [0020 — persone e dialoghi](0020-dialoghi-strutturati.md): grafi di conversazione e stato multi-turno nell'IR 16.

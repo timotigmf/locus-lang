@@ -55,7 +55,14 @@ def main(argv: list[str] | None = None) -> int:
                         command = input("> " if sys.stdin.isatty() else "")
                     except EOFError:
                         break
-                    transition = step(session, parse_command(command, session.world.actions))
+                    transition = step(
+                        session,
+                        parse_command(
+                            command,
+                            session.world.actions,
+                            dialogue_enabled=bool(session.world.dialogues),
+                        ),
+                    )
                     session = transition.session
                     _show(transition, args.command == "debug")
                     if transition.event.kind == "quit":
@@ -89,5 +96,12 @@ def _show(transition: Transition, debug: bool) -> None:
             print(
                 f"[{item.phase}; priorità {item.priority}] {item.name}: {item.outcome} "
                 f"({item.origin.source}:{item.origin.line}:{item.origin.column})",
+                file=sys.stderr,
+            )
+        for dialogue_step in transition.dialogue:
+            choice = f"; scelta {dialogue_step.choice_label}" if dialogue_step.choice_label else ""
+            print(
+                f"[dialogo] {dialogue_step.dialogue_label}: "
+                f"nodo {dialogue_step.node_label}{choice}",
                 file=sys.stderr,
             )

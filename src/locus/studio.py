@@ -77,6 +77,21 @@ _ERROR_HELP = {
         "Fornisci un valore del tipo corretto per ogni colonna.",
         "docs/linguaggio/tabelle-tipate.md",
     ),
+    "E118": (
+        "Dialogo duplicato",
+        "Usa un nome univoco e un solo dialogo per ciascuna persona.",
+        "docs/linguaggio/dialoghi-strutturati.md",
+    ),
+    "E119": (
+        "Grafo del dialogo non valido",
+        "Controlla nodi, scelte, destinazioni e raggiungibilità.",
+        "docs/linguaggio/dialoghi-strutturati.md",
+    ),
+    "E120": (
+        "Partecipante del dialogo non valido",
+        "Dichiara il partecipante come persona e verifica il suo nome.",
+        "docs/linguaggio/dialoghi-strutturati.md",
+    ),
     "E310": (
         "Azione duplicata",
         "Scegli un nome che non appartenga già alla storia o alla libreria.",
@@ -277,6 +292,7 @@ class Studio:
             "entities": len(program.entities),
             "rules": len(program.rules),
             "actions": len(program.actions),
+            "dialogues": len(program.dialogues),
             "title": program.title,
             "author": program.author,
         }
@@ -292,6 +308,10 @@ class Studio:
             "map": map_data(transition.session.world),
             "properties": [asdict(item) for item in transition.session.world.properties],
             "tables": [asdict(item) for item in transition.session.world.tables],
+            "dialogue": [asdict(item) for item in transition.dialogue],
+            "active_dialogue": transition.session.dialogue_id,
+            "active_dialogue_node": transition.session.dialogue_node_id,
+            "visited_dialogue_nodes": list(transition.session.visited_dialogue_nodes),
         }
 
     def restart(self) -> dict[str, Any]:
@@ -307,7 +327,14 @@ class Studio:
             raise ValueError("Avvia o riavvia la storia prima di inviare un comando.")
         if len(command) > 2000:
             raise ValueError("Comando troppo lungo.")
-        transition = step(self.session, parse_command(command, self.session.world.actions))
+        transition = step(
+            self.session,
+            parse_command(
+                command,
+                self.session.world.actions,
+                dialogue_enabled=bool(self.session.world.dialogues),
+            ),
+        )
         self.session = transition.session
         self.ended = transition.event.kind == "quit"
         return self._output(transition)

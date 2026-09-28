@@ -77,6 +77,29 @@ class TableDeclaration:
 
 
 @dataclass(frozen=True, slots=True)
+class DialogueChoiceDeclaration:
+    label: str
+    target: str | None
+    span: Span
+
+
+@dataclass(frozen=True, slots=True)
+class DialogueNodeDeclaration:
+    name: str
+    text: str
+    choices: tuple[DialogueChoiceDeclaration, ...]
+    span: Span
+
+
+@dataclass(frozen=True, slots=True)
+class DialogueDeclaration:
+    name: str
+    speaker: str
+    nodes: tuple[DialogueNodeDeclaration, ...]
+    span: Span
+
+
+@dataclass(frozen=True, slots=True)
 class PropertyReference:
     entity_name: str
     property_name: str
@@ -165,3 +188,4 @@ class Program:
     kinds: tuple[KindDeclaration, ...] = ()
     actions: tuple[ActionDeclaration, ...] = ()
     tables: tuple[TableDeclaration, ...] = ()
+    dialogues: tuple[DialogueDeclaration, ...] = ()

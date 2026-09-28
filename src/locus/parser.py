@@ -7,6 +7,9 @@ from locus.ast import (
     ActionDeclaration,
     Assignment,
     Declaration,
+    DialogueChoiceDeclaration,
+    DialogueDeclaration,
+    DialogueNodeDeclaration,
     EntryPoint,
     Inclusion,
     KindDeclaration,
@@ -147,6 +150,7 @@ class _Parser:
         kinds: list[KindDeclaration] = []
         actions: list[ActionDeclaration] = []
         tables: list[TableDeclaration] = []
+        dialogues: list[DialogueDeclaration] = []
         relations: list[Relation] = []
         properties: list[PropertyDeclaration] = []
         assignments: list[Assignment] = []
@@ -156,6 +160,58 @@ class _Parser:
         metadata: list[Metadata] = []
         vocabulary: list[Vocabulary] = []
         while self.current.kind != "EOF":
+            if self.current.normalized == "dialogo":
+                start = self.current.span
+                self.keyword("dialogo")
+                name = RuleParser(self).quoted()
+                self.keyword("con")
+                speaker = RuleParser(self).quoted()
+                if self.current.kind != "COLON":
+                    self.fail("':'")
+                self.index += 1
+                nodes: list[DialogueNodeDeclaration] = []
+                while self.current.normalized != "fine":
+                    node_start = self.current.span
+                    self.keyword("nodo")
+                    node_name = RuleParser(self).quoted()
+                    self.keyword("dice")
+                    text = RuleParser(self).quoted(name=False)
+                    if self.current.kind != "COLON":
+                        self.fail("':'")
+                    self.index += 1
+                    choices: list[DialogueChoiceDeclaration] = []
+                    while self.current.normalized != "fine":
+                        choice_start = self.current.span
+                        self.keyword("scelta")
+                        label = RuleParser(self).quoted()
+                        target = None
+                        if self.current.normalized == "porta":
+                            self.keyword("porta")
+                            self.keyword("a")
+                            target = RuleParser(self).quoted()
+                        elif self.current.normalized == "termina":
+                            self.keyword("termina")
+                        else:
+                            self.fail("'porta a' o 'termina'")
+                        choices.append(
+                            DialogueChoiceDeclaration(label, target, self.finish(choice_start))
+                        )
+                    self.keyword("fine")
+                    self.keyword("nodo")
+                    nodes.append(
+                        DialogueNodeDeclaration(
+                            node_name,
+                            text,
+                            tuple(choices),
+                            self.finish(node_start),
+                        )
+                    )
+                self.keyword("fine")
+                self.keyword("dialogo")
+                dialogues.append(
+                    DialogueDeclaration(name, speaker, tuple(nodes), self.finish(start))
+                )
+                continue
             if self.current.normalized == "tabella":
                 start = self.current.span
                 self.keyword("tabella")
@@ -379,6 +435,7 @@ class _Parser:
             vocabulary=tuple(vocabulary),
             actions=tuple(actions),
             tables=tuple(tables),
+            dialogues=tuple(dialogues),
         )
 
 

@@ -1,6 +1,6 @@
 # Azioni e comandi definiti dall'autore
 
-Stato: implementato in LOCUS 0.5.0a1, introdotto in IR 8, esteso fino a IR 11 e conservato in IR 15.
+Stato: implementato in LOCUS 0.5.0a1, introdotto in IR 8, esteso fino a IR 11 e conservato in IR 16.
 
 Questa specifica permette di dichiarare un'azione, assegnarle un comando italiano
 e indicare i tipi dei suoi oggetti. Le regole forniscono comportamento e testo.
@@ -12,8 +12,6 @@ sorgente e il runtime non interpreta frasi LOCUS.
 Un'azione può richiedere zero, uno o due oggetti:
 
 ```locus
-Una persona è un tipo di cosa.
-
 Azione "attendere" senza oggetti con comando "attendi".
 Azione "salutare" su una persona con comando "saluta".
 Azione "mostrare" su una cosa con una persona con comando "mostra" e separatore "a".
@@ -52,7 +50,6 @@ il comando riesce e risponde `Non accade nulla.`. Una regola nella fase `invece`
 fornisce il comportamento completo e sostituisce quel testo:
 
 ```locus
-Una persona è un tipo di cosa.
 La Sala è una stanza.
 Il custode è una persona nella Sala.
 

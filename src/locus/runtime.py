@@ -8,6 +8,7 @@ from locus.graph import cycle_node
 from locus.ir import (
     IR_VERSION,
     ActionIR,
+    DialogueIR,
     ProgramIR,
     PropertyIR,
     RelationIR,
@@ -48,6 +49,7 @@ class World:
     types: tuple[TypeIR, ...] = ()
     actions: tuple[ActionIR, ...] = ()
     tables: tuple[TableIR, ...] = ()
+    dialogues: tuple[DialogueIR, ...] = ()
 
 
 def has_type(world: World, actual: str, expected: str) -> bool:
@@ -181,6 +183,60 @@ def instantiate(program: ProgramIR) -> World:
         ):
             raise ValueError("Schema o righe di tabella non validi nell'IR.")
 
+    dialogue_ids = {dialogue.id for dialogue in program.dialogues}
+    dialogue_labels = [canonical(dialogue.label) for dialogue in program.dialogues]
+    dialogue_speakers = [dialogue.speaker_id for dialogue in program.dialogues]
+    if (
+        len(program.dialogues) > 64
+        or len(dialogue_ids) != len(program.dialogues)
+        or len(set(dialogue_labels)) != len(dialogue_labels)
+        or len(set(dialogue_speakers)) != len(dialogue_speakers)
+    ):
+        raise ValueError("Catalogo dei dialoghi duplicato o troppo grande nell'IR.")
+    for dialogue in program.dialogues:
+        node_ids = {node.id for node in dialogue.nodes}
+        node_labels = [canonical(node.label) for node in dialogue.nodes]
+        if (
+            not dialogue.id.strip()
+            or not canonical(dialogue.label)
+            or dialogue.speaker_id not in identifiers
+            or not 1 <= len(dialogue.nodes) <= 128
+            or len(node_ids) != len(dialogue.nodes)
+            or len(set(node_labels)) != len(node_labels)
+            or dialogue.start_node_id not in node_ids
+        ):
+            raise ValueError("Dialogo o nodi non validi nell'IR.")
+        for node in dialogue.nodes:
+            choice_ids = {choice.id for choice in node.choices}
+            choice_labels = [canonical(choice.label) for choice in node.choices]
+            if (
+                not node.id.strip()
+                or not canonical(node.label)
+                or not node.text.strip()
+                or len(node.choices) > 32
+                or len(choice_ids) != len(node.choices)
+                or len(set(choice_labels)) != len(choice_labels)
+                or any(
+                    not choice.id.strip()
+                    or not canonical(choice.label)
+                    or (choice.target_node_id is not None and choice.target_node_id not in node_ids)
+                    for choice in node.choices
+                )
+            ):
+                raise ValueError("Nodo o scelta di dialogo non validi nell'IR.")
+        nodes_by_id = {node.id: node for node in dialogue.nodes}
+        reachable_nodes = {dialogue.start_node_id}
+        pending_nodes = [dialogue.start_node_id]
+        while pending_nodes:
+            node = nodes_by_id[pending_nodes.pop()]
+            for choice in node.choices:
+                target = choice.target_node_id
+                if target is not None and target not in reachable_nodes:
+                    reachable_nodes.add(target)
+                    pending_nodes.append(target)
+        if reachable_nodes != node_ids:
+            raise ValueError("Il dialogo contiene nodi irraggiungibili nell'IR.")
+
     def validate_table_condition(condition: Condition[Any]) -> None:
         if condition.operator == "contiene_riga":
             table = tables_by_id.get(condition.table_id or "")
@@ -262,4 +318,5 @@ def instantiate(program: ProgramIR) -> World:
         types=types,
         actions=program.actions,
         tables=program.tables,
+        dialogues=program.dialogues,
     )

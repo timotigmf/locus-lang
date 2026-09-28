@@ -57,6 +57,7 @@ dall'alto verso il basso prima di studiare i moduli.
 13. [Scenario e oggetti nascosti](../tutorial/13-visibilita-scenario.md)
 14. [Elenchi tipati e taccuino di indizi](../tutorial/14-elenchi-indizi.md)
 15. [Tabelle tipate e registro dei reperti](../tutorial/15-tabelle-reperti.md)
+16. [Persone e dialoghi a scelte](../tutorial/16-dialogo-guardiana.md)
 
 ## Indice per obiettivo
 
@@ -73,7 +74,7 @@ dall'alto verso il basso prima di studiare i moduli.
 | Dettagli ambientali e oggetti nascosti | `scenario` non trasportabile e proprietà `visibile` | Lezione 13 |
 | Indizi, memoria e cronologie | Elenchi tipati con appartenenza e rollback | Lezione 14 |
 | Cataloghi e registri | Tabelle con colonne tipate e righe transazionali | Lezione 15 |
-| Dialoghi ramificati | Non ancora: mancano persone, argomenti e azione parlare | Roadmap |
+| Dialoghi ramificati | Persone, nodi, scelte, cicli e memoria delle visite | Lezione 16 |
 | Veicoli e vetture | Non ancora: manca il modello di entrata, uscita e movimento | Roadmap |
 | Denaro e acquisti | Proprietà numeriche disponibili; azioni compra/vendi non ancora | Roadmap |
 
@@ -110,5 +111,6 @@ silenziose: se due oggetti corrispondono, chiede quale intendi.
 - [Separatori multiparola](../linguaggio/separatori-multiparola.md)
 - [Elenchi tipati](../linguaggio/liste-tipate.md)
 - [Tabelle tipate](../linguaggio/tabelle-tipate.md)
+- [Persone e dialoghi strutturati](../linguaggio/dialoghi-strutturati.md)
 - [Ricettario](../cookbook/README.md)
 - [Da Inform a LOCUS](../tutorial/da-inform-a-locus.md)

@@ -9,7 +9,7 @@ Versione `0.5.0a1`: **Studio web, mappa, test ed esportazione di storie per il b
 Proprietà scalari, elenchi e tabelle tipate definiti dall’autore, contenimento annidato,
 accessibilità verificata, tipi dell'autore con ereditarietà singola e azioni con
 due oggetti. Relazioni cardinali dinamiche, oggetti nascosti e dettagli di
-`scenario` non trasportabili sono modellati nel mondo. Gli autori possono
+`scenario`, persone e dialoghi a scelte sono modellati nel mondo. Gli autori possono
 dichiarare nuovi comandi tipati nel sorgente.
 Nessuna dipendenza runtime esterna o servizio cloud.
 
@@ -106,7 +106,7 @@ diagnostica che conserva il file originale. Ramo GitHub: `codex/milestone-4`.
 
 ## Tutorial in italiano
 
-[Costruisci il faro di Selce](docs/tutorial/README.md): quindici lezioni, esercizi
+[Costruisci il faro di Selce](docs/tutorial/README.md): sedici lezioni, esercizi
 con soluzioni, esempi eseguibili e copione verificato automaticamente.
 [Materiali consultati e scelte](docs/architettura/materiali-didattici.md).
 

@@ -4,7 +4,7 @@ from dataclasses import dataclass, replace
 from typing import Literal
 
 from locus.diagnostics import canonical
-from locus.ir import ActionIR, PropertyIR, RelationIR, TableIR
+from locus.ir import ActionIR, DialogueIR, DialogueNodeIR, PropertyIR, RelationIR, TableIR
 from locus.player import Intent
 from locus.rule_model import ActionCall, Address, RelationChange, TableChange, Trace
 from locus.rules import ActionResult, RuleError, execute
@@ -17,6 +17,7 @@ from locus.stdlib import (
     INSIDE,
     NORTH,
     OPENABLE,
+    PERSON,
     PORTABLE,
     ROOM,
     SIDE_A,
@@ -62,6 +63,12 @@ EventKind = Literal[
     "lock_success",
     "custom",
     "wrong_kind",
+    "dialogue",
+    "no_dialogue",
+    "invalid_choice",
+    "dialogue_active",
+    "dialogue_end",
+    "no_active_dialogue",
 ]
 
 
@@ -70,6 +77,9 @@ class Session:
     world: World
     room_id: str
     inventory: tuple[str, ...] = ()
+    dialogue_id: str | None = None
+    dialogue_node_id: str | None = None
+    visited_dialogue_nodes: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True, slots=True)
@@ -79,12 +89,25 @@ class Event:
 
 
 @dataclass(frozen=True, slots=True)
+class DialogueStep:
+    dialogue_id: str
+    dialogue_label: str
+    speaker_id: str
+    node_id: str
+    node_label: str
+    choice_id: str | None = None
+    choice_label: str | None = None
+    ended: bool = False
+
+
+@dataclass(frozen=True, slots=True)
 class Transition:
     session: Session
     event: Event
     outputs: tuple[Event | str, ...] = ()
     trace: tuple[Trace, ...] = ()
     result: Value | None = None
+    dialogue: tuple[DialogueStep, ...] = ()
 
 
 def start(world: World) -> Session:
@@ -303,6 +326,124 @@ def _perform_authored(session: Session, intent: Intent, action: ActionIR) -> Tra
     return Transition(session, Event("custom", tuple(entity.id for entity in arguments)))
 
 
+def _dialogue_node(dialogue: DialogueIR, node_id: str) -> DialogueNodeIR:
+    return next(node for node in dialogue.nodes if node.id == node_id)
+
+
+def _dialogue_text(node: DialogueNodeIR) -> str:
+    if not node.choices:
+        return node.text
+    choices = "\n".join(f"{index}. {choice.label}" for index, choice in enumerate(node.choices, 1))
+    return f"{node.text}\n{choices}"
+
+
+def _enter_dialogue(
+    session: Session,
+    dialogue: DialogueIR,
+    node_id: str,
+    *,
+    choice_id: str | None = None,
+    choice_label: str | None = None,
+) -> Transition:
+    node = _dialogue_node(dialogue, node_id)
+    visited = session.visited_dialogue_nodes
+    if node.id not in visited:
+        visited = (*visited, node.id)
+    ended = not node.choices
+    updated = replace(
+        session,
+        dialogue_id=None if ended else dialogue.id,
+        dialogue_node_id=None if ended else node.id,
+        visited_dialogue_nodes=visited,
+    )
+    dialogue_step = DialogueStep(
+        dialogue.id,
+        dialogue.label,
+        dialogue.speaker_id,
+        node.id,
+        node.label,
+        choice_id,
+        choice_label,
+        ended,
+    )
+    return Transition(
+        updated,
+        Event("dialogue", (dialogue.speaker_id,)),
+        (_dialogue_text(node),),
+        dialogue=(dialogue_step,),
+    )
+
+
+def _talk(session: Session, name: str) -> Transition:
+    speaker = _resolve(session, name)
+    if isinstance(speaker, Event):
+        return Transition(session, speaker)
+    if not has_type(session.world, speaker.type_id, PERSON):
+        return Transition(session, Event("wrong_kind", (speaker.id,)))
+    dialogue = next(
+        (item for item in session.world.dialogues if item.speaker_id == speaker.id),
+        None,
+    )
+    if dialogue is None:
+        return Transition(session, Event("no_dialogue", (speaker.id,)))
+    return _enter_dialogue(session, dialogue, dialogue.start_node_id)
+
+
+def _choose_dialogue(session: Session, selection: str) -> Transition:
+    dialogue = next(
+        (item for item in session.world.dialogues if item.id == session.dialogue_id),
+        None,
+    )
+    if dialogue is None or session.dialogue_node_id is None:
+        return Transition(session, Event("no_active_dialogue"))
+    node = _dialogue_node(dialogue, session.dialogue_node_id)
+    choice = None
+    if selection.isdecimal():
+        index = int(selection) - 1
+        if 0 <= index < len(node.choices):
+            choice = node.choices[index]
+    else:
+        normalized = canonical(selection)
+        exact = [item for item in node.choices if canonical(item.label) == normalized]
+        if len(exact) == 1:
+            choice = exact[0]
+        elif not exact:
+            words = set(normalized.split())
+            partial = [
+                item
+                for item in node.choices
+                if words and words.issubset(set(canonical(item.label).split()))
+            ]
+            if len(partial) == 1:
+                choice = partial[0]
+    if choice is None:
+        return Transition(session, Event("invalid_choice", (dialogue.speaker_id,)))
+    if choice.target_node_id is None:
+        updated = replace(session, dialogue_id=None, dialogue_node_id=None)
+        dialogue_step = DialogueStep(
+            dialogue.id,
+            dialogue.label,
+            dialogue.speaker_id,
+            node.id,
+            node.label,
+            choice.id,
+            choice.label,
+            True,
+        )
+        return Transition(
+            updated,
+            Event("dialogue_end", (dialogue.speaker_id,)),
+            dialogue=(dialogue_step,),
+        )
+    return _enter_dialogue(
+        session,
+        dialogue,
+        choice.target_node_id,
+        choice_id=choice.id,
+        choice_label=choice.label,
+    )
+
+
 def _perform(session: Session, intent: Intent) -> Transition:
     if intent.verb == "look":
         return Transition(session, Event("look", (session.room_id, *visible(session))))
@@ -341,6 +482,26 @@ def _perform(session: Session, intent: Intent) -> Transition:
         return Transition(session, Event("quit"))
     if intent.verb == "unknown":
         return Transition(session, Event("unknown"))
+    if intent.verb == "end_dialogue":
+        if session.dialogue_id is None:
+            return Transition(session, Event("no_active_dialogue"))
+        dialogue = next(item for item in session.world.dialogues if item.id == session.dialogue_id)
+        return Transition(
+            replace(session, dialogue_id=None, dialogue_node_id=None),
+            Event("dialogue_end", (dialogue.speaker_id,)),
+        )
+    if intent.verb == "dialogue_choice":
+        return (
+            _choose_dialogue(session, intent.noun)
+            if intent.noun is not None
+            else Transition(session, Event("invalid_choice"))
+        )
+    if intent.verb == "talk":
+        return (
+            _talk(session, intent.noun)
+            if intent.noun is not None
+            else Transition(session, Event("missing_noun"))
+        )
     authored = _authored_action(session, intent.verb)
     if authored is not None:
         return _perform_authored(session, intent, authored)
@@ -362,7 +523,9 @@ def _perform(session: Session, intent: Intent) -> Transition:
         return _opening(session, intent, entity)
     if intent.verb not in {"take", "put", "drop"}:
         return Transition(session, Event("unknown"))
-    if not any(has_type(session.world, entity.type_id, expected) for expected in PORTABLE):
+    if has_type(session.world, entity.type_id, PERSON) or not any(
+        has_type(session.world, entity.type_id, expected) for expected in PORTABLE
+    ):
         return Transition(session, Event("not_portable", (entity.id,)))
     if intent.verb == "take":
         if entity.id in session.inventory:
@@ -521,6 +684,16 @@ class _RuleHost:
 
 
 def step(session: Session, intent: Intent) -> Transition:
+    if intent.verb in {"dialogue_choice", "end_dialogue", "talk"}:
+        if session.dialogue_id is not None and intent.verb == "talk":
+            dialogue = next(
+                item for item in session.world.dialogues if item.id == session.dialogue_id
+            )
+            return Transition(session, Event("dialogue_active", (dialogue.speaker_id,)))
+        return _perform(session, intent)
+    if session.dialogue_id is not None and intent.verb != "quit":
+        dialogue = next(item for item in session.world.dialogues if item.id == session.dialogue_id)
+        return Transition(session, Event("dialogue_active", (dialogue.speaker_id,)))
     authored = _authored_action(session, intent.verb)
     if (
         not session.world.rules

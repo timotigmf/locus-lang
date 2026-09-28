@@ -27,3 +27,5 @@ Gli [elenchi tipati](liste-tipate.md) aggiungono collezioni omogenee, condizioni
 di appartenenza ed effetti transazionali nell'IR 14.
 Le [tabelle tipate](tabelle-tipate.md) aggiungono colonne nominate, righe
 eterogenee e mutazioni atomiche nell'IR 15.
+I [dialoghi strutturati](dialoghi-strutturati.md) aggiungono persone, nodi,
+scelte e conversazioni multi-turno nell'IR 16.

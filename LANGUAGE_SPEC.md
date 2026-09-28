@@ -2,7 +2,7 @@
 
 ## Stato attuale
 
-Versione corrente `0.5.0a1`, IR versione 15. Le specifiche M2, M3 e M4
+Versione corrente `0.5.0a1`, IR versione 16. Le specifiche M2, M3 e M4
 estendono e, dove indicato, sostituiscono i limiti M1 sotto.
 La [specifica M2](docs/linguaggio/milestone-2.md) è normativa per proprietà,
 stringhe, nomi quotati, preposizioni, contenitori, porte e chiavi.
@@ -28,6 +28,8 @@ La specifica degli [elenchi tipati](docs/linguaggio/liste-tipate.md) definisce
 collezioni omogenee, appartenenza ed effetti transazionali.
 La specifica delle [tabelle tipate](docs/linguaggio/tabelle-tipate.md) definisce
 colonne nominate, righe eterogenee e mutazioni atomiche.
+La specifica di [persone e dialoghi](docs/linguaggio/dialoghi-strutturati.md)
+definisce grafi di conversazione, scelte e stato multi-turno.
 Le sezioni S0/S1 seguenti descrivono il nucleo storico, non l'intera versione.
 
 ## Dichiarazioni (S0, mantenute in 0.1.0a2)
@@ -143,6 +145,8 @@ E313 segnala un uso di `contiene`, `aggiungi` o `rimuovi` con una proprietà non
 elenco o un elemento del tipo sbagliato.
 E115–E117 segnalano tabelle duplicate, schemi o righe iniziali non validi;
 E314 segnala condizioni ed effetti di tabella incompatibili.
+E118–E120 segnalano dialoghi duplicati, grafi non validi o partecipanti
+incompatibili.
 
 ## Estensione M3
 
@@ -160,7 +164,7 @@ da file e punto iniziale esplicito. IR corrente versione 5.
 sorgente. `Comprendi "alias" come "entità".` aggiunge un nome alternativo per i
 comandi del giocatore. Metadati duplicati producono `E408`; alias in conflitto
 producono `E409`. Questi campi sono stati introdotti con l'IR 6 e restano
-presenti nell'IR 15.
+presenti nell'IR 16.
 
 ## Tipi definiti dall'autore
 
@@ -169,7 +173,7 @@ avanti sono ammessi e ogni tipo ha al massimo un genitore. I sottotipi sono
 compatibili con proprietà, relazioni e capacità degli antenati. Ridefinizioni
 producono `E113`; cicli nella gerarchia producono `E114`. La specifica completa
 è in [tipi definiti dall'autore](docs/linguaggio/tipi-autore.md). La tabella dei
-tipi è stata introdotta nell'IR 7 e resta presente nell'IR 15.
+tipi è stata introdotta nell'IR 7 e resta presente nell'IR 16.
 
 ## Azioni e comandi definiti dall'autore
 
@@ -180,7 +184,7 @@ Nomi duplicati producono `E310`; comandi non validi o in conflitto producono
 `E311`. `e sinonimo "riverisci"` aggiunge una forma equivalente; più clausole
 `e separatore` definiscono le locuzioni fra gli oggetti di un'azione a due
 oggetti. Comandi e separatori possono contenere fino a quattro parole e non
-possono avere prefissi ambigui. L'IR corrente è la versione 15.
+possono avere prefissi ambigui. L'IR corrente è la versione 16.
 
 ## Relazioni dinamiche
 
@@ -190,7 +194,7 @@ risolve gli ID, controlla tipi e mutabilità e incorpora le inverse nello stesso
 effetto. Il runtime applica il cambiamento nella transazione della regola. Gli
 usi non validi producono `E312`; si veda la
 [specifica completa](docs/linguaggio/relazioni-dinamiche.md). Questa estensione
-introduce l'IR 12 ed è conservata nell'IR 15.
+introduce l'IR 12 ed è conservata nell'IR 16.
 
 ## Visibilità e scenario
 
@@ -217,3 +221,14 @@ riga completa; `aggiungi riga ... a tabella ...` e `rimuovi riga ... da tabella
 ...` modificano lo stato con rollback. `E115`–`E117` diagnosticano dichiarazioni
 e righe iniziali; `E314` gli usi incompatibili nelle regole. La
 [specifica completa](docs/linguaggio/tabelle-tipate.md) introduce l'IR 15.
+
+## Persone e dialoghi strutturati
+
+`persona` è un tipo predefinito collocabile e non trasportabile. Un blocco
+`Dialogo "nome" con "persona": ... Fine dialogo.` dichiara nodi con battute e
+scelte dirette ad altri nodi o alla conclusione. Il compilatore risolve il grafo
+e rifiuta nodi irraggiungibili. `parla con`, le scelte numeriche o testuali e
+`basta` gestiscono la conversazione su più turni; la sessione conserva i nodi
+visitati e ogni passo produce trace. `E118`–`E120` diagnosticano catalogo, grafo
+e partecipante. La [specifica completa](docs/linguaggio/dialoghi-strutturati.md)
+introduce l'IR 16.

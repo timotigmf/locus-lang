@@ -1,16 +1,18 @@
 """Composizione del frontend con schemi e vincoli della libreria narrativa."""
 
+from dataclasses import replace
 from pathlib import Path
 
 from locus.ast import Program
 from locus.compiler import analyze, relation_verbs
-from locus.diagnostics import CompileError
+from locus.diagnostics import CompileError, canonical
 from locus.ir import ProgramIR
 from locus.parser import parse
 from locus.player import standard_commands
 from locus.project import load_project
 from locus.runtime import instantiate
 from locus.stdlib import (
+    PERSON,
     default_actions,
     default_kind_parents,
     default_kinds,
@@ -33,14 +35,28 @@ def compile_story_file(path: Path, *, allowed_root: Path | None = None) -> Progr
 
 
 def _compile(ast: Program) -> ProgramIR:
+    has_dialogues = bool(ast.dialogues)
+    # Compatibilità con gli esempi anteriori all'IR 16, dove persona era un tipo autore.
+    ast = replace(
+        ast,
+        kinds=tuple(
+            declaration
+            for declaration in ast.kinds
+            if not (
+                canonical(declaration.name) == "persona" and canonical(declaration.parent) == "cosa"
+            )
+        ),
+    )
+    relations = default_relations()
     program = analyze(
         ast,
         default_kinds(),
-        relations=default_relations(),
+        relations=relations,
         properties=default_properties(),
         actions=default_actions(),
         kind_parents=default_kind_parents(),
-        reserved_commands=standard_commands(),
+        reserved_commands=standard_commands(include_dialogue=has_dialogues),
+        dialogue_actor_types=(PERSON,),
     )
     try:
         validate_world(instantiate(program))
