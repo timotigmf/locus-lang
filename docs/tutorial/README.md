@@ -31,6 +31,7 @@ al prompt della storia: lì si scrivono soltanto i comandi del giocatore.
 | [15. Il registro dei reperti](15-tabelle-reperti.md) | `examples/tutorial/15_tabelle_reperti.locus` | Definire schemi e trasferire righe in una transazione |
 | [16. La guardiana del faro](16-dialogo-guardiana.md) | `examples/tutorial/16_dialogo_guardiana.locus` | Costruire una conversazione a nodi, scelte e cicli |
 | [17. Tre rintocchi nella tempesta](17-tempesta-e-punteggio.md) | `examples/tutorial/17_tempesta_e_punteggio.locus` | Pianificare scene a turni e registrare un premio |
+| [18. Attraversare la città in bicicletta](18-bicicletta-in-movimento.md) | `examples/tutorial/18_bicicletta_in_movimento.locus` | Dichiarare un veicolo e spostarlo con il conducente |
 
 Prima prova la versione fornita. Poi modifica un solo elemento e riesegui la
 sequenza di comandi. In caso di errore conserva il messaggio, il file sorgente e

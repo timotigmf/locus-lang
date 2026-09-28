@@ -262,6 +262,21 @@ def test_scene_diagnostic_links_the_specific_reference() -> None:
     assert Path(diagnostic["manual"]).is_file()
 
 
+def test_vehicle_diagnostic_links_the_specific_reference() -> None:
+    studio = Studio()
+    result = studio.compile(
+        project(
+            "La Rimessa è una stanza. Il cassone è un contenitore nella Rimessa. "
+            "La bicicletta è un veicolo nel cassone."
+        )
+    )
+    diagnostic = result["diagnostics"][0]
+    assert diagnostic["code"] == "E123"
+    assert diagnostic["title"] == "Veicolo non valido"
+    assert diagnostic["manual"] == "docs/linguaggio/veicoli.md"
+    assert Path(diagnostic["manual"]).is_file()
+
+
 def test_studio_exposes_author_types_and_maps_room_subtypes() -> None:
     studio = Studio()
     result = studio.compile(
@@ -342,6 +357,31 @@ def test_studio_exposes_scene_time_score_and_log() -> None:
     score = studio.command("punteggio")
     assert score["text"] == "Punteggio: 10."
     assert score["turn"] == 3
+
+
+def test_studio_exposes_and_moves_vehicles() -> None:
+    studio = Studio()
+    source = Path("examples/tutorial/18_bicicletta_in_movimento.locus").read_text(encoding="utf-8")
+    compiled = studio.compile(project(source))
+    assert compiled["ok"] and compiled["vehicles"] == 1
+    vehicle = compiled["map"]["vehicles"][0]
+    assert vehicle["label"] == "saetta rossa"
+    assert vehicle["room"] == compiled["map"]["entry"]
+
+    initial = studio.restart()
+    assert initial["vehicle"] is None
+    boarded = studio.command("sali sulla saetta")
+    assert boarded["vehicle"] == vehicle["id"]
+    moved = studio.command("est")
+    assert moved["map"]["vehicles"][0]["room"] == moved["room"]
+    assert any(
+        edge["source_id"] == vehicle["id"]
+        and edge["predicate_id"] == "mondo.dentro"
+        and edge["target_id"] == moved["room"]
+        for edge in moved["relations"]
+    )
+    assert "a bordo" in moved["text"]
+    assert studio.command("scendi")["vehicle"] is None
 
 
 def test_dispatch_errors_and_size_limit() -> None:

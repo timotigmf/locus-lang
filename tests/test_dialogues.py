@@ -153,4 +153,4 @@ def test_runtime_accepts_a_minimal_generic_dialogue_ir() -> None:
         'Nodo "a" dice "x": Fine nodo. Fine dialogo.'
     )
     instantiate(replace(program, dialogues=(replace(dialogue, speaker_id="e2"),)))
-    assert IR_VERSION == 17
+    assert IR_VERSION == 18

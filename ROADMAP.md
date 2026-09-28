@@ -61,8 +61,10 @@ Ogni pacchetto conserva il core indipendente dalla narrativa interattiva.
    effetti e conoscenze dei personaggi restano estensioni successive.
 6. Scene temporali, turni e registro del punteggio implementati nell'IR 17;
    condizioni, effetti e ricorrenza delle scene restano estensioni successive.
+7. Veicoli, salita/discesa e movimento atomico del conducente implementati
+   nell'IR 18; passeggeri, carico e percorsi tipati restano estensioni successive.
 
-Veicoli, valuta/commercio, multimedia e indici completi
+Valuta/commercio, multimedia e indici completi
 seguono in pacchetti separati. Non si importeranno codice o testi Inform.
 
 ## Studio M5 — 0.5.0a1

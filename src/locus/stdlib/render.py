@@ -1,7 +1,7 @@
 """Presentazione italiana degli eventi narrativi, separata dalle transizioni."""
 
 from locus.runtime import has_type
-from locus.stdlib import CONTAINER, DESCRIPTION, OPENABLE, STATE
+from locus.stdlib import CONTAINER, DESCRIPTION, OPENABLE, STATE, VEHICLE
 from locus.stdlib.game import Transition
 from locus.stdlib.validation import property_value
 
@@ -20,7 +20,11 @@ def render(transition: Transition) -> str:
         objects = ", ".join(names[1:]) if len(names) > 1 else "nessun oggetto"
         description = property_value(world, transition.event.entities[0], DESCRIPTION)
         detail = f"\n{description}" if description else ""
-        return f"{names[0]}{detail}\nVedi: {objects}."
+        aboard = ""
+        if transition.session.vehicle_id is not None:
+            vehicle = entities[transition.session.vehicle_id].label
+            aboard = f"\nSei a bordo di: {vehicle}."
+        return f"{names[0]}{detail}{aboard}\nVedi: {objects}."
     if kind == "inventory":
         return "Inventario: " + (", ".join(names) if names else "vuoto") + "."
     if kind == "score":
@@ -70,6 +74,20 @@ def render(transition: Transition) -> str:
         return "La conversazione è in corso: scegli un'opzione oppure scrivi «basta»."
     if kind == "no_active_dialogue":
         return "Non c'è una conversazione in corso."
+    if kind == "boarded":
+        return f"Sei salito a bordo di: {names[0]}."
+    if kind == "disembarked":
+        return f"Sei sceso da: {names[0]}."
+    if kind == "not_vehicle":
+        return "Quell'elemento non è un veicolo."
+    if kind == "already_aboard":
+        return f"Sei già a bordo di: {names[0]}."
+    if kind == "already_in_vehicle":
+        return f"Devi prima scendere da: {names[0]}."
+    if kind == "not_in_vehicle":
+        return "Non sei a bordo di alcun veicolo."
+    if kind == "wrong_vehicle":
+        return "Non sei a bordo di quel veicolo."
     unknown = (
         "Comando non riconosciuto. Usa guarda, esamina, prendi, lascia, metti, "
         "apri, chiudi, blocca, inventario, nord, sud, est, ovest o esci. "
@@ -79,6 +97,8 @@ def render(transition: Transition) -> str:
         unknown += " Per conversare usa parla con NOME."
     if world.scenes:
         unknown += " Usa turno per il tempo e punteggio per i punti."
+    if any(has_type(world, entity.type_id, VEHICLE) for entity in world.entities):
+        unknown += " Per i veicoli usa sali/entra e scendi."
     messages = {
         "rule": "Azione gestita dalle regole.",
         "already_carried": "Hai già questo oggetto.",

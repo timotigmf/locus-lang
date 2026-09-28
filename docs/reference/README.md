@@ -9,7 +9,7 @@
 | --- | --- |
 | controlla | valida entità e relazioni; stampa numero di entità |
 | ast | JSON AST senza validazione semantica |
-| ir / compila | JSON IR versione 17, dopo validazione |
+| ir / compila | JSON IR versione 18, dopo validazione |
 | gioca | compila e avvia la sessione IF dalla prima stanza dichiarata |
 
 `gioca`: guarda, esamina, prendi, lascia, metti, apri, chiudi, blocca,
@@ -21,6 +21,8 @@ Quando la storia contiene dialoghi sono disponibili anche `parla con persona`,
 e `fine dialogo`.
 Quando la storia contiene scene sono disponibili `turno`/`tempo` e
 `punteggio`/`score`; questi metacomandi non fanno avanzare il clock logico.
+Quando contiene veicoli sono disponibili `sali`/`entra`, `scendi`, `esci da`,
+`board`/`enter`, `exit` e `get out`; le direzioni spostano anche il mezzo guidato.
 I nomi parziali sono accettati soltanto quando identificano un solo oggetto
 raggiungibile; altrimenti l'evento è `ambiguous` e contiene tutte le alternative.
 EOF termina senza errore, Ctrl-C termina con codice 130. Prompt soltanto su TTY,
@@ -38,7 +40,7 @@ Diagnosi su stderr; nessuna scrittura implicita. Dump non caricabili come giochi
   contratto funzionale e irriflessivo di una relazione; tipi/ID già risolti.
 - `stdlib.default_kinds()` / `stdlib.default_kind_parents()` / `stdlib.default_relations()` / `stdlib.default_properties()`: cataloghi nuovi e sostituibili.
 - `runtime.instantiate(program)`: World immutabile con entità e relazioni.
-- `player.parse_command(text, actions=(), dialogue_enabled=False, scene_enabled=False)`: Intent(verb, noun=None, indirect=None); riceve le azioni compilate del mondo, abilita esplicitamente conversazioni e metacomandi temporali e usa `unknown` per un comando sconosciuto.
+- `player.parse_command(text, actions=(), dialogue_enabled=False, scene_enabled=False, vehicle_enabled=False)`: Intent(verb, noun=None, indirect=None); riceve le azioni compilate del mondo, abilita esplicitamente conversazioni, metacomandi temporali e veicoli e usa `unknown` per un comando sconosciuto.
 - `stdlib.game.start(world)`: Session; ValueError se mancano stanze.
 - `stdlib.game.visible(session)`: ID delle entità percepibili nella stanza e non possedute; considera `visibile`, contenimento e stato dei contenitori.
 - `stdlib.game.step(session, intent, advance_time=True)`: Transition(session, event), senza I/O; l'avvio passa `False` per non consumare un turno con la descrizione iniziale.
@@ -62,6 +64,11 @@ battute e delle scelte senza ricostruire testo sorgente.
 punti. `Session` conserva turno, scene attive/concluse, totale e `ScoreEntry`;
 `Transition.scenes` espone `SceneStep` per inizio, fine e variazione del
 punteggio. La conclusione di una scena registra il premio una sola volta.
+
+La stdlib aggiunge `mondo.veicolo` come tipo radice non trasportabile.
+`Session.vehicle_id` identifica il mezzo guidato; `validate_session` verifica che
+mezzo e giocatore condividano la stanza. La posizione resta una relazione
+`mondo.dentro`, quindi mappa e Indice del mondo leggono lo stesso snapshot.
 
 Cataloghi con nomi non canonici, ID vuoti/duplicati, tipi sconosciuti o inversi
 incompatibili sollevano ValueError. `relations=None` supporta dichiarazioni senza
@@ -89,7 +96,8 @@ prefissi, anche dopo l'articolazione, sono rifiutati.
 conflitto.
 
 Event.kind distingue look, inventory, taken, already_carried, not_here,
-not_portable, ambiguous, no_exit, unknown, quit. Event.entities contiene ID,
+not_portable, ambiguous, no_exit, unknown, quit, boarded, disembarked e gli
+errori specifici dei veicoli. Event.entities contiene ID,
 mai frasi da reinterpretare. La sessione è pura: il chiamante adotta la nuova
 sessione solo dopo step; la precedente rimane invariata.
 Le azioni dell'autore aggiungono gli eventi `custom` e `wrong_kind`.
@@ -108,7 +116,9 @@ Le azioni dell'autore aggiungono gli eventi `custom` e `wrong_kind`.
 - `stdlib.game.reachable(session, id)` e `carried(session, id)`: controlli distinti;
   il primo rifiuta entità con `visibile` falso e discendenti di contenitori invisibili o chiusi.
 - `stdlib.validation.validate_world(world, inventory=())`: invarianti narrative;
-  `WorldError` ha entity_id e messaggio italiano. property_value legge un valore/default.
+  `WorldError` ha entity_id, codice e messaggio italiano. `validate_session`
+  controlla inoltre la coerenza dell'eventuale veicolo guidato; `property_value`
+  legge un valore/default.
 
 AST aggiunge PropertyDeclaration e Assignment. ProgramIR/World aggiungono
 property_specs e properties (tuple di PropertySpec e PropertyIR). Il parser produce

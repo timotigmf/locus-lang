@@ -31,3 +31,5 @@ I [dialoghi strutturati](dialoghi-strutturati.md) aggiungono persone, nodi,
 scelte e conversazioni multi-turno nell'IR 16.
 Le [scene temporali](scene-tempo-punteggio.md) aggiungono turni, ciclo di vita,
 punteggio e registro dei premi nell'IR 17.
+I [veicoli](veicoli.md) aggiungono un tipo standard, salita, discesa e movimento
+congiunto del conducente nell'IR 18.

@@ -18,13 +18,15 @@ from locus.stdlib import (
     SIDE_B,
     SOUTH,
     STATE,
+    VEHICLE,
     WEST,
 )
 
 
 class WorldError(ValueError):
-    def __init__(self, message: str, entity_id: str) -> None:
+    def __init__(self, message: str, entity_id: str, code: str = "E201") -> None:
         self.entity_id = entity_id
+        self.code = code
         super().__init__(message)
 
 
@@ -70,6 +72,10 @@ def validate_world(world: World, inventory: tuple[str, ...] = ()) -> None:
             has_type(world, entities[parent].type_id, expected) for expected in (ROOM, CONTAINER)
         ):
             raise WorldError("Tipi non validi per il contenimento.", child)
+        if has_type(world, entities[child].type_id, VEHICLE) and not has_type(
+            world, entities[parent].type_id, ROOM
+        ):
+            raise WorldError("Un veicolo deve trovarsi direttamente in una stanza.", child, "E123")
     inventory_seen: set[str] = set()
     for ident in inventory:
         if (
@@ -118,3 +124,31 @@ def validate_world(world: World, inventory: tuple[str, ...] = ()) -> None:
             raise WorldError(
                 "Le stanze della porta devono avere un collegamento direzionale.", entity.id
             )
+
+
+def validate_session(
+    world: World,
+    inventory: tuple[str, ...],
+    room_id: str,
+    vehicle_id: str | None,
+) -> None:
+    validate_world(world, inventory)
+    if vehicle_id is None:
+        return
+    entities = {entity.id: entity for entity in world.entities}
+    vehicle = entities.get(vehicle_id)
+    location = next(
+        (
+            edge.target_id
+            for edge in world.relations
+            if edge.source_id == vehicle_id and edge.predicate_id == INSIDE
+        ),
+        None,
+    )
+    if (
+        vehicle is None
+        or not has_type(world, vehicle.type_id, VEHICLE)
+        or vehicle_id in inventory
+        or location != room_id
+    ):
+        raise WorldError("Lo stato del veicolo guidato non è coerente.", vehicle_id, "E123")

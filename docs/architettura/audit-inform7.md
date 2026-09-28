@@ -143,11 +143,11 @@ stessa persona.
 
 ### Veicoli
 
-Un veicolo non sarà una direzione speciale. Richiede una relazione di bordo,
-azioni entra/esci, conducente, passeggeri, regole di movimento e destinazioni
-compatibili. Biciclette, automobili, barche e ascensori potranno essere profili
-della stdlib sopra lo stesso contratto, con test sugli occupanti e sul movimento
-atomico del gruppo.
+LOCUS IR 18 introduce il tipo standard `veicolo`, le azioni di salita e discesa,
+lo stato del mezzo guidato e lo spostamento atomico di conducente e veicolo.
+Sottotipi, regole, mappa e Indice del mondo leggono lo stesso grafo di posizione.
+Passeggeri, carico, capienza e destinazioni compatibili con strada, acqua o
+rotaia restano estensioni successive del contratto.
 
 ### Denaro e commercio
 
@@ -225,7 +225,7 @@ imitare. La misura utile è coprire ogni contratto pubblico e ogni regressione.
 | 4 | elenchi e tabelle tipate con effetti implementati nell'IR 15 | indizi, cronologie e registri modificati transazionalmente |
 | 5 | persone e dialoghi strutturati implementati nell'IR 16 | conversazione ramificata con trace e test dei nodi |
 | 6 | scene, tempo e punteggio implementati nell'IR 17 | eventi temporali e premi registrati e riproducibili |
-| 7 | veicoli | movimento atomico di conducente, passeggeri e veicolo |
+| 7 | veicoli implementati nell'IR 18 | movimento atomico di conducente e veicolo, con mappa aggiornata |
 | 8 | valuta e commercio | acquisto/vendita atomici con unità e fondi verificati |
 | 9 | risorse multimediali | manifest validato ed export web autosufficiente |
 | 10 | manuale e indici completi | corso e ricettario ricercabili con esempi sempre compilati |

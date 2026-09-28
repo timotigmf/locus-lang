@@ -6,11 +6,12 @@ ROOM = "mondo.stanza"
 THING = "mondo.cosa"
 SCENERY = "mondo.scenario"
 PERSON = "mondo.persona"
+VEHICLE = "mondo.veicolo"
 CONTAINER = "mondo.contenitore"
 DOOR = "mondo.porta"
 KEY = "mondo.chiave"
 PORTABLE = (THING,)
-LOCATABLE = (THING, SCENERY, PERSON)
+LOCATABLE = (THING, SCENERY, PERSON, VEHICLE)
 OPENABLE = (CONTAINER, DOOR)
 INSIDE = "mondo.dentro"
 NORTH = "mondo.nord"
@@ -31,6 +32,7 @@ def default_kinds() -> dict[str, str]:
         "cosa": THING,
         "scenario": SCENERY,
         "persona": PERSON,
+        "veicolo": VEHICLE,
         "contenitore": CONTAINER,
         "porta": DOOR,
         "chiave": KEY,
@@ -43,6 +45,7 @@ def default_kind_parents() -> dict[str, str | None]:
         THING: None,
         SCENERY: None,
         PERSON: THING,
+        VEHICLE: None,
         CONTAINER: THING,
         DOOR: None,
         KEY: THING,
@@ -91,4 +94,6 @@ def default_actions() -> dict[str, ActionSpec]:
         "lasciare": ActionSpec("drop", 1, 1),
         "esaminare": ActionSpec("examine", 1, 1),
         "bloccare": ActionSpec("lock", 2, 2),
+        "salire": ActionSpec("board", 1, 1, (VEHICLE,)),
+        "scendere": ActionSpec("exit_vehicle", 0, 1, (VEHICLE,)),
     }

@@ -1,0 +1,22 @@
+Titolo: "La consegna della lanterna".
+Autore: "Esempio LOCUS".
+
+La Rimessa è una stanza.
+La Piazza è una stanza.
+La Piazza è a est della Rimessa.
+Inizia nella "Rimessa".
+
+La Rimessa ha descrizione "Una bicicletta rossa attende accanto al portone.".
+La Piazza ha descrizione "Il selciato circonda la torre del faro.".
+
+Una bicicletta da carico è un tipo di veicolo.
+La saetta rossa è una bicicletta da carico nella Rimessa.
+La saetta rossa ha descrizione "Un telaio rosso con un grande portapacchi.".
+
+Regola "campanello" per salire "saetta rossa" nella fase dopo:
+    dì "Il campanello annuncia la partenza.";
+Fine regola.
+
+Regola "cavalletto" per scendere nella fase dopo:
+    dì "Appoggi con cura il cavalletto.";
+Fine regola.

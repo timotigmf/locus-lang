@@ -281,6 +281,25 @@ def test_scene_tutorial_tracks_turns_and_awards_points_once() -> None:
     assert len(current.score_log) == 1
 
 
+def test_vehicle_tutorial_moves_vehicle_with_player() -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "18_bicicletta_in_movimento.locus")))
+
+    def command(text: str) -> str:
+        nonlocal current
+        transition = step(
+            current,
+            parse_command(text, current.world.actions, vehicle_enabled=True),
+        )
+        current = transition.session
+        return render(transition)
+
+    assert "campanello" in command("sali sulla saetta")
+    assert "Piazza" in command("est")
+    assert current.vehicle_id is not None
+    assert "cavalletto" in command("scendi")
+    assert current.vehicle_id is None
+
+
 def test_final_world_matches_story() -> None:
     current = start(instantiate(compile_story_file(TUTORIAL / "04_faro.locus")))
     for command in (TUTORIAL / "04_faro.comandi").read_text(encoding="utf-8").splitlines():

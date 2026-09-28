@@ -64,7 +64,14 @@ export function drawMap(data) {
   for (const r of data.rooms) {
     const p = positions.get(r.id);
     const initial = r.id === data.entry;
-    body += `<g><title>${escape(r.label)}</title><rect x="${p.x}" y="${p.y}" width="190" height="70" rx="8" fill="${initial ? "#e5eee2" : "#fffefa"}" stroke="${initial ? "#698c68" : "#b8cbbf"}"/><text x="${p.x + 16}" y="${p.y + 22}" font-size="8" letter-spacing="1" fill="#6e8677">${initial ? "PUNTO INIZIALE" : "LUOGO"}</text><text x="${p.x + 16}" y="${p.y + 46}" font-size="13" fill="#294a3e">${escape(r.label.length > 23 ? r.label.slice(0, 22) + "…" : r.label)}</text></g>`;
+    const vehicles = (data.vehicles ?? [])
+      .filter((vehicle) => vehicle.room === r.id)
+      .map((vehicle) => vehicle.label)
+      .join(", ");
+    const vehicleLine = vehicles
+      ? `<text x="${p.x + 16}" y="${p.y + 62}" font-size="9" fill="#72583d">MEZZO · ${escape(vehicles.length > 24 ? vehicles.slice(0, 23) + "…" : vehicles)}</text>`
+      : "";
+    body += `<g><title>${escape(r.label)}</title><rect x="${p.x}" y="${p.y}" width="190" height="70" rx="8" fill="${initial ? "#e5eee2" : "#fffefa"}" stroke="${initial ? "#698c68" : "#b8cbbf"}"/><text x="${p.x + 16}" y="${p.y + 22}" font-size="8" letter-spacing="1" fill="#6e8677">${initial ? "PUNTO INIZIALE" : "LUOGO"}</text><text x="${p.x + 16}" y="${p.y + 46}" font-size="13" fill="#294a3e">${escape(r.label.length > 23 ? r.label.slice(0, 22) + "…" : r.label)}</text>${vehicleLine}</g>`;
   }
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" role="img" aria-label="Mappa dei luoghi" font-family="system-ui,sans-serif"><title>Mappa LOCUS</title><rect width="100%" height="100%" fill="#f8fbf7"/>${body}<text x="20" y="25" font-size="10" fill="#758b7c">N ↑ · LOCUS / ATLANTE</text></svg>`;
 }

@@ -26,6 +26,7 @@ const words = [
   "dal",
   "al",
   "turno",
+  "veicolo",
   "dice",
   "porta",
   "termina",

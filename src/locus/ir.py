@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from locus.rule_model import RuleIR
 from locus.schema import PropertySpec, Scalar, Value, ValueKind
 
-IR_VERSION = 17
+IR_VERSION = 18
 
 
 @dataclass(frozen=True, slots=True)

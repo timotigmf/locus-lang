@@ -505,7 +505,7 @@ async function compileProject(play = false) {
   compiledRevision = rev;
   showDiagnostics([]);
   $("compileStatus").textContent =
-    `${result.entities} entità · ${result.actions ?? 0} azioni autore · ${result.rules} regole · ${result.dialogues ?? 0} dialoghi · ${result.scenes ?? 0} scene · compilato`;
+    `${result.entities} entità · ${result.actions ?? 0} azioni autore · ${result.rules} regole · ${result.dialogues ?? 0} dialoghi · ${result.scenes ?? 0} scene · ${result.vehicles ?? 0} veicoli · compilato`;
   if (result.title) {
     project.title = result.title;
     $("title").value = result.title;
@@ -529,7 +529,7 @@ function showMap(data) {
   mapSVG = drawMap(data);
   $("mapCanvas").innerHTML = mapSVG;
   $("mapSummary").textContent =
-    `${data.rooms.length} luoghi · ${data.links.length} collegamenti · ${data.doors.length} porte`;
+    `${data.rooms.length} luoghi · ${data.links.length} collegamenti · ${data.doors.length} porte · ${(data.vehicles ?? []).length} veicoli`;
 }
 function renderIndex(ir) {
   const types = new Map((ir.types ?? []).map((item) => [item.id, item]));
@@ -544,6 +544,16 @@ function renderIndex(ir) {
       current = item?.parent_id;
     }
     return labels.reverse().join(" › ");
+  }
+  function hasType(typeId, ancestorId) {
+    const visited = new Set();
+    let current = typeId;
+    while (current && !visited.has(current)) {
+      if (current === ancestorId) return true;
+      visited.add(current);
+      current = types.get(current)?.parent_id;
+    }
+    return false;
   }
   const table = el("table", { class: "data" });
   const head = el("tr");
@@ -560,6 +570,33 @@ function renderIndex(ir) {
     table.append(row);
   }
   const content = [table];
+  const vehicles = ir.entities.filter((entity) =>
+    hasType(entity.type_id, "mondo.veicolo"),
+  );
+  if (vehicles.length) {
+    const entities = new Map(ir.entities.map((item) => [item.id, item.label]));
+    content.push(el("h3", {}, "Veicoli"));
+    const grid = el("table", { class: "data" });
+    const vehicleHead = el("tr");
+    for (const label of ["Veicolo", "Tipo", "Posizione"])
+      vehicleHead.append(el("th", {}, label));
+    grid.append(vehicleHead);
+    for (const vehicle of vehicles) {
+      const location = (ir.relations ?? []).find(
+        (edge) =>
+          edge.source_id === vehicle.id && edge.predicate_id === "mondo.dentro",
+      );
+      const row = el("tr");
+      for (const value of [
+        vehicle.label,
+        typePath(vehicle.type_id),
+        entities.get(location?.target_id) ?? "fuori scena",
+      ])
+        row.append(el("td", {}, value));
+      grid.append(row);
+    }
+    content.push(grid);
+  }
   if ((ir.tables ?? []).length) {
     content.push(el("h3", {}, "Tabelle"));
     for (const data of ir.tables) {
@@ -717,6 +754,7 @@ function appendOutput(result, command) {
   showMap(result.map);
   if (compiled && result.properties) {
     compiled.ir.properties = result.properties;
+    compiled.ir.relations = result.relations ?? compiled.ir.relations;
     compiled.ir.tables = result.tables ?? compiled.ir.tables;
     renderIndex(compiled.ir);
   }

@@ -2,7 +2,7 @@
 
 ## Stato attuale
 
-Versione corrente `0.5.0a1`, IR versione 17. Le specifiche M2, M3 e M4
+Versione corrente `0.5.0a1`, IR versione 18. Le specifiche M2, M3 e M4
 estendono e, dove indicato, sostituiscono i limiti M1 sotto.
 La [specifica M2](docs/linguaggio/milestone-2.md) è normativa per proprietà,
 stringhe, nomi quotati, preposizioni, contenitori, porte e chiavi.
@@ -32,6 +32,8 @@ La specifica di [persone e dialoghi](docs/linguaggio/dialoghi-strutturati.md)
 definisce grafi di conversazione, scelte e stato multi-turno.
 La specifica di [scene, tempo e punteggio](docs/linguaggio/scene-tempo-punteggio.md)
 definisce pianificazione a turni, ciclo di vita e registro dei premi.
+La specifica dei [veicoli](docs/linguaggio/veicoli.md) definisce il tipo standard,
+salita, discesa e movimento congiunto del conducente.
 Le sezioni S0/S1 seguenti descrivono il nucleo storico, non l'intera versione.
 
 ## Dichiarazioni (S0, mantenute in 0.1.0a2)
@@ -150,6 +152,7 @@ E314 segnala condizioni ed effetti di tabella incompatibili.
 E118–E120 segnalano dialoghi duplicati, grafi non validi o partecipanti
 incompatibili.
 E121–E122 segnalano scene duplicate oppure intervalli, testi e punti non validi.
+E123 segnala un veicolo collocato fuori da una stanza diretta.
 
 ## Estensione M3
 
@@ -167,7 +170,7 @@ da file e punto iniziale esplicito. IR corrente versione 5.
 sorgente. `Comprendi "alias" come "entità".` aggiunge un nome alternativo per i
 comandi del giocatore. Metadati duplicati producono `E408`; alias in conflitto
 producono `E409`. Questi campi sono stati introdotti con l'IR 6 e restano
-presenti nell'IR 17.
+presenti nell'IR 18.
 
 ## Tipi definiti dall'autore
 
@@ -176,7 +179,7 @@ avanti sono ammessi e ogni tipo ha al massimo un genitore. I sottotipi sono
 compatibili con proprietà, relazioni e capacità degli antenati. Ridefinizioni
 producono `E113`; cicli nella gerarchia producono `E114`. La specifica completa
 è in [tipi definiti dall'autore](docs/linguaggio/tipi-autore.md). La tabella dei
-tipi è stata introdotta nell'IR 7 e resta presente nell'IR 17.
+tipi è stata introdotta nell'IR 7 e resta presente nell'IR 18.
 
 ## Azioni e comandi definiti dall'autore
 
@@ -187,7 +190,7 @@ Nomi duplicati producono `E310`; comandi non validi o in conflitto producono
 `E311`. `e sinonimo "riverisci"` aggiunge una forma equivalente; più clausole
 `e separatore` definiscono le locuzioni fra gli oggetti di un'azione a due
 oggetti. Comandi e separatori possono contenere fino a quattro parole e non
-possono avere prefissi ambigui. L'IR corrente è la versione 17.
+possono avere prefissi ambigui. L'IR corrente è la versione 18.
 
 ## Relazioni dinamiche
 
@@ -197,7 +200,7 @@ risolve gli ID, controlla tipi e mutabilità e incorpora le inverse nello stesso
 effetto. Il runtime applica il cambiamento nella transazione della regola. Gli
 usi non validi producono `E312`; si veda la
 [specifica completa](docs/linguaggio/relazioni-dinamiche.md). Questa estensione
-introduce l'IR 12 ed è conservata nell'IR 17.
+introduce l'IR 12 ed è conservata nell'IR 18.
 
 ## Visibilità e scenario
 
@@ -245,3 +248,12 @@ mostra il tempo logico; `punteggio` mostra il totale. La sessione registra scene
 attive e concluse e la provenienza di ciascun premio. `E121`–`E122` diagnosticano
 nomi e contratti non validi. La
 [specifica completa](docs/linguaggio/scene-tempo-punteggio.md) introduce l'IR 17.
+
+## Veicoli
+
+`veicolo` è un tipo standard collocabile direttamente in una stanza e non
+trasportabile. `sali`/`entra` registra il mezzo guidato, le direzioni cardinali
+spostano insieme conducente e veicolo, e `scendi` conclude la guida. Sottotipi e
+regole usano la gerarchia e le azioni standard esistenti. `E123` segnala una
+collocazione iniziale incompatibile. La
+[specifica completa](docs/linguaggio/veicoli.md) introduce l'IR 18.

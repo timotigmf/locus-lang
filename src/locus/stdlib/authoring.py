@@ -37,14 +37,29 @@ def compile_story_file(path: Path, *, allowed_root: Path | None = None) -> Progr
 def _compile(ast: Program) -> ProgramIR:
     has_dialogues = bool(ast.dialogues)
     has_scenes = bool(ast.scenes)
-    # Compatibilità con gli esempi anteriori all'IR 16, dove persona era un tipo autore.
+    kind_parents = {
+        canonical(declaration.name): canonical(declaration.parent) for declaration in ast.kinds
+    }
+    vehicle_kinds = {"veicolo"}
+    changed = True
+    while changed:
+        changed = False
+        for name, parent in kind_parents.items():
+            if parent in vehicle_kinds and name not in vehicle_kinds:
+                vehicle_kinds.add(name)
+                changed = True
+    has_vehicles = any(
+        canonical(declaration.kind) in vehicle_kinds for declaration in ast.declarations
+    )
+    # Compatibilità con esempi anteriori ai tipi standard persona e veicolo.
     ast = replace(
         ast,
         kinds=tuple(
             declaration
             for declaration in ast.kinds
             if not (
-                canonical(declaration.name) == "persona" and canonical(declaration.parent) == "cosa"
+                canonical(declaration.name) in {"persona", "veicolo"}
+                and canonical(declaration.parent) == "cosa"
             )
         ),
     )
@@ -59,6 +74,7 @@ def _compile(ast: Program) -> ProgramIR:
         reserved_commands=standard_commands(
             include_dialogue=has_dialogues,
             include_scenes=has_scenes,
+            include_vehicles=has_vehicles,
         ),
         dialogue_actor_types=(PERSON,),
     )
@@ -68,5 +84,5 @@ def _compile(ast: Program) -> ProgramIR:
         if ast.entries and program.entry_id == error.entity_id:
             raise CompileError("E407", str(error), ast.entries[0].span) from error
         index = next(i for i, entity in enumerate(program.entities) if entity.id == error.entity_id)
-        raise CompileError("E201", str(error), ast.declarations[index].span) from error
+        raise CompileError(error.code, str(error), ast.declarations[index].span) from error
     return program

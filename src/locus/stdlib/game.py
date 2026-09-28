@@ -25,10 +25,11 @@ from locus.stdlib import (
     SOUTH,
     STATE,
     UNLOCKS,
+    VEHICLE,
     VISIBLE,
     WEST,
 )
-from locus.stdlib.validation import property_value, validate_world
+from locus.stdlib.validation import property_value, validate_session, validate_world
 
 EventKind = Literal[
     "rule",
@@ -71,6 +72,13 @@ EventKind = Literal[
     "no_active_dialogue",
     "score",
     "time",
+    "boarded",
+    "disembarked",
+    "not_vehicle",
+    "already_aboard",
+    "already_in_vehicle",
+    "not_in_vehicle",
+    "wrong_vehicle",
 ]
 
 
@@ -87,6 +95,7 @@ class Session:
     active_scene_ids: tuple[str, ...] = ()
     completed_scene_ids: tuple[str, ...] = ()
     score_log: tuple["ScoreEntry", ...] = ()
+    vehicle_id: str | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -209,6 +218,7 @@ def visible(session: Session) -> tuple[str, ...]:
         entity.id
         for entity in session.world.entities
         if entity.id != session.room_id
+        and entity.id != session.vehicle_id
         and reachable(session, entity.id)
         and not carried(session, entity.id)
     )
@@ -248,7 +258,7 @@ def _resolve(session: Session, name: str) -> Entity | Event:
 
 
 def _changed(session: Session, kind: EventKind, *entities: str) -> Transition:
-    validate_world(session.world, session.inventory)
+    validate_session(session.world, session.inventory, session.room_id, session.vehicle_id)
     return Transition(session, Event(kind, entities))
 
 
@@ -316,6 +326,36 @@ def _opening(session: Session, intent: Intent, entity: Entity) -> Transition:
     value = "bloccato" if intent.verb == "lock" else "aperto"
     kind: EventKind = "lock_success" if intent.verb == "lock" else "opened"
     return _changed(_set_state(session, entity.id, value), kind, entity.id)
+
+
+def _board(session: Session, name: str | None) -> Transition:
+    if name is None:
+        return Transition(session, Event("missing_noun"))
+    entity = _resolve(session, name)
+    if isinstance(entity, Event):
+        return Transition(session, entity)
+    if not has_type(session.world, entity.type_id, VEHICLE):
+        return Transition(session, Event("not_vehicle", (entity.id,)))
+    if session.vehicle_id == entity.id:
+        return Transition(session, Event("already_aboard", (entity.id,)))
+    if session.vehicle_id is not None:
+        return Transition(session, Event("already_in_vehicle", (session.vehicle_id,)))
+    return _changed(replace(session, vehicle_id=entity.id), "boarded", entity.id)
+
+
+def _disembark(session: Session, name: str | None) -> Transition:
+    if session.vehicle_id is None:
+        return Transition(session, Event("not_in_vehicle"))
+    if name is not None:
+        entity = _resolve(session, name)
+        if isinstance(entity, Event):
+            return Transition(session, entity)
+        if not has_type(session.world, entity.type_id, VEHICLE):
+            return Transition(session, Event("not_vehicle", (entity.id,)))
+        if entity.id != session.vehicle_id:
+            return Transition(session, Event("wrong_vehicle", (entity.id,)))
+    vehicle_id = session.vehicle_id
+    return _changed(replace(session, vehicle_id=None), "disembarked", vehicle_id)
 
 
 def _authored_action(session: Session, action_id: str) -> ActionIR | None:
@@ -474,6 +514,10 @@ def _perform(session: Session, intent: Intent) -> Transition:
         return Transition(session, Event("score"))
     if intent.verb == "time":
         return Transition(session, Event("time"))
+    if intent.verb == "board":
+        return _board(session, intent.noun)
+    if intent.verb == "exit_vehicle":
+        return _disembark(session, intent.noun)
     if intent.verb == "look":
         return Transition(session, Event("look", (session.room_id, *visible(session))))
     if intent.verb == "inventory":
@@ -504,8 +548,11 @@ def _perform(session: Session, intent: Intent) -> Transition:
             }:
                 if _state(session, door.id) != "aperto":
                     return Transition(session, Event("door_closed", (door.id,)))
-        moved = replace(session, room_id=target)
-        validate_world(moved.world, moved.inventory)
+        moved = session
+        if session.vehicle_id is not None:
+            moved = _move(session, session.vehicle_id, target)
+        moved = replace(moved, room_id=target)
+        validate_session(moved.world, moved.inventory, moved.room_id, moved.vehicle_id)
         return _perform(moved, Intent("look"))
     if intent.verb == "quit":
         return Transition(session, Event("quit"))
@@ -616,7 +663,7 @@ class _RuleHost:
             ),
         )
         try:
-            validate_world(updated.world, updated.inventory)
+            validate_session(updated.world, updated.inventory, updated.room_id, updated.vehicle_id)
         except ValueError as error:
             raise RuleError(str(error)) from error
         return updated
@@ -652,7 +699,7 @@ class _RuleHost:
             )
         updated = replace(state, world=replace(state.world, relations=tuple(merged)))
         try:
-            validate_world(updated.world, updated.inventory)
+            validate_session(updated.world, updated.inventory, updated.room_id, updated.vehicle_id)
         except ValueError as error:
             raise RuleError(str(error)) from error
         return updated
@@ -708,6 +755,8 @@ class _RuleHost:
             "dropped",
             "examined",
             "custom",
+            "boarded",
+            "disembarked",
         }
         return ActionResult(transition.session, success, (transition.event,))
 
@@ -729,7 +778,16 @@ def _step(session: Session, intent: Intent) -> Transition:
         or intent.verb in {"quit", "unknown"}
         or (
             authored is None
-            and intent.verb not in {"look", "inventory", "north", "south", "east", "west"}
+            and intent.verb
+            not in {
+                "look",
+                "inventory",
+                "north",
+                "south",
+                "east",
+                "west",
+                "exit_vehicle",
+            }
             and not intent.noun
         )
     ):

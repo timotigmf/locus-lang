@@ -110,13 +110,94 @@ def _noun(tokens: list[tuple[str, bool]]) -> str | None:
 
 
 def standard_commands(
-    *, include_dialogue: bool = False, include_scenes: bool = False
+    *,
+    include_dialogue: bool = False,
+    include_scenes: bool = False,
+    include_vehicles: bool = False,
 ) -> frozenset[str]:
     dialogue_commands = (
         ("parla", "p", "talk", "scegli", "basta", "fine dialogo") if include_dialogue else ()
     )
     scene_commands = ("punteggio", "score", "turno", "tempo") if include_scenes else ()
-    return frozenset((*_SIMPLE_COMMANDS, *_ACTION_COMMANDS, *dialogue_commands, *scene_commands))
+    vehicle_commands = (
+        ("sali", "entra", "scendi", "board", "enter", "exit") if include_vehicles else ()
+    )
+    return frozenset(
+        (
+            *_SIMPLE_COMMANDS,
+            *_ACTION_COMMANDS,
+            *dialogue_commands,
+            *scene_commands,
+            *vehicle_commands,
+        )
+    )
+
+
+def _without_initial_preposition(
+    tokens: list[tuple[str, bool]], prepositions: frozenset[str]
+) -> list[tuple[str, bool]]:
+    if tokens and not tokens[0][1] and tokens[0][0] in prepositions:
+        return tokens[1:]
+    return tokens
+
+
+def _vehicle_intent(tokens: list[tuple[str, bool]]) -> Intent | None:
+    verb = tokens[0][0]
+    if verb in {"sali", "entra", "board", "enter"}:
+        rest = tokens[1:]
+        if len(rest) >= 2 and rest[:2] == [("a", False), ("bordo", False)]:
+            rest = rest[2:]
+            rest = _without_initial_preposition(
+                rest,
+                frozenset({"di", "del", "della", "dello", "dei", "degli", "delle", "dell'"}),
+            )
+        else:
+            rest = _without_initial_preposition(
+                rest,
+                frozenset(
+                    {
+                        "in",
+                        "nel",
+                        "nella",
+                        "nello",
+                        "nei",
+                        "negli",
+                        "nelle",
+                        "nell'",
+                        "su",
+                        "sul",
+                        "sulla",
+                        "sullo",
+                        "sui",
+                        "sugli",
+                        "sulle",
+                        "sull'",
+                    }
+                ),
+            )
+        return Intent("board", _noun(rest))
+    get_out = verb == "get" and len(tokens) >= 2 and tokens[1] == ("out", False)
+    if verb in {"scendi", "exit"} or (verb == "esci" and len(tokens) > 1) or get_out:
+        rest = tokens[2:] if get_out else tokens[1:]
+        rest = _without_initial_preposition(
+            rest,
+            frozenset(
+                {
+                    "da",
+                    "dal",
+                    "dalla",
+                    "dallo",
+                    "dai",
+                    "dagli",
+                    "dalle",
+                    "dall'",
+                    "of",
+                    "from",
+                }
+            ),
+        )
+        return Intent("exit_vehicle", _noun(rest))
+    return None
 
 
 def _author_match(
@@ -170,6 +251,7 @@ def parse_command(
     *,
     dialogue_enabled: bool = False,
     scene_enabled: bool = False,
+    vehicle_enabled: bool = False,
 ) -> Intent:
     tokens = _tokens(canonical(text).replace("’", "'"))
     if not tokens:
@@ -177,6 +259,10 @@ def parse_command(
     verb, quoted = tokens[0]
     if quoted:
         return Intent("unknown")
+    if vehicle_enabled:
+        vehicle = _vehicle_intent(tokens)
+        if vehicle is not None:
+            return vehicle
     if scene_enabled and len(tokens) == 1:
         if verb in {"punteggio", "score"}:
             return Intent("score")

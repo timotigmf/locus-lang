@@ -10,7 +10,7 @@ from locus.diagnostics import CompileError
 from locus.ir import ProgramIR
 from locus.player import Intent, parse_command
 from locus.runtime import World, has_type, instantiate
-from locus.stdlib import EAST, NORTH, ROOM, SIDE_A, SIDE_B
+from locus.stdlib import EAST, INSIDE, NORTH, ROOM, SIDE_A, SIDE_B, VEHICLE
 from locus.stdlib.authoring import compile_story_file
 from locus.stdlib.game import Session, Transition, start, step
 from locus.stdlib.render import render
@@ -101,6 +101,11 @@ _ERROR_HELP = {
         "Scena non valida",
         "Controlla turni, testi obbligatori e punti assegnati.",
         "docs/linguaggio/scene-tempo-punteggio.md",
+    ),
+    "E123": (
+        "Veicolo non valido",
+        "Colloca ogni veicolo direttamente in una stanza.",
+        "docs/linguaggio/veicoli.md",
     ),
     "E310": (
         "Azione duplicata",
@@ -245,10 +250,27 @@ def map_data(model: ProgramIR | World) -> dict[str, Any]:
             doors.append(
                 {"id": entity.id, "label": entity.label, "from": sides[SIDE_A], "to": sides[SIDE_B]}
             )
+    vehicles = [
+        {
+            "id": entity.id,
+            "label": entity.label,
+            "room": next(
+                (
+                    edge.target_id
+                    for edge in world.relations
+                    if edge.source_id == entity.id and edge.predicate_id == INSIDE
+                ),
+                None,
+            ),
+        }
+        for entity in world.entities
+        if has_type(world, entity.type_id, VEHICLE)
+    ]
     return {
         "rooms": rooms,
         "links": links,
         "doors": doors,
+        "vehicles": vehicles,
         "entry": world.entry_id or (rooms[0]["id"] if rooms else None),
     }
 
@@ -294,6 +316,7 @@ class Studio:
                 ),
             )
         self.program = program
+        world = instantiate(program)
         return {
             "ok": True,
             "diagnostics": [],
@@ -304,6 +327,7 @@ class Studio:
             "actions": len(program.actions),
             "dialogues": len(program.dialogues),
             "scenes": len(program.scenes),
+            "vehicles": sum(has_type(world, entity.type_id, VEHICLE) for entity in world.entities),
             "title": program.title,
             "author": program.author,
         }
@@ -315,9 +339,11 @@ class Studio:
             "trace": [asdict(item) for item in transition.trace],
             "room": transition.session.room_id,
             "inventory": list(transition.session.inventory),
+            "vehicle": transition.session.vehicle_id,
             "ended": transition.event.kind == "quit",
             "map": map_data(transition.session.world),
             "properties": [asdict(item) for item in transition.session.world.properties],
+            "relations": [asdict(item) for item in transition.session.world.relations],
             "tables": [asdict(item) for item in transition.session.world.tables],
             "dialogue": [asdict(item) for item in transition.dialogue],
             "active_dialogue": transition.session.dialogue_id,
@@ -351,6 +377,10 @@ class Studio:
                 self.session.world.actions,
                 dialogue_enabled=bool(self.session.world.dialogues),
                 scene_enabled=bool(self.session.world.scenes),
+                vehicle_enabled=any(
+                    has_type(self.session.world, entity.type_id, VEHICLE)
+                    for entity in self.session.world.entities
+                ),
             ),
         )
         self.session = transition.session

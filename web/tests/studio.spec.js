@@ -516,3 +516,56 @@ Fine scena.`;
     "Punteggio: 5.",
   );
 });
+
+test("veicolo, movimento e mappa nello Studio", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.locator("#compileStatus")).toContainText("compilato", {
+    timeout: 90000,
+  });
+  const source = `Titolo: "La corsa".
+La Rimessa è una stanza.
+La Piazza è una stanza.
+La Piazza è a est della Rimessa.
+Una bicicletta è un tipo di veicolo.
+La saetta rossa è una bicicletta nella Rimessa.`;
+  await page.locator(".cm-content").click();
+  await page.keyboard.press("ControlOrMeta+A");
+  await page.keyboard.insertText(source);
+  await page
+    .getByRole("button", { name: "▶ Compila e prova", exact: true })
+    .click();
+  await expect(page.locator("#compileStatus")).toContainText("1 veicoli", {
+    timeout: 90000,
+  });
+  await page
+    .getByRole("button", { name: "Indice del mondo", exact: true })
+    .click();
+  await expect(page.locator("#index")).toContainText("Veicoli");
+  const vehicleRows = page
+    .getByRole("heading", { name: "Veicoli", exact: true })
+    .locator("xpath=following-sibling::table[1]")
+    .locator("tr");
+  await expect(vehicleRows.filter({ hasText: "saetta rossa" })).toContainText(
+    "Rimessa",
+  );
+  await page.getByRole("button", { name: "Storia", exact: true }).click();
+  await page.locator("#command").fill("sali sulla saetta");
+  await page.locator("#send").click();
+  await expect(page.locator("#transcript")).toContainText("salito a bordo");
+  await page.locator("#command").fill("est");
+  await page.locator("#send").click();
+  await expect(page.locator("#transcript")).toContainText(
+    "Sei a bordo di: saetta rossa.",
+  );
+  await page.getByRole("button", { name: "Mappa", exact: true }).click();
+  await expect(page.locator("#mapSummary")).toContainText("1 veicoli");
+  await expect(page.locator("#mapCanvas svg")).toContainText(
+    "MEZZO · saetta rossa",
+  );
+  await page
+    .getByRole("button", { name: "Indice del mondo", exact: true })
+    .click();
+  await expect(vehicleRows.filter({ hasText: "saetta rossa" })).toContainText(
+    "Piazza",
+  );
+});

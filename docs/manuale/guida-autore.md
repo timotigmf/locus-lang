@@ -59,6 +59,7 @@ dall'alto verso il basso prima di studiare i moduli.
 15. [Tabelle tipate e registro dei reperti](../tutorial/15-tabelle-reperti.md)
 16. [Persone e dialoghi a scelte](../tutorial/16-dialogo-guardiana.md)
 17. [Scene, tempo e punteggio](../tutorial/17-tempesta-e-punteggio.md)
+18. [Veicoli e movimento](../tutorial/18-bicicletta-in-movimento.md)
 
 ## Indice per obiettivo
 
@@ -77,7 +78,7 @@ dall'alto verso il basso prima di studiare i moduli.
 | Cataloghi e registri | Tabelle con colonne tipate e righe transazionali | Lezione 15 |
 | Dialoghi ramificati | Persone, nodi, scelte, cicli e memoria delle visite | Lezione 16 |
 | Scene temporali | Inizio e fine a turni dichiarati con trace | Lezione 17 |
-| Veicoli e vetture | Non ancora: manca il modello di entrata, uscita e movimento | Roadmap |
+| Veicoli e vetture | Tipo standard, sottotipi, salita/discesa e movimento congiunto | Lezione 18 |
 | Denaro e acquisti | Proprietà numeriche disponibili; azioni compra/vendi non ancora | Roadmap |
 
 ## Vocabolario italiano
@@ -115,5 +116,6 @@ silenziose: se due oggetti corrispondono, chiede quale intendi.
 - [Tabelle tipate](../linguaggio/tabelle-tipate.md)
 - [Persone e dialoghi strutturati](../linguaggio/dialoghi-strutturati.md)
 - [Scene, tempo e punteggio](../linguaggio/scene-tempo-punteggio.md)
+- [Veicoli e movimento](../linguaggio/veicoli.md)
 - [Ricettario](../cookbook/README.md)
 - [Da Inform a LOCUS](../tutorial/da-inform-a-locus.md)
