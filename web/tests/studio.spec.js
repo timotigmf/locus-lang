@@ -20,10 +20,29 @@ test("progetto, compilazione, gioco, test e release statica", async ({
   await expect(page.locator(".cm-content")).not.toContainText("Includi");
   await expect(page.locator("#title")).toHaveValue("Il faro di Selce");
   await expect(page.locator("#storyByline")).toHaveText("di Esempio LOCUS");
+  const pixel = Buffer.from(
+    "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=",
+    "base64",
+  );
+  await page.locator("#assetFile").setInputFiles({
+    name: "molo.png",
+    mimeType: "image/png",
+    buffer: pixel,
+  });
+  await expect(page.locator("#assets")).toContainText("media/molo.png");
+  await page.locator(".cm-content").click();
+  await page.keyboard.press("ControlOrMeta+End");
+  await page.keyboard.insertText(
+    '\nIl Molo ha immagine "media/molo.png".\nIl Molo ha testo alternativo "Il molo nella foschia.".',
+  );
   await page
     .getByRole("button", { name: "▶ Compila e prova", exact: true })
     .click();
   await expect(page.locator("#transcript")).toContainText("Molo");
+  await expect(page.locator("#mediaStage img")).toHaveAttribute(
+    "alt",
+    "Il molo nella foschia.",
+  );
   await page.locator("#command").fill("e");
   await page.locator("#send").click();
   const absentExit = page.locator(".story-output", {
@@ -69,6 +88,7 @@ test("progetto, compilazione, gioco, test e release statica", async ({
   const files = unzipSync(bytes);
   expect(files["runtime/pyodide.asm.wasm"]).toBeTruthy();
   expect(files["project.json"]).toBeTruthy();
+  expect(Buffer.from(files["media/molo.png"])).toEqual(pixel);
   // Una release servita sotto un percorso diverso, senza dipendenze CDN.
   for (const [name, data] of Object.entries(files)) {
     const dest = "site/release-test/" + name;
@@ -85,6 +105,7 @@ test("progetto, compilazione, gioco, test e release statica", async ({
   await expect(player.locator("#transcript")).toContainText("Molo", {
     timeout: 90000,
   });
+  await expect(player.locator("#mediaStage img")).toBeVisible();
   await player.locator("#command").fill("apri custodia");
   await player.locator("#send").click();
   await expect(player.locator("#transcript")).toContainText(

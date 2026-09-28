@@ -1,5 +1,7 @@
 """Adattatore JSON dello Studio: compilatore reale, filesystem temporaneo isolato."""
 
+import base64
+import binascii
 import json
 from dataclasses import asdict
 from pathlib import Path, PurePosixPath
@@ -8,6 +10,14 @@ from typing import Any
 
 from locus.diagnostics import CompileError
 from locus.ir import ProgramIR
+from locus.media import (
+    MAX_PROJECT_RESOURCE_BYTES,
+    MAX_RESOURCE_BYTES,
+    MAX_RESOURCES,
+    MEDIA_FORMATS,
+    valid_media_content,
+    valid_resource_path,
+)
 from locus.player import Intent, parse_command
 from locus.runtime import World, has_type, instantiate
 from locus.stdlib import (
@@ -128,6 +138,11 @@ _ERROR_HELP = {
         "Controlla valuta, cassa, rivendita, venditore e posizione della merce.",
         "docs/linguaggio/mercanti-e-vendita.md",
     ),
+    "E126": (
+        "Risorsa multimediale non valida",
+        "Controlla percorso, formato, presenza e dimensione del file nel progetto.",
+        "docs/linguaggio/risorse-multimediali.md",
+    ),
     "E310": (
         "Azione duplicata",
         "Scegli un nome che non appartenga già alla storia o alla libreria.",
@@ -242,6 +257,30 @@ def validate_project(project: Any) -> dict[str, Any]:
         size += len(source.encode("utf-8"))
     if size > 2_000_000:
         raise ValueError("Progetto troppo grande: massimo 2 MB di sorgenti.")
+    assets = project.get("assets", {})
+    if not isinstance(assets, dict) or len(assets) > MAX_RESOURCES:
+        raise ValueError(f"Un progetto ammette al massimo {MAX_RESOURCES} risorse.")
+    asset_size = 0
+    for name, encoded in assets.items():
+        if (
+            not isinstance(name, str)
+            or not valid_resource_path(name)
+            or PurePosixPath(name).suffix.casefold() not in MEDIA_FORMATS
+            or not isinstance(encoded, str)
+        ):
+            raise ValueError("Percorso, formato o contenuto della risorsa non valido.")
+        try:
+            content = base64.b64decode(encoded, validate=True)
+        except (ValueError, binascii.Error) as error:
+            raise ValueError(f"La risorsa {name} non contiene dati Base64 validi.") from error
+        if len(content) > MAX_RESOURCE_BYTES:
+            raise ValueError(f"La risorsa {name} supera 5 MB.")
+        media_type = MEDIA_FORMATS[PurePosixPath(name).suffix.casefold()]
+        if not valid_media_content(media_type, content[:12]):
+            raise ValueError(f"Il contenuto della risorsa {name} non corrisponde al formato.")
+        asset_size += len(content)
+    if asset_size > MAX_PROJECT_RESOURCE_BYTES:
+        raise ValueError("Le risorse del progetto superano 20 MB.")
     if project.get("entry") not in files:
         raise ValueError("Seleziona un file principale presente nel progetto.")
     return project
@@ -314,6 +353,10 @@ class Studio:
                 path = root / name
                 path.parent.mkdir(parents=True, exist_ok=True)
                 path.write_text(source, encoding="utf-8", newline="")
+            for name, encoded in project.get("assets", {}).items():
+                path = root / name
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_bytes(base64.b64decode(encoded, validate=True))
             try:
                 program = compile_story_file(root / project["entry"], allowed_root=root)
             except CompileError as error:
@@ -358,11 +401,15 @@ class Studio:
             "merchants": sum(
                 has_type(world, entity.type_id, MERCHANT) for entity in world.entities
             ),
+            "resources": len(program.resources),
             "title": program.title,
             "author": program.author,
         }
 
     def _output(self, transition: Transition) -> dict[str, Any]:
+        media_entity = None
+        if transition.event.kind in {"look", "examined"} and transition.event.entities:
+            media_entity = transition.event.entities[0]
         return {
             "ok": True,
             "text": render(transition),
@@ -386,6 +433,11 @@ class Studio:
             "completed_scenes": list(transition.session.completed_scene_ids),
             "score_log": [asdict(item) for item in transition.session.score_log],
             "scenes": [asdict(item) for item in transition.scenes],
+            "media": [
+                asdict(item)
+                for item in transition.session.world.resources
+                if item.entity_id == media_entity
+            ],
         }
 
     def restart(self) -> dict[str, Any]:

@@ -62,6 +62,7 @@ dall'alto verso il basso prima di studiare i moduli.
 18. [Veicoli e movimento](../tutorial/18-bicicletta-in-movimento.md)
 19. [Denaro e acquisti](../tutorial/19-il-mercato-del-faro.md)
 20. [Mercanti, scorte e vendita](../tutorial/20-la-bottegaia-del-faro.md)
+21. [Immagini, suoni e release](../tutorial/21-il-faro-multimediale.md)
 
 ## Indice per obiettivo
 
@@ -83,6 +84,7 @@ dall'alto verso il basso prima di studiare i moduli.
 | Veicoli e vetture | Tipo standard, sottotipi, salita/discesa e movimento congiunto | Lezione 18 |
 | Denaro e acquisti | Valuta, saldo, merci, prezzi e acquisto atomico | Lezione 19 |
 | Mercanti e vendita | Persone venditrici, cassa, scorte e rivendita | Lezione 20 |
+| Immagini e paesaggi sonori | Risorse locali validate e incluse nella release | Lezione 21 |
 
 ## Vocabolario italiano
 
@@ -122,5 +124,6 @@ silenziose: se due oggetti corrispondono, chiede quale intendi.
 - [Veicoli e movimento](../linguaggio/veicoli.md)
 - [Denaro e acquisti](../linguaggio/denaro-e-acquisti.md)
 - [Mercanti e vendita](../linguaggio/mercanti-e-vendita.md)
+- [Risorse multimediali](../linguaggio/risorse-multimediali.md)
 - [Ricettario](../cookbook/README.md)
 - [Da Inform a LOCUS](../tutorial/da-inform-a-locus.md)

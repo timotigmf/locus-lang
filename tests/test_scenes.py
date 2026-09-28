@@ -32,7 +32,7 @@ def command(session: Session, text: str) -> Transition:
 
 def test_scene_is_preserved_in_ir19() -> None:
     program = compile_story(SOURCE)
-    assert IR_VERSION == 20
+    assert IR_VERSION == 21
     assert program.scenes == (
         SceneIR(
             "autore.scena.1",

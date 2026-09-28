@@ -10,8 +10,8 @@ Proprietà scalari, elenchi e tabelle tipate definiti dall’autore, conteniment
 accessibilità verificata, tipi dell'autore con ereditarietà singola e azioni con
 due oggetti. Relazioni cardinali dinamiche, oggetti nascosti e dettagli di
 `scenario`, persone, dialoghi a scelte, scene temporali, punteggio registrato,
-veicoli con movimento del conducente, acquisti, mercanti e rivendita atomica
-sono modellati nel mondo. Gli autori possono
+veicoli con movimento del conducente, acquisti, mercanti, rivendita atomica e
+manifest multimediali locali sono modellati nel mondo. Gli autori possono
 dichiarare nuovi comandi tipati nel sorgente.
 Nessuna dipendenza runtime esterna o servizio cloud.
 
@@ -28,6 +28,8 @@ La chiave è un tesoro nella Cucina.
 [Apri LOCUS Studio](https://timotigmf.github.io/locus-lang/) per scrivere, compilare,
 provare ed esportare le storie nel browser. Consulta il [manuale dello Studio](docs/studio/README.md).
 I progetti sono salvati nel browser: usa **Scarica progetto** per conservarne una copia.
+Immagini e suoni aggiunti nella sezione **Risorse** entrano nel backup e nella
+release ZIP, senza dipendere da CDN.
 
 ## Avvio
 
@@ -114,7 +116,7 @@ diagnostica che conserva il file originale. Ramo GitHub: `codex/milestone-4`.
 
 ## Tutorial in italiano
 
-[Costruisci il faro di Selce](docs/tutorial/README.md): venti lezioni, esercizi
+[Costruisci il faro di Selce](docs/tutorial/README.md): ventuno lezioni, esercizi
 con soluzioni, esempi eseguibili e copione verificato automaticamente.
 [Materiali consultati e scelte](docs/architettura/materiali-didattici.md).
 

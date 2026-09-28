@@ -32,6 +32,7 @@
 - [Veicoli e movimento](linguaggio/veicoli.md): salita, discesa e posizione del mezzo guidato.
 - [Denaro e acquisti](linguaggio/denaro-e-acquisti.md): valuta, saldo, merci e pagamento atomico.
 - [Mercanti e vendita](linguaggio/mercanti-e-vendita.md): scorte, cassa e rivendita atomica.
+- [Risorse multimediali](linguaggio/risorse-multimediali.md): immagini, suoni e manifest validato.
 
 - [Tutorial: il faro](tutorial/README.md), incluse le lezioni su tipi e azioni; [da Inform a LOCUS](tutorial/da-inform-a-locus.md).
 - [Registro dei sei manuali forniti](architettura/materiali-didattici.md).

@@ -6,13 +6,17 @@ from pathlib import Path
 from locus.ast import Program
 from locus.compiler import analyze, relation_verbs
 from locus.diagnostics import CompileError, canonical
-from locus.ir import ProgramIR
+from locus.ir import ProgramIR, ResourceIR
+from locus.media import MAX_RESOURCE_BYTES, resource_media_type, valid_media_content
 from locus.parser import parse
 from locus.player import standard_commands
 from locus.project import load_project
 from locus.runtime import instantiate
 from locus.stdlib import (
+    ALTERNATIVE_TEXT,
+    IMAGE,
     PERSON,
+    SOUND,
     default_actions,
     default_kind_parents,
     default_kinds,
@@ -29,12 +33,14 @@ def compile_story(text: str, source: str = "<memoria>") -> ProgramIR:
 
 
 def compile_story_file(path: Path, *, allowed_root: Path | None = None) -> ProgramIR:
+    root = (allowed_root or path.parent).resolve()
     return _compile(
-        load_project(path, verbs=relation_verbs(default_relations()), allowed_root=allowed_root)
+        load_project(path, verbs=relation_verbs(default_relations()), allowed_root=allowed_root),
+        resource_root=root,
     )
 
 
-def _compile(ast: Program) -> ProgramIR:
+def _compile(ast: Program, *, resource_root: Path | None = None) -> ProgramIR:
     has_dialogues = bool(ast.dialogues)
     has_scenes = bool(ast.scenes)
     kind_parents = {
@@ -92,6 +98,7 @@ def _compile(ast: Program) -> ProgramIR:
         ),
         dialogue_actor_types=(PERSON,),
     )
+    program = _add_resources(program, ast, resource_root)
     try:
         validate_world(instantiate(program))
     except WorldError as error:
@@ -100,3 +107,42 @@ def _compile(ast: Program) -> ProgramIR:
         index = next(i for i, entity in enumerate(program.entities) if entity.id == error.entity_id)
         raise CompileError(error.code, str(error), ast.declarations[index].span) from error
     return program
+
+
+def _add_resources(program: ProgramIR, ast: Program, root: Path | None) -> ProgramIR:
+    """Costruisce il manifest IR dalle proprietà della stdlib multimediale."""
+    entities = {canonical(item.label): item for item in program.entities}
+    spans = {
+        (entities[canonical(item.subject)].id, canonical(item.property_name)): item.span
+        for item in ast.assignments
+        if canonical(item.subject) in entities
+    }
+    values = {(item.entity_id, item.property_id): item.value for item in program.properties}
+    resources: list[ResourceIR] = []
+    for entity in program.entities:
+        alternative = values.get((entity.id, ALTERNATIVE_TEXT)) or entity.label
+        for kind, property_id in (("immagine", IMAGE), ("suono", SOUND)):
+            value = values.get((entity.id, property_id), "")
+            if not isinstance(value, str) or not value:
+                continue
+            span = spans[(entity.id, kind)]
+            try:
+                media_type = resource_media_type(kind, value)
+            except ValueError as error:
+                raise CompileError("E126", str(error), span) from error
+            if root is not None:
+                try:
+                    candidate = (root / value).resolve(strict=True)
+                    if not candidate.is_relative_to(root) or not candidate.is_file():
+                        raise OSError
+                    if candidate.stat().st_size > MAX_RESOURCE_BYTES:
+                        raise OSError("La risorsa supera 5 MB.")
+                    if not valid_media_content(media_type, candidate.read_bytes()[:12]):
+                        raise OSError("Il contenuto non corrisponde al formato dichiarato.")
+                except (OSError, RuntimeError, ValueError) as error:
+                    detail = str(error) or "file assente o non regolare"
+                    raise CompileError(
+                        "E126", f"Risorsa non leggibile: {value} ({detail}).", span
+                    ) from error
+            resources.append(ResourceIR(entity.id, kind, value, media_type, str(alternative)))
+    return replace(program, resources=tuple(resources))

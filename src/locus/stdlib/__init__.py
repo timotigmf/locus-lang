@@ -32,6 +32,9 @@ BALANCE = "commercio.saldo"
 PRICE = "commercio.prezzo"
 RESALE_PRICE = "commercio.rivendita"
 MERCHANT_CASH = "commercio.cassa"
+IMAGE = "media.immagine"
+SOUND = "media.suono"
+ALTERNATIVE_TEXT = "media.testo_alternativo"
 
 
 def default_kinds() -> dict[str, str]:
@@ -94,14 +97,18 @@ def default_relations() -> dict[str, RelationSpec]:
 
 
 def default_properties() -> dict[str, PropertySpec]:
+    all_kinds = tuple(default_kinds().values())
     return {
-        "descrizione": PropertySpec(DESCRIPTION, tuple(default_kinds().values()), "testo", ""),
+        "descrizione": PropertySpec(DESCRIPTION, all_kinds, "testo", ""),
         "stato": PropertySpec(STATE, OPENABLE, "testo", "chiuso", ("aperto", "chiuso", "bloccato")),
         "visibile": PropertySpec(VISIBLE, LOCATABLE, "logico", True),
         "saldo": PropertySpec(BALANCE, (CURRENCY,), "numero", 0),
         "prezzo": PropertySpec(PRICE, (MERCHANDISE,), "numero", 0),
         "prezzo di rivendita": PropertySpec(RESALE_PRICE, (MERCHANDISE,), "numero", 0),
         "cassa": PropertySpec(MERCHANT_CASH, (MERCHANT,), "numero", 0),
+        "immagine": PropertySpec(IMAGE, all_kinds, "testo", ""),
+        "suono": PropertySpec(SOUND, all_kinds, "testo", ""),
+        "testo alternativo": PropertySpec(ALTERNATIVE_TEXT, all_kinds, "testo", ""),
     }
 
 

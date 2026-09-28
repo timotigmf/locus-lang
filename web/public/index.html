@@ -43,6 +43,25 @@
         <label class="small-label" for="entry">FILE PRINCIPALE</label
         ><select id="entry"></select>
         <div class="sidebar-divider"></div>
+        <div class="section-title">
+          RISORSE
+          <button
+            id="addAsset"
+            title="Aggiungi immagini o suoni"
+            aria-label="Aggiungi risorsa"
+          >
+            ＋
+          </button>
+        </div>
+        <div id="assets" aria-label="Risorse multimediali"></div>
+        <input
+          id="assetFile"
+          type="file"
+          accept=".png,.jpg,.jpeg,.webp,.gif,.mp3,.ogg,.wav"
+          multiple
+          hidden
+        />
+        <div class="sidebar-divider"></div>
         <div class="section-title">BIBLIOTECA</div>
         <button id="guideButton" class="nav-item">▤ Tutorial del faro</button
         ><button id="languageButton" class="nav-item">
@@ -108,6 +127,7 @@
                   ><button id="restart">↻ Ricomincia</button>
                 </div>
               </div>
+              <div id="mediaStage" class="media-stage" hidden></div>
               <div id="transcript" class="transcript" aria-live="polite">
                 <div class="welcome">
                   <span class="ornament">◇</span>

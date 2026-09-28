@@ -9,7 +9,7 @@
 | --- | --- |
 | controlla | valida entità e relazioni; stampa numero di entità |
 | ast | JSON AST senza validazione semantica |
-| ir / compila | JSON IR versione 20, dopo validazione |
+| ir / compila | JSON IR versione 21, dopo validazione |
 | gioca | compila e avvia la sessione IF dalla prima stanza dichiarata |
 
 `gioca`: guarda, esamina, prendi, lascia, metti, apri, chiudi, blocca,
@@ -85,6 +85,11 @@ IR 20 aggiunge `mondo.mercante`, `commercio.vende`, `commercio.cassa` e
 relazione di scorta, possesso, saldo e cassa. `validate_world` richiede che ogni
 merce non posseduta di una storia con mercanti appartenga a una sola scorta e
 condivida direttamente la stanza del venditore.
+
+IR 21 aggiunge `ResourceIR` e `ProgramIR.resources`. La stdlib costruisce il
+manifest dalle proprietà `immagine`, `suono` e `testo alternativo`; ogni record
+contiene ID dell'entità, genere, percorso, MIME e alternativa testuale. La
+compilazione da file verifica che la risorsa resti nella radice del progetto.
 
 Cataloghi con nomi non canonici, ID vuoti/duplicati, tipi sconosciuti o inversi
 incompatibili sollevano ValueError. `relations=None` supporta dichiarazioni senza

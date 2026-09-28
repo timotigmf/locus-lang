@@ -1,0 +1,12 @@
+Titolo: "Il faro illustrato".
+Autore: "Esempio LOCUS".
+
+Il Molo è una stanza.
+Inizia nella "Molo".
+Il Molo ha descrizione "La risacca batte contro le tavole del pontile.".
+Il Molo ha immagine "media/molo.png".
+Il Molo ha suono "media/risacca.wav".
+Il Molo ha testo alternativo "Un faro chiaro oltre il molo, sotto il cielo notturno.".
+
+La campana è una cosa nel Molo.
+La campana ha descrizione "Il bronzo porta i segni della salsedine.".

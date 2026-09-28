@@ -175,6 +175,28 @@ function validate(p) {
     size += new TextEncoder().encode(t).length;
   }
   if (size > 2000000) throw new Error("Il progetto supera il limite di 2 MB.");
+  const assets = p.assets ?? {};
+  if (!assets || typeof assets !== "object" || Array.isArray(assets))
+    throw new Error("Il manifest delle risorse non è valido.");
+  const assetEntries = Object.entries(assets);
+  if (assetEntries.length > 64)
+    throw new Error("Sono ammesse al massimo 64 risorse.");
+  let assetSize = 0;
+  for (const [name, encoded] of assetEntries) {
+    if (!validAssetName(name) || typeof encoded !== "string")
+      throw new Error("Risorsa non valida: " + name);
+    let bytes;
+    try {
+      bytes = base64Bytes(encoded);
+    } catch {
+      throw new Error("Dati Base64 non validi per la risorsa: " + name);
+    }
+    if (bytes.length > 5000000)
+      throw new Error("La risorsa supera 5 MB: " + name);
+    assetSize += bytes.length;
+  }
+  if (assetSize > 20000000)
+    throw new Error("Le risorse del progetto superano 20 MB.");
   if (!Object.hasOwn(p.files, p.entry))
     throw new Error("File principale assente.");
   if (
@@ -194,6 +216,7 @@ function validate(p) {
     ...p,
     title: typeof p.title === "string" ? p.title.slice(0, 100) : "Senza titolo",
     tests: p.tests ?? [],
+    assets,
   };
 }
 function validName(name) {
@@ -204,6 +227,35 @@ function validName(name) {
     !name.startsWith("/") &&
     name.split("/").every((p) => p && p !== "." && p !== "..")
   );
+}
+const assetExtensions = new Set([
+  "png",
+  "jpg",
+  "jpeg",
+  "webp",
+  "gif",
+  "mp3",
+  "ogg",
+  "wav",
+]);
+function validAssetName(name) {
+  return (
+    typeof name === "string" &&
+    !/[\\:\x00-\x1f]/.test(name) &&
+    !name.startsWith("/") &&
+    name.split("/").every((part) => part && part !== "." && part !== "..") &&
+    assetExtensions.has(name.split(".").at(-1)?.toLowerCase())
+  );
+}
+function base64Bytes(encoded) {
+  const raw = atob(encoded);
+  return Uint8Array.from(raw, (character) => character.charCodeAt(0));
+}
+function bytesBase64(bytes) {
+  let raw = "";
+  for (let start = 0; start < bytes.length; start += 32768)
+    raw += String.fromCharCode(...bytes.subarray(start, start + 32768));
+  return btoa(raw);
 }
 function sameFiles(left, right) {
   const leftNames = Object.keys(left).sort();
@@ -237,6 +289,7 @@ function setProject(p) {
     ),
   );
   renderFiles();
+  renderAssets();
   openFile(project.entry);
   renderTests();
   dirty();
@@ -262,6 +315,37 @@ function renderFiles() {
   $("entry").value = project.entry;
   $("fileCount").textContent =
     `${Object.keys(project.files).length} file · principale: ${project.entry}`;
+}
+function renderAssets() {
+  const box = $("assets");
+  box.replaceChildren();
+  const entries = Object.entries(project.assets ?? {});
+  if (!entries.length) {
+    box.append(el("span", { class: "muted" }, "Nessuna risorsa"));
+    return;
+  }
+  for (const [name, encoded] of entries) {
+    const row = el("div", { class: "asset" });
+    row.append(
+      el(
+        "span",
+        {},
+        `${name} · ${Math.ceil(base64Bytes(encoded).length / 1024)} KB`,
+      ),
+    );
+    const remove = el("button", { title: `Elimina ${name}` }, "×");
+    remove.onclick = () =>
+      execute(async () => {
+        if (!(await ask("Elimina risorsa", `Eliminare ${name} dal progetto?`)))
+          return;
+        delete project.assets[name];
+        renderAssets();
+        dirty();
+        save();
+      });
+    row.append(remove);
+    box.append(row);
+  }
 }
 function openFile(name, line, column) {
   if (!Object.hasOwn(project.files, name)) return;
@@ -380,6 +464,31 @@ $("backup").onclick = () =>
     "application/json",
   );
 $("importButton").onclick = () => $("importFile").click();
+$("addAsset").onclick = () => $("assetFile").click();
+$("assetFile").onchange = () =>
+  execute(async () => {
+    const files = [...$("assetFile").files];
+    $("assetFile").value = "";
+    if (!files.length) return;
+    const assets = { ...project.assets };
+    for (const file of files) {
+      const name = `media/${file.name}`;
+      if (!validAssetName(name))
+        throw new Error("Formato multimediale non ammesso: " + file.name);
+      if (file.size > 5000000)
+        throw new Error("La risorsa supera 5 MB: " + file.name);
+      if (
+        Object.hasOwn(assets, name) &&
+        !(await ask("Sostituisci risorsa", `${name} esiste già. Sostituirla?`))
+      )
+        continue;
+      assets[name] = bytesBase64(new Uint8Array(await file.arrayBuffer()));
+    }
+    project = validate({ ...project, assets });
+    renderAssets();
+    dirty();
+    save();
+  });
 $("importFile").onchange = () =>
   execute(async () => {
     const files = [...$("importFile").files];
@@ -431,6 +540,7 @@ $("newProject").onclick = () =>
             'Titolo: "Una nuova storia".\nAutore: "Scrivi qui il tuo nome".\n\nLa Sala è una stanza.\nInizia nella "Sala".\nLa Sala ha descrizione "Qui comincia la tua storia.".\n',
         },
         tests: [],
+        assets: {},
       });
   });
 $("demoButton").onclick = () =>
@@ -505,7 +615,7 @@ async function compileProject(play = false) {
   compiledRevision = rev;
   showDiagnostics([]);
   $("compileStatus").textContent =
-    `${result.entities} entità · ${result.actions ?? 0} azioni autore · ${result.rules} regole · ${result.dialogues ?? 0} dialoghi · ${result.scenes ?? 0} scene · ${result.vehicles ?? 0} veicoli · ${result.merchants ?? 0} mercanti · ${result.merchandise ?? 0} merci · compilato`;
+    `${result.entities} entità · ${result.actions ?? 0} azioni autore · ${result.rules} regole · ${result.dialogues ?? 0} dialoghi · ${result.scenes ?? 0} scene · ${result.vehicles ?? 0} veicoli · ${result.merchants ?? 0} mercanti · ${result.merchandise ?? 0} merci · ${result.resources ?? 0} risorse · compilato`;
   if (result.title) {
     project.title = result.title;
     $("title").value = result.title;
@@ -570,6 +680,26 @@ function renderIndex(ir, inventory = []) {
     table.append(row);
   }
   const content = [table];
+  if ((ir.resources ?? []).length) {
+    const entities = new Map(ir.entities.map((item) => [item.id, item.label]));
+    const resources = el("table", { class: "data" });
+    const resourceHead = el("tr");
+    for (const label of ["Entità", "Risorsa", "Percorso", "Formato"])
+      resourceHead.append(el("th", {}, label));
+    resources.append(resourceHead);
+    for (const resource of ir.resources) {
+      const row = el("tr");
+      for (const value of [
+        entities.get(resource.entity_id) ?? resource.entity_id,
+        resource.kind,
+        resource.path,
+        resource.media_type,
+      ])
+        row.append(el("td", {}, value));
+      resources.append(row);
+    }
+    content.push(el("h3", {}, "Risorse multimediali"), resources);
+  }
   const vehicles = ir.entities.filter((entity) =>
     hasType(entity.type_id, "mondo.veicolo"),
   );
@@ -827,6 +957,7 @@ function appendOutput(result, command) {
       el("p", { class: "player-command" }, "› " + command),
     );
   $("transcript").append(el("div", { class: "story-output" }, result.text));
+  renderMedia(result.media ?? []);
   $("transcript").scrollTop = $("transcript").scrollHeight;
   showTrace(result.trace, result.dialogue ?? [], result.scenes ?? []);
   showMap(result.map);
@@ -837,6 +968,38 @@ function appendOutput(result, command) {
     renderIndex(compiled.ir, result.inventory ?? []);
   }
   if (result.ended) stopGame();
+}
+function renderMedia(items) {
+  const stage = $("mediaStage");
+  stage.replaceChildren();
+  for (const item of items) {
+    const encoded = project.assets?.[item.path];
+    const source = encoded
+      ? `data:${item.media_type};base64,${encoded}`
+      : item.path;
+    if (item.kind === "immagine") {
+      const figure = el("figure");
+      figure.append(
+        el("img", {
+          src: source,
+          alt: item.alternative_text,
+          loading: "eager",
+        }),
+        el("figcaption", {}, item.alternative_text),
+      );
+      stage.append(figure);
+    } else if (item.kind === "suono") {
+      stage.append(
+        el("span", { class: "media-label" }, item.alternative_text),
+        el("audio", {
+          controls: "",
+          preload: "metadata",
+          src: source,
+        }),
+      );
+    }
+  }
+  stage.hidden = !items.length;
 }
 async function restart() {
   if (compiledRevision !== revision) {
@@ -1085,9 +1248,11 @@ $("release").onclick = () =>
         await r.arrayBuffer(),
       );
     }
+    for (const [name, encoded] of Object.entries(snapshot.assets ?? {}))
+      archive[name] = base64Bytes(encoded);
     archive["project.json"] = strToU8(JSON.stringify(snapshot));
     archive["LEGGIMI.txt"] = strToU8(
-      "RELEASE LOCUS\n\nCarica tutti i file estratti su un sito statico HTTPS e apri index.html.\nNon aprire index.html con file://: il runtime richiede HTTP.\nIn locale, dalla cartella estratta: python -m http.server 8000\nPoi apri http://localhost:8000. Python serve solo come server locale.\nIl giocatore sul sito non richiede Python installato.\nRuntime incluso: nessun CDN esterno. Browser moderno con WebAssembly richiesto.\nI sorgenti della storia sono inclusi in project.json; non sono segreti.\nLeggi LICENZE.txt per le dipendenze. Questa anteprima non genera eseguibili nativi.\n",
+      "RELEASE LOCUS\n\nCarica tutti i file estratti su un sito statico HTTPS e apri index.html.\nNon aprire index.html con file://: il runtime richiede HTTP.\nIn locale, dalla cartella estratta: python -m http.server 8000\nPoi apri http://localhost:8000. Python serve solo come server locale.\nIl giocatore sul sito non richiede Python installato.\nRuntime e risorse multimediali sono inclusi: nessun CDN esterno. Browser moderno con WebAssembly richiesto.\nI sorgenti della storia sono inclusi in project.json; non sono segreti.\nLeggi LICENZE.txt per le dipendenze. Questa anteprima non genera eseguibili nativi.\n",
     );
     download(
       "release-locus.zip",

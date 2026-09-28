@@ -39,3 +39,4 @@ Le fonti e le licenze sono nel [registro](../architettura/fonti.md).
 - [0022 — veicoli](0022-veicoli.md): tipo standard, salita/discesa e movimento atomico del conducente nell'IR 18.
 - [0023 — valuta e acquisti](0023-valuta-e-acquisti.md): saldo, prezzi, possesso e acquisto atomico nell'IR 19.
 - [0024 — mercanti, scorte e vendita](0024-mercanti-scorte-e-vendita.md): venditori, cassa e rivendita atomica nell'IR 20.
+- [0025 — manifest multimediale](0025-manifest-risorse-multimediali.md): immagini, suoni e release autosufficienti nell'IR 21.

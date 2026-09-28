@@ -68,9 +68,12 @@ Ogni pacchetto conserva il core indipendente dalla narrativa interattiva.
 9. Mercanti, scorte, cassa e rivendita atomica implementati nell'IR 20;
    quantità, cataloghi generativi, contrattazione e mercanti itineranti restano
    estensioni successive.
+10. Manifest multimediale validato e release web autosufficiente implementati
+    nell'IR 21; video, media condizionali e controllo audio da regole restano
+    estensioni successive.
 
-Multimedia e indici completi
-seguono in pacchetti separati. Non si importeranno codice o testi Inform.
+Gli indici completi seguono in un pacchetto separato. Non si importeranno codice
+o testi Inform.
 
 ## Studio M5 — 0.5.0a1
 

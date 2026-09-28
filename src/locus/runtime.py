@@ -12,11 +12,13 @@ from locus.ir import (
     ProgramIR,
     PropertyIR,
     RelationIR,
+    ResourceIR,
     SceneIR,
     SynonymIR,
     TableIR,
     TypeIR,
 )
+from locus.media import resource_media_type
 from locus.rule_model import Condition, RuleIR
 from locus.schema import (
     PropertySpec,
@@ -52,6 +54,7 @@ class World:
     tables: tuple[TableIR, ...] = ()
     dialogues: tuple[DialogueIR, ...] = ()
     scenes: tuple[SceneIR, ...] = ()
+    resources: tuple[ResourceIR, ...] = ()
 
 
 def has_type(world: World, actual: str, expected: str) -> bool:
@@ -64,6 +67,26 @@ def instantiate(program: ProgramIR) -> World:
     if len({entity.id for entity in program.entities}) != len(program.entities):
         raise ValueError("Identificatori di entità duplicati nell'IR.")
     identifiers = {entity.id for entity in program.entities}
+    resource_keys = [(item.entity_id, item.kind) for item in program.resources]
+    if (
+        len(set(resource_keys)) != len(resource_keys)
+        or any(item.entity_id not in identifiers for item in program.resources)
+        or any(item.kind not in {"immagine", "suono"} for item in program.resources)
+        or any(
+            not item.path or not item.media_type or not item.alternative_text
+            for item in program.resources
+        )
+    ):
+        raise ValueError("Manifest delle risorse non valido nell'IR.")
+    try:
+        media_types_valid = all(
+            resource_media_type(item.kind, item.path) == item.media_type
+            for item in program.resources
+        )
+    except ValueError:
+        media_types_valid = False
+    if not media_types_valid:
+        raise ValueError("Percorso o formato di risorsa non valido nell'IR.")
     inferred_type_ids = dict.fromkeys(
         (
             *(entity.type_id for entity in program.entities),
@@ -343,4 +366,5 @@ def instantiate(program: ProgramIR) -> World:
         tables=program.tables,
         dialogues=program.dialogues,
         scenes=program.scenes,
+        resources=program.resources,
     )

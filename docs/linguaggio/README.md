@@ -37,3 +37,5 @@ Il [denaro e gli acquisti](denaro-e-acquisti.md) aggiungono valuta tipata, saldo
 merci, prezzi e pagamento atomico nell'IR 19.
 I [mercanti e la vendita](mercanti-e-vendita.md) aggiungono scorte, cassa e
 rivendita atomica nell'IR 20.
+Le [risorse multimediali](risorse-multimediali.md) aggiungono immagini e suoni
+locali mediante un manifest validato nell'IR 21.

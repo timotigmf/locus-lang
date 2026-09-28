@@ -51,7 +51,7 @@ il successivo. Non promettiamo correzioni automatiche della semantica. Gli span
 di alcune diagnosi coprono un'intera dichiarazione/regola, come nella CLI.
 Il manuale incorporato è ricercabile per capitolo; la guida dell'autore è la
 pagina iniziale e ogni blocco di codice offre **Copia codice**. Comprende un corso
-in venti lezioni, specifiche e tutorial. L'Indice del mondo mostra anche
+in ventuno lezioni, specifiche e tutorial. L'Indice del mondo mostra anche
 dialoghi, scene, veicoli, mercanti e commercio compilati e aggiorna proprietà,
 righe delle tabelle, posizione dei mezzi, saldo, cassa e scorte dopo ogni comando.
 
@@ -108,6 +108,15 @@ estratta e aprire `http://localhost:8000`. Python serve solo a fornire HTTP in
 questo esempio: sul sito, chi gioca non deve installarlo. Il doppio clic sul file
 HTML (`file://`) non è supportato. Puoi incorporare il giocatore sul tuo sito
 tramite un iframe che punta all'indirizzo della release.
+
+## Immagini e suoni
+
+Il pulsante **＋** della sezione **Risorse** importa PNG, JPEG, WebP, GIF, MP3,
+Ogg e WAV come `media/NOMEFILE`. Il sorgente li associa alle entità con
+`immagine` o `suono`; `testo alternativo` descrive le immagini. Backup JSON e
+release ZIP contengono i byte. Consulta il
+[riferimento multimediale](../linguaggio/risorse-multimediali.md) per limiti e
+diagnostica `E126`.
 
 Il target è un browser moderno con WebAssembly e module worker su Windows,
 macOS, Linux e dispositivi mobili compatibili. Non equivale a supportare ogni

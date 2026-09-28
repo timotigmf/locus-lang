@@ -2,7 +2,7 @@
 
 ## Stato attuale
 
-Versione corrente `0.5.0a1`, IR versione 20. Le specifiche M2, M3 e M4
+Versione corrente `0.5.0a1`, IR versione 21. Le specifiche M2, M3 e M4
 estendono e, dove indicato, sostituiscono i limiti M1 sotto.
 La [specifica M2](docs/linguaggio/milestone-2.md) è normativa per proprietà,
 stringhe, nomi quotati, preposizioni, contenitori, porte e chiavi.
@@ -38,6 +38,8 @@ La specifica di [denaro e acquisti](docs/linguaggio/denaro-e-acquisti.md)
 definisce valuta, saldo, merci, prezzi e pagamento atomico.
 La specifica di [mercanti e vendita](docs/linguaggio/mercanti-e-vendita.md)
 definisce scorte, cassa, rivendita e trasferimenti bidirezionali.
+La specifica delle [risorse multimediali](docs/linguaggio/risorse-multimediali.md)
+definisce manifest locali validati per immagini e suoni.
 Le sezioni S0/S1 seguenti descrivono il nucleo storico, non l'intera versione.
 
 ## Dichiarazioni (S0, mantenute in 0.1.0a2)
@@ -159,6 +161,7 @@ E121–E122 segnalano scene duplicate oppure intervalli, testi e punti non valid
 E123 segnala un veicolo collocato fuori da una stanza diretta.
 E124 segnala valuta, saldo o prezzo incompatibile con il contratto commerciale.
 E125 segnala mercante, cassa, rivendita, venditore o scorta incoerenti.
+E126 segnala percorso, formato, presenza o dimensione non validi di una risorsa.
 
 ## Estensione M3
 
@@ -176,7 +179,7 @@ da file e punto iniziale esplicito. IR corrente versione 5.
 sorgente. `Comprendi "alias" come "entità".` aggiunge un nome alternativo per i
 comandi del giocatore. Metadati duplicati producono `E408`; alias in conflitto
 producono `E409`. Questi campi sono stati introdotti con l'IR 6 e restano
-presenti nell'IR 20.
+presenti nell'IR 21.
 
 ## Tipi definiti dall'autore
 
@@ -185,7 +188,7 @@ avanti sono ammessi e ogni tipo ha al massimo un genitore. I sottotipi sono
 compatibili con proprietà, relazioni e capacità degli antenati. Ridefinizioni
 producono `E113`; cicli nella gerarchia producono `E114`. La specifica completa
 è in [tipi definiti dall'autore](docs/linguaggio/tipi-autore.md). La tabella dei
-tipi è stata introdotta nell'IR 7 e resta presente nell'IR 20.
+tipi è stata introdotta nell'IR 7 e resta presente nell'IR 21.
 
 ## Azioni e comandi definiti dall'autore
 
@@ -196,7 +199,7 @@ Nomi duplicati producono `E310`; comandi non validi o in conflitto producono
 `E311`. `e sinonimo "riverisci"` aggiunge una forma equivalente; più clausole
 `e separatore` definiscono le locuzioni fra gli oggetti di un'azione a due
 oggetti. Comandi e separatori possono contenere fino a quattro parole e non
-possono avere prefissi ambigui. L'IR corrente è la versione 20.
+possono avere prefissi ambigui. L'IR corrente è la versione 21.
 
 ## Relazioni dinamiche
 
@@ -206,7 +209,7 @@ risolve gli ID, controlla tipi e mutabilità e incorpora le inverse nello stesso
 effetto. Il runtime applica il cambiamento nella transazione della regola. Gli
 usi non validi producono `E312`; si veda la
 [specifica completa](docs/linguaggio/relazioni-dinamiche.md). Questa estensione
-introduce l'IR 12 ed è conservata nell'IR 20.
+introduce l'IR 12 ed è conservata nell'IR 21.
 
 ## Visibilità e scenario
 
@@ -283,3 +286,12 @@ quanto riceve il giocatore. `compra ... da ...` e `vendi ... a ...` aggiornano
 scorta, possesso, inventario, saldo e cassa in un'unica transazione. `E125`
 segnala contratti incoerenti. La
 [specifica completa](docs/linguaggio/mercanti-e-vendita.md) introduce l'IR 20.
+
+## Risorse multimediali
+
+`La Sala ha immagine "media/sala.png".` e `La Sala ha suono
+"media/vento.ogg".` associano file locali a un'entità; `testo alternativo`
+descrive il contenuto accessibile. I percorsi e i formati sono convalidati e
+compilati in un manifest tipato. Studio e release includono i byte nel progetto;
+`E126` segnala risorse non sicure, assenti o incompatibili. La
+[specifica completa](docs/linguaggio/risorse-multimediali.md) introduce l'IR 21.

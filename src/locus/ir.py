@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from locus.rule_model import RuleIR
 from locus.schema import PropertySpec, Scalar, Value, ValueKind
 
-IR_VERSION = 20
+IR_VERSION = 21
 
 
 @dataclass(frozen=True, slots=True)
@@ -103,6 +103,15 @@ class SceneIR:
 
 
 @dataclass(frozen=True, slots=True)
+class ResourceIR:
+    entity_id: str
+    kind: str
+    path: str
+    media_type: str
+    alternative_text: str
+
+
+@dataclass(frozen=True, slots=True)
 class ProgramIR:
     version: int
     entities: tuple[EntityIR, ...]
@@ -119,3 +128,4 @@ class ProgramIR:
     tables: tuple[TableIR, ...] = ()
     dialogues: tuple[DialogueIR, ...] = ()
     scenes: tuple[SceneIR, ...] = ()
+    resources: tuple[ResourceIR, ...] = ()

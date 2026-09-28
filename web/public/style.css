@@ -193,6 +193,30 @@ input:disabled {
   max-height: 32vh;
   overflow: auto;
 }
+#assets {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  max-height: 18vh;
+  overflow: auto;
+}
+.asset {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 4px;
+  align-items: center;
+  padding: 6px 7px;
+  background: #eef3ef;
+  font-family: var(--mono);
+  font-size: 10px;
+  overflow-wrap: anywhere;
+}
+.asset button {
+  border: 0;
+  background: transparent;
+  padding: 2px 4px;
+  color: var(--muted);
+}
 .file {
   border: 0;
   background: transparent;
@@ -457,6 +481,32 @@ input:disabled {
   font-size: 16px;
   line-height: 1.75;
   color: #34443f;
+}
+.media-stage {
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--line);
+  background: #f2f5f1;
+}
+.media-stage figure {
+  margin: 0;
+}
+.media-stage img {
+  display: block;
+  width: 100%;
+  max-height: 280px;
+  object-fit: contain;
+  border-radius: 3px;
+}
+.media-stage figcaption,
+.media-stage .media-label {
+  display: block;
+  margin-top: 6px;
+  font-size: 11px;
+  color: var(--muted);
+}
+.media-stage audio {
+  width: 100%;
+  margin-top: 5px;
 }
 .transcript .story-output {
   white-space: pre-wrap;

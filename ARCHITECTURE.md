@@ -1,6 +1,6 @@
 # Architettura tecnica
 
-Stato: Studio M5 e linguaggio incrementale fino all'IR 20.
+Stato: Studio M5 e linguaggio incrementale fino all'IR 21.
 Le decisioni strutturali sono motivate negli [ADR](docs/adr/README.md).
 
 ## Pipeline e dipendenze
@@ -58,10 +58,11 @@ riferimenti in avanti. Il catalogo `RelationSpec` definisce tipi agli estremi,
 orientamento e inversi. Nessuna conoscenza di stanze o direzioni nel compilatore.
 Conflitti funzionali, auto-collegamenti e riferimenti non risolti sono diagnosticati.
 
-`ProgramIR` versione 20 contiene gerarchia dei tipi, azioni dell'autore, entità,
-relazioni, proprietà, tabelle, dialoghi, scene, regole, punto iniziale, titolo,
+`ProgramIR` versione 21 contiene gerarchia dei tipi, azioni dell'autore, entità,
+relazioni, proprietà, tabelle, dialoghi, scene, risorse, regole, punto iniziale, titolo,
 autore e sinonimi risolti; i record di base sono
 `TypeIR(id, label, parent_id)`, `ActionIR(id, label, commands, ..., separators)`,
+`ResourceIR(entity_id, kind, path, media_type, alternative_text)`,
 `EntityIR(id, label, type_id)`
 e `RelationIR(source_id, predicate_id, target_id)`. Gli effetti di relazione
 contengono archi già risolti e l'eventuale inversa, applicati atomicamente dal runtime.
@@ -174,7 +175,7 @@ parser. Si consulti l'[ADR 0005](docs/adr/0005-proprieta-e-mondo.md) per le alte
 contiene record immutabili generici. `rules.execute` esegue rulebook attraverso
 un protocollo Host indipendente da IF. `stdlib.game` adatta sessioni e azioni;
 `Transition` espone output, trace e risultato. Questi record furono introdotti
-con l'IR 4 e sono conservati nell'IR 20.
+con l'IR 4 e sono conservati nell'IR 21.
 Vedere [ADR 0006](docs/adr/0006-regole.md).
 
 ## Implementazione M4
@@ -189,6 +190,14 @@ La stdlib valida il tipo del punto iniziale. Vedere [ADR 0007](docs/adr/0007-pro
 Il frontend in `web/` usa CodeMirror e un module worker Pyodide; il compilatore
 e il runtime LOCUS sono gli stessi della CLI. Distribuzione statica ed export ZIP,
 senza caricamento di IR non fidata. Vedere [ADR 0008](docs/adr/0008-studio-web.md).
+
+## Risorse multimediali
+
+La stdlib abbassa proprietà di immagine e suono in `ResourceIR`; il core valida
+identità, percorso e MIME senza decidere la resa. L'adattatore di progetto
+controlla il confine del filesystem, mentre Studio e release trasportano i byte
+separatamente dal manifest. Vedere
+[ADR 0025](docs/adr/0025-manifest-risorse-multimediali.md).
 
 ## Direzioni cardinali
 
@@ -264,7 +273,7 @@ confronto transitivo. Vedere [ADR 0011](docs/adr/0011-gerarchia-tipi.md).
 ## Azioni definite dall'autore
 
 Le dichiarazioni di azione vengono unite al catalogo `ActionSpec` dell'host dopo
-la risoluzione dei tipi. L'IR 20 conserva forme di comando e separatori anche
+la risoluzione dei tipi. L'IR 21 conserva forme di comando e separatori anche
 multiparola, oltre ai tipi degli argomenti. Il parser giocatore riceve questo catalogo
 compilato e produce ID di azione; il dispatcher usa le stesse fasi transazionali
 delle azioni standard.

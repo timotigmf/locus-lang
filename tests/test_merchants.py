@@ -47,7 +47,7 @@ def test_merchant_stock_is_typed_and_lowered_in_ir20() -> None:
     world = instantiate(program)
     merchant = next(entity for entity in world.entities if entity.label == "Ada")
     item = next(entity for entity in world.entities if entity.label == "bussola")
-    assert IR_VERSION == 20
+    assert IR_VERSION == 21
     assert has_type(world, merchant.type_id, MERCHANT)
     assert has_type(world, item.type_id, MERCHANDISE)
     assert property_value(world, merchant.id, MERCHANT_CASH) == 30

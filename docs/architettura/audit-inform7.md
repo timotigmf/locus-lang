@@ -158,6 +158,13 @@ IR 20 aggiunge mercanti tipati, relazione di scorta, cassa e rivendita atomica;
 la forma `compra ... da ...` non richiede riscritture del comando. Più valute,
 cambio, quantità e capacità restano contratti successivi.
 
+### Risorse multimediali
+
+LOCUS IR 21 associa immagini e suoni locali alle entità mediante un manifest
+tipato, con percorsi confinati, formati espliciti e testo alternativo. Studio e
+release consumano gli stessi record e la release incorpora i file. Video,
+risorse condizionali e controllo della riproduzione da regole restano futuri.
+
 ### Punti, tempo, scene ed enigmi
 
 LOCUS IR 17 introduce un clock logico, scene con intervalli assoluti e un
@@ -230,7 +237,7 @@ imitare. La misura utile è coprire ogni contratto pubblico e ogni regressione.
 | 7 | veicoli implementati nell'IR 18 | movimento atomico di conducente e veicolo, con mappa aggiornata |
 | 8 | valuta e acquisto implementati nell'IR 19 | pagamento atomico con unità, prezzo, fondi e possesso verificati |
 | 9 | mercanti e vendita implementati nell'IR 20 | scorta, incasso, rivendita e insolvenza verificati nello stesso snapshot |
-| 10 | risorse multimediali | manifest validato ed export web autosufficiente |
+| 10 | risorse multimediali implementate nell'IR 21 | manifest validato ed export web autosufficiente |
 | 11 | manuale e indici completi | corso e ricettario ricercabili con esempi sempre compilati |
 
 Ogni pacchetto richiede una specifica e, se modifica i confini del sistema, un
