@@ -250,6 +250,18 @@ def test_dialogue_diagnostic_links_the_specific_reference() -> None:
     assert Path(diagnostic["manual"]).is_file()
 
 
+def test_scene_diagnostic_links_the_specific_reference() -> None:
+    studio = Studio()
+    result = studio.compile(
+        project('Scena "contraddizione" dal turno 4 al turno 2: Inizio "x". Fine "y". Fine scena.')
+    )
+    diagnostic = result["diagnostics"][0]
+    assert diagnostic["code"] == "E122"
+    assert diagnostic["title"] == "Scena non valida"
+    assert diagnostic["manual"] == "docs/linguaggio/scene-tempo-punteggio.md"
+    assert Path(diagnostic["manual"]).is_file()
+
+
 def test_studio_exposes_author_types_and_maps_room_subtypes() -> None:
     studio = Studio()
     result = studio.compile(
@@ -308,6 +320,28 @@ def test_studio_exposes_and_executes_dialogue_graphs() -> None:
     ended = studio.command("basta")
     assert ended["active_dialogue"] is None
     assert "termina" in ended["text"]
+
+
+def test_studio_exposes_scene_time_score_and_log() -> None:
+    studio = Studio()
+    source = Path("examples/tutorial/17_tempesta_e_punteggio.locus").read_text(encoding="utf-8")
+    compiled = studio.compile(project(source))
+    assert compiled["ok"] and compiled["scenes"] == 1
+    assert compiled["ir"]["scenes"][0]["points"] == 10
+    assert studio.restart()["turn"] == 0
+
+    started = studio.command("guarda")
+    assert started["turn"] == 1
+    assert started["scenes"][0]["event"] == "iniziata"
+    assert "tempesta è iniziata" in started["text"]
+    studio.command("inventario")
+    ended = studio.command("esamina orologio")
+    assert ended["turn"] == 3 and ended["score"] == 10
+    assert ended["scenes"][0]["score_delta"] == 10
+    assert ended["score_log"][0]["scene_label"] == "la tempesta"
+    score = studio.command("punteggio")
+    assert score["text"] == "Punteggio: 10."
+    assert score["turn"] == 3
 
 
 def test_dispatch_errors_and_size_limit() -> None:

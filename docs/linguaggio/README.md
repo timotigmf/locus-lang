@@ -29,3 +29,5 @@ Le [tabelle tipate](tabelle-tipate.md) aggiungono colonne nominate, righe
 eterogenee e mutazioni atomiche nell'IR 15.
 I [dialoghi strutturati](dialoghi-strutturati.md) aggiungono persone, nodi,
 scelte e conversazioni multi-turno nell'IR 16.
+Le [scene temporali](scene-tempo-punteggio.md) aggiungono turni, ciclo di vita,
+punteggio e registro dei premi nell'IR 17.

@@ -1,6 +1,6 @@
 # Architettura tecnica
 
-Stato: Studio M5 e linguaggio incrementale fino all'IR 16.
+Stato: Studio M5 e linguaggio incrementale fino all'IR 17.
 Le decisioni strutturali sono motivate negli [ADR](docs/adr/README.md).
 
 ## Pipeline e dipendenze
@@ -29,7 +29,7 @@ Un test compila tipi e relazioni non narrativi per verificare concretamente l'in
 | lexer | token, originale, posizione; nessuna risoluzione di nomi | implementato |
 | parser autore | grammatica → AST immutabile | dichiarazioni, relazioni, regole, metadati e vocabolario |
 | semantica | nomi canonici, tipi noti, duplicati, ID risolti | implementato |
-| IR | programma immutabile senza articoli o sintassi | schema sperimentale 13 |
+| IR | programma immutabile senza articoli o sintassi | schema sperimentale 17 |
 | mondo | istanze indipendenti dai nodi AST | snapshot validati e relazioni dinamiche |
 | regole | ordinamento, condizioni, esiti, tracing | implementato con rollback |
 | runtime | transizioni, eventi e servizi deterministici | transizioni IF nella stdlib |
@@ -57,8 +57,9 @@ riferimenti in avanti. Il catalogo `RelationSpec` definisce tipi agli estremi,
 orientamento e inversi. Nessuna conoscenza di stanze o direzioni nel compilatore.
 Conflitti funzionali, auto-collegamenti e riferimenti non risolti sono diagnosticati.
 
-`ProgramIR` versione 16 contiene gerarchia dei tipi, azioni dell'autore, entità, relazioni, proprietà,
-tabelle, dialoghi, regole, punto iniziale, titolo, autore e sinonimi risolti; i record di base sono
+`ProgramIR` versione 17 contiene gerarchia dei tipi, azioni dell'autore, entità,
+relazioni, proprietà, tabelle, dialoghi, scene, regole, punto iniziale, titolo,
+autore e sinonimi risolti; i record di base sono
 `TypeIR(id, label, parent_id)`, `ActionIR(id, label, commands, ..., separators)`,
 `EntityIR(id, label, type_id)`
 e `RelationIR(source_id, predicate_id, target_id)`. Gli effetti di relazione
@@ -99,7 +100,8 @@ Mappa, albero, proprietà e debugger leggeranno viste del mondo senza mutarlo.
 
 I rulebook sono distinti in prima, invece, verifica, esegui, dopo e descrivi.
 Il contratto di una regola include ID, provenienza, priorità intera, condizione
-pura e corpo con effetti espliciti. Eventi temporali e `ogni turno` restano futuri.
+pura e corpo con effetti espliciti. Le scene temporali IR 17 hanno un ciclo di
+vita separato; effetti periodici `ogni turno` nel rulebook restano futuri.
 
 L'ordine è priorità decrescente, poi ordine di dichiarazione stabile, senza
 euristiche di specificità nascoste. Gli esiti formano una somma tipata:
@@ -163,7 +165,7 @@ parser. Si consulti l'[ADR 0005](docs/adr/0005-proprieta-e-mondo.md) per le alte
 contiene record immutabili generici. `rules.execute` esegue rulebook attraverso
 un protocollo Host indipendente da IF. `stdlib.game` adatta sessioni e azioni;
 `Transition` espone output, trace e risultato. Questi record furono introdotti
-con l'IR 4 e sono conservati nell'IR 16.
+con l'IR 4 e sono conservati nell'IR 17.
 Vedere [ADR 0006](docs/adr/0006-regole.md).
 
 ## Implementazione M4
@@ -228,6 +230,13 @@ generico convalida struttura e raggiungibilità senza conoscere la narrativa.
 La stdlib conserva nodo attivo e visite nella sessione e produce trace separato
 dalle regole. Vedere [ADR 0020](docs/adr/0020-dialoghi-strutturati.md).
 
+## Scene, tempo e punteggio
+
+`SceneIR` conserva intervallo temporale, testi e premio. La sessione mantiene un
+clock logico, gli ID delle scene attive e concluse e un registro immutabile dei
+punti assegnati. Il trace temporale resta distinto da quello delle regole e dei
+dialoghi. Vedere [ADR 0021](docs/adr/0021-scene-tempo-punteggio.md).
+
 ## Metadati e vocabolario
 
 Titolo e autore appartengono al progetto compilato, non allo stato separato del
@@ -246,7 +255,7 @@ confronto transitivo. Vedere [ADR 0011](docs/adr/0011-gerarchia-tipi.md).
 ## Azioni definite dall'autore
 
 Le dichiarazioni di azione vengono unite al catalogo `ActionSpec` dell'host dopo
-la risoluzione dei tipi. L'IR 16 conserva forme di comando e separatori anche
+la risoluzione dei tipi. L'IR 17 conserva forme di comando e separatori anche
 multiparola, oltre ai tipi degli argomenti. Il parser giocatore riceve questo catalogo
 compilato e produce ID di azione; il dispatcher usa le stesse fasi transazionali
 delle azioni standard.

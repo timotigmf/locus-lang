@@ -58,6 +58,7 @@ dall'alto verso il basso prima di studiare i moduli.
 14. [Elenchi tipati e taccuino di indizi](../tutorial/14-elenchi-indizi.md)
 15. [Tabelle tipate e registro dei reperti](../tutorial/15-tabelle-reperti.md)
 16. [Persone e dialoghi a scelte](../tutorial/16-dialogo-guardiana.md)
+17. [Scene, tempo e punteggio](../tutorial/17-tempesta-e-punteggio.md)
 
 ## Indice per obiettivo
 
@@ -65,7 +66,7 @@ dall'alto verso il basso prima di studiare i moduli.
 | --- | --- | --- |
 | Dungeon e mappe | Stanze, quattro direzioni, porte e contenitori | Lezioni 1 e 6 |
 | Enigmi con chiavi | Porte/contenitori bloccati, regole e rollback | Lezioni 2, 3 e 6 |
-| Punti | Proprietà numeriche e regole di incremento | Lezione 6 |
+| Punti e tempo | Scene temporali, turni e registro dei premi | Lezioni 6 e 17 |
 | Oggetti complessi | Contenimento annidato, proprietà tipate, stati | Lezione 2 e specifica M2 |
 | Categorie proprie | Tipi nominali con ereditarietà singola | Lezione 7 |
 | Verbi e comandi propri | Azioni tipate con sinonimi e locuzioni multiparola | Lezioni 8–11 |
@@ -75,6 +76,7 @@ dall'alto verso il basso prima di studiare i moduli.
 | Indizi, memoria e cronologie | Elenchi tipati con appartenenza e rollback | Lezione 14 |
 | Cataloghi e registri | Tabelle con colonne tipate e righe transazionali | Lezione 15 |
 | Dialoghi ramificati | Persone, nodi, scelte, cicli e memoria delle visite | Lezione 16 |
+| Scene temporali | Inizio e fine a turni dichiarati con trace | Lezione 17 |
 | Veicoli e vetture | Non ancora: manca il modello di entrata, uscita e movimento | Roadmap |
 | Denaro e acquisti | Proprietà numeriche disponibili; azioni compra/vendi non ancora | Roadmap |
 
@@ -112,5 +114,6 @@ silenziose: se due oggetti corrispondono, chiede quale intendi.
 - [Elenchi tipati](../linguaggio/liste-tipate.md)
 - [Tabelle tipate](../linguaggio/tabelle-tipate.md)
 - [Persone e dialoghi strutturati](../linguaggio/dialoghi-strutturati.md)
+- [Scene, tempo e punteggio](../linguaggio/scene-tempo-punteggio.md)
 - [Ricettario](../cookbook/README.md)
 - [Da Inform a LOCUS](../tutorial/da-inform-a-locus.md)

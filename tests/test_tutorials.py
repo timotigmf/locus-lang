@@ -260,6 +260,27 @@ def test_dialogue_tutorial_branches_cycles_and_ends() -> None:
     assert len(current.visited_dialogue_nodes) == 3
 
 
+def test_scene_tutorial_tracks_turns_and_awards_points_once() -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "17_tempesta_e_punteggio.locus")))
+
+    def command(text: str) -> str:
+        nonlocal current
+        transition = step(
+            current,
+            parse_command(text, current.world.actions, scene_enabled=True),
+        )
+        current = transition.session
+        return render(transition)
+
+    assert command("turno") == "Turno: 0."
+    assert "tempesta è iniziata" in command("guarda")
+    assert command("inventario") == "Inventario: vuoto."
+    assert "nuvole si aprono" in command("esamina orologio")
+    assert command("punteggio") == "Punteggio: 10."
+    assert current.turn == 3
+    assert len(current.score_log) == 1
+
+
 def test_final_world_matches_story() -> None:
     current = start(instantiate(compile_story_file(TUTORIAL / "04_faro.locus")))
     for command in (TUTORIAL / "04_faro.comandi").read_text(encoding="utf-8").splitlines():

@@ -89,4 +89,5 @@ def load_project(
         actions=tuple(item for unit in units for item in unit.actions),
         tables=tuple(item for unit in units for item in unit.tables),
         dialogues=tuple(item for unit in units for item in unit.dialogues),
+        scenes=tuple(item for unit in units for item in unit.scenes),
     )

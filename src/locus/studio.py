@@ -92,6 +92,16 @@ _ERROR_HELP = {
         "Dichiara il partecipante come persona e verifica il suo nome.",
         "docs/linguaggio/dialoghi-strutturati.md",
     ),
+    "E121": (
+        "Scena duplicata",
+        "Usa un nome univoco per ogni scena del progetto.",
+        "docs/linguaggio/scene-tempo-punteggio.md",
+    ),
+    "E122": (
+        "Scena non valida",
+        "Controlla turni, testi obbligatori e punti assegnati.",
+        "docs/linguaggio/scene-tempo-punteggio.md",
+    ),
     "E310": (
         "Azione duplicata",
         "Scegli un nome che non appartenga già alla storia o alla libreria.",
@@ -293,6 +303,7 @@ class Studio:
             "rules": len(program.rules),
             "actions": len(program.actions),
             "dialogues": len(program.dialogues),
+            "scenes": len(program.scenes),
             "title": program.title,
             "author": program.author,
         }
@@ -312,12 +323,18 @@ class Studio:
             "active_dialogue": transition.session.dialogue_id,
             "active_dialogue_node": transition.session.dialogue_node_id,
             "visited_dialogue_nodes": list(transition.session.visited_dialogue_nodes),
+            "turn": transition.session.turn,
+            "score": transition.session.score,
+            "active_scenes": list(transition.session.active_scene_ids),
+            "completed_scenes": list(transition.session.completed_scene_ids),
+            "score_log": [asdict(item) for item in transition.session.score_log],
+            "scenes": [asdict(item) for item in transition.scenes],
         }
 
     def restart(self) -> dict[str, Any]:
         if self.program is None:
             raise ValueError("Compila un progetto valido prima di avviare la storia.")
-        transition = step(start(instantiate(self.program)), Intent("look"))
+        transition = step(start(instantiate(self.program)), Intent("look"), advance_time=False)
         self.session = transition.session
         self.ended = False
         return self._output(transition)
@@ -333,6 +350,7 @@ class Studio:
                 command,
                 self.session.world.actions,
                 dialogue_enabled=bool(self.session.world.dialogues),
+                scene_enabled=bool(self.session.world.scenes),
             ),
         )
         self.session = transition.session

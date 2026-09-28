@@ -59,8 +59,10 @@ Ogni pacchetto conserva il core indipendente dalla narrativa interattiva.
    query per colonna e accesso avanzato alle collezioni restano da completare.
 5. Persone e grafi di dialogo multi-turno implementati nell'IR 16; condizioni,
    effetti e conoscenze dei personaggi restano estensioni successive.
+6. Scene temporali, turni e registro del punteggio implementati nell'IR 17;
+   condizioni, effetti e ricorrenza delle scene restano estensioni successive.
 
-Scene/tempo/punteggio, veicoli, valuta/commercio, multimedia e indici completi
+Veicoli, valuta/commercio, multimedia e indici completi
 seguono in pacchetti separati. Non si importeranno codice o testi Inform.
 
 ## Studio M5 — 0.5.0a1

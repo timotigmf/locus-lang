@@ -1,0 +1,15 @@
+Titolo: "Tre rintocchi nella tempesta".
+Autore: "Esempio LOCUS".
+
+La Torre è una stanza.
+Inizia nella "Torre".
+La Torre ha descrizione "Un orologio misura il tempo mentre il cielo si oscura.".
+
+L'orologio è uno scenario nella Torre.
+L'orologio ha descrizione "La lancetta avanza di un passo a ogni turno.".
+
+Scena "la tempesta" dal turno 1 al turno 3:
+    Inizio "Un tuono scuote la torre: la tempesta è iniziata.".
+    Fine "Al terzo rintocco le nuvole si aprono e il faro torna visibile.".
+    Punti 10.
+Fine scena.

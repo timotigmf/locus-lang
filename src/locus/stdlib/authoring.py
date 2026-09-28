@@ -36,6 +36,7 @@ def compile_story_file(path: Path, *, allowed_root: Path | None = None) -> Progr
 
 def _compile(ast: Program) -> ProgramIR:
     has_dialogues = bool(ast.dialogues)
+    has_scenes = bool(ast.scenes)
     # Compatibilità con gli esempi anteriori all'IR 16, dove persona era un tipo autore.
     ast = replace(
         ast,
@@ -55,7 +56,10 @@ def _compile(ast: Program) -> ProgramIR:
         properties=default_properties(),
         actions=default_actions(),
         kind_parents=default_kind_parents(),
-        reserved_commands=standard_commands(include_dialogue=has_dialogues),
+        reserved_commands=standard_commands(
+            include_dialogue=has_dialogues,
+            include_scenes=has_scenes,
+        ),
         dialogue_actor_types=(PERSON,),
     )
     try:

@@ -12,6 +12,7 @@ from locus.ir import (
     ProgramIR,
     PropertyIR,
     RelationIR,
+    SceneIR,
     SynonymIR,
     TableIR,
     TypeIR,
@@ -50,6 +51,7 @@ class World:
     actions: tuple[ActionIR, ...] = ()
     tables: tuple[TableIR, ...] = ()
     dialogues: tuple[DialogueIR, ...] = ()
+    scenes: tuple[SceneIR, ...] = ()
 
 
 def has_type(world: World, actual: str, expected: str) -> bool:
@@ -237,6 +239,27 @@ def instantiate(program: ProgramIR) -> World:
         if reachable_nodes != node_ids:
             raise ValueError("Il dialogo contiene nodi irraggiungibili nell'IR.")
 
+    scene_ids = {scene.id for scene in program.scenes}
+    scene_labels = [canonical(scene.label) for scene in program.scenes]
+    if (
+        len(program.scenes) > 64
+        or len(scene_ids) != len(program.scenes)
+        or len(set(scene_labels)) != len(scene_labels)
+        or any(
+            not scene.id.strip()
+            or not label
+            or type(scene.start_turn) is not int
+            or type(scene.end_turn) is not int
+            or type(scene.points) is not int
+            or not 1 <= scene.start_turn < scene.end_turn <= 1_000_000
+            or not scene.start_text.strip()
+            or not scene.end_text.strip()
+            or not 0 <= scene.points <= 1_000_000
+            for scene, label in zip(program.scenes, scene_labels, strict=True)
+        )
+    ):
+        raise ValueError("Catalogo delle scene non valido nell'IR.")
+
     def validate_table_condition(condition: Condition[Any]) -> None:
         if condition.operator == "contiene_riga":
             table = tables_by_id.get(condition.table_id or "")
@@ -319,4 +342,5 @@ def instantiate(program: ProgramIR) -> World:
         actions=program.actions,
         tables=program.tables,
         dialogues=program.dialogues,
+        scenes=program.scenes,
     )

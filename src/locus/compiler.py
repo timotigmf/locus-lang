@@ -15,6 +15,7 @@ from locus.ir import (
     ProgramIR,
     PropertyIR,
     RelationIR,
+    SceneIR,
     SynonymIR,
     TableColumnIR,
     TableIR,
@@ -302,6 +303,45 @@ def analyze(
             rows.append(row.values)
         table_catalog[name] = TableIR(
             f"autore.tabella.{index}", table_declaration.name, columns, tuple(rows)
+        )
+
+    if len(program.scenes) > 64:
+        raise CompileError(
+            "E121", "Un progetto ammette al massimo 64 scene.", program.scenes[64].span
+        )
+    scene_names: set[str] = set()
+    scene_records: list[SceneIR] = []
+    for scene_index, scene_declaration in enumerate(program.scenes, 1):
+        scene_name = canonical(scene_declaration.name)
+        if not scene_name or scene_name in scene_names:
+            raise CompileError(
+                "E121",
+                f"Scena già dichiarata: {scene_declaration.name}.",
+                scene_declaration.span,
+            )
+        if (
+            not 1 <= scene_declaration.start_turn <= 1_000_000
+            or not scene_declaration.start_turn < scene_declaration.end_turn <= 1_000_000
+            or not scene_declaration.start_text.strip()
+            or not scene_declaration.end_text.strip()
+            or not 0 <= scene_declaration.points <= 1_000_000
+        ):
+            raise CompileError(
+                "E122",
+                "La scena richiede turni crescenti, testi non vuoti e punti non negativi.",
+                scene_declaration.span,
+            )
+        scene_names.add(scene_name)
+        scene_records.append(
+            SceneIR(
+                f"autore.scena.{scene_index}",
+                scene_declaration.name,
+                scene_declaration.start_turn,
+                scene_declaration.end_turn,
+                scene_declaration.start_text,
+                scene_declaration.end_text,
+                scene_declaration.points,
+            )
         )
     symbols: dict[str, EntityIR] = {}
     for entity_declaration in program.declarations:
@@ -612,6 +652,7 @@ def analyze(
         actions=tuple(action_records),
         tables=tuple(table_catalog.values()),
         dialogues=tuple(dialogue_records),
+        scenes=tuple(scene_records),
     )
 
 

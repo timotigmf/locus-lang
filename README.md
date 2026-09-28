@@ -9,7 +9,8 @@ Versione `0.5.0a1`: **Studio web, mappa, test ed esportazione di storie per il b
 Proprietà scalari, elenchi e tabelle tipate definiti dall’autore, contenimento annidato,
 accessibilità verificata, tipi dell'autore con ereditarietà singola e azioni con
 due oggetti. Relazioni cardinali dinamiche, oggetti nascosti e dettagli di
-`scenario`, persone e dialoghi a scelte sono modellati nel mondo. Gli autori possono
+`scenario`, persone, dialoghi a scelte, scene temporali e punteggio registrato
+sono modellati nel mondo. Gli autori possono
 dichiarare nuovi comandi tipati nel sorgente.
 Nessuna dipendenza runtime esterna o servizio cloud.
 
@@ -83,6 +84,8 @@ Il ramo `main` viene mantenuto separato fino all'integrazione delle modifiche.
 
 Dopo l'avvio: `guarda`, `prendi la chiave`, `inventario`, `nord`, `sud`, `est`,
 `ovest`, `esci`. Le direzioni si abbreviano in `n`, `s`, `e`, `o`.
+Nelle storie con scene, `turno` o `tempo` mostra l'orologio narrativo e
+`punteggio` o `score` mostra i punti accumulati.
 `Inizia nella "Sala".` sceglie il punto iniziale; in assenza, vale la prima stanza. EOF termina la sessione;
 Ctrl-C la interrompe. Vedi il [manuale](docs/manuale/README.md) per un transcript.
 
@@ -106,7 +109,7 @@ diagnostica che conserva il file originale. Ramo GitHub: `codex/milestone-4`.
 
 ## Tutorial in italiano
 
-[Costruisci il faro di Selce](docs/tutorial/README.md): sedici lezioni, esercizi
+[Costruisci il faro di Selce](docs/tutorial/README.md): diciassette lezioni, esercizi
 con soluzioni, esempi eseguibili e copione verificato automaticamente.
 [Materiali consultati e scelte](docs/architettura/materiali-didattici.md).
 

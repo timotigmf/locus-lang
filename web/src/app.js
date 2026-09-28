@@ -505,7 +505,7 @@ async function compileProject(play = false) {
   compiledRevision = rev;
   showDiagnostics([]);
   $("compileStatus").textContent =
-    `${result.entities} entità · ${result.actions ?? 0} azioni autore · ${result.rules} regole · ${result.dialogues ?? 0} dialoghi · compilato`;
+    `${result.entities} entità · ${result.actions ?? 0} azioni autore · ${result.rules} regole · ${result.dialogues ?? 0} dialoghi · ${result.scenes ?? 0} scene · compilato`;
   if (result.title) {
     project.title = result.title;
     $("title").value = result.title;
@@ -610,6 +610,26 @@ function renderIndex(ir) {
     }
     content.push(dialogues);
   }
+  if ((ir.scenes ?? []).length) {
+    content.push(el("h3", {}, "Scene, tempo e punteggio"));
+    const scenes = el("table", { class: "data" });
+    const sceneHead = el("tr");
+    for (const label of ["Scena", "Inizio", "Fine", "Punti"])
+      sceneHead.append(el("th", {}, label));
+    scenes.append(sceneHead);
+    for (const scene of ir.scenes) {
+      const row = el("tr");
+      for (const value of [
+        scene.label,
+        `turno ${scene.start_turn}`,
+        `turno ${scene.end_turn}`,
+        String(scene.points),
+      ])
+        row.append(el("td", {}, value));
+      scenes.append(row);
+    }
+    content.push(scenes);
+  }
   if ((ir.actions ?? []).length) {
     content.push(el("h3", {}, "Azioni definite dall'autore"));
     const actions = el("table", { class: "data" });
@@ -635,9 +655,9 @@ function renderIndex(ir) {
   }
   $("index").replaceChildren(...content);
 }
-function showTrace(trace, dialogue = []) {
+function showTrace(trace, dialogue = [], scenes = []) {
   $("trace").replaceChildren();
-  if (!trace.length && !dialogue.length) {
+  if (!trace.length && !dialogue.length && !scenes.length) {
     $("trace").append(
       el(
         "p",
@@ -676,6 +696,15 @@ function showTrace(trace, dialogue = []) {
       ),
     );
   }
+  for (const item of scenes) {
+    $("trace").append(
+      el(
+        "p",
+        { class: "empty" },
+        `Scena «${item.scene_label}» · ${item.event} al turno ${item.turn}${item.score_delta ? ` · +${item.score_delta} punti` : ""}`,
+      ),
+    );
+  }
 }
 function appendOutput(result, command) {
   if (command)
@@ -684,7 +713,7 @@ function appendOutput(result, command) {
     );
   $("transcript").append(el("div", { class: "story-output" }, result.text));
   $("transcript").scrollTop = $("transcript").scrollHeight;
-  showTrace(result.trace, result.dialogue ?? []);
+  showTrace(result.trace, result.dialogue ?? [], result.scenes ?? []);
   showMap(result.map);
   if (compiled && result.properties) {
     compiled.ir.properties = result.properties;

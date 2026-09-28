@@ -109,11 +109,14 @@ def _noun(tokens: list[tuple[str, bool]]) -> str | None:
     return " ".join(token for token, _ in tokens) or None
 
 
-def standard_commands(*, include_dialogue: bool = False) -> frozenset[str]:
+def standard_commands(
+    *, include_dialogue: bool = False, include_scenes: bool = False
+) -> frozenset[str]:
     dialogue_commands = (
         ("parla", "p", "talk", "scegli", "basta", "fine dialogo") if include_dialogue else ()
     )
-    return frozenset((*_SIMPLE_COMMANDS, *_ACTION_COMMANDS, *dialogue_commands))
+    scene_commands = ("punteggio", "score", "turno", "tempo") if include_scenes else ()
+    return frozenset((*_SIMPLE_COMMANDS, *_ACTION_COMMANDS, *dialogue_commands, *scene_commands))
 
 
 def _author_match(
@@ -162,7 +165,11 @@ def _author_intent(action: ActionIR, tokens: list[tuple[str, bool]], command_len
 
 
 def parse_command(
-    text: str, actions: Sequence[ActionIR] = (), *, dialogue_enabled: bool = False
+    text: str,
+    actions: Sequence[ActionIR] = (),
+    *,
+    dialogue_enabled: bool = False,
+    scene_enabled: bool = False,
 ) -> Intent:
     tokens = _tokens(canonical(text).replace("’", "'"))
     if not tokens:
@@ -170,6 +177,11 @@ def parse_command(
     verb, quoted = tokens[0]
     if quoted:
         return Intent("unknown")
+    if scene_enabled and len(tokens) == 1:
+        if verb in {"punteggio", "score"}:
+            return Intent("score")
+        if verb in {"turno", "tempo"}:
+            return Intent("time")
     if dialogue_enabled:
         if len(tokens) == 1 and verb.isdecimal():
             return Intent("dialogue_choice", verb)

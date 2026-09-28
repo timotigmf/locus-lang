@@ -2,7 +2,7 @@
 
 ## Stato attuale
 
-Versione corrente `0.5.0a1`, IR versione 16. Le specifiche M2, M3 e M4
+Versione corrente `0.5.0a1`, IR versione 17. Le specifiche M2, M3 e M4
 estendono e, dove indicato, sostituiscono i limiti M1 sotto.
 La [specifica M2](docs/linguaggio/milestone-2.md) è normativa per proprietà,
 stringhe, nomi quotati, preposizioni, contenitori, porte e chiavi.
@@ -30,6 +30,8 @@ La specifica delle [tabelle tipate](docs/linguaggio/tabelle-tipate.md) definisce
 colonne nominate, righe eterogenee e mutazioni atomiche.
 La specifica di [persone e dialoghi](docs/linguaggio/dialoghi-strutturati.md)
 definisce grafi di conversazione, scelte e stato multi-turno.
+La specifica di [scene, tempo e punteggio](docs/linguaggio/scene-tempo-punteggio.md)
+definisce pianificazione a turni, ciclo di vita e registro dei premi.
 Le sezioni S0/S1 seguenti descrivono il nucleo storico, non l'intera versione.
 
 ## Dichiarazioni (S0, mantenute in 0.1.0a2)
@@ -147,6 +149,7 @@ E115–E117 segnalano tabelle duplicate, schemi o righe iniziali non validi;
 E314 segnala condizioni ed effetti di tabella incompatibili.
 E118–E120 segnalano dialoghi duplicati, grafi non validi o partecipanti
 incompatibili.
+E121–E122 segnalano scene duplicate oppure intervalli, testi e punti non validi.
 
 ## Estensione M3
 
@@ -164,7 +167,7 @@ da file e punto iniziale esplicito. IR corrente versione 5.
 sorgente. `Comprendi "alias" come "entità".` aggiunge un nome alternativo per i
 comandi del giocatore. Metadati duplicati producono `E408`; alias in conflitto
 producono `E409`. Questi campi sono stati introdotti con l'IR 6 e restano
-presenti nell'IR 16.
+presenti nell'IR 17.
 
 ## Tipi definiti dall'autore
 
@@ -173,7 +176,7 @@ avanti sono ammessi e ogni tipo ha al massimo un genitore. I sottotipi sono
 compatibili con proprietà, relazioni e capacità degli antenati. Ridefinizioni
 producono `E113`; cicli nella gerarchia producono `E114`. La specifica completa
 è in [tipi definiti dall'autore](docs/linguaggio/tipi-autore.md). La tabella dei
-tipi è stata introdotta nell'IR 7 e resta presente nell'IR 16.
+tipi è stata introdotta nell'IR 7 e resta presente nell'IR 17.
 
 ## Azioni e comandi definiti dall'autore
 
@@ -184,7 +187,7 @@ Nomi duplicati producono `E310`; comandi non validi o in conflitto producono
 `E311`. `e sinonimo "riverisci"` aggiunge una forma equivalente; più clausole
 `e separatore` definiscono le locuzioni fra gli oggetti di un'azione a due
 oggetti. Comandi e separatori possono contenere fino a quattro parole e non
-possono avere prefissi ambigui. L'IR corrente è la versione 16.
+possono avere prefissi ambigui. L'IR corrente è la versione 17.
 
 ## Relazioni dinamiche
 
@@ -194,7 +197,7 @@ risolve gli ID, controlla tipi e mutabilità e incorpora le inverse nello stesso
 effetto. Il runtime applica il cambiamento nella transazione della regola. Gli
 usi non validi producono `E312`; si veda la
 [specifica completa](docs/linguaggio/relazioni-dinamiche.md). Questa estensione
-introduce l'IR 12 ed è conservata nell'IR 16.
+introduce l'IR 12 ed è conservata nell'IR 17.
 
 ## Visibilità e scenario
 
@@ -232,3 +235,13 @@ e rifiuta nodi irraggiungibili. `parla con`, le scelte numeriche o testuali e
 visitati e ogni passo produce trace. `E118`–`E120` diagnosticano catalogo, grafo
 e partecipante. La [specifica completa](docs/linguaggio/dialoghi-strutturati.md)
 introduce l'IR 16.
+
+## Scene, tempo e punteggio
+
+`Scena "nome" dal turno 1 al turno 3: ... Fine scena.` pianifica un intervallo
+temporale con testi di inizio e fine e un premio facoltativo. La descrizione
+iniziale, gli errori di parsing e i metacomandi non consumano turni. `turno`
+mostra il tempo logico; `punteggio` mostra il totale. La sessione registra scene
+attive e concluse e la provenienza di ciascun premio. `E121`–`E122` diagnosticano
+nomi e contratti non validi. La
+[specifica completa](docs/linguaggio/scene-tempo-punteggio.md) introduce l'IR 17.

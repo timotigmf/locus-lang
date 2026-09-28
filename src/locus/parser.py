@@ -18,6 +18,7 @@ from locus.ast import (
     PropertyDeclaration,
     Relation,
     Rule,
+    SceneDeclaration,
     TableColumnDeclaration,
     TableDeclaration,
     TableRowDeclaration,
@@ -151,6 +152,7 @@ class _Parser:
         actions: list[ActionDeclaration] = []
         tables: list[TableDeclaration] = []
         dialogues: list[DialogueDeclaration] = []
+        scenes: list[SceneDeclaration] = []
         relations: list[Relation] = []
         properties: list[PropertyDeclaration] = []
         assignments: list[Assignment] = []
@@ -160,6 +162,76 @@ class _Parser:
         metadata: list[Metadata] = []
         vocabulary: list[Vocabulary] = []
         while self.current.kind != "EOF":
+            if self.current.normalized == "scena":
+                start = self.current.span
+                self.keyword("scena")
+                name = RuleParser(self).quoted()
+                self.keyword("dal")
+                self.keyword("turno")
+                start_turn = self.value()
+                self.keyword("al")
+                self.keyword("turno")
+                end_turn = self.value()
+                if type(start_turn) is not int or type(end_turn) is not int:
+                    self.fail("un numero di turno intero")
+                start_turn_number = cast(int, start_turn)
+                end_turn_number = cast(int, end_turn)
+                if self.current.kind != "COLON":
+                    self.fail("':'")
+                self.index += 1
+                start_text = None
+                end_text = None
+                points = 0
+                seen: set[str] = set()
+                while not (
+                    self.current.normalized == "fine"
+                    and self.tokens[self.index + 1].normalized == "scena"
+                ):
+                    item = self.current.normalized
+                    if item not in {"inizio", "fine", "punti"}:
+                        self.fail("'Inizio', 'Fine', 'Punti' o 'Fine scena'")
+                    if item in seen:
+                        raise CompileError(
+                            "E122",
+                            f"Voce ripetuta nella scena: {self.current.text}.",
+                            self.current.span,
+                        )
+                    seen.add(item)
+                    item_start = self.current.span
+                    self.keyword(item)
+                    if item == "punti":
+                        points_value = self.value()
+                        if type(points_value) is not int:
+                            self.fail("un numero intero di punti")
+                        points = cast(int, points_value)
+                    else:
+                        text = RuleParser(self).quoted(name=False)
+                        if item == "inizio":
+                            start_text = text
+                        else:
+                            end_text = text
+                    self.finish(item_start)
+                self.keyword("fine")
+                self.keyword("scena")
+                span = self.finish(start)
+                if start_text is None or end_text is None:
+                    raise CompileError(
+                        "E122",
+                        "Una scena richiede i testi Inizio e Fine.",
+                        span,
+                    )
+                scenes.append(
+                    SceneDeclaration(
+                        name,
+                        start_turn_number,
+                        end_turn_number,
+                        start_text,
+                        end_text,
+                        points,
+                        span,
+                    )
+                )
+                continue
             if self.current.normalized == "dialogo":
                 start = self.current.span
                 self.keyword("dialogo")
@@ -436,6 +508,7 @@ class _Parser:
             actions=tuple(actions),
             tables=tuple(tables),
             dialogues=tuple(dialogues),
+            scenes=tuple(scenes),
         )
 
 

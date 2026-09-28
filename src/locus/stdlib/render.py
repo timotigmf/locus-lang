@@ -23,6 +23,10 @@ def render(transition: Transition) -> str:
         return f"{names[0]}{detail}\nVedi: {objects}."
     if kind == "inventory":
         return "Inventario: " + (", ".join(names) if names else "vuoto") + "."
+    if kind == "score":
+        return f"Punteggio: {transition.session.score}."
+    if kind == "time":
+        return f"Turno: {transition.session.turn}."
     if kind == "taken":
         return f"Hai preso: {names[0]}."
     if kind == "put":
@@ -73,6 +77,8 @@ def render(transition: Transition) -> str:
     )
     if world.dialogues:
         unknown += " Per conversare usa parla con NOME."
+    if world.scenes:
+        unknown += " Usa turno per il tempo e punteggio per i punti."
     messages = {
         "rule": "Azione gestita dalle regole.",
         "already_carried": "Hai già questo oggetto.",

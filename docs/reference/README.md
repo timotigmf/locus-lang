@@ -9,7 +9,7 @@
 | --- | --- |
 | controlla | valida entità e relazioni; stampa numero di entità |
 | ast | JSON AST senza validazione semantica |
-| ir / compila | JSON IR versione 16, dopo validazione |
+| ir / compila | JSON IR versione 17, dopo validazione |
 | gioca | compila e avvia la sessione IF dalla prima stanza dichiarata |
 
 `gioca`: guarda, esamina, prendi, lascia, metti, apri, chiudi, blocca,
@@ -19,6 +19,8 @@ open, close, drop, put, lock.
 Quando la storia contiene dialoghi sono disponibili anche `parla con persona`,
 `p persona`, `talk to persona`, il numero della scelta, `scegli testo`, `basta`
 e `fine dialogo`.
+Quando la storia contiene scene sono disponibili `turno`/`tempo` e
+`punteggio`/`score`; questi metacomandi non fanno avanzare il clock logico.
 I nomi parziali sono accettati soltanto quando identificano un solo oggetto
 raggiungibile; altrimenti l'evento è `ambiguous` e contiene tutte le alternative.
 EOF termina senza errore, Ctrl-C termina con codice 130. Prompt soltanto su TTY,
@@ -36,10 +38,10 @@ Diagnosi su stderr; nessuna scrittura implicita. Dump non caricabili come giochi
   contratto funzionale e irriflessivo di una relazione; tipi/ID già risolti.
 - `stdlib.default_kinds()` / `stdlib.default_kind_parents()` / `stdlib.default_relations()` / `stdlib.default_properties()`: cataloghi nuovi e sostituibili.
 - `runtime.instantiate(program)`: World immutabile con entità e relazioni.
-- `player.parse_command(text, actions=(), dialogue_enabled=False)`: Intent(verb, noun=None, indirect=None); riceve le azioni compilate del mondo, abilita esplicitamente i comandi di conversazione e usa `unknown` per un comando sconosciuto.
+- `player.parse_command(text, actions=(), dialogue_enabled=False, scene_enabled=False)`: Intent(verb, noun=None, indirect=None); riceve le azioni compilate del mondo, abilita esplicitamente conversazioni e metacomandi temporali e usa `unknown` per un comando sconosciuto.
 - `stdlib.game.start(world)`: Session; ValueError se mancano stanze.
 - `stdlib.game.visible(session)`: ID delle entità percepibili nella stanza e non possedute; considera `visibile`, contenimento e stato dei contenitori.
-- `stdlib.game.step(session, intent)`: Transition(session, event), senza I/O.
+- `stdlib.game.step(session, intent, advance_time=True)`: Transition(session, event), senza I/O; l'avvio passa `False` per non consumare un turno con la descrizione iniziale.
 - `stdlib.render.render(transition)`: testo italiano di un evento.
 - `diagnostics.CompileError`: code, message, span; `canonical(text)`: NFC/casefold/spazi.
 
@@ -55,6 +57,11 @@ stdlib passa `mondo.persona` fra `dialogue_actor_types`; il core non assume il
 significato narrativo di alcun tipo. `Session` conserva dialogo e nodo attivi e
 l'insieme ordinato dei nodi visitati. `Transition.dialogue` espone il trace delle
 battute e delle scelte senza ricostruire testo sorgente.
+
+`ProgramIR.scenes` e `World.scenes` contengono `SceneIR` con intervallo, testi e
+punti. `Session` conserva turno, scene attive/concluse, totale e `ScoreEntry`;
+`Transition.scenes` espone `SceneStep` per inizio, fine e variazione del
+punteggio. La conclusione di una scena registra il premio una sola volta.
 
 Cataloghi con nomi non canonici, ID vuoti/duplicati, tipi sconosciuti o inversi
 incompatibili sollevano ValueError. `relations=None` supporta dichiarazioni senza

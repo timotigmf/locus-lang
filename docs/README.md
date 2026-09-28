@@ -28,6 +28,7 @@
 - [Elenchi tipati](linguaggio/liste-tipate.md): raccolte omogenee, appartenenza e rollback.
 - [Tabelle tipate](linguaggio/tabelle-tipate.md): colonne nominate e righe transazionali.
 - [Persone e dialoghi](linguaggio/dialoghi-strutturati.md): conversazioni a nodi e scelte multi-turno.
+- [Scene, tempo e punteggio](linguaggio/scene-tempo-punteggio.md): intervalli a turni e premi registrati.
 
 - [Tutorial: il faro](tutorial/README.md), incluse le lezioni su tipi e azioni; [da Inform a LOCUS](tutorial/da-inform-a-locus.md).
 - [Registro dei sei manuali forniti](architettura/materiali-didattici.md).

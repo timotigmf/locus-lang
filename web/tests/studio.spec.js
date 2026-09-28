@@ -464,3 +464,55 @@ Fine dialogo.`;
     "scelta «Chiedi della torre» · concluso",
   );
 });
+
+test("scena temporale e punteggio nello Studio", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.locator("#compileStatus")).toContainText("compilato", {
+    timeout: 90000,
+  });
+  const source = `Titolo: "Il temporale".
+La Torre è una stanza.
+L'orologio è uno scenario nella Torre.
+Scena "temporale" dal turno 1 al turno 2:
+    Inizio "Il temporale comincia.".
+    Fine "Il temporale finisce.".
+    Punti 5.
+Fine scena.`;
+  await page.locator(".cm-content").click();
+  await page.keyboard.press("ControlOrMeta+A");
+  await page.keyboard.insertText(source);
+  await page
+    .getByRole("button", { name: "▶ Compila e prova", exact: true })
+    .click();
+  await expect(page.locator("#compileStatus")).toContainText("1 scene", {
+    timeout: 90000,
+  });
+  await page
+    .getByRole("button", { name: "Indice del mondo", exact: true })
+    .click();
+  await expect(page.locator("#index")).toContainText(
+    "Scene, tempo e punteggio",
+  );
+  await expect(page.locator("#index")).toContainText("temporale");
+  await expect(page.locator("#index")).toContainText("turno 2");
+  await page.getByRole("button", { name: "Storia", exact: true }).click();
+  await page.locator("#command").fill("guarda");
+  await page.locator("#send").click();
+  await expect(page.locator("#transcript")).toContainText(
+    "Il temporale comincia.",
+  );
+  await expect(page.locator("#trace")).toContainText(
+    "Scena «temporale» · iniziata al turno 1",
+  );
+  await page.locator("#command").fill("esamina orologio");
+  await page.locator("#send").click();
+  await expect(page.locator("#transcript")).toContainText(
+    "Il temporale finisce.",
+  );
+  await expect(page.locator("#trace")).toContainText("+5 punti");
+  await page.locator("#command").fill("punteggio");
+  await page.locator("#send").click();
+  await expect(page.locator(".story-output").last()).toHaveText(
+    "Punteggio: 5.",
+  );
+});

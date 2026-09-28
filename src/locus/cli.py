@@ -47,7 +47,7 @@ def main(argv: list[str] | None = None) -> int:
             program = compile_story_file(args.file)
             if args.command in {"gioca", "debug"}:
                 session = start(instantiate(program))
-                initial = step(session, Intent("look"))
+                initial = step(session, Intent("look"), advance_time=False)
                 session = initial.session
                 _show(initial, args.command == "debug")
                 while True:
@@ -61,6 +61,7 @@ def main(argv: list[str] | None = None) -> int:
                             command,
                             session.world.actions,
                             dialogue_enabled=bool(session.world.dialogues),
+                            scene_enabled=bool(session.world.scenes),
                         ),
                     )
                     session = transition.session
@@ -103,5 +104,12 @@ def _show(transition: Transition, debug: bool) -> None:
             print(
                 f"[dialogo] {dialogue_step.dialogue_label}: "
                 f"nodo {dialogue_step.node_label}{choice}",
+                file=sys.stderr,
+            )
+        for scene_step in transition.scenes:
+            points = f"; {scene_step.score_delta} punti" if scene_step.score_delta else ""
+            print(
+                f"[scena] {scene_step.scene_label}: {scene_step.event} "
+                f"al turno {scene_step.turn}{points}",
                 file=sys.stderr,
             )

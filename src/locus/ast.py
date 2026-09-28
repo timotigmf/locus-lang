@@ -100,6 +100,17 @@ class DialogueDeclaration:
 
 
 @dataclass(frozen=True, slots=True)
+class SceneDeclaration:
+    name: str
+    start_turn: int
+    end_turn: int
+    start_text: str
+    end_text: str
+    points: int
+    span: Span
+
+
+@dataclass(frozen=True, slots=True)
 class PropertyReference:
     entity_name: str
     property_name: str
@@ -189,3 +200,4 @@ class Program:
     actions: tuple[ActionDeclaration, ...] = ()
     tables: tuple[TableDeclaration, ...] = ()
     dialogues: tuple[DialogueDeclaration, ...] = ()
+    scenes: tuple[SceneDeclaration, ...] = ()

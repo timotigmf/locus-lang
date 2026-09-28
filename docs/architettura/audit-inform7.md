@@ -158,11 +158,12 @@ una verifica non dovrà modificare nessuno dei due inventari.
 
 ### Punti, tempo, scene ed enigmi
 
-Il punteggio esistente come proprietà numerica può evolvere in un servizio della
-stdlib con massimo, motivazioni e registro degli eventi. Scene e tempo dovranno
-essere macchine a stati con condizioni di inizio/fine e trace. Gli enigmi non
-richiedono una categoria speciale: emergono da azioni, relazioni, condizioni,
-stato e regole verificabili.
+LOCUS IR 17 introduce un clock logico, scene con intervalli assoluti e un
+registro che attribuisce ogni premio alla scena e al turno. Inizio, fine e punti
+compaiono nel trace. Restano da aggiungere condizioni ed effetti delle scene,
+ricorrenza e un massimo del punteggio dichiarato. Gli enigmi non richiedono una
+categoria speciale: emergono da azioni, relazioni, condizioni, stato e regole
+verificabili.
 
 ## Azioni e regole
 
@@ -223,7 +224,7 @@ imitare. La misura utile è coprire ogni contratto pubblico e ogni regressione.
 | 3 | relazioni dinamiche, visibilità e scenario implementati fino all'IR 13 | passaggio segreto reale, oggetto nascosto e mappa coerente con lo stato |
 | 4 | elenchi e tabelle tipate con effetti implementati nell'IR 15 | indizi, cronologie e registri modificati transazionalmente |
 | 5 | persone e dialoghi strutturati implementati nell'IR 16 | conversazione ramificata con trace e test dei nodi |
-| 6 | scene, tempo e punteggio | eventi temporali e premi registrati e riproducibili |
+| 6 | scene, tempo e punteggio implementati nell'IR 17 | eventi temporali e premi registrati e riproducibili |
 | 7 | veicoli | movimento atomico di conducente, passeggeri e veicolo |
 | 8 | valuta e commercio | acquisto/vendita atomici con unità e fondi verificati |
 | 9 | risorse multimediali | manifest validato ed export web autosufficiente |

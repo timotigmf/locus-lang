@@ -69,6 +69,8 @@ EventKind = Literal[
     "dialogue_active",
     "dialogue_end",
     "no_active_dialogue",
+    "score",
+    "time",
 ]
 
 
@@ -80,6 +82,11 @@ class Session:
     dialogue_id: str | None = None
     dialogue_node_id: str | None = None
     visited_dialogue_nodes: tuple[str, ...] = ()
+    turn: int = 0
+    score: int = 0
+    active_scene_ids: tuple[str, ...] = ()
+    completed_scene_ids: tuple[str, ...] = ()
+    score_log: tuple["ScoreEntry", ...] = ()
 
 
 @dataclass(frozen=True, slots=True)
@@ -101,6 +108,23 @@ class DialogueStep:
 
 
 @dataclass(frozen=True, slots=True)
+class ScoreEntry:
+    scene_id: str
+    scene_label: str
+    points: int
+    turn: int
+
+
+@dataclass(frozen=True, slots=True)
+class SceneStep:
+    scene_id: str
+    scene_label: str
+    event: Literal["iniziata", "terminata"]
+    turn: int
+    score_delta: int = 0
+
+
+@dataclass(frozen=True, slots=True)
 class Transition:
     session: Session
     event: Event
@@ -108,6 +132,7 @@ class Transition:
     trace: tuple[Trace, ...] = ()
     result: Value | None = None
     dialogue: tuple[DialogueStep, ...] = ()
+    scenes: tuple[SceneStep, ...] = ()
 
 
 def start(world: World) -> Session:
@@ -445,6 +470,10 @@ def _choose_dialogue(session: Session, selection: str) -> Transition:
 
 
 def _perform(session: Session, intent: Intent) -> Transition:
+    if intent.verb == "score":
+        return Transition(session, Event("score"))
+    if intent.verb == "time":
+        return Transition(session, Event("time"))
     if intent.verb == "look":
         return Transition(session, Event("look", (session.room_id, *visible(session))))
     if intent.verb == "inventory":
@@ -683,7 +712,7 @@ class _RuleHost:
         return ActionResult(transition.session, success, (transition.event,))
 
 
-def step(session: Session, intent: Intent) -> Transition:
+def _step(session: Session, intent: Intent) -> Transition:
     if intent.verb in {"dialogue_choice", "end_dialogue", "talk"}:
         if session.dialogue_id is not None and intent.verb == "talk":
             dialogue = next(
@@ -728,3 +757,71 @@ def step(session: Session, intent: Intent) -> Transition:
         outputs = (*outputs, "vero" if value is True else "falso" if value is False else str(value))
     event = next((item for item in reversed(outputs) if isinstance(item, Event)), Event("rule"))
     return Transition(execution.state, event, outputs, execution.trace, execution.value)
+
+
+_TURNLESS_EVENTS = {
+    "unknown",
+    "missing_noun",
+    "ambiguous",
+    "quit",
+    "score",
+    "time",
+    "invalid_choice",
+    "dialogue_active",
+    "no_active_dialogue",
+}
+
+
+def _advance_scenes(transition: Transition) -> Transition:
+    session = transition.session
+    turn = session.turn + 1
+    active = list(session.active_scene_ids)
+    completed = list(session.completed_scene_ids)
+    score = session.score
+    score_log = list(session.score_log)
+    scene_steps: list[SceneStep] = []
+    texts: list[str] = []
+
+    for scene in session.world.scenes:
+        if scene.start_turn == turn and scene.id not in active and scene.id not in completed:
+            active.append(scene.id)
+            texts.append(scene.start_text)
+            scene_steps.append(SceneStep(scene.id, scene.label, "iniziata", turn))
+    for scene in session.world.scenes:
+        if scene.end_turn == turn and scene.id in active:
+            active.remove(scene.id)
+            completed.append(scene.id)
+            texts.append(scene.end_text)
+            score += scene.points
+            if scene.points:
+                score_log.append(ScoreEntry(scene.id, scene.label, scene.points, turn))
+            scene_steps.append(SceneStep(scene.id, scene.label, "terminata", turn, scene.points))
+
+    updated = replace(
+        session,
+        turn=turn,
+        score=score,
+        active_scene_ids=tuple(active),
+        completed_scene_ids=tuple(completed),
+        score_log=tuple(score_log),
+    )
+    if not texts:
+        return replace(transition, session=updated)
+    outputs = transition.outputs or (transition.event,)
+    return replace(
+        transition,
+        session=updated,
+        outputs=(*outputs, *texts),
+        scenes=tuple(scene_steps),
+    )
+
+
+def step(session: Session, intent: Intent, *, advance_time: bool = True) -> Transition:
+    transition = _step(session, intent)
+    if (
+        not advance_time
+        or not transition.session.world.scenes
+        or transition.event.kind in _TURNLESS_EVENTS
+    ):
+        return transition
+    return _advance_scenes(transition)

@@ -56,7 +56,7 @@ la chiave inaccessibile. Vedi [sintassi e limiti M2](../linguaggio/milestone-2.m
 
 ## Percorso guidato
 
-Per iniziare da zero, segui le [sedici lezioni del faro](../tutorial/README.md),
+Per iniziare da zero, segui le [diciassette lezioni del faro](../tutorial/README.md),
 con prove di gioco e soluzioni.
 La [quinta lezione](../tutorial/05-comandi-e-nomi.md) presenta le abbreviazioni
 classiche delle avventure testuali e spiega quando un nome parziale è sufficiente.
@@ -80,3 +80,5 @@ La [quattordicesima lezione](../tutorial/14-elenchi-indizi.md) usa un elenco
 tipato come taccuino; la [quindicesima](../tutorial/15-tabelle-reperti.md) crea
 un registro a colonne. La [sedicesima](../tutorial/16-dialogo-guardiana.md)
 introduce persone e conversazioni ramificate con scelte numerate.
+La [diciassettesima](../tutorial/17-tempesta-e-punteggio.md) pianifica una
+tempesta a turni e registra il premio della sua conclusione.

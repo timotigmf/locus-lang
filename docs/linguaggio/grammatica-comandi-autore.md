@@ -1,6 +1,6 @@
 # Sinonimi e separatori delle azioni
 
-Stato: implementato in LOCUS 0.5.0a1, introdotto in IR 9, esteso fino a IR 11 e conservato in IR 16.
+Stato: implementato in LOCUS 0.5.0a1, introdotto in IR 9, esteso fino a IR 11 e conservato in IR 17.
 
 Questa specifica estende le [azioni definite dall'autore](azioni-autore.md) con
 forme di comando equivalenti e separatori alternativi dichiarati esplicitamente.
