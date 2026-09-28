@@ -56,3 +56,6 @@ riconoscere che è già stata pagata.
 
 La [specifica di denaro e acquisti](../linguaggio/denaro-e-acquisti.md) descrive
 invarianti, alias, regole e limiti del primo incremento commerciale.
+
+La [lezione 20](20-la-bottegaia-del-faro.md) assegna le merci a una bottegaia e
+aggiunge cassa, scorte e rivendita.

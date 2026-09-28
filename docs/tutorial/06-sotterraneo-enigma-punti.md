@@ -66,6 +66,6 @@ comparire dopo una ricerca usa le relazioni dinamiche della
 [lezione 12](12-passaggi-segreti.md): testo, navigazione e mappa restano coerenti.
 
 Le lezioni successive introducono dialoghi ramificati, veicoli e acquisti con
-denaro spendibile. Vendita e mercanti con inventario restano pianificati. La
+denaro spendibile. La lezione 20 aggiunge vendita e mercanti con scorte. La
 [guida dell'autore](../manuale/guida-autore.md) distingue ciò che è eseguibile
 oggi dalle estensioni future.

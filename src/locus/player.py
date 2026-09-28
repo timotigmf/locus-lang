@@ -124,7 +124,19 @@ def standard_commands(
         ("sali", "entra", "scendi", "board", "enter", "exit") if include_vehicles else ()
     )
     commerce_commands = (
-        ("compra", "acquista", "buy", "purchase", "denaro", "saldo", "money", "balance")
+        (
+            "compra",
+            "acquista",
+            "buy",
+            "purchase",
+            "vendi",
+            "vendere",
+            "sell",
+            "denaro",
+            "saldo",
+            "money",
+            "balance",
+        )
         if include_commerce
         else ()
     )
@@ -212,9 +224,37 @@ def _commerce_intent(tokens: list[tuple[str, bool]]) -> Intent | None:
     if verb in {"denaro", "saldo", "money", "balance"}:
         return Intent("money") if len(tokens) == 1 else Intent("unknown")
     if verb in {"compra", "acquista", "buy", "purchase"}:
-        noun = _noun(tokens[1:])
-        return Intent("buy", noun) if noun else Intent("missing_noun")
+        return _commerce_transfer_intent(
+            "buy",
+            tokens[1:],
+            frozenset({"da", "dal", "dalla", "dallo", "dai", "dagli", "dalle", "dall'", "from"}),
+        )
+    if verb in {"vendi", "vendere", "sell"}:
+        return _commerce_transfer_intent(
+            "sell",
+            tokens[1:],
+            frozenset({"a", "ad", "al", "alla", "allo", "ai", "agli", "alle", "all'", "to"}),
+        )
     return None
+
+
+def _commerce_transfer_intent(
+    action: str,
+    tokens: list[tuple[str, bool]],
+    separators: frozenset[str],
+) -> Intent:
+    splits = [
+        index for index, (word, quoted) in enumerate(tokens) if not quoted and word in separators
+    ]
+    if len(splits) > 1:
+        return Intent("unknown")
+    if not splits:
+        noun = _noun(tokens)
+        return Intent(action, noun) if noun else Intent("missing_noun")
+    index = splits[0]
+    noun = _noun(tokens[:index])
+    merchant = _noun(tokens[index + 1 :])
+    return Intent(action, noun, merchant) if noun and merchant else Intent("unknown")
 
 
 def _author_match(

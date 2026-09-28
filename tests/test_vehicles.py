@@ -44,7 +44,7 @@ def test_vehicle_type_is_preserved_in_ir19() -> None:
     program = compile_story(SOURCE)
     world = instantiate(program)
     vehicle = next(entity for entity in world.entities if entity.label == "saetta rossa")
-    assert IR_VERSION == 19
+    assert IR_VERSION == 20
     assert has_type(world, vehicle.type_id, VEHICLE)
     assert any(item.id == VEHICLE and item.parent_id is None for item in program.types)
 

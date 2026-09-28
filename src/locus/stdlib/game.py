@@ -18,11 +18,15 @@ from locus.stdlib import (
     EAST,
     INSIDE,
     MERCHANDISE,
+    MERCHANT,
+    MERCHANT_CASH,
     NORTH,
+    OFFERS,
     OPENABLE,
     PERSON,
     PORTABLE,
     PRICE,
+    RESALE_PRICE,
     ROOM,
     SIDE_A,
     SIDE_B,
@@ -95,6 +99,13 @@ EventKind = Literal[
     "insufficient_funds",
     "must_buy",
     "already_owned",
+    "sold",
+    "not_sellable",
+    "no_merchant",
+    "not_merchant",
+    "wrong_merchant",
+    "merchant_refuses",
+    "merchant_no_funds",
 ]
 
 
@@ -407,7 +418,57 @@ def _currency(session: Session) -> Entity | None:
     )
 
 
-def _purchase(session: Session, name: str | None) -> Transition:
+def _merchant_for_item(session: Session, item_id: str) -> Entity | None:
+    merchant_id = next(
+        (
+            edge.target_id
+            for edge in session.world.relations
+            if edge.source_id == item_id and edge.predicate_id == OFFERS
+        ),
+        None,
+    )
+    return (
+        next(entity for entity in session.world.entities if entity.id == merchant_id)
+        if merchant_id is not None
+        else None
+    )
+
+
+def _without_offer(session: Session, item_id: str) -> Session:
+    relations = tuple(
+        edge
+        for edge in session.world.relations
+        if not (edge.source_id == item_id and edge.predicate_id == OFFERS)
+    )
+    return replace(session, world=replace(session.world, relations=relations))
+
+
+def _with_offer(session: Session, item_id: str, merchant_id: str) -> Session:
+    relations = (*session.world.relations, RelationIR(item_id, OFFERS, merchant_id))
+    return replace(session, world=replace(session.world, relations=relations))
+
+
+def _resolve_merchant(session: Session, name: str | None) -> Entity | Event:
+    if name is not None:
+        merchant = _resolve(session, name)
+        if isinstance(merchant, Event):
+            return merchant
+        if not has_type(session.world, merchant.type_id, MERCHANT):
+            return Event("not_merchant", (merchant.id,))
+        return merchant
+    merchants = tuple(
+        entity
+        for entity in session.world.entities
+        if has_type(session.world, entity.type_id, MERCHANT) and reachable(session, entity.id)
+    )
+    if not merchants:
+        return Event("no_merchant")
+    if len(merchants) > 1:
+        return Event("ambiguous", tuple(entity.id for entity in merchants))
+    return merchants[0]
+
+
+def _purchase(session: Session, name: str | None, merchant_name: str | None = None) -> Transition:
     if name is None:
         return Transition(session, Event("missing_noun"))
     entity = _resolve(session, name)
@@ -419,6 +480,21 @@ def _purchase(session: Session, name: str | None) -> Transition:
         return Transition(session, Event("already_carried", (entity.id,)))
     if entity.id in session.owned_ids:
         return Transition(session, Event("already_owned", (entity.id,)))
+    merchants_exist = any(
+        has_type(session.world, candidate.type_id, MERCHANT) for candidate in session.world.entities
+    )
+    merchant = _merchant_for_item(session, entity.id)
+    if merchants_exist:
+        if merchant is None:
+            return Transition(session, Event("not_for_sale", (entity.id,)))
+        if not reachable(session, merchant.id):
+            return Transition(session, Event("no_merchant"))
+        if merchant_name is not None:
+            selected = _resolve_merchant(session, merchant_name)
+            if isinstance(selected, Event):
+                return Transition(session, selected)
+            if selected.id != merchant.id:
+                return Transition(session, Event("wrong_merchant", (selected.id, entity.id)))
     currency = _currency(session)
     if currency is None:
         return Transition(session, Event("no_currency"))
@@ -427,10 +503,50 @@ def _purchase(session: Session, name: str | None) -> Transition:
     if balance < price:
         return Transition(session, Event("insufficient_funds", (entity.id, currency.id)))
     moved = _move(session, entity.id, None)
+    if merchant is not None:
+        moved = _without_offer(moved, entity.id)
+        cash = integer_property_value(moved.world, merchant.id, MERCHANT_CASH, code="E125")
+        moved = _set_property(moved, merchant.id, MERCHANT_CASH, cash + price)
     owned = (*session.owned_ids, entity.id)
     changed = replace(moved, owned_ids=owned)
     changed = _set_property(changed, currency.id, BALANCE, balance - price)
-    return _changed(changed, "purchased", entity.id, currency.id)
+    entities = (
+        (entity.id, currency.id, merchant.id) if merchant is not None else (entity.id, currency.id)
+    )
+    return _changed(changed, "purchased", *entities)
+
+
+def _sell(session: Session, name: str | None, merchant_name: str | None = None) -> Transition:
+    if name is None:
+        return Transition(session, Event("missing_noun"))
+    entity = _resolve(session, name)
+    if isinstance(entity, Event):
+        return Transition(session, entity)
+    if not has_type(session.world, entity.type_id, MERCHANDISE):
+        return Transition(session, Event("not_sellable", (entity.id,)))
+    if not carried(session, entity.id) or entity.id not in session.owned_ids:
+        return Transition(session, Event("not_carried", (entity.id,)))
+    merchant = _resolve_merchant(session, merchant_name)
+    if isinstance(merchant, Event):
+        return Transition(session, merchant)
+    resale = integer_property_value(session.world, entity.id, RESALE_PRICE, code="E125")
+    if resale <= 0:
+        return Transition(session, Event("merchant_refuses", (merchant.id, entity.id)))
+    cash = integer_property_value(session.world, merchant.id, MERCHANT_CASH, code="E125")
+    if cash < resale:
+        return Transition(session, Event("merchant_no_funds", (merchant.id, entity.id)))
+    currency = _currency(session)
+    if currency is None:
+        return Transition(session, Event("no_currency"))
+    balance = integer_property_value(session.world, currency.id, BALANCE)
+    moved = _move(session, entity.id, session.room_id)
+    moved = _with_offer(moved, entity.id, merchant.id)
+    moved = replace(
+        moved, owned_ids=tuple(ident for ident in moved.owned_ids if ident != entity.id)
+    )
+    moved = _set_property(moved, merchant.id, MERCHANT_CASH, cash - resale)
+    moved = _set_property(moved, currency.id, BALANCE, balance + resale)
+    return _changed(moved, "sold", entity.id, currency.id, merchant.id)
 
 
 def _authored_action(session: Session, action_id: str) -> ActionIR | None:
@@ -596,7 +712,9 @@ def _perform(session: Session, intent: Intent) -> Transition:
             Event("money", (currency.id,)) if currency is not None else Event("no_currency"),
         )
     if intent.verb == "buy":
-        return _purchase(session, intent.noun)
+        return _purchase(session, intent.noun, intent.indirect)
+    if intent.verb == "sell":
+        return _sell(session, intent.noun, intent.indirect)
     if intent.verb == "board":
         return _board(session, intent.noun)
     if intent.verb == "exit_vehicle":
@@ -860,6 +978,7 @@ class _RuleHost:
             "boarded",
             "disembarked",
             "purchased",
+            "sold",
         }
         return ActionResult(transition.session, success, (transition.event,))
 

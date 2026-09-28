@@ -616,3 +616,45 @@ La corda ha prezzo 9.`;
   await expect(commerce).toContainText("corda");
   await expect(commerce).toContainText("Bottega");
 });
+
+test("mercante, scorta e rivendita atomica", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.locator("#compileStatus")).toContainText("compilato", {
+    timeout: 90000,
+  });
+  const source = `Titolo: "La bottega".
+La Bottega è una stanza.
+Il credito portuale è una valuta.
+Il credito portuale ha saldo 20.
+La Ada è una mercante nella Bottega.
+La Ada ha cassa 25.
+La bussola è un prodotto nella Bottega.
+La bussola ha prezzo 7.
+La bussola ha prezzo di rivendita 3.
+La Ada vende la bussola.`;
+  await page.locator(".cm-content").click();
+  await page.keyboard.press("ControlOrMeta+A");
+  await page.keyboard.insertText(source);
+  await page
+    .getByRole("button", { name: "▶ Compila e prova", exact: true })
+    .click();
+  await expect(page.locator("#compileStatus")).toContainText("1 mercanti", {
+    timeout: 90000,
+  });
+  await page.locator("#command").fill("compra bussola da Ada");
+  await page.locator("#send").click();
+  await expect(page.locator("#transcript")).toContainText("Saldo: 13");
+  await page.locator("#command").fill("vendi bussola a Ada");
+  await page.locator("#send").click();
+  await expect(page.locator("#transcript")).toContainText("Saldo: 16");
+  await page
+    .getByRole("button", { name: "Indice del mondo", exact: true })
+    .click();
+  const commerce = page
+    .getByRole("heading", { name: "Commercio", exact: true })
+    .locator("xpath=following-sibling::table[1]");
+  await expect(commerce).toContainText("Ada");
+  await expect(commerce).toContainText("cassa 29");
+  await expect(commerce).toContainText("rivendita 3");
+  await expect(commerce).toContainText("Bottega");
+});

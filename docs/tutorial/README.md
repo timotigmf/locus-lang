@@ -33,6 +33,7 @@ al prompt della storia: lì si scrivono soltanto i comandi del giocatore.
 | [17. Tre rintocchi nella tempesta](17-tempesta-e-punteggio.md) | `examples/tutorial/17_tempesta_e_punteggio.locus` | Pianificare scene a turni e registrare un premio |
 | [18. Attraversare la città in bicicletta](18-bicicletta-in-movimento.md) | `examples/tutorial/18_bicicletta_in_movimento.locus` | Dichiarare un veicolo e spostarlo con il conducente |
 | [19. Comprare provviste al mercato](19-il-mercato-del-faro.md) | `examples/tutorial/19_mercato_del_faro.locus` | Usare valuta, prezzi e acquisti atomici |
+| [20. La bottegaia, la scorta e la rivendita](20-la-bottegaia-del-faro.md) | `examples/tutorial/20_bottegaia_e_rivendita.locus` | Modellare mercanti, incassi, scorte e vendita |
 
 Prima prova la versione fornita. Poi modifica un solo elemento e riesegui la
 sequenza di comandi. In caso di errore conserva il messaggio, il file sorgente e

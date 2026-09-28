@@ -64,7 +64,10 @@ Ogni pacchetto conserva il core indipendente dalla narrativa interattiva.
 7. Veicoli, salita/discesa e movimento atomico del conducente implementati
    nell'IR 18; passeggeri, carico e percorsi tipati restano estensioni successive.
 8. Valuta tipata, saldo, merci, prezzi e acquisto atomico implementati nell'IR 19;
-   vendita, mercanti, scorte e più valute restano estensioni successive.
+   più valute restano un'estensione successiva.
+9. Mercanti, scorte, cassa e rivendita atomica implementati nell'IR 20;
+   quantità, cataloghi generativi, contrattazione e mercanti itineranti restano
+   estensioni successive.
 
 Multimedia e indici completi
 seguono in pacchetti separati. Non si importeranno codice o testi Inform.

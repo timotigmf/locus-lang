@@ -1,7 +1,18 @@
 """Presentazione italiana degli eventi narrativi, separata dalle transizioni."""
 
 from locus.runtime import has_type
-from locus.stdlib import BALANCE, CONTAINER, CURRENCY, DESCRIPTION, OPENABLE, PRICE, STATE, VEHICLE
+from locus.stdlib import (
+    BALANCE,
+    CONTAINER,
+    CURRENCY,
+    DESCRIPTION,
+    MERCHANT_CASH,
+    OPENABLE,
+    PRICE,
+    RESALE_PRICE,
+    STATE,
+    VEHICLE,
+)
 from locus.stdlib.game import Transition
 from locus.stdlib.validation import property_value
 
@@ -94,13 +105,37 @@ def render(transition: Transition) -> str:
     if kind == "purchased":
         price = property_value(world, transition.event.entities[0], PRICE, 0)
         balance = property_value(world, transition.event.entities[1], BALANCE, 0)
-        return f"Hai comprato: {names[0]} per {price} unità di {names[1]}. Saldo: {balance}."
+        seller = f" da {names[2]}" if len(names) > 2 else ""
+        return (
+            f"Hai comprato: {names[0]}{seller} per {price} unità di {names[1]}. Saldo: {balance}."
+        )
+    if kind == "sold":
+        resale = property_value(world, transition.event.entities[0], RESALE_PRICE, 0)
+        balance = property_value(world, transition.event.entities[1], BALANCE, 0)
+        return (
+            f"Hai venduto: {names[0]} a {names[2]} per {resale} unità di {names[1]}. "
+            f"Saldo: {balance}."
+        )
     if kind == "insufficient_funds":
         price = property_value(world, transition.event.entities[0], PRICE, 0)
         balance = property_value(world, transition.event.entities[1], BALANCE, 0)
         return f"Fondi insufficienti: servono {price} unità, saldo disponibile {balance}."
     if kind == "not_for_sale":
         return "Quell'elemento non è in vendita."
+    if kind == "not_sellable":
+        return "Quell'elemento non è una merce rivendibile."
+    if kind == "no_merchant":
+        return "Non c'è alcun mercante disponibile qui."
+    if kind == "not_merchant":
+        return f"{names[0]} non è un mercante."
+    if kind == "wrong_merchant":
+        return f"{names[0]} non vende {names[1]}."
+    if kind == "merchant_refuses":
+        return f"{names[0]} non acquista {names[1]}."
+    if kind == "merchant_no_funds":
+        resale = property_value(world, transition.event.entities[1], RESALE_PRICE, 0)
+        cash = property_value(world, transition.event.entities[0], MERCHANT_CASH, 0)
+        return f"{names[0]} non ha fondi sufficienti: servono {resale}, cassa disponibile {cash}."
     if kind == "must_buy":
         return f"Devi prima comprare: {names[0]}."
     if kind == "already_owned":
@@ -119,7 +154,7 @@ def render(transition: Transition) -> str:
     if any(has_type(world, entity.type_id, VEHICLE) for entity in world.entities):
         unknown += " Per i veicoli usa sali/entra e scendi."
     if any(has_type(world, entity.type_id, CURRENCY) for entity in world.entities):
-        unknown += " Per gli acquisti usa compra NOME; usa denaro per vedere il saldo."
+        unknown += " Per il commercio usa compra NOME, vendi NOME a MERCANTE e denaro per il saldo."
     messages = {
         "rule": "Azione gestita dalle regole.",
         "already_carried": "Hai già questo oggetto.",

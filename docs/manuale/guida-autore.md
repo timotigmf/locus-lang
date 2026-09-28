@@ -61,6 +61,7 @@ dall'alto verso il basso prima di studiare i moduli.
 17. [Scene, tempo e punteggio](../tutorial/17-tempesta-e-punteggio.md)
 18. [Veicoli e movimento](../tutorial/18-bicicletta-in-movimento.md)
 19. [Denaro e acquisti](../tutorial/19-il-mercato-del-faro.md)
+20. [Mercanti, scorte e vendita](../tutorial/20-la-bottegaia-del-faro.md)
 
 ## Indice per obiettivo
 
@@ -81,6 +82,7 @@ dall'alto verso il basso prima di studiare i moduli.
 | Scene temporali | Inizio e fine a turni dichiarati con trace | Lezione 17 |
 | Veicoli e vetture | Tipo standard, sottotipi, salita/discesa e movimento congiunto | Lezione 18 |
 | Denaro e acquisti | Valuta, saldo, merci, prezzi e acquisto atomico | Lezione 19 |
+| Mercanti e vendita | Persone venditrici, cassa, scorte e rivendita | Lezione 20 |
 
 ## Vocabolario italiano
 
@@ -119,5 +121,6 @@ silenziose: se due oggetti corrispondono, chiede quale intendi.
 - [Scene, tempo e punteggio](../linguaggio/scene-tempo-punteggio.md)
 - [Veicoli e movimento](../linguaggio/veicoli.md)
 - [Denaro e acquisti](../linguaggio/denaro-e-acquisti.md)
+- [Mercanti e vendita](../linguaggio/mercanti-e-vendita.md)
 - [Ricettario](../cookbook/README.md)
 - [Da Inform a LOCUS](../tutorial/da-inform-a-locus.md)

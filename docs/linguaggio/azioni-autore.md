@@ -1,6 +1,6 @@
 # Azioni e comandi definiti dall'autore
 
-Stato: implementato in LOCUS 0.5.0a1, introdotto in IR 8, esteso fino a IR 11 e conservato in IR 19.
+Stato: implementato in LOCUS 0.5.0a1, introdotto in IR 8, esteso fino a IR 11 e conservato in IR 20.
 
 Questa specifica permette di dichiarare un'azione, assegnarle un comando italiano
 e indicare i tipi dei suoi oggetti. Le regole forniscono comportamento e testo.

@@ -38,12 +38,12 @@ def currency_id(session: Session) -> str:
     )
 
 
-def test_currency_and_merchandise_are_lowered_in_ir19() -> None:
+def test_currency_and_merchandise_are_lowered_in_ir20() -> None:
     program = compile_story(SOURCE)
     world = instantiate(program)
     currency = next(entity for entity in world.entities if entity.label == "credito portuale")
     item = next(entity for entity in world.entities if entity.label == "bussola tascabile")
-    assert IR_VERSION == 19
+    assert IR_VERSION == 20
     assert has_type(world, currency.type_id, CURRENCY)
     assert has_type(world, item.type_id, MERCHANDISE)
     assert property_value(world, currency.id, BALANCE) == 12

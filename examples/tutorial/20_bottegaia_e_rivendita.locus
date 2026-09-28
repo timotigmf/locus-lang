@@ -1,0 +1,36 @@
+Titolo: "La bottegaia del faro".
+Autore: "Esempio LOCUS".
+
+La Bottega è una stanza.
+La Piazza è una stanza.
+La Piazza è a est della Bottega.
+Inizia nella "Bottega".
+
+La Bottega ha descrizione "Ada pesa corde, mappe e strumenti nautici.".
+La Piazza ha descrizione "Le bancarelle circondano la base del faro.".
+
+Il credito portuale è una valuta.
+Il credito portuale ha saldo 20.
+
+La Ada è una mercante nella Bottega.
+La Ada ha descrizione "La bottegaia annota ogni passaggio di proprietà.".
+La Ada ha cassa 25.
+
+Una provvista nautica è un tipo di prodotto.
+La bussola tascabile è una provvista nautica nella Bottega.
+La bussola tascabile ha prezzo 7.
+La bussola tascabile ha prezzo di rivendita 3.
+La Ada vende la bussola tascabile.
+
+La corda cerata è una provvista nautica nella Bottega.
+La corda cerata ha prezzo 9.
+La corda cerata ha prezzo di rivendita 4.
+La Ada vende la corda cerata.
+
+Regola "ricevuta della bussola" per comprare "bussola tascabile" con "Ada" nella fase dopo:
+    dì "Ada consegna la bussola e registra sette crediti in cassa.";
+Fine regola.
+
+Regola "ricevuta di rivendita" per vendere "bussola tascabile" con "Ada" nella fase dopo:
+    dì "Ada ripone la bussola sul banco: ora è di nuovo nella sua scorta.";
+Fine regola.

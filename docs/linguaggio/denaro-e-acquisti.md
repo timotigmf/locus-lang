@@ -68,7 +68,6 @@ L'Indice del mondo contiene una sezione **Commercio** con valuta, saldo, merci,
 prezzi e posizione corrente. Dopo un acquisto aggiorna saldo e posizione in
 inventario. La diagnostica `E124` apre direttamente questa pagina.
 
-IR 19 non modella ancora venditori, incassi, scorte, vendita da parte del
-giocatore, più valute, cambio, prestiti, merci gratuite o prezzi espressi in
-unità diverse. Questi casi richiedono contratti ulteriori; non sono simulati da
-testi o convenzioni implicite.
+IR 20 estende questo contratto con
+[mercanti, scorte e vendita](mercanti-e-vendita.md). Restano fuori più valute,
+cambio, prestiti, merci gratuite o prezzi espressi in unità diverse.

@@ -505,7 +505,7 @@ async function compileProject(play = false) {
   compiledRevision = rev;
   showDiagnostics([]);
   $("compileStatus").textContent =
-    `${result.entities} entità · ${result.actions ?? 0} azioni autore · ${result.rules} regole · ${result.dialogues ?? 0} dialoghi · ${result.scenes ?? 0} scene · ${result.vehicles ?? 0} veicoli · ${result.merchandise ?? 0} merci · compilato`;
+    `${result.entities} entità · ${result.actions ?? 0} azioni autore · ${result.rules} regole · ${result.dialogues ?? 0} dialoghi · ${result.scenes ?? 0} scene · ${result.vehicles ?? 0} veicoli · ${result.merchants ?? 0} mercanti · ${result.merchandise ?? 0} merci · compilato`;
   if (result.title) {
     project.title = result.title;
     $("title").value = result.title;
@@ -603,7 +603,10 @@ function renderIndex(ir, inventory = []) {
   const merchandise = ir.entities.filter((entity) =>
     hasType(entity.type_id, "mondo.merce"),
   );
-  if (currencies.length || merchandise.length) {
+  const merchants = ir.entities.filter((entity) =>
+    hasType(entity.type_id, "mondo.mercante"),
+  );
+  if (currencies.length || merchandise.length || merchants.length) {
     const entities = new Map(ir.entities.map((item) => [item.id, item.label]));
     const propertyValue = (entityId, propertyId) =>
       (ir.properties ?? []).find(
@@ -621,7 +624,13 @@ function renderIndex(ir, inventory = []) {
     content.push(el("h3", {}, "Commercio"));
     const grid = el("table", { class: "data" });
     const commerceHead = el("tr");
-    for (const label of ["Categoria", "Nome", "Valore", "Posizione"])
+    for (const label of [
+      "Categoria",
+      "Nome",
+      "Valore",
+      "Posizione",
+      "Venditore",
+    ])
       commerceHead.append(el("th", {}, label));
     grid.append(commerceHead);
     for (const currency of currencies) {
@@ -631,17 +640,35 @@ function renderIndex(ir, inventory = []) {
         currency.label,
         `saldo ${propertyValue(currency.id, "commercio.saldo") ?? 0}`,
         "globale",
+        "—",
+      ])
+        row.append(el("td", {}, value));
+      grid.append(row);
+    }
+    for (const merchant of merchants) {
+      const row = el("tr");
+      for (const value of [
+        "Mercante",
+        merchant.label,
+        `cassa ${propertyValue(merchant.id, "commercio.cassa") ?? 0}`,
+        location(merchant.id),
+        "—",
       ])
         row.append(el("td", {}, value));
       grid.append(row);
     }
     for (const item of merchandise) {
       const row = el("tr");
+      const offer = (ir.relations ?? []).find(
+        (edge) =>
+          edge.source_id === item.id && edge.predicate_id === "commercio.vende",
+      );
       for (const value of [
         "Merce",
         item.label,
-        `prezzo ${propertyValue(item.id, "commercio.prezzo") ?? 0}`,
+        `prezzo ${propertyValue(item.id, "commercio.prezzo") ?? 0} · rivendita ${propertyValue(item.id, "commercio.rivendita") ?? 0}`,
         location(item.id),
+        entities.get(offer?.target_id) ?? "—",
       ])
         row.append(el("td", {}, value));
       grid.append(row);

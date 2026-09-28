@@ -9,7 +9,7 @@
 | --- | --- |
 | controlla | valida entità e relazioni; stampa numero di entità |
 | ast | JSON AST senza validazione semantica |
-| ir / compila | JSON IR versione 19, dopo validazione |
+| ir / compila | JSON IR versione 20, dopo validazione |
 | gioca | compila e avvia la sessione IF dalla prima stanza dichiarata |
 
 `gioca`: guarda, esamina, prendi, lascia, metti, apri, chiudi, blocca,
@@ -24,7 +24,9 @@ Quando la storia contiene scene sono disponibili `turno`/`tempo` e
 Quando contiene veicoli sono disponibili `sali`/`entra`, `scendi`, `esci da`,
 `board`/`enter`, `exit` e `get out`; le direzioni spostano anche il mezzo guidato.
 Quando contiene una valuta sono disponibili `compra`/`acquista`, `buy`/`purchase`
-e i metacomandi `denaro`/`saldo`/`money`/`balance`.
+e i metacomandi `denaro`/`saldo`/`money`/`balance`. Con mercanti sono disponibili
+anche `compra MERCE da MERCANTE`, `vendi`/`vendere MERCE a MERCANTE` e
+`sell MERCE to MERCHANT`; il mercante può essere omesso se è l'unico raggiungibile.
 I nomi parziali sono accettati soltanto quando identificano un solo oggetto
 raggiungibile; altrimenti l'evento è `ambiguous` e contiene tutte le alternative.
 EOF termina senza errore, Ctrl-C termina con codice 130. Prompt soltanto su TTY,
@@ -78,6 +80,12 @@ che vengono lasciate; un acquisto riuscito aggiorna proprietà, inventario e
 registro nello stesso snapshot. `validate_session` rifiuta merci non acquistate
 in inventario e registri di possesso incoerenti.
 
+IR 20 aggiunge `mondo.mercante`, `commercio.vende`, `commercio.cassa` e
+`commercio.rivendita`. Acquisto e vendita trasferiscono atomicamente merce,
+relazione di scorta, possesso, saldo e cassa. `validate_world` richiede che ogni
+merce non posseduta di una storia con mercanti appartenga a una sola scorta e
+condivida direttamente la stanza del venditore.
+
 Cataloghi con nomi non canonici, ID vuoti/duplicati, tipi sconosciuti o inversi
 incompatibili sollevano ValueError. `relations=None` supporta dichiarazioni senza
 relazioni; l'API non importa implicitamente la stdlib. instantiate verifica versione,
@@ -105,9 +113,9 @@ conflitto.
 
 Event.kind distingue look, inventory, taken, already_carried, not_here,
 not_portable, ambiguous, no_exit, unknown, quit, boarded, disembarked, money,
-purchased e gli errori specifici di veicoli e commercio. Event.entities contiene ID,
-mai frasi da reinterpretare. La sessione è pura: il chiamante adotta la nuova
-sessione solo dopo step; la precedente rimane invariata.
+purchased, sold e gli errori specifici di veicoli e commercio. Event.entities
+contiene ID, mai frasi da reinterpretare. La sessione è pura: il chiamante adotta
+la nuova sessione solo dopo step; la precedente rimane invariata.
 Le azioni dell'autore aggiungono gli eventi `custom` e `wrong_kind`.
 
 ## API aggiunte M2
@@ -123,7 +131,7 @@ Le azioni dell'autore aggiungono gli eventi `custom` e `wrong_kind`.
 - `graph.cycle_node(parents)`: rileva un ciclo in un grafo funzionale senza ricorsione.
 - `stdlib.game.reachable(session, id)` e `carried(session, id)`: controlli distinti;
   il primo rifiuta entità con `visibile` falso e discendenti di contenitori invisibili o chiusi.
-- `stdlib.validation.validate_world(world, inventory=())`: invarianti narrative;
+- `stdlib.validation.validate_world(world, inventory=(), owned_ids=())`: invarianti narrative;
   `WorldError` ha entity_id, codice e messaggio italiano. `validate_session`
   controlla inoltre veicolo guidato, possesso delle merci e inventario;
   `property_value` legge un valore/default.

@@ -289,6 +289,18 @@ def test_commerce_diagnostic_links_the_specific_reference() -> None:
     assert Path(diagnostic["manual"]).is_file()
 
 
+def test_merchant_diagnostic_links_the_specific_reference() -> None:
+    studio = Studio()
+    result = studio.compile(
+        project("La Bottega è una stanza. La Ada è una mercante nella Bottega.")
+    )
+    diagnostic = result["diagnostics"][0]
+    assert diagnostic["code"] == "E125"
+    assert diagnostic["title"] == "Mercante o scorta non validi"
+    assert diagnostic["manual"] == "docs/linguaggio/mercanti-e-vendita.md"
+    assert Path(diagnostic["manual"]).is_file()
+
+
 def test_studio_exposes_author_types_and_maps_room_subtypes() -> None:
     studio = Studio()
     result = studio.compile(
@@ -414,6 +426,31 @@ def test_studio_exposes_commerce_and_updates_balance() -> None:
     assert any(
         prop["property_id"] == "commercio.saldo" and prop["value"] == 8
         for prop in bought["properties"]
+    )
+
+
+def test_studio_exposes_merchants_and_resale_state() -> None:
+    studio = Studio()
+    source = Path("examples/tutorial/20_bottegaia_e_rivendita.locus").read_text(encoding="utf-8")
+    compiled = studio.compile(project(source))
+    assert compiled["ok"]
+    assert compiled["merchants"] == 1
+    assert compiled["merchandise"] == 2
+
+    studio.restart()
+    bought = studio.command("compra bussola da Ada")
+    assert "Saldo: 13" in bought["text"]
+    assert not any(
+        edge["predicate_id"] == "commercio.vende" and edge["source_id"] in bought["owned"]
+        for edge in bought["relations"]
+    )
+    sold = studio.command("vendi bussola a Ada")
+    assert "Saldo: 16" in sold["text"]
+    assert sold["owned"] == []
+    assert any(edge["predicate_id"] == "commercio.vende" for edge in sold["relations"])
+    assert any(
+        prop["property_id"] == "commercio.cassa" and prop["value"] == 29
+        for prop in sold["properties"]
     )
 
 

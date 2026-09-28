@@ -10,7 +10,18 @@ from locus.diagnostics import CompileError
 from locus.ir import ProgramIR
 from locus.player import Intent, parse_command
 from locus.runtime import World, has_type, instantiate
-from locus.stdlib import CURRENCY, EAST, INSIDE, MERCHANDISE, NORTH, ROOM, SIDE_A, SIDE_B, VEHICLE
+from locus.stdlib import (
+    CURRENCY,
+    EAST,
+    INSIDE,
+    MERCHANDISE,
+    MERCHANT,
+    NORTH,
+    ROOM,
+    SIDE_A,
+    SIDE_B,
+    VEHICLE,
+)
 from locus.stdlib.authoring import compile_story_file
 from locus.stdlib.game import Session, Transition, start, step
 from locus.stdlib.render import render
@@ -111,6 +122,11 @@ _ERROR_HELP = {
         "Commercio non valido",
         "Controlla valuta, saldo e prezzi positivi delle merci.",
         "docs/linguaggio/denaro-e-acquisti.md",
+    ),
+    "E125": (
+        "Mercante o scorta non validi",
+        "Controlla valuta, cassa, rivendita, venditore e posizione della merce.",
+        "docs/linguaggio/mercanti-e-vendita.md",
     ),
     "E310": (
         "Azione duplicata",
@@ -338,6 +354,9 @@ class Studio:
             ),
             "merchandise": sum(
                 has_type(world, entity.type_id, MERCHANDISE) for entity in world.entities
+            ),
+            "merchants": sum(
+                has_type(world, entity.type_id, MERCHANT) for entity in world.entities
             ),
             "title": program.title,
             "author": program.author,

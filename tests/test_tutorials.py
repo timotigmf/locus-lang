@@ -321,6 +321,28 @@ def test_commerce_tutorial_spends_currency_atomically() -> None:
     assert current == before
 
 
+def test_merchant_tutorial_transfers_stock_and_cash_atomically() -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "20_bottegaia_e_rivendita.locus")))
+
+    def command(text: str) -> str:
+        nonlocal current
+        transition = step(
+            current,
+            parse_command(text, current.world.actions, commerce_enabled=True),
+        )
+        current = transition.session
+        return render(transition)
+
+    assert "registra sette crediti" in command("compra bussola da Ada")
+    assert property_of(current, "credito portuale", "saldo") == 13
+    assert property_of(current, "Ada", "cassa") == 32
+    assert "di nuovo nella sua scorta" in command("vendi bussola a Ada")
+    assert property_of(current, "credito portuale", "saldo") == 16
+    assert property_of(current, "Ada", "cassa") == 29
+    assert not current.inventory
+    assert not current.owned_ids
+
+
 def test_final_world_matches_story() -> None:
     current = start(instantiate(compile_story_file(TUTORIAL / "04_faro.locus")))
     for command in (TUTORIAL / "04_faro.comandi").read_text(encoding="utf-8").splitlines():

@@ -154,8 +154,9 @@ rotaia restano estensioni successive del contratto.
 LOCUS IR 19 introduce una valuta tipata, saldo, merci, prezzi e un registro del
 possesso. `compra` verifica oggetto, prezzo e fondi, poi trasferisce denaro e
 merce in un unico snapshot; un fallimento non modifica saldo o collocazione.
-Venditori con inventario e incasso, vendita, più valute, cambio e capacità
-restano contratti successivi.
+IR 20 aggiunge mercanti tipati, relazione di scorta, cassa e rivendita atomica;
+la forma `compra ... da ...` non richiede riscritture del comando. Più valute,
+cambio, quantità e capacità restano contratti successivi.
 
 ### Punti, tempo, scene ed enigmi
 
@@ -227,9 +228,10 @@ imitare. La misura utile è coprire ogni contratto pubblico e ogni regressione.
 | 5 | persone e dialoghi strutturati implementati nell'IR 16 | conversazione ramificata con trace e test dei nodi |
 | 6 | scene, tempo e punteggio implementati nell'IR 17 | eventi temporali e premi registrati e riproducibili |
 | 7 | veicoli implementati nell'IR 18 | movimento atomico di conducente e veicolo, con mappa aggiornata |
-| 8 | valuta e acquisto implementati nell'IR 19 | pagamento atomico con unità, prezzo, fondi e possesso verificati; vendita rinviata |
-| 9 | risorse multimediali | manifest validato ed export web autosufficiente |
-| 10 | manuale e indici completi | corso e ricettario ricercabili con esempi sempre compilati |
+| 8 | valuta e acquisto implementati nell'IR 19 | pagamento atomico con unità, prezzo, fondi e possesso verificati |
+| 9 | mercanti e vendita implementati nell'IR 20 | scorta, incasso, rivendita e insolvenza verificati nello stesso snapshot |
+| 10 | risorse multimediali | manifest validato ed export web autosufficiente |
+| 11 | manuale e indici completi | corso e ricettario ricercabili con esempi sempre compilati |
 
 Ogni pacchetto richiede una specifica e, se modifica i confini del sistema, un
 ADR prima dell'implementazione. Le capacità verranno aggiunte in questo ordine

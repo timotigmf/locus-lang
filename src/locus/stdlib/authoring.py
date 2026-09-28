@@ -41,7 +41,7 @@ def _compile(ast: Program) -> ProgramIR:
         canonical(declaration.name): canonical(declaration.parent) for declaration in ast.kinds
     }
     vehicle_kinds = {"veicolo"}
-    commerce_kinds = {"valuta", "prodotto"}
+    commerce_kinds = {"valuta", "prodotto", "mercante"}
     changed = True
     while changed:
         changed = False
@@ -65,8 +65,14 @@ def _compile(ast: Program) -> ProgramIR:
             declaration
             for declaration in ast.kinds
             if not (
-                canonical(declaration.name) in {"persona", "veicolo", "valuta"}
-                and canonical(declaration.parent) == "cosa"
+                (
+                    canonical(declaration.name) in {"persona", "veicolo", "valuta"}
+                    and canonical(declaration.parent) == "cosa"
+                )
+                or (
+                    canonical(declaration.name) == "mercante"
+                    and canonical(declaration.parent) == "persona"
+                )
             )
         ),
     )

@@ -12,11 +12,15 @@ from locus.stdlib import (
     INSIDE,
     LOCATABLE,
     MERCHANDISE,
+    MERCHANT,
+    MERCHANT_CASH,
     NORTH,
+    OFFERS,
     OPENABLE,
     PERSON,
     PORTABLE,
     PRICE,
+    RESALE_PRICE,
     ROOM,
     SIDE_A,
     SIDE_B,
@@ -45,14 +49,24 @@ def property_value(world: World, entity_id: str, property_id: str, default: Valu
     )
 
 
-def integer_property_value(world: World, entity_id: str, property_id: str, default: int = 0) -> int:
+def integer_property_value(
+    world: World,
+    entity_id: str,
+    property_id: str,
+    default: int = 0,
+    code: str = "E124",
+) -> int:
     value = property_value(world, entity_id, property_id, default)
     if not isinstance(value, int) or isinstance(value, bool):
-        raise WorldError("La proprietà commerciale deve essere numerica.", entity_id, "E124")
+        raise WorldError("La proprietà commerciale deve essere numerica.", entity_id, code)
     return value
 
 
-def validate_world(world: World, inventory: tuple[str, ...] = ()) -> None:
+def validate_world(
+    world: World,
+    inventory: tuple[str, ...] = (),
+    owned_ids: tuple[str, ...] = (),
+) -> None:
     entities = {entity.id: entity for entity in world.entities}
     if world.entry_id is not None and (
         world.entry_id not in entities
@@ -91,6 +105,7 @@ def validate_world(world: World, inventory: tuple[str, ...] = ()) -> None:
     merchandise = [
         entity for entity in world.entities if has_type(world, entity.type_id, MERCHANDISE)
     ]
+    merchants = [entity for entity in world.entities if has_type(world, entity.type_id, MERCHANT)]
     if len(currencies) > 1:
         raise WorldError(
             "Questa versione ammette una sola valuta per storia.", currencies[1].id, "E124"
@@ -101,6 +116,8 @@ def validate_world(world: World, inventory: tuple[str, ...] = ()) -> None:
             merchandise[0].id,
             "E124",
         )
+    if merchants and not currencies:
+        raise WorldError("Dichiara una valuta prima di usare un mercante.", merchants[0].id, "E125")
     for currency in currencies:
         if integer_property_value(world, currency.id, BALANCE) < 0:
             raise WorldError("Il saldo iniziale non può essere negativo.", currency.id, "E124")
@@ -108,6 +125,53 @@ def validate_world(world: World, inventory: tuple[str, ...] = ()) -> None:
         if integer_property_value(world, item.id, PRICE) <= 0:
             raise WorldError(
                 "Il prezzo di una merce deve essere maggiore di zero.", item.id, "E124"
+            )
+        if integer_property_value(world, item.id, RESALE_PRICE, code="E125") < 0:
+            raise WorldError("Il prezzo di rivendita non può essere negativo.", item.id, "E125")
+    for merchant in merchants:
+        if integer_property_value(world, merchant.id, MERCHANT_CASH, code="E125") < 0:
+            raise WorldError(
+                "La cassa di un mercante non può essere negativa.", merchant.id, "E125"
+            )
+    offers = [edge for edge in world.relations if edge.predicate_id == OFFERS]
+    offered_ids = {edge.source_id for edge in offers}
+    if len(offered_ids) != len(offers):
+        raise WorldError("Una merce può avere un solo mercante.", offers[-1].source_id, "E125")
+    if merchants:
+        for item in merchandise:
+            is_owned = item.id in owned_ids
+            is_offered = item.id in offered_ids
+            if is_owned == is_offered:
+                message = (
+                    "Una merce posseduta non può restare nella scorta di un mercante."
+                    if is_owned
+                    else "Associa ogni merce non posseduta a un mercante con «vende»."
+                )
+                raise WorldError(message, item.id, "E125")
+    for offer in offers:
+        offered_item = entities.get(offer.source_id)
+        offering_merchant = entities.get(offer.target_id)
+        if (
+            offered_item is None
+            or offering_merchant is None
+            or not has_type(world, offered_item.type_id, MERCHANDISE)
+            or not has_type(world, offering_merchant.type_id, MERCHANT)
+        ):
+            raise WorldError("La scorta collega una merce a un mercante.", offer.source_id, "E125")
+        if parents.get(offered_item.id) is None or parents.get(offered_item.id) != parents.get(
+            offering_merchant.id
+        ):
+            raise WorldError(
+                "La merce e il mercante devono trovarsi direttamente nella stessa stanza.",
+                offered_item.id,
+                "E125",
+            )
+        location = parents[offered_item.id]
+        if not has_type(world, entities[location].type_id, ROOM):
+            raise WorldError(
+                "La scorta di un mercante deve trovarsi direttamente in una stanza.",
+                offered_item.id,
+                "E125",
             )
     inventory_seen: set[str] = set()
     for ident in inventory:
@@ -166,7 +230,7 @@ def validate_session(
     vehicle_id: str | None,
     owned_ids: tuple[str, ...] = (),
 ) -> None:
-    validate_world(world, inventory)
+    validate_world(world, inventory, owned_ids)
     entities = {entity.id: entity for entity in world.entities}
     if len(set(owned_ids)) != len(owned_ids) or any(
         ident not in entities or not has_type(world, entities[ident].type_id, MERCHANDISE)

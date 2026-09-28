@@ -38,3 +38,4 @@ Le fonti e le licenze sono nel [registro](../architettura/fonti.md).
 - [0021 — scene, tempo e punteggio](0021-scene-tempo-punteggio.md): clock logico, ciclo di vita e registro dei premi nell'IR 17.
 - [0022 — veicoli](0022-veicoli.md): tipo standard, salita/discesa e movimento atomico del conducente nell'IR 18.
 - [0023 — valuta e acquisti](0023-valuta-e-acquisti.md): saldo, prezzi, possesso e acquisto atomico nell'IR 19.
+- [0024 — mercanti, scorte e vendita](0024-mercanti-scorte-e-vendita.md): venditori, cassa e rivendita atomica nell'IR 20.
