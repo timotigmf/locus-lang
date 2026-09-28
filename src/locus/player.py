@@ -114,6 +114,7 @@ def standard_commands(
     include_dialogue: bool = False,
     include_scenes: bool = False,
     include_vehicles: bool = False,
+    include_commerce: bool = False,
 ) -> frozenset[str]:
     dialogue_commands = (
         ("parla", "p", "talk", "scegli", "basta", "fine dialogo") if include_dialogue else ()
@@ -122,6 +123,11 @@ def standard_commands(
     vehicle_commands = (
         ("sali", "entra", "scendi", "board", "enter", "exit") if include_vehicles else ()
     )
+    commerce_commands = (
+        ("compra", "acquista", "buy", "purchase", "denaro", "saldo", "money", "balance")
+        if include_commerce
+        else ()
+    )
     return frozenset(
         (
             *_SIMPLE_COMMANDS,
@@ -129,6 +135,7 @@ def standard_commands(
             *dialogue_commands,
             *scene_commands,
             *vehicle_commands,
+            *commerce_commands,
         )
     )
 
@@ -200,6 +207,16 @@ def _vehicle_intent(tokens: list[tuple[str, bool]]) -> Intent | None:
     return None
 
 
+def _commerce_intent(tokens: list[tuple[str, bool]]) -> Intent | None:
+    verb = tokens[0][0]
+    if verb in {"denaro", "saldo", "money", "balance"}:
+        return Intent("money") if len(tokens) == 1 else Intent("unknown")
+    if verb in {"compra", "acquista", "buy", "purchase"}:
+        noun = _noun(tokens[1:])
+        return Intent("buy", noun) if noun else Intent("missing_noun")
+    return None
+
+
 def _author_match(
     actions: Sequence[ActionIR], tokens: list[tuple[str, bool]]
 ) -> tuple[ActionIR, int] | None:
@@ -252,6 +269,7 @@ def parse_command(
     dialogue_enabled: bool = False,
     scene_enabled: bool = False,
     vehicle_enabled: bool = False,
+    commerce_enabled: bool = False,
 ) -> Intent:
     tokens = _tokens(canonical(text).replace("’", "'"))
     if not tokens:
@@ -263,6 +281,10 @@ def parse_command(
         vehicle = _vehicle_intent(tokens)
         if vehicle is not None:
             return vehicle
+    if commerce_enabled:
+        commerce = _commerce_intent(tokens)
+        if commerce is not None:
+            return commerce
     if scene_enabled and len(tokens) == 1:
         if verb in {"punteggio", "score"}:
             return Intent("score")

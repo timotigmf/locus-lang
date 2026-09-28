@@ -277,6 +277,18 @@ def test_vehicle_diagnostic_links_the_specific_reference() -> None:
     assert Path(diagnostic["manual"]).is_file()
 
 
+def test_commerce_diagnostic_links_the_specific_reference() -> None:
+    studio = Studio()
+    result = studio.compile(
+        project("La Bottega è una stanza. La bussola è un prodotto nella Bottega.")
+    )
+    diagnostic = result["diagnostics"][0]
+    assert diagnostic["code"] == "E124"
+    assert diagnostic["title"] == "Commercio non valido"
+    assert diagnostic["manual"] == "docs/linguaggio/denaro-e-acquisti.md"
+    assert Path(diagnostic["manual"]).is_file()
+
+
 def test_studio_exposes_author_types_and_maps_room_subtypes() -> None:
     studio = Studio()
     result = studio.compile(
@@ -382,6 +394,27 @@ def test_studio_exposes_and_moves_vehicles() -> None:
     )
     assert "a bordo" in moved["text"]
     assert studio.command("scendi")["vehicle"] is None
+
+
+def test_studio_exposes_commerce_and_updates_balance() -> None:
+    studio = Studio()
+    source = Path("examples/tutorial/19_mercato_del_faro.locus").read_text(encoding="utf-8")
+    compiled = studio.compile(project(source))
+    assert compiled["ok"]
+    assert compiled["currencies"] == 1
+    assert compiled["merchandise"] == 2
+
+    initial = studio.restart()
+    assert initial["owned"] == []
+    blocked = studio.command("prendi bussola")
+    assert "prima comprare" in blocked["text"]
+    bought = studio.command("compra bussola")
+    assert "Saldo: 8" in bought["text"]
+    assert bought["owned"] == bought["inventory"]
+    assert any(
+        prop["property_id"] == "commercio.saldo" and prop["value"] == 8
+        for prop in bought["properties"]
+    )
 
 
 def test_dispatch_errors_and_size_limit() -> None:

@@ -505,7 +505,7 @@ async function compileProject(play = false) {
   compiledRevision = rev;
   showDiagnostics([]);
   $("compileStatus").textContent =
-    `${result.entities} entità · ${result.actions ?? 0} azioni autore · ${result.rules} regole · ${result.dialogues ?? 0} dialoghi · ${result.scenes ?? 0} scene · ${result.vehicles ?? 0} veicoli · compilato`;
+    `${result.entities} entità · ${result.actions ?? 0} azioni autore · ${result.rules} regole · ${result.dialogues ?? 0} dialoghi · ${result.scenes ?? 0} scene · ${result.vehicles ?? 0} veicoli · ${result.merchandise ?? 0} merci · compilato`;
   if (result.title) {
     project.title = result.title;
     $("title").value = result.title;
@@ -531,7 +531,7 @@ function showMap(data) {
   $("mapSummary").textContent =
     `${data.rooms.length} luoghi · ${data.links.length} collegamenti · ${data.doors.length} porte · ${(data.vehicles ?? []).length} veicoli`;
 }
-function renderIndex(ir) {
+function renderIndex(ir, inventory = []) {
   const types = new Map((ir.types ?? []).map((item) => [item.id, item]));
   function typePath(typeId) {
     const labels = [];
@@ -591,6 +591,57 @@ function renderIndex(ir) {
         vehicle.label,
         typePath(vehicle.type_id),
         entities.get(location?.target_id) ?? "fuori scena",
+      ])
+        row.append(el("td", {}, value));
+      grid.append(row);
+    }
+    content.push(grid);
+  }
+  const currencies = ir.entities.filter((entity) =>
+    hasType(entity.type_id, "mondo.valuta"),
+  );
+  const merchandise = ir.entities.filter((entity) =>
+    hasType(entity.type_id, "mondo.merce"),
+  );
+  if (currencies.length || merchandise.length) {
+    const entities = new Map(ir.entities.map((item) => [item.id, item.label]));
+    const propertyValue = (entityId, propertyId) =>
+      (ir.properties ?? []).find(
+        (item) =>
+          item.entity_id === entityId && item.property_id === propertyId,
+      )?.value;
+    const location = (entityId) => {
+      if (inventory.includes(entityId)) return "inventario";
+      const edge = (ir.relations ?? []).find(
+        (item) =>
+          item.source_id === entityId && item.predicate_id === "mondo.dentro",
+      );
+      return entities.get(edge?.target_id) ?? "fuori scena";
+    };
+    content.push(el("h3", {}, "Commercio"));
+    const grid = el("table", { class: "data" });
+    const commerceHead = el("tr");
+    for (const label of ["Categoria", "Nome", "Valore", "Posizione"])
+      commerceHead.append(el("th", {}, label));
+    grid.append(commerceHead);
+    for (const currency of currencies) {
+      const row = el("tr");
+      for (const value of [
+        "Valuta",
+        currency.label,
+        `saldo ${propertyValue(currency.id, "commercio.saldo") ?? 0}`,
+        "globale",
+      ])
+        row.append(el("td", {}, value));
+      grid.append(row);
+    }
+    for (const item of merchandise) {
+      const row = el("tr");
+      for (const value of [
+        "Merce",
+        item.label,
+        `prezzo ${propertyValue(item.id, "commercio.prezzo") ?? 0}`,
+        location(item.id),
       ])
         row.append(el("td", {}, value));
       grid.append(row);
@@ -756,7 +807,7 @@ function appendOutput(result, command) {
     compiled.ir.properties = result.properties;
     compiled.ir.relations = result.relations ?? compiled.ir.relations;
     compiled.ir.tables = result.tables ?? compiled.ir.tables;
-    renderIndex(compiled.ir);
+    renderIndex(compiled.ir, result.inventory ?? []);
   }
   if (result.ended) stopGame();
 }

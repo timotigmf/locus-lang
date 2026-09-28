@@ -4,15 +4,19 @@ from locus.graph import cycle_node
 from locus.runtime import World, has_type
 from locus.schema import Value
 from locus.stdlib import (
+    BALANCE,
     CONTAINER,
+    CURRENCY,
     DOOR,
     EAST,
     INSIDE,
     LOCATABLE,
+    MERCHANDISE,
     NORTH,
     OPENABLE,
     PERSON,
     PORTABLE,
+    PRICE,
     ROOM,
     SIDE_A,
     SIDE_B,
@@ -39,6 +43,13 @@ def property_value(world: World, entity_id: str, property_id: str, default: Valu
         ),
         default,
     )
+
+
+def integer_property_value(world: World, entity_id: str, property_id: str, default: int = 0) -> int:
+    value = property_value(world, entity_id, property_id, default)
+    if not isinstance(value, int) or isinstance(value, bool):
+        raise WorldError("La proprietà commerciale deve essere numerica.", entity_id, "E124")
+    return value
 
 
 def validate_world(world: World, inventory: tuple[str, ...] = ()) -> None:
@@ -76,6 +87,28 @@ def validate_world(world: World, inventory: tuple[str, ...] = ()) -> None:
             world, entities[parent].type_id, ROOM
         ):
             raise WorldError("Un veicolo deve trovarsi direttamente in una stanza.", child, "E123")
+    currencies = [entity for entity in world.entities if has_type(world, entity.type_id, CURRENCY)]
+    merchandise = [
+        entity for entity in world.entities if has_type(world, entity.type_id, MERCHANDISE)
+    ]
+    if len(currencies) > 1:
+        raise WorldError(
+            "Questa versione ammette una sola valuta per storia.", currencies[1].id, "E124"
+        )
+    if merchandise and not currencies:
+        raise WorldError(
+            "Dichiara una valuta prima di usare oggetti in vendita.",
+            merchandise[0].id,
+            "E124",
+        )
+    for currency in currencies:
+        if integer_property_value(world, currency.id, BALANCE) < 0:
+            raise WorldError("Il saldo iniziale non può essere negativo.", currency.id, "E124")
+    for item in merchandise:
+        if integer_property_value(world, item.id, PRICE) <= 0:
+            raise WorldError(
+                "Il prezzo di una merce deve essere maggiore di zero.", item.id, "E124"
+            )
     inventory_seen: set[str] = set()
     for ident in inventory:
         if (
@@ -131,11 +164,31 @@ def validate_session(
     inventory: tuple[str, ...],
     room_id: str,
     vehicle_id: str | None,
+    owned_ids: tuple[str, ...] = (),
 ) -> None:
     validate_world(world, inventory)
+    entities = {entity.id: entity for entity in world.entities}
+    if len(set(owned_ids)) != len(owned_ids) or any(
+        ident not in entities or not has_type(world, entities[ident].type_id, MERCHANDISE)
+        for ident in owned_ids
+    ):
+        raise WorldError("Il registro degli acquisti non è coerente.", owned_ids[0], "E124")
+    if any(
+        ident in entities
+        and has_type(world, entities[ident].type_id, MERCHANDISE)
+        and ident not in owned_ids
+        for ident in inventory
+    ):
+        invalid = next(
+            ident
+            for ident in inventory
+            if ident in entities
+            and has_type(world, entities[ident].type_id, MERCHANDISE)
+            and ident not in owned_ids
+        )
+        raise WorldError("L'inventario contiene una merce non acquistata.", invalid, "E124")
     if vehicle_id is None:
         return
-    entities = {entity.id: entity for entity in world.entities}
     vehicle = entities.get(vehicle_id)
     location = next(
         (

@@ -12,7 +12,7 @@ from locus.diagnostics import CompileError
 from locus.player import Intent, parse_command
 from locus.project import load_project
 from locus.runtime import has_type, instantiate
-from locus.stdlib import VEHICLE, default_relations
+from locus.stdlib import CURRENCY, VEHICLE, default_relations
 from locus.stdlib.authoring import compile_story_file
 from locus.stdlib.game import Transition, start, step
 from locus.stdlib.render import render
@@ -64,6 +64,10 @@ def main(argv: list[str] | None = None) -> int:
                             scene_enabled=bool(session.world.scenes),
                             vehicle_enabled=any(
                                 has_type(session.world, entity.type_id, VEHICLE)
+                                for entity in session.world.entities
+                            ),
+                            commerce_enabled=any(
+                                has_type(session.world, entity.type_id, CURRENCY)
                                 for entity in session.world.entities
                             ),
                         ),

@@ -56,7 +56,7 @@ la chiave inaccessibile. Vedi [sintassi e limiti M2](../linguaggio/milestone-2.m
 
 ## Percorso guidato
 
-Per iniziare da zero, segui le [diciotto lezioni del faro](../tutorial/README.md),
+Per iniziare da zero, segui le [diciannove lezioni del faro](../tutorial/README.md),
 con prove di gioco e soluzioni.
 La [quinta lezione](../tutorial/05-comandi-e-nomi.md) presenta le abbreviazioni
 classiche delle avventure testuali e spiega quando un nome parziale è sufficiente.
@@ -84,3 +84,5 @@ La [diciassettesima](../tutorial/17-tempesta-e-punteggio.md) pianifica una
 tempesta a turni e registra il premio della sua conclusione.
 La [diciottesima](../tutorial/18-bicicletta-in-movimento.md) introduce veicoli,
 salita, discesa e movimento del mezzo insieme al conducente.
+La [diciannovesima](../tutorial/19-il-mercato-del-faro.md) introduce valuta,
+prezzi e acquisti che aggiornano saldo e inventario atomicamente.

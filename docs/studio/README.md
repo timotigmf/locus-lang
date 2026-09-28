@@ -51,9 +51,9 @@ il successivo. Non promettiamo correzioni automatiche della semantica. Gli span
 di alcune diagnosi coprono un'intera dichiarazione/regola, come nella CLI.
 Il manuale incorporato è ricercabile per capitolo; la guida dell'autore è la
 pagina iniziale e ogni blocco di codice offre **Copia codice**. Comprende un corso
-in diciotto lezioni, specifiche e tutorial. L'Indice del mondo mostra anche
-dialoghi, scene e veicoli compilati e aggiorna proprietà, righe delle tabelle e
-posizione dei mezzi dopo ogni comando.
+in diciannove lezioni, specifiche e tutorial. L'Indice del mondo mostra anche
+dialoghi, scene, veicoli e commercio compilati e aggiorna proprietà, righe delle
+tabelle, posizione dei mezzi, saldo e merci dopo ogni comando.
 
 Quando modifichi il sorgente, il gioco precedente viene disabilitato e mappa e
 indice sono da ricompilare. Non si mescolano una versione vecchia della storia e
@@ -71,7 +71,8 @@ ciclici o complessi possono avere linee incrociate.
 **Indice del mondo** elenca entità, gerarchie dei tipi, proprietà, tabelle,
 azioni, dialoghi e scene compilati. Per ogni dialogo mostra persona, numero di
 nodi e nodo iniziale; per ogni scena mostra turni e punti; per ogni veicolo tipo
-e stanza corrente. **Regole e trace**
+e stanza corrente; per il commercio mostra valuta, saldo, prezzi e posizione.
+**Regole e trace**
 mostra le regole considerate nell'ultima azione, con esito e collegamento alla
 riga del sorgente, il percorso del dialogo e gli eventi temporali con variazione
 del punteggio. Non è ancora un debugger a passi con breakpoint.

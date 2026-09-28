@@ -33,3 +33,5 @@ Le [scene temporali](scene-tempo-punteggio.md) aggiungono turni, ciclo di vita,
 punteggio e registro dei premi nell'IR 17.
 I [veicoli](veicoli.md) aggiungono un tipo standard, salita, discesa e movimento
 congiunto del conducente nell'IR 18.
+Il [denaro e gli acquisti](denaro-e-acquisti.md) aggiungono valuta tipata, saldo,
+merci, prezzi e pagamento atomico nell'IR 19.

@@ -41,6 +41,7 @@ def _compile(ast: Program) -> ProgramIR:
         canonical(declaration.name): canonical(declaration.parent) for declaration in ast.kinds
     }
     vehicle_kinds = {"veicolo"}
+    commerce_kinds = {"valuta", "prodotto"}
     changed = True
     while changed:
         changed = False
@@ -48,8 +49,14 @@ def _compile(ast: Program) -> ProgramIR:
             if parent in vehicle_kinds and name not in vehicle_kinds:
                 vehicle_kinds.add(name)
                 changed = True
+            if parent in commerce_kinds and name not in commerce_kinds:
+                commerce_kinds.add(name)
+                changed = True
     has_vehicles = any(
         canonical(declaration.kind) in vehicle_kinds for declaration in ast.declarations
+    )
+    has_commerce = any(
+        canonical(declaration.kind) in commerce_kinds for declaration in ast.declarations
     )
     # Compatibilità con esempi anteriori ai tipi standard persona e veicolo.
     ast = replace(
@@ -58,7 +65,7 @@ def _compile(ast: Program) -> ProgramIR:
             declaration
             for declaration in ast.kinds
             if not (
-                canonical(declaration.name) in {"persona", "veicolo"}
+                canonical(declaration.name) in {"persona", "veicolo", "valuta"}
                 and canonical(declaration.parent) == "cosa"
             )
         ),
@@ -75,6 +82,7 @@ def _compile(ast: Program) -> ProgramIR:
             include_dialogue=has_dialogues,
             include_scenes=has_scenes,
             include_vehicles=has_vehicles,
+            include_commerce=has_commerce,
         ),
         dialogue_actor_types=(PERSON,),
     )

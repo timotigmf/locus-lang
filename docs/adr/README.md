@@ -37,3 +37,4 @@ Le fonti e le licenze sono nel [registro](../architettura/fonti.md).
 - [0020 — persone e dialoghi](0020-dialoghi-strutturati.md): grafi di conversazione e stato multi-turno nell'IR 16.
 - [0021 — scene, tempo e punteggio](0021-scene-tempo-punteggio.md): clock logico, ciclo di vita e registro dei premi nell'IR 17.
 - [0022 — veicoli](0022-veicoli.md): tipo standard, salita/discesa e movimento atomico del conducente nell'IR 18.
+- [0023 — valuta e acquisti](0023-valuta-e-acquisti.md): saldo, prezzi, possesso e acquisto atomico nell'IR 19.

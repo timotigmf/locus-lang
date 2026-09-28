@@ -1,7 +1,7 @@
 """Presentazione italiana degli eventi narrativi, separata dalle transizioni."""
 
 from locus.runtime import has_type
-from locus.stdlib import CONTAINER, DESCRIPTION, OPENABLE, STATE, VEHICLE
+from locus.stdlib import BALANCE, CONTAINER, CURRENCY, DESCRIPTION, OPENABLE, PRICE, STATE, VEHICLE
 from locus.stdlib.game import Transition
 from locus.stdlib.validation import property_value
 
@@ -31,6 +31,9 @@ def render(transition: Transition) -> str:
         return f"Punteggio: {transition.session.score}."
     if kind == "time":
         return f"Turno: {transition.session.turn}."
+    if kind == "money":
+        balance = property_value(world, transition.event.entities[0], BALANCE, 0)
+        return f"Saldo: {balance} unità di {names[0]}."
     if kind == "taken":
         return f"Hai preso: {names[0]}."
     if kind == "put":
@@ -88,6 +91,22 @@ def render(transition: Transition) -> str:
         return "Non sei a bordo di alcun veicolo."
     if kind == "wrong_vehicle":
         return "Non sei a bordo di quel veicolo."
+    if kind == "purchased":
+        price = property_value(world, transition.event.entities[0], PRICE, 0)
+        balance = property_value(world, transition.event.entities[1], BALANCE, 0)
+        return f"Hai comprato: {names[0]} per {price} unità di {names[1]}. Saldo: {balance}."
+    if kind == "insufficient_funds":
+        price = property_value(world, transition.event.entities[0], PRICE, 0)
+        balance = property_value(world, transition.event.entities[1], BALANCE, 0)
+        return f"Fondi insufficienti: servono {price} unità, saldo disponibile {balance}."
+    if kind == "not_for_sale":
+        return "Quell'elemento non è in vendita."
+    if kind == "must_buy":
+        return f"Devi prima comprare: {names[0]}."
+    if kind == "already_owned":
+        return f"Hai già acquistato: {names[0]}. Puoi prenderlo senza pagare di nuovo."
+    if kind == "no_currency":
+        return "La storia non dichiara alcuna valuta."
     unknown = (
         "Comando non riconosciuto. Usa guarda, esamina, prendi, lascia, metti, "
         "apri, chiudi, blocca, inventario, nord, sud, est, ovest o esci. "
@@ -99,6 +118,8 @@ def render(transition: Transition) -> str:
         unknown += " Usa turno per il tempo e punteggio per i punti."
     if any(has_type(world, entity.type_id, VEHICLE) for entity in world.entities):
         unknown += " Per i veicoli usa sali/entra e scendi."
+    if any(has_type(world, entity.type_id, CURRENCY) for entity in world.entities):
+        unknown += " Per gli acquisti usa compra NOME; usa denaro per vedere il saldo."
     messages = {
         "rule": "Azione gestita dalle regole.",
         "already_carried": "Hai già questo oggetto.",

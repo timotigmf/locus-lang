@@ -1,0 +1,24 @@
+Titolo: "Il mercato del faro".
+Autore: "Esempio LOCUS".
+
+La Bottega è una stanza.
+La Piazza è una stanza.
+La Piazza è a est della Bottega.
+Inizia nella "Bottega".
+
+La Bottega ha descrizione "Scaffali di provviste attendono i naviganti.".
+La Piazza ha descrizione "Il mercato guarda il mare dalla base del faro.".
+
+Il credito portuale è una valuta.
+Il credito portuale ha saldo 15.
+
+Una provvista nautica è un tipo di prodotto.
+La bussola tascabile è una provvista nautica nella Bottega.
+La bussola tascabile ha prezzo 7.
+La bussola tascabile ha descrizione "L'ago punta ostinatamente verso nord.".
+La corda cerata è una provvista nautica nella Bottega.
+La corda cerata ha prezzo 9.
+
+Regola "ricevuta della bussola" per comprare "bussola tascabile" nella fase dopo:
+    dì "La bottegaia annota l'acquisto sul registro.";
+Fine regola.

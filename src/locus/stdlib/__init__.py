@@ -7,6 +7,8 @@ THING = "mondo.cosa"
 SCENERY = "mondo.scenario"
 PERSON = "mondo.persona"
 VEHICLE = "mondo.veicolo"
+CURRENCY = "mondo.valuta"
+MERCHANDISE = "mondo.merce"
 CONTAINER = "mondo.contenitore"
 DOOR = "mondo.porta"
 KEY = "mondo.chiave"
@@ -24,6 +26,8 @@ UNLOCKS = "mondo.apre"
 STATE = "mondo.stato"
 DESCRIPTION = "base.descrizione"
 VISIBLE = "mondo.visibile"
+BALANCE = "commercio.saldo"
+PRICE = "commercio.prezzo"
 
 
 def default_kinds() -> dict[str, str]:
@@ -33,6 +37,8 @@ def default_kinds() -> dict[str, str]:
         "scenario": SCENERY,
         "persona": PERSON,
         "veicolo": VEHICLE,
+        "valuta": CURRENCY,
+        "prodotto": MERCHANDISE,
         "contenitore": CONTAINER,
         "porta": DOOR,
         "chiave": KEY,
@@ -46,6 +52,8 @@ def default_kind_parents() -> dict[str, str | None]:
         SCENERY: None,
         PERSON: THING,
         VEHICLE: None,
+        CURRENCY: None,
+        MERCHANDISE: THING,
         CONTAINER: THING,
         DOOR: None,
         KEY: THING,
@@ -76,6 +84,8 @@ def default_properties() -> dict[str, PropertySpec]:
         "descrizione": PropertySpec(DESCRIPTION, tuple(default_kinds().values()), "testo", ""),
         "stato": PropertySpec(STATE, OPENABLE, "testo", "chiuso", ("aperto", "chiuso", "bloccato")),
         "visibile": PropertySpec(VISIBLE, LOCATABLE, "logico", True),
+        "saldo": PropertySpec(BALANCE, (CURRENCY,), "numero", 0),
+        "prezzo": PropertySpec(PRICE, (MERCHANDISE,), "numero", 0),
     }
 
 
@@ -96,4 +106,5 @@ def default_actions() -> dict[str, ActionSpec]:
         "bloccare": ActionSpec("lock", 2, 2),
         "salire": ActionSpec("board", 1, 1, (VEHICLE,)),
         "scendere": ActionSpec("exit_vehicle", 0, 1, (VEHICLE,)),
+        "comprare": ActionSpec("buy", 1, 1, (MERCHANDISE,)),
     }

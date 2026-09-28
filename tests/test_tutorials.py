@@ -300,6 +300,27 @@ def test_vehicle_tutorial_moves_vehicle_with_player() -> None:
     assert current.vehicle_id is None
 
 
+def test_commerce_tutorial_spends_currency_atomically() -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "19_mercato_del_faro.locus")))
+
+    def command(text: str) -> str:
+        nonlocal current
+        transition = step(
+            current,
+            parse_command(text, current.world.actions, commerce_enabled=True),
+        )
+        current = transition.session
+        return render(transition)
+
+    assert "Saldo: 15" in command("denaro")
+    assert "prima comprare" in command("prendi bussola")
+    assert "registro" in command("compra bussola")
+    assert "Saldo: 8" in command("denaro")
+    before = current
+    assert "Fondi insufficienti" in command("compra corda")
+    assert current == before
+
+
 def test_final_world_matches_story() -> None:
     current = start(instantiate(compile_story_file(TUTORIAL / "04_faro.locus")))
     for command in (TUTORIAL / "04_faro.comandi").read_text(encoding="utf-8").splitlines():

@@ -63,8 +63,10 @@ Ogni pacchetto conserva il core indipendente dalla narrativa interattiva.
    condizioni, effetti e ricorrenza delle scene restano estensioni successive.
 7. Veicoli, salita/discesa e movimento atomico del conducente implementati
    nell'IR 18; passeggeri, carico e percorsi tipati restano estensioni successive.
+8. Valuta tipata, saldo, merci, prezzi e acquisto atomico implementati nell'IR 19;
+   vendita, mercanti, scorte e più valute restano estensioni successive.
 
-Valuta/commercio, multimedia e indici completi
+Multimedia e indici completi
 seguono in pacchetti separati. Non si importeranno codice o testi Inform.
 
 ## Studio M5 — 0.5.0a1

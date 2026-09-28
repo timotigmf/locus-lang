@@ -65,6 +65,7 @@ Puoi descrivere un passaggio come segreto e proteggerlo con una porta. Per farlo
 comparire dopo una ricerca usa le relazioni dinamiche della
 [lezione 12](12-passaggi-segreti.md): testo, navigazione e mappa restano coerenti.
 
-Dialoghi ramificati, veicoli, compravendita e denaro spendibile richiedono azioni
-e modelli dedicati. La [guida dell'autore](../manuale/guida-autore.md) distingue
-ciò che è eseguibile oggi dalle estensioni pianificate.
+Le lezioni successive introducono dialoghi ramificati, veicoli e acquisti con
+denaro spendibile. Vendita e mercanti con inventario restano pianificati. La
+[guida dell'autore](../manuale/guida-autore.md) distingue ciò che è eseguibile
+oggi dalle estensioni future.

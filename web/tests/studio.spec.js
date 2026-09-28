@@ -569,3 +569,50 @@ La saetta rossa è una bicicletta nella Rimessa.`;
     "Piazza",
   );
 });
+
+test("valuta, acquisto e indice del commercio", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.locator("#compileStatus")).toContainText("compilato", {
+    timeout: 90000,
+  });
+  const source = `Titolo: "Il mercato".
+La Bottega è una stanza.
+Il credito portuale è una valuta.
+Il credito portuale ha saldo 15.
+Una provvista è un tipo di prodotto.
+La bussola è una provvista nella Bottega.
+La bussola ha prezzo 7.
+La corda è una provvista nella Bottega.
+La corda ha prezzo 9.`;
+  await page.locator(".cm-content").click();
+  await page.keyboard.press("ControlOrMeta+A");
+  await page.keyboard.insertText(source);
+  await page
+    .getByRole("button", { name: "▶ Compila e prova", exact: true })
+    .click();
+  await expect(page.locator("#compileStatus")).toContainText("2 merci", {
+    timeout: 90000,
+  });
+  await page.locator("#command").fill("prendi bussola");
+  await page.locator("#send").click();
+  await expect(page.locator("#transcript")).toContainText("prima comprare");
+  await page.locator("#command").fill("compra bussola");
+  await page.locator("#send").click();
+  await expect(page.locator("#transcript")).toContainText("Saldo: 8");
+  await page.locator("#command").fill("compra corda");
+  await page.locator("#send").click();
+  await expect(page.locator("#transcript")).toContainText(
+    "Fondi insufficienti",
+  );
+  await page
+    .getByRole("button", { name: "Indice del mondo", exact: true })
+    .click();
+  const commerce = page
+    .getByRole("heading", { name: "Commercio", exact: true })
+    .locator("xpath=following-sibling::table[1]");
+  await expect(commerce).toContainText("saldo 8");
+  await expect(commerce).toContainText("bussola");
+  await expect(commerce).toContainText("inventario");
+  await expect(commerce).toContainText("corda");
+  await expect(commerce).toContainText("Bottega");
+});

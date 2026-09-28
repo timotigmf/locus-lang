@@ -30,6 +30,7 @@
 - [Persone e dialoghi](linguaggio/dialoghi-strutturati.md): conversazioni a nodi e scelte multi-turno.
 - [Scene, tempo e punteggio](linguaggio/scene-tempo-punteggio.md): intervalli a turni e premi registrati.
 - [Veicoli e movimento](linguaggio/veicoli.md): salita, discesa e posizione del mezzo guidato.
+- [Denaro e acquisti](linguaggio/denaro-e-acquisti.md): valuta, saldo, merci e pagamento atomico.
 
 - [Tutorial: il faro](tutorial/README.md), incluse le lezioni su tipi e azioni; [da Inform a LOCUS](tutorial/da-inform-a-locus.md).
 - [Registro dei sei manuali forniti](architettura/materiali-didattici.md).

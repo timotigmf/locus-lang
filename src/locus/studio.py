@@ -10,7 +10,7 @@ from locus.diagnostics import CompileError
 from locus.ir import ProgramIR
 from locus.player import Intent, parse_command
 from locus.runtime import World, has_type, instantiate
-from locus.stdlib import EAST, INSIDE, NORTH, ROOM, SIDE_A, SIDE_B, VEHICLE
+from locus.stdlib import CURRENCY, EAST, INSIDE, MERCHANDISE, NORTH, ROOM, SIDE_A, SIDE_B, VEHICLE
 from locus.stdlib.authoring import compile_story_file
 from locus.stdlib.game import Session, Transition, start, step
 from locus.stdlib.render import render
@@ -106,6 +106,11 @@ _ERROR_HELP = {
         "Veicolo non valido",
         "Colloca ogni veicolo direttamente in una stanza.",
         "docs/linguaggio/veicoli.md",
+    ),
+    "E124": (
+        "Commercio non valido",
+        "Controlla valuta, saldo e prezzi positivi delle merci.",
+        "docs/linguaggio/denaro-e-acquisti.md",
     ),
     "E310": (
         "Azione duplicata",
@@ -328,6 +333,12 @@ class Studio:
             "dialogues": len(program.dialogues),
             "scenes": len(program.scenes),
             "vehicles": sum(has_type(world, entity.type_id, VEHICLE) for entity in world.entities),
+            "currencies": sum(
+                has_type(world, entity.type_id, CURRENCY) for entity in world.entities
+            ),
+            "merchandise": sum(
+                has_type(world, entity.type_id, MERCHANDISE) for entity in world.entities
+            ),
             "title": program.title,
             "author": program.author,
         }
@@ -340,6 +351,7 @@ class Studio:
             "room": transition.session.room_id,
             "inventory": list(transition.session.inventory),
             "vehicle": transition.session.vehicle_id,
+            "owned": list(transition.session.owned_ids),
             "ended": transition.event.kind == "quit",
             "map": map_data(transition.session.world),
             "properties": [asdict(item) for item in transition.session.world.properties],
@@ -379,6 +391,10 @@ class Studio:
                 scene_enabled=bool(self.session.world.scenes),
                 vehicle_enabled=any(
                     has_type(self.session.world, entity.type_id, VEHICLE)
+                    for entity in self.session.world.entities
+                ),
+                commerce_enabled=any(
+                    has_type(self.session.world, entity.type_id, CURRENCY)
                     for entity in self.session.world.entities
                 ),
             ),

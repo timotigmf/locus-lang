@@ -11,14 +11,18 @@ from locus.rules import ActionResult, RuleError, execute
 from locus.runtime import Entity, World, has_type
 from locus.schema import Scalar, Value, valid_value
 from locus.stdlib import (
+    BALANCE,
     CONTAINER,
+    CURRENCY,
     DOOR,
     EAST,
     INSIDE,
+    MERCHANDISE,
     NORTH,
     OPENABLE,
     PERSON,
     PORTABLE,
+    PRICE,
     ROOM,
     SIDE_A,
     SIDE_B,
@@ -29,7 +33,12 @@ from locus.stdlib import (
     VISIBLE,
     WEST,
 )
-from locus.stdlib.validation import property_value, validate_session, validate_world
+from locus.stdlib.validation import (
+    integer_property_value,
+    property_value,
+    validate_session,
+    validate_world,
+)
 
 EventKind = Literal[
     "rule",
@@ -79,6 +88,13 @@ EventKind = Literal[
     "already_in_vehicle",
     "not_in_vehicle",
     "wrong_vehicle",
+    "money",
+    "purchased",
+    "no_currency",
+    "not_for_sale",
+    "insufficient_funds",
+    "must_buy",
+    "already_owned",
 ]
 
 
@@ -96,6 +112,7 @@ class Session:
     completed_scene_ids: tuple[str, ...] = ()
     score_log: tuple["ScoreEntry", ...] = ()
     vehicle_id: str | None = None
+    owned_ids: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True, slots=True)
@@ -258,7 +275,13 @@ def _resolve(session: Session, name: str) -> Entity | Event:
 
 
 def _changed(session: Session, kind: EventKind, *entities: str) -> Transition:
-    validate_session(session.world, session.inventory, session.room_id, session.vehicle_id)
+    validate_session(
+        session.world,
+        session.inventory,
+        session.room_id,
+        session.vehicle_id,
+        session.owned_ids,
+    )
     return Transition(session, Event(kind, entities))
 
 
@@ -285,6 +308,21 @@ def _set_state(session: Session, entity_id: str, value: str) -> Session:
     return replace(
         session,
         world=replace(session.world, properties=(*properties, PropertyIR(entity_id, STATE, value))),
+    )
+
+
+def _set_property(session: Session, entity_id: str, property_id: str, value: Value) -> Session:
+    properties = tuple(
+        prop
+        for prop in session.world.properties
+        if not (prop.entity_id == entity_id and prop.property_id == property_id)
+    )
+    return replace(
+        session,
+        world=replace(
+            session.world,
+            properties=(*properties, PropertyIR(entity_id, property_id, value)),
+        ),
     )
 
 
@@ -356,6 +394,43 @@ def _disembark(session: Session, name: str | None) -> Transition:
             return Transition(session, Event("wrong_vehicle", (entity.id,)))
     vehicle_id = session.vehicle_id
     return _changed(replace(session, vehicle_id=None), "disembarked", vehicle_id)
+
+
+def _currency(session: Session) -> Entity | None:
+    return next(
+        (
+            entity
+            for entity in session.world.entities
+            if has_type(session.world, entity.type_id, CURRENCY)
+        ),
+        None,
+    )
+
+
+def _purchase(session: Session, name: str | None) -> Transition:
+    if name is None:
+        return Transition(session, Event("missing_noun"))
+    entity = _resolve(session, name)
+    if isinstance(entity, Event):
+        return Transition(session, entity)
+    if not has_type(session.world, entity.type_id, MERCHANDISE):
+        return Transition(session, Event("not_for_sale", (entity.id,)))
+    if entity.id in session.inventory:
+        return Transition(session, Event("already_carried", (entity.id,)))
+    if entity.id in session.owned_ids:
+        return Transition(session, Event("already_owned", (entity.id,)))
+    currency = _currency(session)
+    if currency is None:
+        return Transition(session, Event("no_currency"))
+    price = integer_property_value(session.world, entity.id, PRICE)
+    balance = integer_property_value(session.world, currency.id, BALANCE)
+    if balance < price:
+        return Transition(session, Event("insufficient_funds", (entity.id, currency.id)))
+    moved = _move(session, entity.id, None)
+    owned = (*session.owned_ids, entity.id)
+    changed = replace(moved, owned_ids=owned)
+    changed = _set_property(changed, currency.id, BALANCE, balance - price)
+    return _changed(changed, "purchased", entity.id, currency.id)
 
 
 def _authored_action(session: Session, action_id: str) -> ActionIR | None:
@@ -514,6 +589,14 @@ def _perform(session: Session, intent: Intent) -> Transition:
         return Transition(session, Event("score"))
     if intent.verb == "time":
         return Transition(session, Event("time"))
+    if intent.verb == "money":
+        currency = _currency(session)
+        return Transition(
+            session,
+            Event("money", (currency.id,)) if currency is not None else Event("no_currency"),
+        )
+    if intent.verb == "buy":
+        return _purchase(session, intent.noun)
     if intent.verb == "board":
         return _board(session, intent.noun)
     if intent.verb == "exit_vehicle":
@@ -552,7 +635,9 @@ def _perform(session: Session, intent: Intent) -> Transition:
         if session.vehicle_id is not None:
             moved = _move(session, session.vehicle_id, target)
         moved = replace(moved, room_id=target)
-        validate_session(moved.world, moved.inventory, moved.room_id, moved.vehicle_id)
+        validate_session(
+            moved.world, moved.inventory, moved.room_id, moved.vehicle_id, moved.owned_ids
+        )
         return _perform(moved, Intent("look"))
     if intent.verb == "quit":
         return Transition(session, Event("quit"))
@@ -606,6 +691,11 @@ def _perform(session: Session, intent: Intent) -> Transition:
     if intent.verb == "take":
         if entity.id in session.inventory:
             return Transition(session, Event("already_carried", (entity.id,)))
+        if (
+            has_type(session.world, entity.type_id, MERCHANDISE)
+            and entity.id not in session.owned_ids
+        ):
+            return Transition(session, Event("must_buy", (entity.id,)))
         return _changed(_move(session, entity.id, None), "taken", entity.id)
     if not carried(session, entity.id):
         return Transition(session, Event("not_carried", (entity.id,)))
@@ -663,7 +753,13 @@ class _RuleHost:
             ),
         )
         try:
-            validate_session(updated.world, updated.inventory, updated.room_id, updated.vehicle_id)
+            validate_session(
+                updated.world,
+                updated.inventory,
+                updated.room_id,
+                updated.vehicle_id,
+                updated.owned_ids,
+            )
         except ValueError as error:
             raise RuleError(str(error)) from error
         return updated
@@ -699,7 +795,13 @@ class _RuleHost:
             )
         updated = replace(state, world=replace(state.world, relations=tuple(merged)))
         try:
-            validate_session(updated.world, updated.inventory, updated.room_id, updated.vehicle_id)
+            validate_session(
+                updated.world,
+                updated.inventory,
+                updated.room_id,
+                updated.vehicle_id,
+                updated.owned_ids,
+            )
         except ValueError as error:
             raise RuleError(str(error)) from error
         return updated
@@ -757,6 +859,7 @@ class _RuleHost:
             "custom",
             "boarded",
             "disembarked",
+            "purchased",
         }
         return ActionResult(transition.session, success, (transition.event,))
 
@@ -824,6 +927,7 @@ _TURNLESS_EVENTS = {
     "quit",
     "score",
     "time",
+    "money",
     "invalid_choice",
     "dialogue_active",
     "no_active_dialogue",

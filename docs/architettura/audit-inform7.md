@@ -151,10 +151,11 @@ rotaia restano estensioni successive del contratto.
 
 ### Denaro e commercio
 
-Il denaro richiede quantità con unità o una valuta tipata, non un intero senza
-significato. Una transazione dovrà verificare venditore, oggetto, prezzo, fondi e
-capacità, poi trasferire denaro e possesso in un unico effetto atomico. Fallire
-una verifica non dovrà modificare nessuno dei due inventari.
+LOCUS IR 19 introduce una valuta tipata, saldo, merci, prezzi e un registro del
+possesso. `compra` verifica oggetto, prezzo e fondi, poi trasferisce denaro e
+merce in un unico snapshot; un fallimento non modifica saldo o collocazione.
+Venditori con inventario e incasso, vendita, più valute, cambio e capacità
+restano contratti successivi.
 
 ### Punti, tempo, scene ed enigmi
 
@@ -226,7 +227,7 @@ imitare. La misura utile è coprire ogni contratto pubblico e ogni regressione.
 | 5 | persone e dialoghi strutturati implementati nell'IR 16 | conversazione ramificata con trace e test dei nodi |
 | 6 | scene, tempo e punteggio implementati nell'IR 17 | eventi temporali e premi registrati e riproducibili |
 | 7 | veicoli implementati nell'IR 18 | movimento atomico di conducente e veicolo, con mappa aggiornata |
-| 8 | valuta e commercio | acquisto/vendita atomici con unità e fondi verificati |
+| 8 | valuta e acquisto implementati nell'IR 19 | pagamento atomico con unità, prezzo, fondi e possesso verificati; vendita rinviata |
 | 9 | risorse multimediali | manifest validato ed export web autosufficiente |
 | 10 | manuale e indici completi | corso e ricettario ricercabili con esempi sempre compilati |
 

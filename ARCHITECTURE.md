@@ -1,6 +1,6 @@
 # Architettura tecnica
 
-Stato: Studio M5 e linguaggio incrementale fino all'IR 18.
+Stato: Studio M5 e linguaggio incrementale fino all'IR 19.
 Le decisioni strutturali sono motivate negli [ADR](docs/adr/README.md).
 
 ## Pipeline e dipendenze
@@ -18,8 +18,8 @@ frontend → parser giocatore → intento → dispatcher → runtime / regole
 La CLI è il punto di composizione: seleziona la stdlib e passa i cataloghi di tipi e relazioni
 al compilatore. Il compilatore non importa la stdlib né il runtime. Il runtime
 importa esclusivamente il contratto IR e i suoi modelli, mai il parser o l'AST.
-La stdlib fornisce `stanza`, `cosa`, `scenario`, `persona`, `veicolo`, containment
-e quattro direzioni cardinali.
+La stdlib fornisce `stanza`, `cosa`, `scenario`, `persona`, `veicolo`, `valuta`,
+`prodotto`, containment e quattro direzioni cardinali.
 Il core gestisce una gerarchia nominale generica; la stdlib dichiara contenitore
 e chiave come sottotipi di cosa.
 Un test compila tipi e relazioni non narrativi per verificare concretamente l'indipendenza del core.
@@ -30,7 +30,7 @@ Un test compila tipi e relazioni non narrativi per verificare concretamente l'in
 | lexer | token, originale, posizione; nessuna risoluzione di nomi | implementato |
 | parser autore | grammatica → AST immutabile | dichiarazioni, relazioni, regole, metadati e vocabolario |
 | semantica | nomi canonici, tipi noti, duplicati, ID risolti | implementato |
-| IR | programma immutabile senza articoli o sintassi | schema sperimentale 18 |
+| IR | programma immutabile senza articoli o sintassi | schema sperimentale 19 |
 | mondo | istanze indipendenti dai nodi AST | snapshot validati e relazioni dinamiche |
 | regole | ordinamento, condizioni, esiti, tracing | implementato con rollback |
 | runtime | transizioni, eventi e servizi deterministici | transizioni IF nella stdlib |
@@ -58,7 +58,7 @@ riferimenti in avanti. Il catalogo `RelationSpec` definisce tipi agli estremi,
 orientamento e inversi. Nessuna conoscenza di stanze o direzioni nel compilatore.
 Conflitti funzionali, auto-collegamenti e riferimenti non risolti sono diagnosticati.
 
-`ProgramIR` versione 18 contiene gerarchia dei tipi, azioni dell'autore, entità,
+`ProgramIR` versione 19 contiene gerarchia dei tipi, azioni dell'autore, entità,
 relazioni, proprietà, tabelle, dialoghi, scene, regole, punto iniziale, titolo,
 autore e sinonimi risolti; i record di base sono
 `TypeIR(id, label, parent_id)`, `ActionIR(id, label, commands, ..., separators)`,
@@ -86,6 +86,9 @@ una cosa dalla sua collocazione iniziale all'inventario. Proprietà, conteniment
 e direzioni dinamiche producono un nuovo snapshot; l'IR iniziale non viene mutata.
 La sessione conserva inoltre l'eventuale veicolo guidato. Una direzione riuscita
 aggiorna atomicamente stanza del giocatore e relazione di posizione del mezzo.
+Il registro delle merci acquistate distingue possesso e collocazione: comprare
+aggiorna saldo, inventario e possesso in un solo snapshot; lasciare un bene non
+annulla l'acquisto.
 
 Nessun print nel core. `player.parse_command` produce intenti senza usare lexer
 o parser autore; la sessione controlla visibilità, tipo e possesso prima di una
@@ -168,7 +171,7 @@ parser. Si consulti l'[ADR 0005](docs/adr/0005-proprieta-e-mondo.md) per le alte
 contiene record immutabili generici. `rules.execute` esegue rulebook attraverso
 un protocollo Host indipendente da IF. `stdlib.game` adatta sessioni e azioni;
 `Transition` espone output, trace e risultato. Questi record furono introdotti
-con l'IR 4 e sono conservati nell'IR 18.
+con l'IR 4 e sono conservati nell'IR 19.
 Vedere [ADR 0006](docs/adr/0006-regole.md).
 
 ## Implementazione M4
@@ -258,7 +261,7 @@ confronto transitivo. Vedere [ADR 0011](docs/adr/0011-gerarchia-tipi.md).
 ## Azioni definite dall'autore
 
 Le dichiarazioni di azione vengono unite al catalogo `ActionSpec` dell'host dopo
-la risoluzione dei tipi. L'IR 18 conserva forme di comando e separatori anche
+la risoluzione dei tipi. L'IR 19 conserva forme di comando e separatori anche
 multiparola, oltre ai tipi degli argomenti. Il parser giocatore riceve questo catalogo
 compilato e produce ID di azione; il dispatcher usa le stesse fasi transazionali
 delle azioni standard.
