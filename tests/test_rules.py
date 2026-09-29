@@ -592,6 +592,25 @@ Fine regola.
     )
 
 
+def test_dynamic_diagonal_relation_is_structured_and_navigable() -> None:
+    initial = session(
+        """
+La Vedetta è una stanza.
+Regola "rivela diagonale" per esaminare "leva" nella fase dopo:
+    crea relazione "nordest" da "Sala" a "Vedetta";
+Fine regola.
+"""
+    )
+    revealed = step(initial, parse_command("esamina leva"))
+    change = revealed.trace[-1]
+    assert change.outcome == "completata"
+    assert step(initial, parse_command("ne")).event.kind == "no_exit"
+    moved = step(revealed.session, parse_command("ne"))
+    assert moved.session.room_id != revealed.session.room_id
+    returned = step(moved.session, parse_command("so"))
+    assert returned.session.room_id == revealed.session.room_id
+
+
 def test_debug_cli(
     tmp_path: "Path", monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
 ) -> None:

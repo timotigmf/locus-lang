@@ -52,7 +52,7 @@ Ogni pacchetto conserva il core indipendente dalla narrativa interattiva.
 1. Gerarchia dei tipi e azioni dell'autore implementate in IR 8.
 2. Sinonimi, locuzioni iniziali e separatori multiparola implementati in IR 11;
    clitici, pattern liberi e disambiguazione a più turni restano da completare.
-3. Relazioni dinamiche cardinali, passaggio segreto, visibilità esplicita e
+3. Relazioni dinamiche direzionali, passaggio segreto, visibilità esplicita e
    oggetti di scenario implementati fino all'IR 13. Luce, trasparenza e punti di
    vista multipli restano pacchetti separati.
 4. Elenchi e tabelle tipate con effetti transazionali implementati nell'IR 15;
@@ -76,6 +76,10 @@ Ogni pacchetto conserva il core indipendente dalla narrativa interattiva.
     implementati nello Studio; viste incrociate e debugger restano pacchetti
     successivi.
 
+12. Otto direzioni della rosa dei venti implementate nella stdlib, nel runtime e
+    nell'atlante; alto/basso, dentro/fuori e percorsi a senso unico restano
+    pacchetti separati.
+
 Non si importeranno codice o testi Inform.
 
 ## Studio M5 — 0.5.0a1
@@ -84,6 +88,6 @@ Editor web, progetto virtuale, diagnostica con manuale, gioco, mappa SVG/JSON,
 indice, trace, copioni verificabili e release web con runtime incluso. Restano
 fuori scope collaborazione cloud, breakpoint, salvataggi del gioco ed eseguibili nativi.
 
-Estensione compatibile completata: quattro direzioni cardinali, abbreviazioni
-classiche, nomi parziali non ambigui e disambiguazione esplicita. Diagonali,
-alto/basso, dentro/fuori e dialogo di chiarimento a più turni restano futuri.
+Estensione compatibile completata: otto direzioni della rosa dei venti,
+abbreviazioni classiche, nomi parziali non ambigui e disambiguazione esplicita.
+Alto/basso, dentro/fuori e dialogo di chiarimento a più turni restano futuri.

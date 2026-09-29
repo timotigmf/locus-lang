@@ -64,19 +64,20 @@ dall'alto verso il basso prima di studiare i moduli.
 20. [Mercanti, scorte e vendita](../tutorial/20-la-bottegaia-del-faro.md)
 21. [Immagini, suoni e release](../tutorial/21-il-faro-multimediale.md)
 22. [Leggere, filtrare ed esportare l'Indice](../tutorial/22-leggere-indice-del-mondo.md)
+23. [Costruire la rosa dei venti](../tutorial/23-la-rosa-dei-venti.md)
 
 ## Indice per obiettivo
 
 | Voglio creare… | Supporto attuale | Da leggere |
 | --- | --- | --- |
-| Dungeon e mappe | Stanze, quattro direzioni, porte e contenitori | Lezioni 1 e 6 |
+| Dungeon e mappe | Stanze, otto direzioni, porte e contenitori | Lezioni 1, 6 e 23 |
 | Enigmi con chiavi | Porte/contenitori bloccati, regole e rollback | Lezioni 2, 3 e 6 |
 | Punti e tempo | Scene temporali, turni e registro dei premi | Lezioni 6 e 17 |
 | Oggetti complessi | Contenimento annidato, proprietà tipate, stati | Lezione 2 e specifica M2 |
 | Categorie proprie | Tipi nominali con ereditarietà singola | Lezione 7 |
 | Verbi e comandi propri | Azioni tipate con sinonimi e locuzioni multiparola | Lezioni 8–11 |
 | Sinonimi | Alias nominali e più forme per le azioni | Lezioni 5, 6 e 9 |
-| Passaggi segreti dinamici | Uscite cardinali create o rimosse dalle regole | Lezione 12 |
+| Passaggi segreti dinamici | Uscite direzionali create o rimosse dalle regole | Lezione 12 |
 | Dettagli ambientali e oggetti nascosti | `scenario` non trasportabile e proprietà `visibile` | Lezione 13 |
 | Indizi, memoria e cronologie | Elenchi tipati con appartenenza e rollback | Lezione 14 |
 | Cataloghi e registri | Tabelle con colonne tipate e righe transazionali | Lezione 15 |
@@ -87,6 +88,7 @@ dall'alto verso il basso prima di studiare i moduli.
 | Mercanti e vendita | Persone venditrici, cassa, scorte e rivendita | Lezione 20 |
 | Immagini e paesaggi sonori | Risorse locali validate e incluse nella release | Lezione 21 |
 | Ispezionare il progetto compilato | Indice completo, filtro ed export JSON | Lezione 22 |
+| Percorsi diagonali | Nordest, sudest, sudovest, nordovest e inverse | Lezione 23 |
 
 ## Vocabolario italiano
 

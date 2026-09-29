@@ -173,6 +173,20 @@ def test_map_contains_north_and_east_links_once() -> None:
     ]
 
 
+def test_map_contains_each_diagonal_link_once() -> None:
+    studio = Studio()
+    result = studio.compile(
+        project(
+            "La Sala è una stanza. La Vedetta è una stanza. La Darsena è una stanza. "
+            "La Vedetta è a nordest della Sala. La Darsena è a sudest della Sala."
+        )
+    )
+    assert result["map"]["links"] == [
+        {"from": "e1", "to": "e2", "direction": "nordest"},
+        {"from": "e1", "to": "e3", "direction": "sudest"},
+    ]
+
+
 def test_map_updates_when_a_secret_passage_is_revealed() -> None:
     studio = Studio()
     result = studio.compile(

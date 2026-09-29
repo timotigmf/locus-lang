@@ -21,6 +21,7 @@ accettate anche alcune convenzioni storiche delle avventure testuali in inglese.
 | `esamina custodia` | `x custodia`, `examine custodia` | Mostra dettagli e stato |
 | `inventario` | `i`, `inv`, `inventory` | Elenca ciò che porti |
 | `nord`, `sud`, `est`, `ovest` | `n`, `s`, `e`, `o`, `w` e forme inglesi | Si sposta sulla mappa |
+| `nordest`, `sudest`, `sudovest`, `nordovest` | `ne`, `se`, `so`, `no`, `nw` e forme inglesi | Percorre una diagonale |
 | `prendi chiave` | `get chiave`, `take chiave` | Prende un oggetto |
 | `esci` | `q`, `quit` | Termina la sessione |
 

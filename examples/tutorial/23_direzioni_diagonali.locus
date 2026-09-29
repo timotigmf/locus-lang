@@ -1,0 +1,20 @@
+Titolo: "La rosa dei venti".
+Autore: "Esempio LOCUS".
+
+La Piazza è una stanza.
+La Vedetta è una stanza.
+La Darsena è una stanza.
+La Forgia è una stanza.
+Il Giardino è una stanza.
+
+La Vedetta è a nordest della Piazza.
+La Darsena è a sudest della Piazza.
+La Forgia è a sudovest della Piazza.
+Il Giardino è a nordovest della Piazza.
+
+Inizia nella "Piazza".
+La Piazza ha descrizione "Quattro sentieri diagonali partono dalla rosa dei venti.".
+La Vedetta ha descrizione "La vedetta domina il porto a sudovest.".
+La Darsena ha descrizione "La piazza si trova a nordovest.".
+La Forgia ha descrizione "La piazza si trova a nordest.".
+Il Giardino ha descrizione "La piazza si trova a sudest.".

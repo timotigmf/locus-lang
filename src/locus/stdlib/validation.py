@@ -15,6 +15,8 @@ from locus.stdlib import (
     MERCHANT,
     MERCHANT_CASH,
     NORTH,
+    NORTHEAST,
+    NORTHWEST,
     OFFERS,
     OPENABLE,
     PERSON,
@@ -25,6 +27,8 @@ from locus.stdlib import (
     SIDE_A,
     SIDE_B,
     SOUTH,
+    SOUTHEAST,
+    SOUTHWEST,
     STATE,
     VEHICLE,
     WEST,
@@ -215,7 +219,17 @@ def validate_world(
         if not any(
             edge.source_id == left
             and edge.target_id == right
-            and edge.predicate_id in {NORTH, SOUTH, EAST, WEST}
+            and edge.predicate_id
+            in {
+                NORTH,
+                SOUTH,
+                EAST,
+                WEST,
+                NORTHEAST,
+                SOUTHEAST,
+                SOUTHWEST,
+                NORTHWEST,
+            }
             for edge in world.relations
         ):
             raise WorldError(

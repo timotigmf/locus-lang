@@ -25,6 +25,7 @@
 - [Comandi multiparola](linguaggio/comandi-multiparola.md): locuzioni iniziali e collisioni di prefisso.
 - [Separatori multiparola](linguaggio/separatori-multiparola.md): locuzioni fra due oggetti e forme articolate.
 - [Relazioni dinamiche](linguaggio/relazioni-dinamiche.md) e [visibilità](linguaggio/visibilita-scenario.md): passaggi segreti, oggetti nascosti e scenario.
+- [Direzioni diagonali](linguaggio/direzioni-diagonali.md): rosa dei venti completa, inverse e atlante.
 - [Elenchi tipati](linguaggio/liste-tipate.md): raccolte omogenee, appartenenza e rollback.
 - [Tabelle tipate](linguaggio/tabelle-tipate.md): colonne nominate e righe transazionali.
 - [Persone e dialoghi](linguaggio/dialoghi-strutturati.md): conversazioni a nodi e scelte multi-turno.

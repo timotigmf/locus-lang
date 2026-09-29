@@ -51,7 +51,7 @@ il successivo. Non promettiamo correzioni automatiche della semantica. Gli span
 di alcune diagnosi coprono un'intera dichiarazione/regola, come nella CLI.
 Il manuale incorporato è ricercabile per capitolo; la guida dell'autore è la
 pagina iniziale e ogni blocco di codice offre **Copia codice**. Comprende un corso
-in ventidue lezioni, specifiche e tutorial. L'Indice del mondo mostra anche
+in ventitré lezioni, specifiche e tutorial. L'Indice del mondo mostra anche
 dialoghi, scene, veicoli, mercanti e commercio compilati e aggiorna proprietà,
 righe delle tabelle, posizione dei mezzi, saldo, cassa e scorte dopo ogni comando.
 
@@ -61,7 +61,7 @@ un sorgente nuovo. **Ricomincia** resetta la sessione del progetto compilato.
 
 ## Mappa e indice
 
-**Mappa** mostra luoghi, collegamenti nord/sud ed est/ovest, porte, veicoli e punto iniziale. I
+**Mappa** mostra luoghi, otto direzioni della rosa dei venti, porte, veicoli e punto iniziale. I
 passaggi dinamici compaiono o scompaiono subito dopo il comando che li modifica. Puoi
 allargare/ridurre la vista ed esportare SVG o dati JSON. L'SVG è un file vettoriale
 riutilizzabile e stampabile. È uno schema logico dello stato corrente, non una

@@ -67,4 +67,4 @@ IR 18 modella un solo conducente e un solo veicolo guidato alla volta. Passegger
 oggetti caricati, capienza, carburante, rotte riservate a strada o acqua,
 veicoli autonomi e movimento verticale richiedono contratti successivi. In
 questa versione il giocatore può percorrere a piedi gli stessi collegamenti
-cardinali quando non è a bordo.
+della rosa dei venti quando non è a bordo.

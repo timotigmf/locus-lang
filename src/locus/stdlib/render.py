@@ -144,8 +144,9 @@ def render(transition: Transition) -> str:
         return "La storia non dichiara alcuna valuta."
     unknown = (
         "Comando non riconosciuto. Usa guarda, esamina, prendi, lascia, metti, "
-        "apri, chiudi, blocca, inventario, nord, sud, est, ovest o esci. "
-        "Sono disponibili anche le abbreviazioni l, x, i, n, s, e, o e q."
+        "apri, chiudi, blocca, inventario, nord, sud, est, ovest, nordest, "
+        "sudest, sudovest, nordovest o esci. Sono disponibili anche le "
+        "abbreviazioni l, x, i, n, s, e, o, ne, se, so, no e q."
     )
     if world.dialogues:
         unknown += " Per conversare usa parla con NOME."

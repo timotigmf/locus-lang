@@ -40,6 +40,19 @@ def make_session() -> Session:
         ("o", Intent("west")),
         ("w", Intent("west")),
         ("west", Intent("west")),
+        ("nordest", Intent("northeast")),
+        ("ne", Intent("northeast")),
+        ("northeast", Intent("northeast")),
+        ("sudest", Intent("southeast")),
+        ("se", Intent("southeast")),
+        ("southeast", Intent("southeast")),
+        ("sudovest", Intent("southwest")),
+        ("so", Intent("southwest")),
+        ("southwest", Intent("southwest")),
+        ("nordovest", Intent("northwest")),
+        ("no", Intent("northwest")),
+        ("nw", Intent("northwest")),
+        ("northwest", Intent("northwest")),
         ("esci", Intent("quit")),
         ("q", Intent("quit")),
         ("prendi chiave", Intent("take", "chiave")),
@@ -114,6 +127,10 @@ def test_absent_and_unreachable_objects_do_not_change_state() -> None:
         ("sud", "no_exit"),
         ("e", "no_exit"),
         ("o", "no_exit"),
+        ("ne", "no_exit"),
+        ("se", "no_exit"),
+        ("so", "no_exit"),
+        ("no", "no_exit"),
         ("salta", "unknown"),
     ]:
         result = step(session, parse_command(command))
@@ -144,6 +161,31 @@ def test_east_west_movement_and_inverse() -> None:
     assert next(e.label for e in world.entities if e.id == moved.session.room_id) == "Serra"
     returned = step(moved.session, parse_command("o"))
     assert returned.event.kind == "look"
+    assert returned.session.room_id == current.room_id
+
+
+@pytest.mark.parametrize(
+    ("predicate", "outbound", "inbound", "destination"),
+    [
+        ("nordest", "ne", "so", "Belvedere"),
+        ("sudest", "se", "no", "Darsena"),
+    ],
+)
+def test_diagonal_movement_and_inverse(
+    predicate: str, outbound: str, inbound: str, destination: str
+) -> None:
+    world = instantiate(
+        compile_source(
+            f"La Sala è una stanza. La {destination} è una stanza. "
+            f"La {destination} è a {predicate} della Sala.",
+            default_kinds(),
+            relations=default_relations(),
+        )
+    )
+    current = start(world)
+    moved = step(current, parse_command(outbound))
+    assert next(e.label for e in world.entities if e.id == moved.session.room_id) == destination
+    returned = step(moved.session, parse_command(inbound))
     assert returned.session.room_id == current.room_id
 
 

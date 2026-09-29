@@ -6,8 +6,10 @@ Versione corrente `0.5.0a1`, IR versione 21. Le specifiche M2, M3 e M4
 estendono e, dove indicato, sostituiscono i limiti M1 sotto.
 La [specifica M2](docs/linguaggio/milestone-2.md) è normativa per proprietà,
 stringhe, nomi quotati, preposizioni, contenitori, porte e chiavi.
-La stdlib corrente estende inoltre i collegamenti cardinali a nord/sud ed
-est/ovest; le coppie inverse sono generate automaticamente.
+La stdlib corrente offre le otto direzioni della rosa dei venti; le coppie
+inverse sono generate automaticamente. La specifica delle
+[direzioni diagonali](docs/linguaggio/direzioni-diagonali.md) completa i quattro
+collegamenti cardinali storici.
 La specifica di [metadati e vocabolario](docs/linguaggio/metadati-vocabolario.md)
 definisce titolo, autore e sinonimi nominali dichiarati dall'autore.
 La specifica dei [tipi definiti dall'autore](docs/linguaggio/tipi-autore.md)
@@ -21,7 +23,7 @@ definisce locuzioni iniziali prive di collisioni di prefisso.
 La specifica dei [separatori multiparola](docs/linguaggio/separatori-multiparola.md)
 definisce locuzioni deterministiche fra i due oggetti.
 La specifica delle [relazioni dinamiche](docs/linguaggio/relazioni-dinamiche.md)
-definisce passaggi cardinali creati o rimossi da effetti transazionali.
+definisce passaggi direzionali creati o rimossi da effetti transazionali.
 La specifica di [visibilità e scenario](docs/linguaggio/visibilita-scenario.md)
 definisce oggetti nascosti e dettagli ambientali non trasportabili.
 La specifica degli [elenchi tipati](docs/linguaggio/liste-tipate.md) definisce
@@ -204,12 +206,13 @@ possono avere prefissi ambigui. L'IR corrente è la versione 21.
 ## Relazioni dinamiche
 
 Le regole possono usare `crea relazione "nord" da "Sala" a "Cripta";` e
-`rimuovi relazione ...;` per modificare i collegamenti cardinali. Il compilatore
+`rimuovi relazione ...;` per modificare i collegamenti direzionali. Il compilatore
 risolve gli ID, controlla tipi e mutabilità e incorpora le inverse nello stesso
 effetto. Il runtime applica il cambiamento nella transazione della regola. Gli
 usi non validi producono `E312`; si veda la
 [specifica completa](docs/linguaggio/relazioni-dinamiche.md). Questa estensione
-introduce l'IR 12 ed è conservata nell'IR 21.
+introduce l'IR 12 ed è conservata nell'IR 21; la stdlib attuale comprende anche
+le quattro diagonali senza modificare la forma dell'IR.
 
 ## Visibilità e scenario
 
@@ -261,7 +264,7 @@ nomi e contratti non validi. La
 ## Veicoli
 
 `veicolo` è un tipo standard collocabile direttamente in una stanza e non
-trasportabile. `sali`/`entra` registra il mezzo guidato, le direzioni cardinali
+trasportabile. `sali`/`entra` registra il mezzo guidato, le direzioni della rosa dei venti
 spostano insieme conducente e veicolo, e `scendi` conclude la guida. Sottotipi e
 regole usano la gerarchia e le azioni standard esistenti. `E123` segnala una
 collocazione iniziale incompatibile. La

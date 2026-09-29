@@ -33,7 +33,7 @@ test("progetto, compilazione, gioco, test e release statica", async ({
   await page.locator(".cm-content").click();
   await page.keyboard.press("ControlOrMeta+End");
   await page.keyboard.insertText(
-    '\nIl Molo ha immagine "media/molo.png".\nIl Molo ha testo alternativo "Il molo nella foschia.".',
+    '\nIl Molo ha immagine "media/molo.png".\nIl Molo ha testo alternativo "Il molo nella foschia.".\nLa Vedetta è una stanza.\nLa Vedetta è a nordest del Molo.',
   );
   await page
     .getByRole("button", { name: "▶ Compila e prova", exact: true })
@@ -52,6 +52,12 @@ test("progetto, compilazione, gioco, test e release statica", async ({
   await page.locator("#command").fill("o");
   await page.locator("#send").click();
   await expect(absentExit).toHaveCount(2);
+  await page.locator("#command").fill("ne");
+  await page.locator("#send").click();
+  await expect(page.locator(".story-output").last()).toContainText("Vedetta");
+  await page.locator("#command").fill("so");
+  await page.locator("#send").click();
+  await expect(page.locator(".story-output").last()).toContainText("Molo");
   await page.locator("#command").fill("apri custodia");
   await page.locator("#send").click();
   await expect(page.locator("#transcript")).toContainText(
@@ -72,6 +78,9 @@ test("progetto, compilazione, gioco, test e release statica", async ({
   });
   await page.getByRole("button", { name: "Mappa", exact: true }).click();
   await expect(page.locator("#mapCanvas svg")).toBeVisible();
+  await expect(page.locator("#mapCanvas svg")).toContainText(
+    "nordest / sudovest",
+  );
   const mapDownload = page.waitForEvent("download");
   await page.locator("#exportMap").click();
   expect((await mapDownload).suggestedFilename()).toBe("mappa-locus.svg");

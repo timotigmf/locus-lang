@@ -17,6 +17,8 @@ regole delega l'applicazione all'host e conserva il rollback dell'intera azione.
 
 La libreria standard rende dinamiche soltanto le quattro direzioni cardinali.
 La mappa dello Studio legge lo snapshot `World` corrente dopo ogni comando.
+L'[ADR 0026](0026-direzioni-diagonali.md) estende in seguito lo stesso contratto
+alle quattro diagonali senza cambiare la forma dell'IR.
 
 ## Alternative considerate
 

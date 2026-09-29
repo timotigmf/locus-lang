@@ -127,6 +127,28 @@ def test_tutorial_accepts_classic_abbreviation_and_unique_partial_name() -> None
     assert "chiave di rame" in render(taken)
 
 
+def test_compass_rose_tutorial_traverses_all_diagonals() -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "23_direzioni_diagonali.locus")))
+    assert step(current, parse_command("nord")).event.kind == "no_exit"
+    for outbound, destination, inbound in (
+        ("ne", "Vedetta", "so"),
+        ("se", "Darsena", "no"),
+        ("so", "Forgia", "ne"),
+        ("no", "Giardino", "se"),
+    ):
+        moved = step(current, parse_command(outbound))
+        assert (
+            next(
+                entity.label
+                for entity in moved.session.world.entities
+                if entity.id == moved.session.room_id
+            )
+            == destination
+        )
+        returned = step(moved.session, parse_command(inbound))
+        assert returned.session.room_id == current.room_id
+
+
 def test_dungeon_tutorial_awards_points_once_after_the_puzzle() -> None:
     current = start(instantiate(compile_story_file(TUTORIAL / "06_sotterraneo.locus")))
     for command in [

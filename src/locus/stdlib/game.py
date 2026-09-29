@@ -21,6 +21,8 @@ from locus.stdlib import (
     MERCHANT,
     MERCHANT_CASH,
     NORTH,
+    NORTHEAST,
+    NORTHWEST,
     OFFERS,
     OPENABLE,
     PERSON,
@@ -31,6 +33,8 @@ from locus.stdlib import (
     SIDE_A,
     SIDE_B,
     SOUTH,
+    SOUTHEAST,
+    SOUTHWEST,
     STATE,
     UNLOCKS,
     VEHICLE,
@@ -729,7 +733,16 @@ def _perform(session: Session, intent: Intent) -> Transition:
                 tuple(ident for ident in session.inventory if reachable(session, ident)),
             ),
         )
-    directions = {"north": NORTH, "south": SOUTH, "east": EAST, "west": WEST}
+    directions = {
+        "north": NORTH,
+        "south": SOUTH,
+        "east": EAST,
+        "west": WEST,
+        "northeast": NORTHEAST,
+        "southeast": SOUTHEAST,
+        "southwest": SOUTHWEST,
+        "northwest": NORTHWEST,
+    }
     if intent.verb in directions:
         predicate = directions[intent.verb]
         target = next(
@@ -1008,6 +1021,10 @@ def _step(session: Session, intent: Intent) -> Transition:
                 "south",
                 "east",
                 "west",
+                "northeast",
+                "southeast",
+                "southwest",
+                "northwest",
                 "exit_vehicle",
             }
             and not intent.noun

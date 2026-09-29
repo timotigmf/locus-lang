@@ -27,9 +27,11 @@ from locus.stdlib import (
     MERCHANDISE,
     MERCHANT,
     NORTH,
+    NORTHEAST,
     ROOM,
     SIDE_A,
     SIDE_B,
+    SOUTHEAST,
     VEHICLE,
 )
 from locus.stdlib.authoring import compile_story_file
@@ -289,7 +291,12 @@ def validate_project(project: Any) -> dict[str, Any]:
 def map_data(model: ProgramIR | World) -> dict[str, Any]:
     world = instantiate(model) if isinstance(model, ProgramIR) else model
     rooms = [asdict(entity) for entity in world.entities if has_type(world, entity.type_id, ROOM)]
-    link_directions = {NORTH: "nord", EAST: "est"}
+    link_directions = {
+        NORTH: "nord",
+        EAST: "est",
+        NORTHEAST: "nordest",
+        SOUTHEAST: "sudest",
+    }
     links = [
         {
             "from": edge.source_id,

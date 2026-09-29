@@ -21,6 +21,10 @@ NORTH = "mondo.nord"
 SOUTH = "mondo.sud"
 EAST = "mondo.est"
 WEST = "mondo.ovest"
+NORTHEAST = "mondo.nordest"
+SOUTHEAST = "mondo.sudest"
+SOUTHWEST = "mondo.sudovest"
+NORTHWEST = "mondo.nordovest"
 SIDE_A = "mondo.lato_a"
 SIDE_B = "mondo.lato_b"
 UNLOCKS = "mondo.apre"
@@ -82,6 +86,38 @@ def default_relations() -> dict[str, RelationSpec]:
         "ovest": RelationSpec(
             WEST, ROOM, ROOM, reverse_operands=True, inverse_id=EAST, mutable=True
         ),
+        "nordest": RelationSpec(
+            NORTHEAST,
+            ROOM,
+            ROOM,
+            reverse_operands=True,
+            inverse_id=SOUTHWEST,
+            mutable=True,
+        ),
+        "sudest": RelationSpec(
+            SOUTHEAST,
+            ROOM,
+            ROOM,
+            reverse_operands=True,
+            inverse_id=NORTHWEST,
+            mutable=True,
+        ),
+        "sudovest": RelationSpec(
+            SOUTHWEST,
+            ROOM,
+            ROOM,
+            reverse_operands=True,
+            inverse_id=NORTHEAST,
+            mutable=True,
+        ),
+        "nordovest": RelationSpec(
+            NORTHWEST,
+            ROOM,
+            ROOM,
+            reverse_operands=True,
+            inverse_id=SOUTHEAST,
+            mutable=True,
+        ),
         "collega da": RelationSpec(SIDE_A, DOOR, ROOM),
         "collega a": RelationSpec(SIDE_B, DOOR, ROOM),
         "apre": RelationSpec(UNLOCKS, KEY, OPENABLE, verb="apre"),
@@ -120,6 +156,10 @@ def default_actions() -> dict[str, ActionSpec]:
         "andare a sud": ActionSpec("south", 0, 0),
         "andare a est": ActionSpec("east", 0, 0),
         "andare a ovest": ActionSpec("west", 0, 0),
+        "andare a nordest": ActionSpec("northeast", 0, 0),
+        "andare a sudest": ActionSpec("southeast", 0, 0),
+        "andare a sudovest": ActionSpec("southwest", 0, 0),
+        "andare a nordovest": ActionSpec("northwest", 0, 0),
         "prendere": ActionSpec("take", 1, 1),
         "aprire": ActionSpec("open", 1, 2),
         "chiudere": ActionSpec("close", 1, 1),
