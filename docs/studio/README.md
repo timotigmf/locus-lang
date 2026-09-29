@@ -51,7 +51,7 @@ il successivo. Non promettiamo correzioni automatiche della semantica. Gli span
 di alcune diagnosi coprono un'intera dichiarazione/regola, come nella CLI.
 Il manuale incorporato è ricercabile per capitolo; la guida dell'autore è la
 pagina iniziale e ogni blocco di codice offre **Copia codice**. Comprende un corso
-in ventuno lezioni, specifiche e tutorial. L'Indice del mondo mostra anche
+in ventidue lezioni, specifiche e tutorial. L'Indice del mondo mostra anche
 dialoghi, scene, veicoli, mercanti e commercio compilati e aggiorna proprietà,
 righe delle tabelle, posizione dei mezzi, saldo, cassa e scorte dopo ogni comando.
 
@@ -68,11 +68,13 @@ riutilizzabile e stampabile. È uno schema logico dello stato corrente, non una
 mappa delle posizioni del giocatore né un impaginatore geografico: collegamenti
 ciclici o complessi possono avere linee incrociate.
 
-**Indice del mondo** elenca entità, gerarchie dei tipi, proprietà, tabelle,
-azioni, dialoghi e scene compilati. Per ogni dialogo mostra persona, numero di
-nodi e nodo iniziale; per ogni scena mostra turni e punti; per ogni veicolo tipo
-e stanza corrente; per il commercio mostra valuta, saldo, mercanti, cassa,
-prezzi, rivendita, posizione e venditore corrente.
+**Indice del mondo** elenca metadati, gerarchie dei tipi, entità, proprietà,
+relazioni, vocabolario, azioni, regole, tabelle, dialoghi, scene e risorse
+compilati. Per ogni dialogo mostra persona, numero di nodi e nodo iniziale; per
+ogni scena mostra turni e punti; per ogni veicolo tipo e stanza corrente; per il
+commercio mostra valuta, saldo, mercanti, cassa, prezzi, rivendita, posizione e
+venditore corrente. Il filtro cerca in tutte le righe e **Scarica JSON** esporta
+l'IR completa. Consulta il [riferimento dell'Indice](indice-del-mondo.md).
 **Regole e trace**
 mostra le regole considerate nell'ultima azione, con esito e collegamento alla
 riga del sorgente, il percorso del dialogo e gli eventi temporali con variazione

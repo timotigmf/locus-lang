@@ -1,0 +1,29 @@
+Titolo: "L'archivio trasparente".
+Autore: "Esempio LOCUS".
+
+Un reperto è un tipo di cosa.
+
+La Sala è una stanza.
+Il Deposito è una stanza.
+Il Deposito è a nord della Sala.
+Inizia nella "Sala".
+La Sala ha descrizione "Ogni elemento dell'archivio può essere ispezionato.".
+
+Il medaglione è un reperto nella Sala.
+Comprendi "talismano" come "medaglione".
+
+Azione "catalogare" su un reperto con comando "cataloga".
+Regola "scheda del medaglione" per catalogare "medaglione" nella fase invece:
+    dì "Registri il medaglione nel catalogo.";
+Fine regola.
+
+Tabella "reperti":
+    Colonna "nome" testuale.
+    Colonna "numero" numerica.
+    Riga "medaglione" 17.
+Fine tabella.
+
+Scena "orario di apertura" dal turno 1 al turno 3:
+    Inizio "L'archivio apre al pubblico.".
+    Fine "L'archivio chiude le porte.".
+Fine scena.

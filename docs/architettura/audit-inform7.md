@@ -238,7 +238,7 @@ imitare. La misura utile è coprire ogni contratto pubblico e ogni regressione.
 | 8 | valuta e acquisto implementati nell'IR 19 | pagamento atomico con unità, prezzo, fondi e possesso verificati |
 | 9 | mercanti e vendita implementati nell'IR 20 | scorta, incasso, rivendita e insolvenza verificati nello stesso snapshot |
 | 10 | risorse multimediali implementate nell'IR 21 | manifest validato ed export web autosufficiente |
-| 11 | manuale e indici completi | corso e ricettario ricercabili con esempi sempre compilati |
+| 11 | indice completo implementato nello Studio | proiezione IR ricercabile ed esportabile; corso con esempi sempre compilati |
 
 Ogni pacchetto richiede una specifica e, se modifica i confini del sistema, un
 ADR prima dell'implementazione. Le capacità verranno aggiunte in questo ordine

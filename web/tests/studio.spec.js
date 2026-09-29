@@ -79,6 +79,27 @@ test("progetto, compilazione, gioco, test e release statica", async ({
     .getByRole("button", { name: "Indice del mondo", exact: true })
     .click();
   await expect(page.locator("#index")).toContainText("cosa › contenitore");
+  await expect(page.locator("#index")).toContainText("Gerarchia dei tipi");
+  await expect(page.locator("#index")).toContainText("Relazioni");
+  await expect(page.locator("#index")).toContainText("Vocabolario");
+  await expect(page.locator("#index")).toContainText("Regole");
+  await page.locator("#indexSearch").fill("scatola");
+  await expect(page.locator("#indexSearchCount")).toContainText("1 voce");
+  await page.locator("#indexSearch").fill("termine inesistente zzz");
+  await expect(page.locator("#indexEmpty")).toBeVisible();
+  await page.locator("#indexSearch").fill("");
+  const indexDownload = page.waitForEvent("download");
+  await page.locator("#exportIndex").click();
+  const indexFile = await indexDownload;
+  expect(indexFile.suggestedFilename()).toBe("indice-mondo-locus.json");
+  const exportedIndex = JSON.parse(
+    await readFile(await indexFile.path(), "utf8"),
+  );
+  expect(exportedIndex.version).toBe(21);
+  expect(exportedIndex.rules.length).toBeGreaterThan(0);
+  expect(exportedIndex.synonyms.some((item) => item.alias === "scatola")).toBe(
+    true,
+  );
   await page.getByRole("button", { name: "Storia", exact: true }).click();
   await page.screenshot({ path: "test-results/studio.png", fullPage: true });
   const downloadPromise = page.waitForEvent("download");

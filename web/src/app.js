@@ -152,9 +152,13 @@ function dirty() {
       "Sorgente modificato: compila per aggiornare le diagnosi.",
     ),
   );
-  $("index").replaceChildren(
+  $("indexContent").replaceChildren(
     el("p", { class: "empty" }, "Indice da aggiornare."),
   );
+  $("indexSearch").disabled = true;
+  $("exportIndex").disabled = true;
+  $("indexSearchCount").textContent = "";
+  $("indexEmpty").hidden = true;
 }
 function validate(p) {
   if (
@@ -641,8 +645,47 @@ function showMap(data) {
   $("mapSummary").textContent =
     `${data.rooms.length} luoghi · ${data.links.length} collegamenti · ${data.doors.length} porte · ${(data.vehicles ?? []).length} veicoli`;
 }
+function indexTable(headers, rows) {
+  const table = el("table", { class: "data" });
+  const head = el("tr");
+  for (const label of headers) head.append(el("th", {}, label));
+  table.append(head);
+  for (const values of rows) {
+    const row = el("tr", { "data-index-row": "" });
+    for (const value of values) row.append(el("td", {}, String(value)));
+    table.append(row);
+  }
+  return table;
+}
+function indexSection(title, headers, rows) {
+  const section = el("section", { class: "index-section" });
+  section.append(el("h3", {}, title), indexTable(headers, rows));
+  return section;
+}
+function filterIndex() {
+  const query = $("indexSearch").value.trim().toLocaleLowerCase("it");
+  const rows = [...$("indexContent").querySelectorAll("[data-index-row]")];
+  let matches = 0;
+  for (const row of rows) {
+    const visible =
+      !query || row.textContent.toLocaleLowerCase("it").includes(query);
+    row.hidden = !visible;
+    if (visible) matches++;
+  }
+  for (const table of $("indexContent").querySelectorAll("table")) {
+    const tableRows = [...table.querySelectorAll("[data-index-row]")];
+    table.hidden = Boolean(query) && !tableRows.some((row) => !row.hidden);
+  }
+  $("indexSearchCount").textContent = query
+    ? `${matches} ${matches === 1 ? "voce" : "voci"}`
+    : `${rows.length} voci`;
+  $("indexEmpty").hidden = !query || matches > 0;
+}
 function renderIndex(ir, inventory = []) {
   const types = new Map((ir.types ?? []).map((item) => [item.id, item]));
+  const entitiesById = new Map(
+    ir.entities.map((item) => [item.id, item.label]),
+  );
   function typePath(typeId) {
     const labels = [];
     const visited = new Set();
@@ -665,12 +708,38 @@ function renderIndex(ir, inventory = []) {
     }
     return false;
   }
+  const content = [];
+  content.push(
+    indexSection(
+      "Progetto compilato",
+      ["Voce", "Valore"],
+      [
+        ["Titolo", ir.title ?? "senza titolo"],
+        ["Autore", ir.author ?? "non dichiarato"],
+        ["Versione IR", ir.version],
+        ["Punto iniziale", entitiesById.get(ir.entry_id) ?? "prima stanza"],
+        ["Entità", ir.entities.length],
+        ["Regole", (ir.rules ?? []).length],
+      ],
+    ),
+    indexSection(
+      "Gerarchia dei tipi",
+      ["Tipo", "Genitore", "Identificatore"],
+      [...types.values()].map((item) => [
+        item.label,
+        item.parent_id
+          ? (types.get(item.parent_id)?.label ?? item.parent_id)
+          : "radice",
+        item.id,
+      ]),
+    ),
+  );
   const table = el("table", { class: "data" });
   const head = el("tr");
   for (const s of ["Entità", "Tipo", "Proprietà"]) head.append(el("th", {}, s));
   table.append(head);
   for (const entity of ir.entities) {
-    const row = el("tr");
+    const row = el("tr", { "data-index-row": "" });
     const props = ir.properties
       .filter((p) => p.entity_id === entity.id)
       .map((p) => `${p.property_id.split(".").at(-1)}: ${String(p.value)}`)
@@ -679,7 +748,52 @@ function renderIndex(ir, inventory = []) {
       row.append(el("td", {}, t));
     table.append(row);
   }
-  const content = [table];
+  const entitySection = el("section", { class: "index-section" });
+  entitySection.append(el("h3", {}, "Entità e proprietà"), table);
+  content.push(entitySection);
+  const predicateLabels = new Map([
+    ["mondo.dentro", "nella"],
+    ["mondo.nord", "nord"],
+    ["mondo.sud", "sud"],
+    ["mondo.est", "est"],
+    ["mondo.ovest", "ovest"],
+    ["mondo.lato_a", "collega da"],
+    ["mondo.lato_b", "collega a"],
+    ["mondo.apre", "apre"],
+    ["commercio.vende", "vende"],
+  ]);
+  content.push(
+    indexSection(
+      "Relazioni",
+      ["Sorgente", "Relazione", "Destinazione"],
+      (ir.relations ?? []).map((edge) => [
+        entitiesById.get(edge.source_id) ?? edge.source_id,
+        predicateLabels.get(edge.predicate_id) ?? edge.predicate_id,
+        entitiesById.get(edge.target_id) ?? edge.target_id,
+      ]),
+    ),
+    indexSection(
+      "Schemi delle proprietà",
+      ["Proprietà", "Tipo valore", "Entità ammesse", "Predefinito"],
+      (ir.property_specs ?? []).map((spec) => [
+        spec.id,
+        spec.value_kind,
+        spec.owner_types.map(typePath).join(", "),
+        Array.isArray(spec.default) ? spec.default.join(", ") : spec.default,
+      ]),
+    ),
+  );
+  if ((ir.synonyms ?? []).length)
+    content.push(
+      indexSection(
+        "Vocabolario",
+        ["Sinonimo", "Entità"],
+        ir.synonyms.map((item) => [
+          item.alias,
+          entitiesById.get(item.target_id) ?? item.target_id,
+        ]),
+      ),
+    );
   if ((ir.resources ?? []).length) {
     const entities = new Map(ir.entities.map((item) => [item.id, item.label]));
     const resources = el("table", { class: "data" });
@@ -898,8 +1012,106 @@ function renderIndex(ir, inventory = []) {
     }
     content.push(actions);
   }
-  $("index").replaceChildren(...content);
+  const actionLabels = new Map([
+    ["look", "guardare"],
+    ["inventory", "inventariare"],
+    ["north", "andare a nord"],
+    ["south", "andare a sud"],
+    ["east", "andare a est"],
+    ["west", "andare a ovest"],
+    ["take", "prendere"],
+    ["open", "aprire"],
+    ["close", "chiudere"],
+    ["put", "mettere"],
+    ["drop", "lasciare"],
+    ["examine", "esaminare"],
+    ["lock", "bloccare"],
+    ["board", "salire"],
+    ["exit_vehicle", "scendere"],
+    ["buy", "comprare"],
+    ["sell", "vendere"],
+  ]);
+  for (const action of ir.actions ?? [])
+    actionLabels.set(action.id, action.label);
+  function conditionText(condition) {
+    if (!condition) return "sempre";
+    if (condition.operands?.length)
+      return `${condition.operator}(${condition.operands.map(conditionText).join(", ")})`;
+    if (condition.reference) {
+      const owner =
+        entitiesById.get(condition.reference.entity_id) ??
+        condition.reference.entity_id;
+      const value =
+        condition.value === null ? "" : ` ${String(condition.value)}`;
+      return `${condition.operator} ${condition.reference.property_id} di ${owner}${value}`;
+    }
+    if (condition.table_id)
+      return `${condition.operator} ${condition.table_id}: ${condition.row.join(", ")}`;
+    return condition.operator;
+  }
+  function effectText(effect) {
+    if (effect.address) {
+      const owner =
+        entitiesById.get(effect.address.entity_id) ?? effect.address.entity_id;
+      const value = effect.value === null ? "" : ` ${String(effect.value)}`;
+      return `${effect.kind} ${effect.address.property_id} di ${owner}${value}`;
+    }
+    if (effect.action)
+      return `${effect.kind} ${actionLabels.get(effect.action.action_id) ?? effect.action.action_id}`;
+    if (effect.relation)
+      return `${effect.kind} ${effect.relation.edges.map((edge) => predicateLabels.get(edge.predicate_id) ?? edge.predicate_id).join(" + ")}`;
+    if (effect.table) return `${effect.kind} ${effect.table.table_id}`;
+    return effect.value === null
+      ? effect.kind
+      : `${effect.kind} «${String(effect.value)}»`;
+  }
+  if ((ir.rules ?? []).length)
+    content.push(
+      indexSection(
+        "Regole",
+        [
+          "Regola",
+          "Fase",
+          "Azione e selettori",
+          "Condizione",
+          "Priorità",
+          "Effetti",
+          "Sorgente",
+        ],
+        ir.rules.map((rule) => {
+          const selected = [rule.selector.target_id, rule.selector.indirect_id]
+            .filter(Boolean)
+            .map((id) => entitiesById.get(id) ?? id);
+          return [
+            rule.name,
+            rule.phase,
+            `${actionLabels.get(rule.selector.action_id) ?? rule.selector.action_id}${selected.length ? ` · ${selected.join(" + ")}` : ""}`,
+            conditionText(rule.condition),
+            rule.priority,
+            rule.effects.map(effectText).join("; ") || "nessuno",
+            `${rule.origin.source}:${rule.origin.line}`,
+          ];
+        }),
+      ),
+    );
+  $("indexContent").replaceChildren(...content);
+  for (const row of $("indexContent").querySelectorAll(
+    "table tr:not(:first-child)",
+  ))
+    row.setAttribute("data-index-row", "");
+  $("indexSearch").disabled = false;
+  $("exportIndex").disabled = false;
+  filterIndex();
 }
+$("indexSearch").oninput = filterIndex;
+$("exportIndex").onclick = () => {
+  if (!compiled?.ir) return;
+  download(
+    "indice-mondo-locus.json",
+    JSON.stringify(compiled.ir, null, 2),
+    "application/json;charset=utf-8",
+  );
+};
 function showTrace(trace, dialogue = [], scenes = []) {
   $("trace").replaceChildren();
   if (!trace.length && !dialogue.length && !scenes.length) {

@@ -164,3 +164,11 @@ door_closed, not_container, cycle, put, dropped, examined, must_close, lock_succ
 Verbi e cataloghi Python restano espliciti: l'API core senza stdlib non assume
 stanze, chiavi o significato di un predicato. Il programma autore, i comandi e le
 diagnosi sono in italiano; nomi Python e campi dei dump sono contratti tecnici.
+
+## Indice dello Studio
+
+Lo Studio proietta direttamente `ProgramIR` e lo stato corrente in sezioni per
+metadati, tipi, entità, proprietà, relazioni, vocabolario, azioni, regole,
+tabelle, dialoghi, scene, veicoli, commercio e risorse. Il filtro opera sul testo
+visualizzato senza ricompilare. **Scarica JSON** produce
+`indice-mondo-locus.json` con l'IR completa e la relativa `version`.

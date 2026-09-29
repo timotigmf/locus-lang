@@ -72,8 +72,11 @@ Ogni pacchetto conserva il core indipendente dalla narrativa interattiva.
     nell'IR 21; video, media condizionali e controllo audio da regole restano
     estensioni successive.
 
-Gli indici completi seguono in un pacchetto separato. Non si importeranno codice
-o testi Inform.
+11. Indice completo derivato dall'IR, ricerca locale ed esportazione JSON
+    implementati nello Studio; viste incrociate e debugger restano pacchetti
+    successivi.
+
+Non si importeranno codice o testi Inform.
 
 ## Studio M5 — 0.5.0a1
 

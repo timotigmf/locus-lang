@@ -30,6 +30,8 @@ provare ed esportare le storie nel browser. Consulta il [manuale dello Studio](d
 I progetti sono salvati nel browser: usa **Scarica progetto** per conservarne una copia.
 Immagini e suoni aggiunti nella sezione **Risorse** entrano nel backup e nella
 release ZIP, senza dipendere da CDN.
+L'Indice del mondo espone tipi, entità, proprietà, relazioni, vocabolario,
+azioni, regole, tabelle, dialoghi, scene e risorse, con filtro ed export JSON.
 
 ## Avvio
 
@@ -116,7 +118,7 @@ diagnostica che conserva il file originale. Ramo GitHub: `codex/milestone-4`.
 
 ## Tutorial in italiano
 
-[Costruisci il faro di Selce](docs/tutorial/README.md): ventuno lezioni, esercizi
+[Costruisci il faro di Selce](docs/tutorial/README.md): ventidue lezioni, esercizi
 con soluzioni, esempi eseguibili e copione verificato automaticamente.
 [Materiali consultati e scelte](docs/architettura/materiali-didattici.md).
 

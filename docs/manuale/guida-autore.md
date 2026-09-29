@@ -63,6 +63,7 @@ dall'alto verso il basso prima di studiare i moduli.
 19. [Denaro e acquisti](../tutorial/19-il-mercato-del-faro.md)
 20. [Mercanti, scorte e vendita](../tutorial/20-la-bottegaia-del-faro.md)
 21. [Immagini, suoni e release](../tutorial/21-il-faro-multimediale.md)
+22. [Leggere, filtrare ed esportare l'Indice](../tutorial/22-leggere-indice-del-mondo.md)
 
 ## Indice per obiettivo
 
@@ -85,6 +86,7 @@ dall'alto verso il basso prima di studiare i moduli.
 | Denaro e acquisti | Valuta, saldo, merci, prezzi e acquisto atomico | Lezione 19 |
 | Mercanti e vendita | Persone venditrici, cassa, scorte e rivendita | Lezione 20 |
 | Immagini e paesaggi sonori | Risorse locali validate e incluse nella release | Lezione 21 |
+| Ispezionare il progetto compilato | Indice completo, filtro ed export JSON | Lezione 22 |
 
 ## Vocabolario italiano
 
@@ -125,5 +127,6 @@ silenziose: se due oggetti corrispondono, chiede quale intendi.
 - [Denaro e acquisti](../linguaggio/denaro-e-acquisti.md)
 - [Mercanti e vendita](../linguaggio/mercanti-e-vendita.md)
 - [Risorse multimediali](../linguaggio/risorse-multimediali.md)
+- [Indice completo del mondo](../studio/indice-del-mondo.md)
 - [Ricettario](../cookbook/README.md)
 - [Da Inform a LOCUS](../tutorial/da-inform-a-locus.md)

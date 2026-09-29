@@ -56,7 +56,7 @@ la chiave inaccessibile. Vedi [sintassi e limiti M2](../linguaggio/milestone-2.m
 
 ## Percorso guidato
 
-Per iniziare da zero, segui le [ventuno lezioni del faro](../tutorial/README.md),
+Per iniziare da zero, segui le [ventidue lezioni del faro](../tutorial/README.md),
 con prove di gioco e soluzioni.
 La [quinta lezione](../tutorial/05-comandi-e-nomi.md) presenta le abbreviazioni
 classiche delle avventure testuali e spiega quando un nome parziale è sufficiente.
@@ -90,3 +90,5 @@ La [ventesima](../tutorial/20-la-bottegaia-del-faro.md) aggiunge mercanti, cassa
 scorte e rivendita atomica.
 La [ventunesima](../tutorial/21-il-faro-multimediale.md) associa immagini e suoni
 locali alle entità e li conserva nella release web.
+La [ventiduesima](../tutorial/22-leggere-indice-del-mondo.md) usa ricerca ed
+esportazione dell'Indice per controllare l'intero modello compilato.

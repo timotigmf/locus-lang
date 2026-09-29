@@ -38,3 +38,4 @@
 - [Registro dei sei manuali forniti](architettura/materiali-didattici.md).
 
 - [Studio web](studio/README.md): editor, gioco, mappe, test e release.
+- [Indice completo del mondo](studio/indice-del-mondo.md): sezioni IR, ricerca ed esportazione JSON.

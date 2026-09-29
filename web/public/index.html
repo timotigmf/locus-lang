@@ -242,7 +242,23 @@
             <p class="empty">Esegui un'azione per osservare le regole.</p>
           </div>
           <div id="index" class="inspector-content">
-            <p class="empty">Compila per esplorare entità e proprietà.</p>
+            <div class="index-tools">
+              <input
+                id="indexSearch"
+                type="search"
+                placeholder="Filtra tipi, entità, relazioni, regole…"
+                aria-label="Filtra l'indice del mondo"
+                disabled
+              />
+              <button id="exportIndex" disabled>Scarica JSON</button>
+              <span id="indexSearchCount" class="muted"></span>
+            </div>
+            <div id="indexContent">
+              <p class="empty">Compila per esplorare il mondo.</p>
+            </div>
+            <p id="indexEmpty" class="empty" hidden>
+              Nessuna voce corrisponde alla ricerca.
+            </p>
           </div>
         </section>
         <footer class="statusbar">
