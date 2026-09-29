@@ -109,6 +109,15 @@ def test_bridge_exposes_and_resolves_a_pending_clarification() -> None:
     assert selected["clarification"] is None
 
 
+def test_bridge_exposes_the_pronoun_referent_and_accepts_a_clitic() -> None:
+    studio = Studio()
+    studio.compile(project("La Sala è una stanza. La lanterna è una cosa nella Sala."))
+    studio.restart()
+    examined = studio.command("esamina lanterna")
+    assert examined["referent"] == {"id": "e2", "label": "lanterna"}
+    assert studio.command("prendila")["text"] == "Hai preso: lanterna."
+
+
 def test_failed_compile_invalidates_previous_program() -> None:
     studio = Studio()
     studio.compile(project("La Sala è una stanza."))

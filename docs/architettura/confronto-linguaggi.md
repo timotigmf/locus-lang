@@ -64,7 +64,7 @@ riuso di codice Inform.
 | Mondo coerente | tipi, cicli, doppie posizioni, visibilità e porte verificati | supporti, persone e regioni |
 | Regole ispezionabili | architettura proposta | M3 con priorità, esiti, trace |
 | Portabilità | Python puro, CI su quattro piattaforme | conformità di un backend browser |
-| Italiano del giocatore | due oggetti, articoli, nomi quotati | sinonimi, anafore, clitici e disambiguazione interattiva |
+| Italiano del giocatore | due oggetti, articoli, nomi quotati | sinonimi, anafore singolari, clitici standard e disambiguazione interattiva; plurali futuri |
 
 Questa tabella è una lista di prove per LOCUS, non una classifica dei concorrenti.
 Le capacità avanzate dei riferimenti non vengono date per implementate in LOCUS.

@@ -58,6 +58,7 @@ duplicati e collisioni di prefisso anche per IR costruite tramite API.
 
 Le forme descritte qui occupano l'inizio. IR 11 ammette inoltre
 [separatori multiparola](separatori-multiparola.md) fra due oggetti. Non sono
-ancora disponibili parole fisse dopo il secondo oggetto, oggetti facoltativi o
-clitici come `prendilo`. La disambiguazione nel turno successivo è descritta
-nella [specifica dedicata](disambiguazione-multiturno.md).
+ancora disponibili parole fisse dopo il secondo oggetto o oggetti facoltativi.
+I clitici delle azioni standard sono descritti in
+[pronomi e clitici](pronomi-e-clitici.md); la disambiguazione nel turno successivo
+ha una [specifica dedicata](disambiguazione-multiturno.md).

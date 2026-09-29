@@ -155,7 +155,7 @@ def render(transition: Transition) -> str:
         "apri, chiudi, blocca, inventario, nord, sud, est, ovest, nordest, "
         "sudest, sudovest, nordovest, su, giù, dentro, fuori o esci. Sono "
         "disponibili anche le abbreviazioni l, x, i, n, s, e, o, ne, se, so, "
-        "no, u, d e q."
+        "no, u, d e q; dopo un oggetto noto puoi usare esso, essa o forme come prendila."
     )
     if world.dialogues:
         unknown += " Per conversare usa parla con NOME."
@@ -173,6 +173,7 @@ def render(transition: Transition) -> str:
         "no_exit": "Non c'è alcun passaggio in quella direzione.",
         "unknown": unknown,
         "missing_noun": "Indica quale oggetto vuoi esaminare o manipolare.",
+        "no_referent": "Non c'è ancora un oggetto a cui riferire il pronome.",
         "quit": "A presto.",
         "locked": "È bloccato: serve una chiave adatta.",
         "already_open": "È già aperto.",

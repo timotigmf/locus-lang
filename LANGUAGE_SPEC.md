@@ -16,6 +16,8 @@ La specifica di [metadati e vocabolario](docs/linguaggio/metadati-vocabolario.md
 definisce titolo, autore e sinonimi nominali dichiarati dall'autore.
 La specifica della [disambiguazione a più turni](docs/linguaggio/disambiguazione-multiturno.md)
 definisce domande, risposte, annullamento e ripresa dell'azione.
+La specifica di [pronomi e clitici](docs/linguaggio/pronomi-e-clitici.md)
+definisce il referente di sessione e le forme unite dei comandi standard.
 La specifica dei [tipi definiti dall'autore](docs/linguaggio/tipi-autore.md)
 definisce la gerarchia nominale a ereditarietà singola.
 La specifica delle [azioni dell'autore](docs/linguaggio/azioni-autore.md)
@@ -115,7 +117,8 @@ Il parser giocatore produce intenzioni tipate senza riusare questa grammatica.
 Ambiguità, oggetto assente, oggetto già posseduto e uscita assente sono esiti distinti.
 `esci` termina la sessione. Questa limitazione storica è sostituita dalla
 [specifica M2 corrente](docs/linguaggio/milestone-2.md): sono disponibili alias
-classici, nomi parziali e chiarimenti a più turni. Clitici e pronomi restano esclusi.
+classici, nomi parziali, chiarimenti a più turni e riferimenti pronominali
+singolari. Plurali e accordo grammaticale restano esclusi.
 
 ## Diagnostica M1
 

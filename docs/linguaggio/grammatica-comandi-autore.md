@@ -68,7 +68,7 @@ CLI, Studio e release web consumano direttamente questi record.
 
 ## Limiti
 
-Non sono ancora disponibili pattern liberi con ruoli nominati, pronomi e
-clitici, oggetti sottintesi
+Non sono ancora disponibili pattern liberi con ruoli nominati, clitici per le
+azioni dell'autore, oggetti sottintesi
 o una domanda di chiarimento che continui nel turno successivo. L'ambiguità fra
 nomi di oggetto continua a produrre una richiesta esplicita con le alternative.

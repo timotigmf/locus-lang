@@ -456,6 +456,14 @@ class Studio:
                 if clarification is not None
                 else None
             ),
+            "referent": (
+                {
+                    "id": transition.session.pronoun_id,
+                    "label": labels[transition.session.pronoun_id],
+                }
+                if transition.session.pronoun_id is not None
+                else None
+            ),
             "media": [
                 asdict(item)
                 for item in transition.session.world.resources

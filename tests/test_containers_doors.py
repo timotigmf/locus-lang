@@ -103,6 +103,22 @@ def test_indirect_object_clarification_resumes_the_original_command() -> None:
     )
 
 
+def test_pronoun_can_fill_a_direct_or_indirect_object() -> None:
+    state = session(
+        "La Sala è una stanza. "
+        'La scatola è un contenitore nella Sala. La scatola ha stato "aperto". '
+        "La gemma è una cosa nella Sala."
+    )
+    taken = step(state, parse_session_command(state, "prendi gemma"))
+    examined_box = step(taken.session, parse_session_command(taken.session, "esamina scatola"))
+    put = step(
+        examined_box.session,
+        parse_session_command(examined_box.session, "metti gemma in essa"),
+    )
+    assert put.event.kind == "put"
+    assert put.event.entities[1] == ident(state, "scatola")
+
+
 def test_nested_container_transport_put_drop_and_cycle_prevention() -> None:
     state = session(
         "La Sala è una stanza. Il Corridoio è una stanza. Il Corridoio è a nord della Sala. "

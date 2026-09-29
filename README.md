@@ -15,6 +15,8 @@ veicoli con movimento del conducente, acquisti, mercanti, rivendita atomica e
 manifest multimediali locali sono modellati nel mondo. Gli autori possono
 dichiarare nuovi comandi tipati nel sorgente. Se un nome indica più oggetti, il
 giocatore può chiarire nel turno seguente con numero, nome parziale o sinonimo.
+L'ultimo oggetto diretto riuscito può essere richiamato con `esso`/`essa`, `it`
+e forme come `prendila` o `esaminalo`.
 Nessuna dipendenza runtime esterna o servizio cloud.
 
 ```locus
@@ -103,6 +105,8 @@ cassa del venditore è sufficiente. Le due operazioni aggiornano tutti i saldi e
 il passaggio di proprietà atomicamente.
 Quando più oggetti corrispondono, rispondi alla domanda con il numero, il nome o
 un sinonimo; `annulla` chiude il chiarimento senza eseguire l'azione.
+Dopo aver agito su un oggetto, usa `esso`, `essa`, `quello`, `quella`, `it` o
+le forme unite `prendilo/a`, `esaminalo/a`, `aprilo/a`, `chiudilo/a`, `lascialo/a`.
 `Inizia nella "Sala".` sceglie il punto iniziale; in assenza, vale la prima stanza. EOF termina la sessione;
 Ctrl-C la interrompe. Vedi il [manuale](docs/manuale/README.md) per un transcript.
 
@@ -126,7 +130,7 @@ diagnostica che conserva il file originale. Ramo GitHub: `codex/milestone-4`.
 
 ## Tutorial in italiano
 
-[Costruisci il faro di Selce](docs/tutorial/README.md): ventisei lezioni, esercizi
+[Costruisci il faro di Selce](docs/tutorial/README.md): ventisette lezioni, esercizi
 con soluzioni, esempi eseguibili e copione verificato automaticamente.
 [Materiali consultati e scelte](docs/architettura/materiali-didattici.md).
 

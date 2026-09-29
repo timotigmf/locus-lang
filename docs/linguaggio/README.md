@@ -2,9 +2,9 @@
 
 La [specifica normativa M1](../../LANGUAGE_SPEC.md) distingue funzioni eseguibili
 da funzionalità future. Il suffisso alpha non autorizza ambiguità silenziose:
-un cambiamento di semantica deve aggiornare specifica e test. Per la morfologia
-italiana si partirà da articoli e sintagmi nominali; accordi, pronomi e clitici
-richiederanno decisioni separate nei due parser.
+un cambiamento di semantica deve aggiornare specifica e test. Articoli, pronomi
+singolari e clitici standard hanno contratti separati; accordo grammaticale,
+plurali e forme composte richiederanno decisioni ulteriori.
 
 La versione attuale è descritta nelle specifiche [M2](milestone-2.md),
 [M3](milestone-3.md), [M4](milestone-4.md) e in
@@ -29,6 +29,8 @@ relazionale `sovrasta` e una resa distinta nell'atlante.
 senza riutilizzare il contenimento degli oggetti.
 La [disambiguazione a più turni](disambiguazione-multiturno.md) conserva la
 domanda nella sessione e riprende l'azione dopo una scelta univoca.
+[Pronomi e clitici](pronomi-e-clitici.md) aggiunge un referente di sessione e
+forme unite italiane per le azioni standard più comuni.
 La [visibilità esplicita](visibilita-scenario.md) aggiunge oggetti nascosti e il
 tipo ambientale non trasportabile `scenario` nell'IR 13.
 Gli [elenchi tipati](liste-tipate.md) aggiungono collezioni omogenee, condizioni

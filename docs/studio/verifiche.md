@@ -10,9 +10,9 @@ Esportazione ZIP del giocatore statico con sorgente della storia e runtime inclu
 
 ## Controlli eseguiti
 
-- 670 test Python passati, incluse rosa dei venti, direzioni verticali e
+- 682 test Python passati, incluse rosa dei venti, direzioni verticali e
   dentro/fuori, alias classici, nomi parziali, sinonimi dichiarati, metadati,
-  chiarimenti a più turni, tutorial,
+  chiarimenti a più turni, pronomi e clitici singolari, tutorial,
   regole transazionali, adapter Studio e confine del progetto virtuale.
 - Ruff, controllo formato e mypy strict passati.
 - Build wheel e sdist 0.5.0a1 riuscita; build web statica riuscita.
@@ -29,7 +29,8 @@ Esportazione ZIP del giocatore statico con sorgente della storia e runtime inclu
   percorre una diagonale, un livello verticale e un passaggio interno, torna
   tramite le inverse e controlla etichette, tratteggio e linea puntinata nell'SVG.
   Un test dedicato verifica la domanda ambigua e la risposta successiva tramite
-  un sinonimo nello stesso runtime della release.
+  un sinonimo nello stesso runtime della release, quindi richiama l'oggetto con
+  il clitico `esaminala`.
 - Release provata bloccando tutte le richieste diverse dall'hosting locale:
   nessun CDN necessario al giocatore.
 - Audit npm dopo aggiornamento delle dipendenze: zero vulnerabilità note segnalate.

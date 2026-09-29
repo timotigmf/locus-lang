@@ -761,4 +761,9 @@ Comprendi "scura" come "chiave di ferro".`;
   await expect(page.locator(".story-output").last()).toContainText(
     "Hai preso: chiave di ferro.",
   );
+  await page.locator("#command").fill("esaminala");
+  await page.locator("#send").click();
+  await expect(page.locator(".story-output").last()).toContainText(
+    "chiave di ferro",
+  );
 });

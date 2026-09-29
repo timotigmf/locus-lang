@@ -84,6 +84,19 @@ _ACTION_COMMANDS: dict[str, Verb] = {
     "lock": "lock",
 }
 
+_CLITIC_COMMANDS: dict[str, tuple[Verb, str]] = {
+    "prendilo": ("take", "esso"),
+    "prendila": ("take", "essa"),
+    "esaminalo": ("examine", "esso"),
+    "esaminala": ("examine", "essa"),
+    "aprilo": ("open", "esso"),
+    "aprila": ("open", "essa"),
+    "chiudilo": ("close", "esso"),
+    "chiudila": ("close", "essa"),
+    "lascialo": ("drop", "esso"),
+    "lasciala": ("drop", "essa"),
+}
+
 
 @dataclass(frozen=True, slots=True)
 class Intent:
@@ -176,6 +189,7 @@ def standard_commands(
         (
             *_SIMPLE_COMMANDS,
             *_ACTION_COMMANDS,
+            *_CLITIC_COMMANDS,
             *dialogue_commands,
             *scene_commands,
             *vehicle_commands,
@@ -380,6 +394,9 @@ def parse_command(
             return Intent("talk", direct) if direct else Intent("missing_noun")
     authored = _author_match(actions, tokens)
     if len(tokens) == 1:
+        clitic = _CLITIC_COMMANDS.get(verb)
+        if clitic is not None:
+            return Intent(*clitic)
         standard = _SIMPLE_COMMANDS.get(verb, _ACTION_COMMANDS.get(verb))
         return (
             Intent(standard)

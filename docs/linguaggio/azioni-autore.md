@@ -86,7 +86,8 @@ catalogo e lo stesso dispatcher.
 ## Limiti attuali
 
 La [grammatica dei comandi](grammatica-comandi-autore.md) permette più sinonimi e
-separatori espliciti, anche multiparola. Mancano ancora pattern liberi, clitici e argomenti
+separatori espliciti, anche multiparola. Mancano ancora pattern liberi, clitici
+per le azioni dell'autore e argomenti
 impliciti come “l'oggetto corrente” nel corpo di una regola generica. Le regole
 possono selezionare un'entità precisa oppure tutte le entità dell'azione, ma gli
 effetti continuano a nominare esplicitamente i propri destinatari.

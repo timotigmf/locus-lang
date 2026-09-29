@@ -51,7 +51,7 @@ il successivo. Non promettiamo correzioni automatiche della semantica. Gli span
 di alcune diagnosi coprono un'intera dichiarazione/regola, come nella CLI.
 Il manuale incorporato è ricercabile per capitolo; la guida dell'autore è la
 pagina iniziale e ogni blocco di codice offre **Copia codice**. Comprende un corso
-in ventisei lezioni, specifiche e tutorial. L'Indice del mondo mostra anche
+in ventisette lezioni, specifiche e tutorial. L'Indice del mondo mostra anche
 dialoghi, scene, veicoli, mercanti e commercio compilati e aggiorna proprietà,
 righe delle tabelle, posizione dei mezzi, saldo, cassa e scorte dopo ogni comando.
 
@@ -84,6 +84,8 @@ del punteggio. Non è ancora un debugger a passi con breakpoint.
 Nel riquadro di gioco, una domanda su più oggetti resta attiva: rispondi con il
 numero, il nome o un sinonimo. `annulla` la chiude; anche un nuovo comando completo
 la sostituisce. La stessa sequenza funziona nei copioni e nelle release esportate.
+L'ultimo oggetto diretto riuscito resta disponibile anche a `esso`, `essa`, `it`
+e ai clitici standard come `prendila` ed `esaminalo`.
 
 ## Test e transcript
 

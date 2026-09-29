@@ -243,6 +243,7 @@ imitare. La misura utile è coprire ogni contratto pubblico e ogni regressione.
 | 13 | livelli verticali implementati nella stdlib e nello Studio | su/giù, verbo naturale, porte e atlante distinti |
 | 14 | dentro/fuori implementati nella stdlib e nello Studio | navigazione interna distinta dal contenimento degli oggetti |
 | 15 | disambiguazione a più turni implementata nel runtime condiviso | scelta per numero, nome o sinonimo in CLI, Studio e release |
+| 16 | pronomi singolari e clitici standard implementati nella sessione | referente stabile, errore esplicito e stessa semantica in ogni frontend |
 
 Ogni pacchetto richiede una specifica e, se modifica i confini del sistema, un
 ADR prima dell'implementazione. Le capacità verranno aggiunte in questo ordine

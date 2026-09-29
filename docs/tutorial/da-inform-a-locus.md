@@ -18,6 +18,7 @@ compatibilità del sorgente o equivalenza del comportamento con Inform.
 | Oggetto dell'azione | Nomi quotati espliciti | Nessun equivalente parametrico generale di noun/second noun |
 | Azioni dell'autore | `Azione` con comandi e zero, uno o due tipi | Forme iniziali e separatori fino a quattro parole; niente pattern liberi o argomenti facoltativi |
 | Disambiguazione | Domanda persistente; risposta per numero, nome o sinonimo | Campo d'azione LOCUS e una sola posizione ambigua per volta |
+| Pronomi | Referente dell'ultima azione riuscita e clitici standard | Singolare senza deduzione del genere; niente clitici doppi |
 | Estensioni | Inclusione di file locali | Nessun package manager, namespace o formato di estensione Inform |
 | Test e transcript | Copioni stdin, uscita attesa e pytest | Non esiste ancora una direttiva autore `Test ...` |
 | Tracing | `locus debug` | Mostra le regole autore considerate, non tutte le operazioni interne |

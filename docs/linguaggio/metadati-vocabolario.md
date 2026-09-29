@@ -52,8 +52,9 @@ ripetuti seguono la stessa canonicalizzazione dei nomi del sorgente.
 
 I sinonimi riguardano i nomi delle entità nei comandi del giocatore. Non
 ridefiniscono verbi, parole chiave del sorgente, preposizioni o riferimenti nelle
-regole. Flessioni, pronomi e un dizionario italiano generale richiedono un
-modello linguistico separato e restano fuori da questo contratto.
+regole. I [pronomi singolari e clitici standard](pronomi-e-clitici.md) usano un
+referente di sessione separato. Flessioni generali e un dizionario italiano
+completo restano fuori da questo contratto.
 
 ## Rappresentazione interna
 

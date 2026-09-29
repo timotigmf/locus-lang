@@ -63,6 +63,7 @@ EventKind = Literal[
     "ambiguous",
     "invalid_clarification",
     "clarification_cancelled",
+    "no_referent",
     "no_exit",
     "unknown",
     "missing_noun",
@@ -142,6 +143,7 @@ class Session:
     vehicle_id: str | None = None
     owned_ids: tuple[str, ...] = ()
     clarification: Clarification | None = None
+    pronoun_id: str | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -740,6 +742,8 @@ def _choose_dialogue(session: Session, selection: str) -> Transition:
 
 
 def _perform(session: Session, intent: Intent) -> Transition:
+    if intent.verb == "no_referent":
+        return Transition(session, Event("no_referent"))
     if intent.verb == "score":
         return Transition(session, Event("score"))
     if intent.verb == "time":
@@ -1184,7 +1188,63 @@ def _resume_clarification(session: Session, selection: str | None) -> Transition
         else replace(clarification.intent, indirect_id=selected_id)
     )
     cleared = replace(session, clarification=None)
-    return _remember_ambiguity(cleared, intent, _step(cleared, intent))
+    transition = _remember_ambiguity(cleared, intent, _step(cleared, intent))
+    return _remember_reference(cleared, intent, transition)
+
+
+_PRONOUNS = frozenset({"esso", "essa", "questo", "questa", "quello", "quella", "it"})
+
+
+def _with_pronoun(session: Session, intent: Intent) -> Intent:
+    for argument in ("noun", "indirect"):
+        name = intent.noun if argument == "noun" else intent.indirect
+        if name is None or canonical(name) not in _PRONOUNS:
+            continue
+        if session.pronoun_id is None:
+            return Intent("no_referent")
+        entity = next(
+            (
+                candidate
+                for candidate in session.world.entities
+                if candidate.id == session.pronoun_id
+            ),
+            None,
+        )
+        if entity is None:
+            return Intent("no_referent")
+        intent = (
+            replace(intent, noun=entity.label, noun_id=entity.id)
+            if argument == "noun"
+            else replace(intent, indirect=entity.label, indirect_id=entity.id)
+        )
+    return intent
+
+
+def _remember_reference(session: Session, intent: Intent, transition: Transition) -> Transition:
+    if intent.noun is None or transition.event.kind not in {
+        "taken",
+        "opened",
+        "closed",
+        "lock_success",
+        "put",
+        "dropped",
+        "examined",
+        "custom",
+        "dialogue",
+        "boarded",
+        "disembarked",
+        "purchased",
+        "sold",
+    }:
+        return transition
+    if intent.noun_id is not None:
+        entity_id = intent.noun_id
+    else:
+        resolved = _resolve(session, intent.noun)
+        if isinstance(resolved, Event):
+            return transition
+        entity_id = resolved.id
+    return replace(transition, session=replace(transition.session, pronoun_id=entity_id))
 
 
 def parse_session_command(session: Session, text: str) -> Intent:
@@ -1208,7 +1268,7 @@ def parse_session_command(session: Session, text: str) -> Intent:
     )
     if session.clarification is not None and intent.verb == "unknown":
         return Intent("clarify", normalized or None)
-    return intent
+    return _with_pronoun(session, intent)
 
 
 _TURNLESS_EVENTS = {
@@ -1217,6 +1277,7 @@ _TURNLESS_EVENTS = {
     "ambiguous",
     "invalid_clarification",
     "clarification_cancelled",
+    "no_referent",
     "quit",
     "score",
     "time",
@@ -1284,6 +1345,7 @@ def step(session: Session, intent: Intent, *, advance_time: bool = True) -> Tran
             replace(session, clarification=None) if session.clarification is not None else session
         )
         transition = _remember_ambiguity(base, intent, _step(base, intent))
+        transition = _remember_reference(base, intent, transition)
     if (
         not advance_time
         or not transition.session.world.scenes

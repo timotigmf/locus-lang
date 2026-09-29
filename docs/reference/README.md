@@ -19,6 +19,9 @@ Alias classici: l/look, x/examine, i/inv/inventory, n/north, s/south, e/east,
 o/w/west, ne/northeast, se/southeast, so/southwest, no/nw/northwest,
 u/up/alto, d/down/giu/basso, in/inside, out/outside, q/quit,
 get/take, open, close, drop, put, lock.
+Il referente dell'ultima azione riuscita accetta `esso`, `essa`, `questo`,
+`questa`, `quello`, `quella`, `it` e le forme unite `prendilo/a`,
+`esaminalo/a`, `aprilo/a`, `chiudilo/a`, `lascialo/a`.
 Quando la storia contiene dialoghi sono disponibili anche `parla con persona`,
 `p persona`, `talk to persona`, il numero della scelta, `scegli testo`, `basta`
 e `fine dialogo`.
@@ -65,6 +68,8 @@ avere riferimenti coerenti; non sono un'API di caricamento di dati non fidati.
 `Session.clarification` conserva intento, argomento e candidate di una domanda
 ambigua. Gli ID opzionali di `Intent` sono prodotti dal runtime dopo una scelta e
 non costituiscono identificatori accettati dal testo del giocatore.
+`Session.pronoun_id` conserva l'ultimo oggetto diretto di un'azione riuscita;
+`parse_session_command` risolve pronomi e clitici verso quell'ID.
 
 `ProgramIR.dialogues` e `World.dialogues` contengono `DialogueIR`, composto da
 `DialogueNodeIR` e `DialogueChoiceIR`. Tutti i riferimenti sono ID risolti. La

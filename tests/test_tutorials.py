@@ -179,6 +179,16 @@ def test_clarification_tutorial_accepts_a_synonym_on_the_next_turn() -> None:
     assert "chiave di ferro" in render(taken)
 
 
+def test_pronoun_tutorial_reuses_the_last_direct_object() -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "27_pronomi_e_clitici.locus")))
+    examined = step(current, parse_session_command(current, "esamina lanterna"))
+    taken = step(examined.session, parse_session_command(examined.session, "prendila"))
+    assert taken.event.kind == "taken"
+    repeated = step(taken.session, parse_session_command(taken.session, "x essa"))
+    assert repeated.event.kind == "examined"
+    assert "lanterna di vetro" in render(repeated)
+
+
 def test_dungeon_tutorial_awards_points_once_after_the_puzzle() -> None:
     current = start(instantiate(compile_story_file(TUTORIAL / "06_sotterraneo.locus")))
     for command in [

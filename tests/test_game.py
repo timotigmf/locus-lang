@@ -82,6 +82,11 @@ def make_session() -> Session:
         ("prendi il caffè", Intent("take", "caffè")),
         ("prendi lo scudo", Intent("take", "scudo")),
         ("prendi la chiave di ottone", Intent("take", "chiave di ottone")),
+        ("prendila", Intent("take", "essa")),
+        ("esaminalo", Intent("examine", "esso")),
+        ("aprila", Intent("open", "essa")),
+        ("chiudilo", Intent("close", "esso")),
+        ("lasciala", Intent("drop", "essa")),
         ("prendi la", Intent("unknown")),
         ("prendi", Intent("take")),
         ("x", Intent("examine")),
@@ -353,6 +358,41 @@ def test_clarification_can_be_cancelled_or_replaced_by_a_new_command() -> None:
     looked = step(asked_again.session, parse_session_command(asked_again.session, "guarda"))
     assert looked.event.kind == "look"
     assert looked.session.clarification is None
+
+
+def test_pronouns_and_clitics_reuse_the_last_direct_object() -> None:
+    initial = make_session()
+    missing = step(initial, parse_session_command(initial, "prendila"))
+    assert missing.event.kind == "no_referent"
+    assert missing.session is initial
+    assert render(missing) == "Non c'è ancora un oggetto a cui riferire il pronome."
+
+    examined = step(initial, parse_session_command(initial, "esamina chiave"))
+    assert examined.session.pronoun_id == examined.event.entities[0]
+    looked = step(examined.session, parse_session_command(examined.session, "guarda"))
+    assert looked.session.pronoun_id == examined.session.pronoun_id
+    taken = step(looked.session, parse_session_command(looked.session, "prendila"))
+    assert taken.event.kind == "taken"
+    assert taken.event.entities == (examined.session.pronoun_id,)
+    dropped = step(taken.session, parse_session_command(taken.session, "drop it"))
+    assert dropped.event.kind == "dropped"
+
+
+def test_disambiguated_object_becomes_the_pronoun_referent() -> None:
+    world = World(
+        (
+            Entity("r", "Sala", ROOM),
+            Entity("a", "chiave di rame", THING),
+            Entity("b", "chiave di ferro", THING),
+        )
+    )
+    initial = Session(world, "r", ("a", "b"))
+    asked = step(initial, parse_session_command(initial, "esamina chiave"))
+    selected = step(asked.session, parse_session_command(asked.session, "2"))
+    assert selected.event.kind == "examined"
+    assert selected.session.pronoun_id == "b"
+    again = step(selected.session, parse_session_command(selected.session, "esaminala"))
+    assert again.event.entities[0] == "b"
 
 
 def test_missing_object_gets_a_specific_prompt() -> None:

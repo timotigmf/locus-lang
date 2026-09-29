@@ -57,7 +57,7 @@ la chiave inaccessibile. Vedi [sintassi e limiti M2](../linguaggio/milestone-2.m
 
 ## Percorso guidato
 
-Per iniziare da zero, segui le [ventisei lezioni del faro](../tutorial/README.md),
+Per iniziare da zero, segui le [ventisette lezioni del faro](../tutorial/README.md),
 con prove di gioco e soluzioni.
 La [quinta lezione](../tutorial/05-comandi-e-nomi.md) presenta le abbreviazioni
 classiche delle avventure testuali e spiega quando un nome parziale è sufficiente.
@@ -101,3 +101,5 @@ La [venticinquesima](../tutorial/25-entrare-e-uscire.md) collega esterni e inter
 con `racchiude`, `dentro` e `fuori` senza confonderli con i contenitori.
 La [ventiseiesima](../tutorial/26-scegliere-tra-oggetti.md) mostra come chiarire
 un nome ambiguo con numero, frammento univoco o sinonimo.
+La [ventisettesima](../tutorial/27-pronomi-e-clitici.md) riusa l'ultimo oggetto
+diretto con pronomi e forme come `prendila` ed `esaminalo`.

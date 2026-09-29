@@ -32,6 +32,6 @@ ordinario. Le candidate sono conservate come identificatori nell'oggetto
 sia raggiungibile. CLI, Studio e release web usano `parse_session_command`, così
 la semantica è identica nei tre ambienti.
 
-Limiti attuali: non sono ancora supportati pronomi e clitici come `prendila`; il
-chiarimento riguarda una sola posizione dell'argomento alla volta.
-
+Pronomi e clitici singolari sono descritti nella
+[specifica dedicata](pronomi-e-clitici.md). Il chiarimento riguarda una sola
+posizione dell'argomento alla volta.
