@@ -8,7 +8,8 @@ Nome **LOCUS provvisorio**; il repository locale si chiama LOCUS.
 Versione `0.5.0a1`: **Studio web, mappa, test ed esportazione di storie per il browser**.
 Proprietà scalari, elenchi e tabelle tipate definiti dall’autore, contenimento annidato,
 accessibilità verificata, tipi dell'autore con ereditarietà singola e azioni con
-due oggetti. Dieci direzioni dinamiche, compresi livelli verticali, oggetti nascosti e dettagli di
+due oggetti. Dodici direzioni dinamiche, compresi livelli verticali e
+dentro/fuori, oggetti nascosti e dettagli di
 `scenario`, persone, dialoghi a scelte, scene temporali, punteggio registrato,
 veicoli con movimento del conducente, acquisti, mercanti, rivendita atomica e
 manifest multimediali locali sono modellati nel mondo. Gli autori possono
@@ -88,9 +89,11 @@ Il ramo `main` viene mantenuto separato fino all'integrazione delle modifiche.
 ## Giocare
 
 Dopo l'avvio: `guarda`, `prendi la chiave`, `inventario`, `nord`, `sud`, `est`,
-`ovest`, `nordest`, `sudest`, `sudovest`, `nordovest`, `su`, `giù`, `esci`. Le diagonali si
+`ovest`, `nordest`, `sudest`, `sudovest`, `nordovest`, `su`, `giù`, `dentro`,
+`fuori`, `esci`. Le diagonali si
 abbreviano in `ne`, `se`, `so`, `no` (`nw` è accettato per nordovest); `su` e
-`giù` usano anche `u` e `d`.
+`giù` usano anche `u` e `d`. `in` equivale a `dentro`; `esci` termina la
+sessione e `fuori` percorre il passaggio verso l'esterno.
 Nelle storie con scene, `turno` o `tempo` mostra l'orologio narrativo e
 `punteggio` o `score` mostra i punti accumulati.
 Nelle storie commerciali, `denaro` mostra il saldo, `compra NOME da MERCANTE`
@@ -120,7 +123,7 @@ diagnostica che conserva il file originale. Ramo GitHub: `codex/milestone-4`.
 
 ## Tutorial in italiano
 
-[Costruisci il faro di Selce](docs/tutorial/README.md): ventiquattro lezioni, esercizi
+[Costruisci il faro di Selce](docs/tutorial/README.md): venticinque lezioni, esercizi
 con soluzioni, esempi eseguibili e copione verificato automaticamente.
 [Materiali consultati e scelte](docs/architettura/materiali-didattici.md).
 

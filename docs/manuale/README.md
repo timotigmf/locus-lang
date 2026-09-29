@@ -19,7 +19,8 @@ Eseguire `locus gioca storia.locus`. Una copia è in `examples/prima_storia.locu
 La prima stanza dichiarata è l'inizio; la posizione nord genera automaticamente
 l'uscita sud nel senso opposto. Allo stesso modo, est genera ovest. Nomi e
 riferimenti possono precedere le dichiarazioni. Nel gioco puoi abbreviare le
-direzioni con `n`, `s`, `e`, `o`; è accettato anche `w` per ovest.
+direzioni con `n`, `s`, `e`, `o`; è accettato anche `w` per ovest. Le storie
+possono inoltre dichiarare diagonali, livelli e passaggi `dentro`/`fuori`.
 
 ```text
 Cucina
@@ -56,7 +57,7 @@ la chiave inaccessibile. Vedi [sintassi e limiti M2](../linguaggio/milestone-2.m
 
 ## Percorso guidato
 
-Per iniziare da zero, segui le [ventiquattro lezioni del faro](../tutorial/README.md),
+Per iniziare da zero, segui le [venticinque lezioni del faro](../tutorial/README.md),
 con prove di gioco e soluzioni.
 La [quinta lezione](../tutorial/05-comandi-e-nomi.md) presenta le abbreviazioni
 classiche delle avventure testuali e spiega quando un nome parziale è sufficiente.
@@ -96,3 +97,5 @@ La [ventitreesima](../tutorial/23-la-rosa-dei-venti.md) completa la mappa con le
 quattro diagonali, le abbreviazioni classiche e le inverse automatiche.
 La [ventiquattresima](../tutorial/24-i-tre-livelli-del-faro.md) collega terrazze,
 sale e sotterranei con `sovrasta`, `su` e `giù`.
+La [venticinquesima](../tutorial/25-entrare-e-uscire.md) collega esterni e interni
+con `racchiude`, `dentro` e `fuori` senza confonderli con i contenitori.

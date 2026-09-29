@@ -145,8 +145,9 @@ def render(transition: Transition) -> str:
     unknown = (
         "Comando non riconosciuto. Usa guarda, esamina, prendi, lascia, metti, "
         "apri, chiudi, blocca, inventario, nord, sud, est, ovest, nordest, "
-        "sudest, sudovest, nordovest, su, giù o esci. Sono disponibili anche le "
-        "abbreviazioni l, x, i, n, s, e, o, ne, se, so, no, u, d e q."
+        "sudest, sudovest, nordovest, su, giù, dentro, fuori o esci. Sono "
+        "disponibili anche le abbreviazioni l, x, i, n, s, e, o, ne, se, so, "
+        "no, u, d e q."
     )
     if world.dialogues:
         unknown += " Per conversare usa parla con NOME."

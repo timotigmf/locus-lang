@@ -31,8 +31,8 @@ le direzioni nell'etichetta.
   identità spaziale e creerebbe falsi conflitti.
 - Aggiungere solo i comandi: scartato perché un comando riconosciuto deve poter
   corrispondere a una relazione dichiarabile.
-- Introdurre insieme alto, basso, dentro e fuori: rinviato perché richiede livelli
-  nella mappa e la distinzione fra movimento e contenimento.
+- Introdurre insieme alto, basso, dentro e fuori: scartato per mantenere separati
+  i contratti dei livelli e del contenimento.
 - Codificare le direzioni nel compilatore: scartato perché il core deve restare
   indipendente dalla narrativa interattiva.
 
@@ -41,5 +41,6 @@ le direzioni nell'etichetta.
 Le storie esistenti e la versione IR 21 restano valide. `no` è riservato come
 comando completo per nordovest, mentre dentro una frase continua a essere una
 parola ordinaria. Le collisioni del layout restano risolte visivamente senza
-modificare il grafo. L'[ADR 0027](0027-livelli-verticali.md) specifica in seguito
-livelli, etichette e interazione con `mondo.dentro`.
+modificare il grafo. Gli [ADR 0027](0027-livelli-verticali.md) e
+[0028](0028-dentro-fuori.md) specificano in seguito livelli, etichette e
+separazione dal contenimento `mondo.dentro`.

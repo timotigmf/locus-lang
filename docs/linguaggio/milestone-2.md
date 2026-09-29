@@ -50,7 +50,8 @@ abilitare lo stesso oggetto. Un contenitore può essere bloccato con la stessa
 semantica della porta. Le porte non sono oggetti trasportabili o collocabili.
 Devono collegare due stanze distinte già collegate da una direzione; una sola
 porta per coppia di stanze. I collegamenti direzionali comprendono la rosa dei
-venti e i livelli `sopra`/`sotto`, con inverso generato automaticamente.
+venti, i livelli `sopra`/`sotto` e la coppia `dentro`/`fuori`, con inverso
+generato automaticamente.
 
 Una cosa, una chiave o un contenitore può essere dentro stanza o contenitore.
 Si accettano `nella`, `nel`, `nello`, `nell'` e la forma tipografica dell'apostrofo.

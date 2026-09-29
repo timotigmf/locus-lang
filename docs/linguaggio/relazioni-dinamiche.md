@@ -55,6 +55,6 @@ snapshot corrente e cambia appena il passaggio viene rivelato o nascosto.
 ## Limiti
 
 Il sorgente non può ancora dichiarare nuovi schemi di relazione. La versione
-corrente riguarda le dieci direzioni della libreria.
+corrente riguarda le dodici direzioni della libreria.
 Visibilità degli oggetti, porte segrete come entità e collegamenti a senso unico
 richiedono specifiche successive.

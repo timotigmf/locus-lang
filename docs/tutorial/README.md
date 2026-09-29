@@ -38,6 +38,7 @@ al prompt della storia: lì si scrivono soltanto i comandi del giocatore.
 | [22. Leggere l'Indice del mondo](22-leggere-indice-del-mondo.md) | `examples/tutorial/22_indice_completo.locus` | Ispezionare, filtrare ed esportare l'intera IR |
 | [23. La rosa dei venti](23-la-rosa-dei-venti.md) | `examples/tutorial/23_direzioni_diagonali.locus` | Dichiarare, percorrere e mappare le quattro diagonali |
 | [24. I tre livelli del faro](24-i-tre-livelli-del-faro.md) | `examples/tutorial/24_livelli_verticali.locus` | Dichiarare scale e botole con su, giù e `sovrasta` |
+| [25. Entrare e uscire dalla lanterna](25-entrare-e-uscire.md) | `examples/tutorial/25_dentro_fuori.locus` | Distinguere passaggi dentro/fuori e contenimento degli oggetti |
 
 Prima prova la versione fornita. Poi modifica un solo elemento e riesegui la
 sequenza di comandi. In caso di errore conserva il messaggio, il file sorgente e

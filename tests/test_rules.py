@@ -628,6 +628,23 @@ Fine regola.
     assert returned.session.room_id == revealed.session.room_id
 
 
+def test_dynamic_inward_relation_is_navigable() -> None:
+    initial = session(
+        """
+La Cripta è una stanza.
+Regola "apri il varco interno" per esaminare "leva" nella fase dopo:
+    crea relazione "dentro" da "Sala" a "Cripta";
+Fine regola.
+"""
+    )
+    revealed = step(initial, parse_command("esamina leva"))
+    assert step(initial, parse_command("dentro")).event.kind == "no_exit"
+    moved = step(revealed.session, parse_command("dentro"))
+    assert moved.session.room_id != revealed.session.room_id
+    returned = step(moved.session, parse_command("fuori"))
+    assert returned.session.room_id == revealed.session.room_id
+
+
 def test_debug_cli(
     tmp_path: "Path", monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
 ) -> None:

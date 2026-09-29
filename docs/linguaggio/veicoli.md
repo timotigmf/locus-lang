@@ -33,7 +33,7 @@ Il nome parziale deve identificare un solo veicolo raggiungibile. Salire su un
 oggetto comune, tentare di cambiare veicolo senza scendere o indicare il mezzo
 sbagliato produce un evento distinto e un messaggio italiano.
 
-Quando il giocatore è a bordo, un comando cardinale sposta nello stesso snapshot
+Quando il giocatore è a bordo, un comando direzionale sposta nello stesso snapshot
 la posizione del giocatore e la relazione `nella` del veicolo. Se una porta
 chiusa o l'assenza di un'uscita impedisce il viaggio, nessuno dei due cambia
 posizione. `guarda` indica il mezzo guidato senza elencarlo di nuovo fra gli
@@ -65,6 +65,6 @@ l'ID del mezzo guidato e le relazioni dello snapshot corrente.
 
 IR 18 modella un solo conducente e un solo veicolo guidato alla volta. Passeggeri,
 oggetti caricati, capienza, carburante, rotte riservate a strada o acqua,
-veicoli autonomi e movimento verticale richiedono contratti successivi. In
-questa versione il giocatore può percorrere a piedi gli stessi collegamenti
-della rosa dei venti o fra livelli quando non è a bordo.
+veicoli autonomi e rotte tipate richiedono contratti successivi. In questa
+versione il giocatore può percorrere a piedi gli stessi collegamenti della rosa
+dei venti, fra livelli o dentro/fuori quando non è a bordo.

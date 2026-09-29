@@ -1,0 +1,13 @@
+Titolo: "Dentro la lanterna".
+Autore: "Esempio LOCUS".
+
+La Terrazza è una stanza.
+La Lanterna è una stanza.
+La Terrazza racchiude la Lanterna.
+
+Inizia nella "Terrazza".
+La Terrazza ha descrizione "La porta della lanterna è aperta davanti a te.".
+La Lanterna ha descrizione "La lente di Fresnel occupa il centro della camera.".
+
+La lente è uno scenario nella Lanterna.
+La lente ha descrizione "Anelli di vetro concentrano la luce verso il mare.".

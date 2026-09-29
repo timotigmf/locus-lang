@@ -42,7 +42,7 @@ sposta il livello sulla prima colonna libera senza cambiare il grafo compilato.
 
 ## Limiti
 
-I livelli sono topologici: non hanno quota, altezza o distanza numerica. `dentro`
-e `fuori` non sono ancora direzioni di movimento e il contenimento
-`mondo.dentro` resta un contratto distinto. I percorsi a senso unico richiedono
-una specifica successiva.
+I livelli sono topologici: non hanno quota, altezza o distanza numerica. La
+[navigazione dentro/fuori](dentro-fuori.md) usa relazioni distinte dal
+contenimento `mondo.dentro`. I percorsi a senso unico richiedono una specifica
+successiva.

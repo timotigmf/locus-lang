@@ -19,7 +19,8 @@ La libreria standard rende dinamiche soltanto le quattro direzioni cardinali.
 La mappa dello Studio legge lo snapshot `World` corrente dopo ogni comando.
 L'[ADR 0026](0026-direzioni-diagonali.md) estende in seguito lo stesso contratto
 alle quattro diagonali senza cambiare la forma dell'IR.
-L'[ADR 0027](0027-livelli-verticali.md) lo applica poi a `sopra` e `sotto`.
+L'[ADR 0027](0027-livelli-verticali.md) lo applica poi a `sopra` e `sotto`;
+l'[ADR 0028](0028-dentro-fuori.md) aggiunge `dentro` e `fuori`.
 
 ## Alternative considerate
 

@@ -62,6 +62,14 @@ def make_session() -> Session:
         ("basso", Intent("down")),
         ("d", Intent("down")),
         ("down", Intent("down")),
+        ("dentro", Intent("inward")),
+        ("interno", Intent("inward")),
+        ("in", Intent("inward")),
+        ("inside", Intent("inward")),
+        ("fuori", Intent("outward")),
+        ("esterno", Intent("outward")),
+        ("out", Intent("outward")),
+        ("outside", Intent("outward")),
         ("esci", Intent("quit")),
         ("q", Intent("quit")),
         ("prendi chiave", Intent("take", "chiave")),
@@ -142,6 +150,8 @@ def test_absent_and_unreachable_objects_do_not_change_state() -> None:
         ("no", "no_exit"),
         ("u", "no_exit"),
         ("d", "no_exit"),
+        ("dentro", "no_exit"),
+        ("fuori", "no_exit"),
         ("salta", "unknown"),
     ]:
         result = step(session, parse_command(command))
@@ -210,6 +220,17 @@ def test_vertical_movement_and_inverse() -> None:
     moved = step(current, parse_command("u"))
     assert next(e.label for e in world.entities if e.id == moved.session.room_id) == "Soffitta"
     returned = step(moved.session, parse_command("d"))
+    assert returned.session.room_id == current.room_id
+
+
+def test_inward_outward_movement_and_inverse() -> None:
+    world = instantiate(
+        compile_story("La Villa è una stanza. L'Atrio è una stanza. La Villa racchiude l'Atrio.")
+    )
+    current = start(world)
+    moved = step(current, parse_command("dentro"))
+    assert next(e.label for e in world.entities if e.id == moved.session.room_id) == "Atrio"
+    returned = step(moved.session, parse_command("fuori"))
     assert returned.session.room_id == current.room_id
 
 

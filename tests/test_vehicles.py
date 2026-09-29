@@ -121,6 +121,23 @@ La piattaforma è un veicolo nella Rimessa.
     assert lowered.session.room_id == vehicle_location(lowered.session)
 
 
+def test_vehicle_moves_with_driver_inward_and_outward() -> None:
+    source = """
+La Corte è una stanza.
+La Rimessa è una stanza.
+La Corte racchiude la Rimessa.
+La piattaforma è un veicolo nella Corte.
+"""
+    current = start(instantiate(compile_story(source)))
+    boarded = command(current, "sali sulla piattaforma")
+    entered = command(boarded.session, "dentro")
+    assert entered.event.kind == "look"
+    assert entered.session.room_id == vehicle_location(entered.session)
+    left = command(entered.session, "fuori")
+    assert left.session.room_id == current.room_id
+    assert left.session.room_id == vehicle_location(left.session)
+
+
 def test_vehicle_errors_are_specific_and_do_not_corrupt_state() -> None:
     source = SOURCE + "La campana è una cosa nella Rimessa. La mula è un veicolo nella Rimessa."
     current = start(instantiate(compile_story(source)))

@@ -44,7 +44,7 @@ il layout sposta una stanza sulla linea libera più vicina.
 ## Limiti
 
 `Su` e `giù` sono definiti dalla specifica dei
-[livelli verticali](livelli-verticali.md). `Dentro` e `fuori` non sono ancora
-direzioni di movimento; `dentro` resta distinto dalla relazione strutturale
-`mondo.dentro`, usata per collocare oggetti e veicoli. Percorsi a senso unico
+[livelli verticali](livelli-verticali.md) e nella specifica
+[dentro/fuori](dentro-fuori.md). Il passaggio direzionale `dentro` resta distinto
+dalla relazione strutturale `mondo.dentro`, usata per collocare oggetti e veicoli. Percorsi a senso unico
 richiedono un contratto successivo.

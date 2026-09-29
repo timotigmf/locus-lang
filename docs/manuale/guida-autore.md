@@ -66,12 +66,13 @@ dall'alto verso il basso prima di studiare i moduli.
 22. [Leggere, filtrare ed esportare l'Indice](../tutorial/22-leggere-indice-del-mondo.md)
 23. [Costruire la rosa dei venti](../tutorial/23-la-rosa-dei-venti.md)
 24. [Collegare i livelli del faro](../tutorial/24-i-tre-livelli-del-faro.md)
+25. [Entrare e uscire dalla lanterna](../tutorial/25-entrare-e-uscire.md)
 
 ## Indice per obiettivo
 
 | Voglio creare… | Supporto attuale | Da leggere |
 | --- | --- | --- |
-| Dungeon e mappe | Stanze, dieci direzioni, porte e contenitori | Lezioni 1, 6, 23 e 24 |
+| Dungeon e mappe | Stanze, dodici direzioni, porte e contenitori | Lezioni 1, 6 e 23–25 |
 | Enigmi con chiavi | Porte/contenitori bloccati, regole e rollback | Lezioni 2, 3 e 6 |
 | Punti e tempo | Scene temporali, turni e registro dei premi | Lezioni 6 e 17 |
 | Oggetti complessi | Contenimento annidato, proprietà tipate, stati | Lezione 2 e specifica M2 |
@@ -91,6 +92,7 @@ dall'alto verso il basso prima di studiare i moduli.
 | Ispezionare il progetto compilato | Indice completo, filtro ed export JSON | Lezione 22 |
 | Percorsi diagonali | Nordest, sudest, sudovest, nordovest e inverse | Lezione 23 |
 | Torri e sotterranei | Livelli `su`/`giù`, scale, botole e porte | Lezione 24 |
+| Edifici e grotte | Passaggi `dentro`/`fuori` distinti dal contenimento | Lezione 25 |
 
 ## Vocabolario italiano
 
@@ -125,6 +127,7 @@ silenziose: se due oggetti corrispondono, chiede quale intendi.
 - [Separatori multiparola](../linguaggio/separatori-multiparola.md)
 - [Rosa dei venti e diagonali](../linguaggio/direzioni-diagonali.md)
 - [Livelli verticali](../linguaggio/livelli-verticali.md)
+- [Dentro e fuori](../linguaggio/dentro-fuori.md)
 - [Elenchi tipati](../linguaggio/liste-tipate.md)
 - [Tabelle tipate](../linguaggio/tabelle-tipate.md)
 - [Persone e dialoghi strutturati](../linguaggio/dialoghi-strutturati.md)

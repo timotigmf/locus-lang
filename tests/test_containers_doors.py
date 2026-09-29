@@ -174,6 +174,7 @@ def test_compile_rejects_invalid_door_topology(source: str) -> None:
         ("La Serra è a est della Sala.", "e"),
         ("La Serra è a nordest della Sala.", "ne"),
         ("La Serra sovrasta la Sala.", "u"),
+        ("La Sala racchiude la Serra.", "dentro"),
     ],
 )
 def test_door_can_guard_directional_passages(relation: str, movement: str) -> None:

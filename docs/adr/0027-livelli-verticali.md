@@ -39,5 +39,6 @@ tratteggiato e lo etichetta `su / giù`. La forma dell'IR 21 non cambia.
 
 Le storie precedenti e l'IR restano compatibili. L'autore descrive una coppia
 verticale con la stanza superiore come soggetto di `sovrasta`; l'inversa basta
-per dichiarare una stanza inferiore. Dentro/fuori, quote e percorsi a senso unico
-restano contratti separati.
+per dichiarare una stanza inferiore. Dentro/fuori è specificato separatamente
+nell'[ADR 0028](0028-dentro-fuori.md); quote e percorsi a senso unico restano
+contratti distinti.

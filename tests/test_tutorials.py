@@ -161,6 +161,14 @@ def test_vertical_levels_tutorial_moves_up_and_down() -> None:
     assert returned.session.room_id == current.room_id
 
 
+def test_inward_outward_tutorial_enters_and_leaves_the_lantern_room() -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "25_dentro_fuori.locus")))
+    lantern = step(current, parse_command("dentro"))
+    assert "Lanterna" in render(lantern)
+    returned = step(lantern.session, parse_command("fuori"))
+    assert returned.session.room_id == current.room_id
+
+
 def test_dungeon_tutorial_awards_points_once_after_the_puzzle() -> None:
     current = start(instantiate(compile_story_file(TUTORIAL / "06_sotterraneo.locus")))
     for command in [

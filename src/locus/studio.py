@@ -24,6 +24,7 @@ from locus.stdlib import (
     CURRENCY,
     EAST,
     INSIDE,
+    INWARD,
     MERCHANDISE,
     MERCHANT,
     NORTH,
@@ -298,6 +299,7 @@ def map_data(model: ProgramIR | World) -> dict[str, Any]:
         NORTHEAST: "nordest",
         SOUTHEAST: "sudest",
         UP: "su",
+        INWARD: "dentro",
     }
     links = [
         {

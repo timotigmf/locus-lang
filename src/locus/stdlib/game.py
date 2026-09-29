@@ -18,6 +18,7 @@ from locus.stdlib import (
     DOWN,
     EAST,
     INSIDE,
+    INWARD,
     MERCHANDISE,
     MERCHANT,
     MERCHANT_CASH,
@@ -26,6 +27,7 @@ from locus.stdlib import (
     NORTHWEST,
     OFFERS,
     OPENABLE,
+    OUTWARD,
     PERSON,
     PORTABLE,
     PRICE,
@@ -746,6 +748,8 @@ def _perform(session: Session, intent: Intent) -> Transition:
         "northwest": NORTHWEST,
         "up": UP,
         "down": DOWN,
+        "inward": INWARD,
+        "outward": OUTWARD,
     }
     if intent.verb in directions:
         predicate = directions[intent.verb]
@@ -1031,6 +1035,8 @@ def _step(session: Session, intent: Intent) -> Transition:
                 "northwest",
                 "up",
                 "down",
+                "inward",
+                "outward",
                 "exit_vehicle",
             }
             and not intent.noun

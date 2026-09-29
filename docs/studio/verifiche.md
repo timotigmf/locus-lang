@@ -10,7 +10,8 @@ Esportazione ZIP del giocatore statico con sorgente della storia e runtime inclu
 
 ## Controlli eseguiti
 
-- 643 test Python passati, incluse rosa dei venti e direzioni verticali, alias
+- 662 test Python passati, incluse rosa dei venti, direzioni verticali e
+  dentro/fuori, alias
   classici, nomi parziali, sinonimi dichiarati, metadati, ambiguità, tutorial,
   regole transazionali, adapter Studio e confine del progetto virtuale.
 - Ruff, controllo formato e mypy strict passati.
@@ -25,8 +26,8 @@ Esportazione ZIP del giocatore statico con sorgente della storia e runtime inclu
   navigazione inversa e mappa aggiornata durante la sessione; scenario non
   trasportabile e rivelazione di un oggetto inizialmente invisibile; elenchi,
   tabelle, dialoghi, scene, veicoli, acquisti e mercanti. Il flusso principale
-  percorre una diagonale e un livello verticale, torna tramite le inverse e
-  controlla etichette e linea tratteggiata nell'SVG.
+  percorre una diagonale, un livello verticale e un passaggio interno, torna
+  tramite le inverse e controlla etichette, tratteggio e linea puntinata nell'SVG.
 - Release provata bloccando tutte le richieste diverse dall'hosting locale:
   nessun CDN necessario al giocatore.
 - Audit npm dopo aggiornamento delle dipendenze: zero vulnerabilità note segnalate.

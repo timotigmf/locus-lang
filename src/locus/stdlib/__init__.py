@@ -27,6 +27,8 @@ SOUTHWEST = "mondo.sudovest"
 NORTHWEST = "mondo.nordovest"
 UP = "mondo.sopra"
 DOWN = "mondo.sotto"
+INWARD = "mondo.interno"
+OUTWARD = "mondo.esterno"
 SIDE_A = "mondo.lato_a"
 SIDE_B = "mondo.lato_b"
 UNLOCKS = "mondo.apre"
@@ -137,6 +139,21 @@ def default_relations() -> dict[str, RelationSpec]:
             inverse_id=UP,
             mutable=True,
         ),
+        "dentro": RelationSpec(
+            INWARD,
+            ROOM,
+            ROOM,
+            inverse_id=OUTWARD,
+            verb="racchiude",
+            mutable=True,
+        ),
+        "fuori": RelationSpec(
+            OUTWARD,
+            ROOM,
+            ROOM,
+            inverse_id=INWARD,
+            mutable=True,
+        ),
         "collega da": RelationSpec(SIDE_A, DOOR, ROOM),
         "collega a": RelationSpec(SIDE_B, DOOR, ROOM),
         "apre": RelationSpec(UNLOCKS, KEY, OPENABLE, verb="apre"),
@@ -181,6 +198,8 @@ def default_actions() -> dict[str, ActionSpec]:
         "andare a nordovest": ActionSpec("northwest", 0, 0),
         "andare su": ActionSpec("up", 0, 0),
         "andare giù": ActionSpec("down", 0, 0),
+        "andare dentro": ActionSpec("inward", 0, 0),
+        "andare fuori": ActionSpec("outward", 0, 0),
         "prendere": ActionSpec("take", 1, 1),
         "aprire": ActionSpec("open", 1, 2),
         "chiudere": ActionSpec("close", 1, 1),

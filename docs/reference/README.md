@@ -13,17 +13,18 @@
 | gioca | compila e avvia la sessione IF dalla prima stanza dichiarata |
 
 `gioca`: guarda, esamina, prendi, lascia, metti, apri, chiudi, blocca,
-inventario, nord, sud, est, ovest, nordest, sudest, sudovest, nordovest, su, giù, esci.
+inventario, nord, sud, est, ovest, nordest, sudest, sudovest, nordovest, su, giù,
+dentro, fuori, esci.
 Alias classici: l/look, x/examine, i/inv/inventory, n/north, s/south, e/east,
 o/w/west, ne/northeast, se/southeast, so/southwest, no/nw/northwest,
-u/up/alto, d/down/giu/basso, q/quit,
+u/up/alto, d/down/giu/basso, in/inside, out/outside, q/quit,
 get/take, open, close, drop, put, lock.
 Quando la storia contiene dialoghi sono disponibili anche `parla con persona`,
 `p persona`, `talk to persona`, il numero della scelta, `scegli testo`, `basta`
 e `fine dialogo`.
 Quando la storia contiene scene sono disponibili `turno`/`tempo` e
 `punteggio`/`score`; questi metacomandi non fanno avanzare il clock logico.
-Quando contiene veicoli sono disponibili `sali`/`entra`, `scendi`, `esci da`,
+Quando contiene veicoli sono disponibili `sali`/`entra in NOME`, `scendi`, `esci da`,
 `board`/`enter`, `exit` e `get out`; le direzioni spostano anche il mezzo guidato.
 Quando contiene una valuta sono disponibili `compra`/`acquista`, `buy`/`purchase`
 e i metacomandi `denaro`/`saldo`/`money`/`balance`. Con mercanti sono disponibili

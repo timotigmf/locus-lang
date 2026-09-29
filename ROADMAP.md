@@ -80,8 +80,11 @@ Ogni pacchetto conserva il core indipendente dalla narrativa interattiva.
     nell'atlante.
 
 13. Livelli verticali `su`/`giù`, dichiarazione naturale con `sovrasta` e resa
-    distinta nell'atlante implementati; dentro/fuori e percorsi a senso unico
-    restano pacchetti separati.
+    distinta nell'atlante implementati.
+
+14. Navigazione `dentro`/`fuori`, dichiarazione naturale con `racchiude` e resa
+    distinta dal contenimento implementate; i percorsi a senso unico restano un
+    pacchetto separato.
 
 Non si importeranno codice o testi Inform.
 
@@ -91,6 +94,6 @@ Editor web, progetto virtuale, diagnostica con manuale, gioco, mappa SVG/JSON,
 indice, trace, copioni verificabili e release web con runtime incluso. Restano
 fuori scope collaborazione cloud, breakpoint, salvataggi del gioco ed eseguibili nativi.
 
-Estensione compatibile completata: dieci direzioni, incluse rosa dei venti e livelli,
-abbreviazioni classiche, nomi parziali non ambigui e disambiguazione esplicita.
-Dentro/fuori e dialogo di chiarimento a più turni restano futuri.
+Estensione compatibile completata: dodici direzioni, incluse rosa dei venti,
+livelli e dentro/fuori, abbreviazioni classiche, nomi parziali non ambigui e
+disambiguazione esplicita. Il dialogo di chiarimento a più turni resta futuro.

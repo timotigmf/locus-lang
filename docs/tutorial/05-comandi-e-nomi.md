@@ -23,6 +23,7 @@ accettate anche alcune convenzioni storiche delle avventure testuali in inglese.
 | `nord`, `sud`, `est`, `ovest` | `n`, `s`, `e`, `o`, `w` e forme inglesi | Si sposta sulla mappa |
 | `nordest`, `sudest`, `sudovest`, `nordovest` | `ne`, `se`, `so`, `no`, `nw` e forme inglesi | Percorre una diagonale |
 | `su`, `giù` | `alto`, `basso`, `u`, `d`, `up`, `down` | Cambia livello |
+| `dentro`, `fuori` | `interno`, `esterno`, `in`, `inside`, `out`, `outside` | Entra o lascia un luogo collegato |
 | `prendi chiave` | `get chiave`, `take chiave` | Prende un oggetto |
 | `esci` | `q`, `quit` | Termina la sessione |
 

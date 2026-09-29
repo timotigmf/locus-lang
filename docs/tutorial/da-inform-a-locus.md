@@ -7,7 +7,7 @@ compatibilità del sorgente o equivalenza del comportamento con Inform.
 | Concetto incontrato nei manuali | In LOCUS oggi | Differenza da ricordare |
 | --- | --- | --- |
 | Modello del mondo | Entità, proprietà e relazioni | La prosa descrittiva non crea il modello |
-| Luoghi e mappa | `stanza`, rosa dei venti, su/giù | Dieci direzioni con inverse; dentro/fuori non sono ancora registrati |
+| Luoghi e mappa | `stanza`, rosa dei venti, su/giù, dentro/fuori | Dodici direzioni con inverse e contenimento separato |
 | Tipi e proprietà | Tipi dell'autore a ereditarietà singola; proprietà numeriche, testuali, logiche | Niente ereditarietà multipla o proprietà limitate a un tipo autore |
 | Descrizione del luogo e oggetti visibili | `descrizione`, `visibile`, `scenario`, `guarda`, `esamina` | Niente supporter, trasparenza, luce o locale priorities |
 | Controllo, modifica e resoconto | `verifica`, `esegui`, `dopo`, `descrivi` | Semantica propria, non traduzione diretta dei rulebook |

@@ -25,6 +25,8 @@ Le [direzioni diagonali](direzioni-diagonali.md) completano la rosa dei venti
 nella stdlib, nel runtime e nell'atlante senza cambiare la forma dell'IR 21.
 I [livelli verticali](livelli-verticali.md) aggiungono `su`/`giù`, il verbo
 relazionale `sovrasta` e una resa distinta nell'atlante.
+[Dentro e fuori](dentro-fuori.md) aggiunge passaggi topologici con `racchiude`
+senza riutilizzare il contenimento degli oggetti.
 La [visibilità esplicita](visibilita-scenario.md) aggiunge oggetti nascosti e il
 tipo ambientale non trasportabile `scenario` nell'IR 13.
 Gli [elenchi tipati](liste-tipate.md) aggiungono collezioni omogenee, condizioni

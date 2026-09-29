@@ -33,7 +33,7 @@ test("progetto, compilazione, gioco, test e release statica", async ({
   await page.locator(".cm-content").click();
   await page.keyboard.press("ControlOrMeta+End");
   await page.keyboard.insertText(
-    '\nIl Molo ha immagine "media/molo.png".\nIl Molo ha testo alternativo "Il molo nella foschia.".\nLa Vedetta è una stanza.\nLa Vedetta è a nordest del Molo.\nLa Torre è una stanza.\nLa Torre sovrasta il Molo.',
+    '\nIl Molo ha immagine "media/molo.png".\nIl Molo ha testo alternativo "Il molo nella foschia.".\nLa Vedetta è una stanza.\nLa Vedetta è a nordest del Molo.\nLa Torre è una stanza.\nLa Torre sovrasta il Molo.\nLa Camera Ottica è una stanza.\nIl Molo racchiude la Camera Ottica.',
   );
   await page
     .getByRole("button", { name: "▶ Compila e prova", exact: true })
@@ -64,6 +64,14 @@ test("progetto, compilazione, gioco, test e release statica", async ({
   await page.locator("#command").fill("d");
   await page.locator("#send").click();
   await expect(page.locator(".story-output").last()).toContainText("Molo");
+  await page.locator("#command").fill("dentro");
+  await page.locator("#send").click();
+  await expect(page.locator(".story-output").last()).toContainText(
+    "Camera Ottica",
+  );
+  await page.locator("#command").fill("fuori");
+  await page.locator("#send").click();
+  await expect(page.locator(".story-output").last()).toContainText("Molo");
   await page.locator("#command").fill("apri custodia");
   await page.locator("#send").click();
   await expect(page.locator("#transcript")).toContainText(
@@ -88,8 +96,12 @@ test("progetto, compilazione, gioco, test e release statica", async ({
     "nordest / sudovest",
   );
   await expect(page.locator("#mapCanvas svg")).toContainText("su / giù");
+  await expect(page.locator("#mapCanvas svg")).toContainText("dentro / fuori");
   await expect(
     page.locator('#mapCanvas path[stroke-dasharray="6 4"]'),
+  ).toHaveCount(1);
+  await expect(
+    page.locator('#mapCanvas path[stroke-dasharray="2 3"]'),
   ).toHaveCount(1);
   const mapDownload = page.waitForEvent("download");
   await page.locator("#exportMap").click();

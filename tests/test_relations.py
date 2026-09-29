@@ -114,6 +114,26 @@ def test_vertical_destination_conflict_is_rejected() -> None:
     assert error.value.code == "E106"
 
 
+def test_inward_relation_uses_natural_italian_verb_and_inverse() -> None:
+    program = compile_source(
+        ROOMS + "La A racchiude la B.",
+        default_kinds(),
+        relations=default_relations(),
+    )
+    assert RelationIR("e1", "mondo.interno", "e2") in program.relations
+    assert RelationIR("e2", "mondo.esterno", "e1") in program.relations
+
+
+def test_inward_destination_conflict_is_rejected() -> None:
+    with pytest.raises(CompileError) as error:
+        compile_source(
+            ROOMS + "La A racchiude la B. La A racchiude la C.",
+            default_kinds(),
+            relations=default_relations(),
+        )
+    assert error.value.code == "E106"
+
+
 def test_catalog_is_required_and_replaceable() -> None:
     with pytest.raises(CompileError, match="E104"):
         compile_source(ROOMS + "La B è a nord della A.", default_kinds())
