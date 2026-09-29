@@ -26,6 +26,7 @@
 - [Separatori multiparola](linguaggio/separatori-multiparola.md): locuzioni fra due oggetti e forme articolate.
 - [Relazioni dinamiche](linguaggio/relazioni-dinamiche.md) e [visibilità](linguaggio/visibilita-scenario.md): passaggi segreti, oggetti nascosti e scenario.
 - [Direzioni diagonali](linguaggio/direzioni-diagonali.md): rosa dei venti completa, inverse e atlante.
+- [Livelli verticali](linguaggio/livelli-verticali.md): su/giù, scale, botole e mappa a livelli.
 - [Elenchi tipati](linguaggio/liste-tipate.md): raccolte omogenee, appartenenza e rollback.
 - [Tabelle tipate](linguaggio/tabelle-tipate.md): colonne nominate e righe transazionali.
 - [Persone e dialoghi](linguaggio/dialoghi-strutturati.md): conversazioni a nodi e scelte multi-turno.

@@ -30,6 +30,7 @@ export function drawMap(data) {
               est: [245, 0],
               nordest: [245, -155],
               sudest: [245, 155],
+              su: [0, -155],
             },
             [dx, dy] = offsets[link.direction] ?? [0, -155];
           let x = p.x + dx * sign,
@@ -70,8 +71,11 @@ export function drawMap(data) {
         est: "est / ovest",
         nordest: "nordest / sudovest",
         sudest: "sudest / nordovest",
+        su: "su / giù",
       }[link.direction] ?? link.direction;
-    body += `<path d="M${a.x + 95},${a.y + 35} L${b.x + 95},${b.y + 35}" stroke="#9eb8ad" stroke-width="2" fill="none"/><text x="${(a.x + b.x) / 2 + 105}" y="${(a.y + b.y) / 2 + 35}" fill="#687f72" font-size="10">${escape(door?.label ?? directions)}</text>`;
+    const verticalStyle =
+      link.direction === "su" ? ' stroke-dasharray="6 4"' : "";
+    body += `<path d="M${a.x + 95},${a.y + 35} L${b.x + 95},${b.y + 35}" stroke="#9eb8ad" stroke-width="2"${verticalStyle} fill="none"/><text x="${(a.x + b.x) / 2 + 105}" y="${(a.y + b.y) / 2 + 35}" fill="#687f72" font-size="10">${escape(door?.label ?? directions)}</text>`;
   }
   for (const r of data.rooms) {
     const p = positions.get(r.id);

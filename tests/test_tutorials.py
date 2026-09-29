@@ -149,6 +149,18 @@ def test_compass_rose_tutorial_traverses_all_diagonals() -> None:
         assert returned.session.room_id == current.room_id
 
 
+def test_vertical_levels_tutorial_moves_up_and_down() -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "24_livelli_verticali.locus")))
+    terrace = step(current, parse_command("su"))
+    assert "Terrazza" in render(terrace)
+    center = step(terrace.session, parse_command("giù"))
+    assert center.session.room_id == current.room_id
+    cistern = step(center.session, parse_command("d"))
+    assert "Cisterna" in render(cistern)
+    returned = step(cistern.session, parse_command("u"))
+    assert returned.session.room_id == current.room_id
+
+
 def test_dungeon_tutorial_awards_points_once_after_the_puzzle() -> None:
     current = start(instantiate(compile_story_file(TUTORIAL / "06_sotterraneo.locus")))
     for command in [

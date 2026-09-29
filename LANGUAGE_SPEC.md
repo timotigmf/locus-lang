@@ -6,9 +6,10 @@ Versione corrente `0.5.0a1`, IR versione 21. Le specifiche M2, M3 e M4
 estendono e, dove indicato, sostituiscono i limiti M1 sotto.
 La [specifica M2](docs/linguaggio/milestone-2.md) è normativa per proprietà,
 stringhe, nomi quotati, preposizioni, contenitori, porte e chiavi.
-La stdlib corrente offre le otto direzioni della rosa dei venti; le coppie
-inverse sono generate automaticamente. La specifica delle
-[direzioni diagonali](docs/linguaggio/direzioni-diagonali.md) completa i quattro
+La stdlib corrente offre le otto direzioni della rosa dei venti più `su` e
+`giù`; le coppie inverse sono generate automaticamente. Le specifiche delle
+[direzioni diagonali](docs/linguaggio/direzioni-diagonali.md) e dei
+[livelli verticali](docs/linguaggio/livelli-verticali.md) completano i quattro
 collegamenti cardinali storici.
 La specifica di [metadati e vocabolario](docs/linguaggio/metadati-vocabolario.md)
 definisce titolo, autore e sinonimi nominali dichiarati dall'autore.
@@ -212,7 +213,7 @@ effetto. Il runtime applica il cambiamento nella transazione della regola. Gli
 usi non validi producono `E312`; si veda la
 [specifica completa](docs/linguaggio/relazioni-dinamiche.md). Questa estensione
 introduce l'IR 12 ed è conservata nell'IR 21; la stdlib attuale comprende anche
-le quattro diagonali senza modificare la forma dell'IR.
+le quattro diagonali e i due livelli verticali senza modificare la forma dell'IR.
 
 ## Visibilità e scenario
 

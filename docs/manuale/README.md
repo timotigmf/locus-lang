@@ -56,7 +56,7 @@ la chiave inaccessibile. Vedi [sintassi e limiti M2](../linguaggio/milestone-2.m
 
 ## Percorso guidato
 
-Per iniziare da zero, segui le [ventitré lezioni del faro](../tutorial/README.md),
+Per iniziare da zero, segui le [ventiquattro lezioni del faro](../tutorial/README.md),
 con prove di gioco e soluzioni.
 La [quinta lezione](../tutorial/05-comandi-e-nomi.md) presenta le abbreviazioni
 classiche delle avventure testuali e spiega quando un nome parziale è sufficiente.
@@ -94,3 +94,5 @@ La [ventiduesima](../tutorial/22-leggere-indice-del-mondo.md) usa ricerca ed
 esportazione dell'Indice per controllare l'intero modello compilato.
 La [ventitreesima](../tutorial/23-la-rosa-dei-venti.md) completa la mappa con le
 quattro diagonali, le abbreviazioni classiche e le inverse automatiche.
+La [ventiquattresima](../tutorial/24-i-tre-livelli-del-faro.md) collega terrazze,
+sale e sotterranei con `sovrasta`, `su` e `giù`.

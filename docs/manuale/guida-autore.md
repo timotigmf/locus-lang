@@ -65,12 +65,13 @@ dall'alto verso il basso prima di studiare i moduli.
 21. [Immagini, suoni e release](../tutorial/21-il-faro-multimediale.md)
 22. [Leggere, filtrare ed esportare l'Indice](../tutorial/22-leggere-indice-del-mondo.md)
 23. [Costruire la rosa dei venti](../tutorial/23-la-rosa-dei-venti.md)
+24. [Collegare i livelli del faro](../tutorial/24-i-tre-livelli-del-faro.md)
 
 ## Indice per obiettivo
 
 | Voglio creare… | Supporto attuale | Da leggere |
 | --- | --- | --- |
-| Dungeon e mappe | Stanze, otto direzioni, porte e contenitori | Lezioni 1, 6 e 23 |
+| Dungeon e mappe | Stanze, dieci direzioni, porte e contenitori | Lezioni 1, 6, 23 e 24 |
 | Enigmi con chiavi | Porte/contenitori bloccati, regole e rollback | Lezioni 2, 3 e 6 |
 | Punti e tempo | Scene temporali, turni e registro dei premi | Lezioni 6 e 17 |
 | Oggetti complessi | Contenimento annidato, proprietà tipate, stati | Lezione 2 e specifica M2 |
@@ -89,6 +90,7 @@ dall'alto verso il basso prima di studiare i moduli.
 | Immagini e paesaggi sonori | Risorse locali validate e incluse nella release | Lezione 21 |
 | Ispezionare il progetto compilato | Indice completo, filtro ed export JSON | Lezione 22 |
 | Percorsi diagonali | Nordest, sudest, sudovest, nordovest e inverse | Lezione 23 |
+| Torri e sotterranei | Livelli `su`/`giù`, scale, botole e porte | Lezione 24 |
 
 ## Vocabolario italiano
 
@@ -121,6 +123,8 @@ silenziose: se due oggetti corrispondono, chiede quale intendi.
 - [Sinonimi e separatori delle azioni](../linguaggio/grammatica-comandi-autore.md)
 - [Forme di comando multiparola](../linguaggio/comandi-multiparola.md)
 - [Separatori multiparola](../linguaggio/separatori-multiparola.md)
+- [Rosa dei venti e diagonali](../linguaggio/direzioni-diagonali.md)
+- [Livelli verticali](../linguaggio/livelli-verticali.md)
 - [Elenchi tipati](../linguaggio/liste-tipate.md)
 - [Tabelle tipate](../linguaggio/tabelle-tipate.md)
 - [Persone e dialoghi strutturati](../linguaggio/dialoghi-strutturati.md)

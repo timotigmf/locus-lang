@@ -77,8 +77,11 @@ Ogni pacchetto conserva il core indipendente dalla narrativa interattiva.
     successivi.
 
 12. Otto direzioni della rosa dei venti implementate nella stdlib, nel runtime e
-    nell'atlante; alto/basso, dentro/fuori e percorsi a senso unico restano
-    pacchetti separati.
+    nell'atlante.
+
+13. Livelli verticali `su`/`giù`, dichiarazione naturale con `sovrasta` e resa
+    distinta nell'atlante implementati; dentro/fuori e percorsi a senso unico
+    restano pacchetti separati.
 
 Non si importeranno codice o testi Inform.
 
@@ -88,6 +91,6 @@ Editor web, progetto virtuale, diagnostica con manuale, gioco, mappa SVG/JSON,
 indice, trace, copioni verificabili e release web con runtime incluso. Restano
 fuori scope collaborazione cloud, breakpoint, salvataggi del gioco ed eseguibili nativi.
 
-Estensione compatibile completata: otto direzioni della rosa dei venti,
+Estensione compatibile completata: dieci direzioni, incluse rosa dei venti e livelli,
 abbreviazioni classiche, nomi parziali non ambigui e disambiguazione esplicita.
-Alto/basso, dentro/fuori e dialogo di chiarimento a più turni restano futuri.
+Dentro/fuori e dialogo di chiarimento a più turni restano futuri.

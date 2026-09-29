@@ -33,8 +33,8 @@ statica `La Cripta è a nord della Anticamera.`.
 Il compilatore risolve i tre nomi, controlla i tipi degli estremi e rifiuta
 auto-collegamenti. Solo uno schema di relazione dichiarato dinamico può essere
 usato. La libreria standard abilita `nord`, `sud`, `est`, `ovest`, `nordest`,
-`sudest`, `sudovest` e `nordovest`; contenimento, lati delle porte e relazione
-fra chiave e serratura restano strutturali.
+`sudest`, `sudovest`, `nordovest`, `sopra` e `sotto`; contenimento, lati delle
+porte e relazione fra chiave e serratura restano strutturali.
 
 Una relazione sconosciuta, immutabile o riflessiva produce `E312`. Estremi di
 tipo incompatibile producono `E305`. Gli effetti non sono ammessi nella fase
@@ -55,6 +55,6 @@ snapshot corrente e cambia appena il passaggio viene rivelato o nascosto.
 ## Limiti
 
 Il sorgente non può ancora dichiarare nuovi schemi di relazione. La versione
-corrente riguarda gli otto collegamenti della rosa dei venti della libreria.
+corrente riguarda le dieci direzioni della libreria.
 Visibilità degli oggetti, porte segrete come entità e collegamenti a senso unico
 richiedono specifiche successive.

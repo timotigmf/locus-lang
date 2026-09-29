@@ -1,0 +1,14 @@
+Titolo: "I tre livelli del faro".
+Autore: "Esempio LOCUS".
+
+La Sala Macchine è una stanza.
+La Terrazza è una stanza.
+La Cisterna è una stanza.
+
+La Terrazza sovrasta la Sala Macchine.
+La Sala Macchine sovrasta la Cisterna.
+
+Inizia nella "Sala Macchine".
+La Sala Macchine ha descrizione "Una scala sale alla terrazza e un'altra scende alla cisterna.".
+La Terrazza ha descrizione "Il mare circonda il faro. La sala macchine è sotto di te.".
+La Cisterna ha descrizione "L'acqua riflette una botola aperta verso l'alto.".

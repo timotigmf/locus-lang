@@ -10,9 +10,9 @@ Esportazione ZIP del giocatore statico con sorgente della storia e runtime inclu
 
 ## Controlli eseguiti
 
-- 623 test Python passati, inclusi otto punti della rosa dei venti, alias classici,
-  nomi parziali, sinonimi dichiarati, metadati, ambiguità, tutorial, regole
-  transazionali, adapter Studio e confine del progetto virtuale.
+- 643 test Python passati, incluse rosa dei venti e direzioni verticali, alias
+  classici, nomi parziali, sinonimi dichiarati, metadati, ambiguità, tutorial,
+  regole transazionali, adapter Studio e confine del progetto virtuale.
 - Ruff, controllo formato e mypy strict passati.
 - Build wheel e sdist 0.5.0a1 riuscita; build web statica riuscita.
 - Quindici test browser reali passati in Chrome su macOS: flusso compilazione/gioco,
@@ -25,7 +25,8 @@ Esportazione ZIP del giocatore statico con sorgente della storia e runtime inclu
   navigazione inversa e mappa aggiornata durante la sessione; scenario non
   trasportabile e rivelazione di un oggetto inizialmente invisibile; elenchi,
   tabelle, dialoghi, scene, veicoli, acquisti e mercanti. Il flusso principale
-  percorre una diagonale, torna tramite l'inversa e controlla l'etichetta SVG.
+  percorre una diagonale e un livello verticale, torna tramite le inverse e
+  controlla etichette e linea tratteggiata nell'SVG.
 - Release provata bloccando tutte le richieste diverse dall'hosting locale:
   nessun CDN necessario al giocatore.
 - Audit npm dopo aggiornamento delle dipendenze: zero vulnerabilità note segnalate.

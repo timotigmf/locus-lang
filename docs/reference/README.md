@@ -13,9 +13,10 @@
 | gioca | compila e avvia la sessione IF dalla prima stanza dichiarata |
 
 `gioca`: guarda, esamina, prendi, lascia, metti, apri, chiudi, blocca,
-inventario, nord, sud, est, ovest, nordest, sudest, sudovest, nordovest, esci.
+inventario, nord, sud, est, ovest, nordest, sudest, sudovest, nordovest, su, giù, esci.
 Alias classici: l/look, x/examine, i/inv/inventory, n/north, s/south, e/east,
-o/w/west, ne/northeast, se/southeast, so/southwest, no/nw/northwest, q/quit,
+o/w/west, ne/northeast, se/southeast, so/southwest, no/nw/northwest,
+u/up/alto, d/down/giu/basso, q/quit,
 get/take, open, close, drop, put, lock.
 Quando la storia contiene dialoghi sono disponibili anche `parla con persona`,
 `p persona`, `talk to persona`, il numero della scelta, `scegli testo`, `basta`

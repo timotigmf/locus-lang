@@ -611,6 +611,23 @@ Fine regola.
     assert returned.session.room_id == revealed.session.room_id
 
 
+def test_dynamic_vertical_relation_is_navigable() -> None:
+    initial = session(
+        """
+La Soffitta è una stanza.
+Regola "abbassa scala" per esaminare "leva" nella fase dopo:
+    crea relazione "sopra" da "Sala" a "Soffitta";
+Fine regola.
+"""
+    )
+    revealed = step(initial, parse_command("esamina leva"))
+    assert step(initial, parse_command("u")).event.kind == "no_exit"
+    moved = step(revealed.session, parse_command("u"))
+    assert moved.session.room_id != revealed.session.room_id
+    returned = step(moved.session, parse_command("d"))
+    assert returned.session.room_id == revealed.session.room_id
+
+
 def test_debug_cli(
     tmp_path: "Path", monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
 ) -> None:

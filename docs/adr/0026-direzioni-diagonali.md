@@ -41,5 +41,5 @@ le direzioni nell'etichetta.
 Le storie esistenti e la versione IR 21 restano valide. `no` è riservato come
 comando completo per nordovest, mentre dentro una frase continua a essere una
 parola ordinaria. Le collisioni del layout restano risolte visivamente senza
-modificare il grafo. Una futura estensione verticale dovrà specificare livelli,
-etichette e interazione con `mondo.dentro` prima dell'implementazione.
+modificare il grafo. L'[ADR 0027](0027-livelli-verticali.md) specifica in seguito
+livelli, etichette e interazione con `mondo.dentro`.

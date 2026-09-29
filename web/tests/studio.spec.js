@@ -33,7 +33,7 @@ test("progetto, compilazione, gioco, test e release statica", async ({
   await page.locator(".cm-content").click();
   await page.keyboard.press("ControlOrMeta+End");
   await page.keyboard.insertText(
-    '\nIl Molo ha immagine "media/molo.png".\nIl Molo ha testo alternativo "Il molo nella foschia.".\nLa Vedetta è una stanza.\nLa Vedetta è a nordest del Molo.',
+    '\nIl Molo ha immagine "media/molo.png".\nIl Molo ha testo alternativo "Il molo nella foschia.".\nLa Vedetta è una stanza.\nLa Vedetta è a nordest del Molo.\nLa Torre è una stanza.\nLa Torre sovrasta il Molo.',
   );
   await page
     .getByRole("button", { name: "▶ Compila e prova", exact: true })
@@ -56,6 +56,12 @@ test("progetto, compilazione, gioco, test e release statica", async ({
   await page.locator("#send").click();
   await expect(page.locator(".story-output").last()).toContainText("Vedetta");
   await page.locator("#command").fill("so");
+  await page.locator("#send").click();
+  await expect(page.locator(".story-output").last()).toContainText("Molo");
+  await page.locator("#command").fill("u");
+  await page.locator("#send").click();
+  await expect(page.locator(".story-output").last()).toContainText("Torre");
+  await page.locator("#command").fill("d");
   await page.locator("#send").click();
   await expect(page.locator(".story-output").last()).toContainText("Molo");
   await page.locator("#command").fill("apri custodia");
@@ -81,6 +87,10 @@ test("progetto, compilazione, gioco, test e release statica", async ({
   await expect(page.locator("#mapCanvas svg")).toContainText(
     "nordest / sudovest",
   );
+  await expect(page.locator("#mapCanvas svg")).toContainText("su / giù");
+  await expect(
+    page.locator('#mapCanvas path[stroke-dasharray="6 4"]'),
+  ).toHaveCount(1);
   const mapDownload = page.waitForEvent("download");
   await page.locator("#exportMap").click();
   expect((await mapDownload).suggestedFilename()).toBe("mappa-locus.svg");

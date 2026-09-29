@@ -23,6 +23,8 @@ Le [relazioni dinamiche](relazioni-dinamiche.md) permettono alle regole di crear
 o rimuovere passaggi cardinali transazionali nell'IR 12.
 Le [direzioni diagonali](direzioni-diagonali.md) completano la rosa dei venti
 nella stdlib, nel runtime e nell'atlante senza cambiare la forma dell'IR 21.
+I [livelli verticali](livelli-verticali.md) aggiungono `su`/`giù`, il verbo
+relazionale `sovrasta` e una resa distinta nell'atlante.
 La [visibilità esplicita](visibilita-scenario.md) aggiunge oggetti nascosti e il
 tipo ambientale non trasportabile `scenario` nell'IR 13.
 Gli [elenchi tipati](liste-tipate.md) aggiungono collezioni omogenee, condizioni

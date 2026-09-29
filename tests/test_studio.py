@@ -187,6 +187,16 @@ def test_map_contains_each_diagonal_link_once() -> None:
     ]
 
 
+def test_map_contains_vertical_link_once() -> None:
+    studio = Studio()
+    result = studio.compile(
+        project("La Sala è una stanza. La Soffitta è una stanza. La Soffitta sovrasta la Sala.")
+    )
+    assert result["map"]["links"] == [
+        {"from": "e1", "to": "e2", "direction": "su"},
+    ]
+
+
 def test_map_updates_when_a_secret_passage_is_revealed() -> None:
     studio = Studio()
     result = studio.compile(

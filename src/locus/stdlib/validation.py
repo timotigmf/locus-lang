@@ -8,6 +8,7 @@ from locus.stdlib import (
     CONTAINER,
     CURRENCY,
     DOOR,
+    DOWN,
     EAST,
     INSIDE,
     LOCATABLE,
@@ -30,6 +31,7 @@ from locus.stdlib import (
     SOUTHEAST,
     SOUTHWEST,
     STATE,
+    UP,
     VEHICLE,
     WEST,
 )
@@ -229,6 +231,8 @@ def validate_world(
                 SOUTHEAST,
                 SOUTHWEST,
                 NORTHWEST,
+                UP,
+                DOWN,
             }
             for edge in world.relations
         ):

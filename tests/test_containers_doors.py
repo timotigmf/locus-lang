@@ -168,11 +168,18 @@ def test_compile_rejects_invalid_door_topology(source: str) -> None:
         compile_story(source)
 
 
-@pytest.mark.parametrize(("predicate", "movement"), [("est", "e"), ("nordest", "ne")])
-def test_door_can_guard_cardinal_and_diagonal_passages(predicate: str, movement: str) -> None:
+@pytest.mark.parametrize(
+    ("relation", "movement"),
+    [
+        ("La Serra è a est della Sala.", "e"),
+        ("La Serra è a nordest della Sala.", "ne"),
+        ("La Serra sovrasta la Sala.", "u"),
+    ],
+)
+def test_door_can_guard_directional_passages(relation: str, movement: str) -> None:
     state = session(
-        f"La Sala è una stanza. La Serra è una stanza. La Serra è a {predicate} della Sala. "
-        "La vetrata è una porta. La vetrata collega la Sala alla Serra. "
+        "La Sala è una stanza. La Serra è una stanza. "
+        f"{relation} La vetrata è una porta. La vetrata collega la Sala alla Serra. "
         'La vetrata ha stato "aperto".'
     )
     assert command(state, movement, "look").room_id != state.room_id

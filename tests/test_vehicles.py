@@ -104,6 +104,23 @@ def test_board_move_and_disembark_move_vehicle_atomically() -> None:
     assert command(returned.session, "entra nella saetta").event.kind == "not_here"
 
 
+def test_vehicle_moves_with_driver_between_vertical_levels() -> None:
+    source = """
+La Rimessa è una stanza.
+La Terrazza è una stanza.
+La Terrazza sovrasta la Rimessa.
+La piattaforma è un veicolo nella Rimessa.
+"""
+    current = start(instantiate(compile_story(source)))
+    boarded = command(current, "sali sulla piattaforma")
+    raised = command(boarded.session, "su")
+    assert raised.event.kind == "look"
+    assert raised.session.room_id == vehicle_location(raised.session)
+    lowered = command(raised.session, "giù")
+    assert lowered.session.room_id == current.room_id
+    assert lowered.session.room_id == vehicle_location(lowered.session)
+
+
 def test_vehicle_errors_are_specific_and_do_not_corrupt_state() -> None:
     source = SOURCE + "La campana è una cosa nella Rimessa. La mula è un veicolo nella Rimessa."
     current = start(instantiate(compile_story(source)))

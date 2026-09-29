@@ -32,6 +32,7 @@ from locus.stdlib import (
     SIDE_A,
     SIDE_B,
     SOUTHEAST,
+    UP,
     VEHICLE,
 )
 from locus.stdlib.authoring import compile_story_file
@@ -296,6 +297,7 @@ def map_data(model: ProgramIR | World) -> dict[str, Any]:
         EAST: "est",
         NORTHEAST: "nordest",
         SOUTHEAST: "sudest",
+        UP: "su",
     }
     links = [
         {

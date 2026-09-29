@@ -23,7 +23,7 @@ Fine regola.
 
 Azioni registrate dalla libreria narrativa: `guardare`, `inventariare`,
 `andare a nord`, `andare a sud`, `andare a est`, `andare a ovest`, le quattro
-azioni diagonali, `prendere`,
+azioni diagonali, `andare su`, `andare giù`, `prendere`,
 `aprire`, `chiudere`, `mettere`, `lasciare`, `esaminare`, `bloccare`.
 Un selettore senza oggetti si applica a tutti gli oggetti; un oggetto
 quotato restringe il destinatario, `con "nome"` restringe il secondo oggetto.

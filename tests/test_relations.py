@@ -94,6 +94,26 @@ def test_diagonal_destination_conflict_is_rejected() -> None:
     assert error.value.code == "E106"
 
 
+def test_vertical_relation_uses_natural_italian_verb_and_inverse() -> None:
+    program = compile_source(
+        ROOMS + "La B sovrasta la A.",
+        default_kinds(),
+        relations=default_relations(),
+    )
+    assert RelationIR("e1", "mondo.sopra", "e2") in program.relations
+    assert RelationIR("e2", "mondo.sotto", "e1") in program.relations
+
+
+def test_vertical_destination_conflict_is_rejected() -> None:
+    with pytest.raises(CompileError) as error:
+        compile_source(
+            ROOMS + "La B sovrasta la A. La C sovrasta la A.",
+            default_kinds(),
+            relations=default_relations(),
+        )
+    assert error.value.code == "E106"
+
+
 def test_catalog_is_required_and_replaceable() -> None:
     with pytest.raises(CompileError, match="E104"):
         compile_source(ROOMS + "La B è a nord della A.", default_kinds())
