@@ -19,6 +19,7 @@
 
 - [Progetti M4](linguaggio/milestone-4.md) e [rapporto M4](rapporto-milestone-4.md).
 - [Metadati e vocabolario](linguaggio/metadati-vocabolario.md): titolo, autore e sinonimi.
+- [Disambiguazione a più turni](linguaggio/disambiguazione-multiturno.md): scegliere per numero, nome o sinonimo.
 - [Tipi definiti dall'autore](linguaggio/tipi-autore.md): gerarchia nominale ed ereditarietà singola.
 - [Azioni definite dall'autore](linguaggio/azioni-autore.md): comandi italiani e argomenti tipati.
 - [Sinonimi e separatori delle azioni](linguaggio/grammatica-comandi-autore.md): più forme italiane per lo stesso verbo.

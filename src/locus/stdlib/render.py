@@ -70,10 +70,18 @@ def render(transition: Transition) -> str:
     if kind in named:
         return f"{named[kind]}: {names[0]}."
     if kind == "ambiguous":
-        alternatives = (
-            " o ".join(names) if len(names) < 3 else ", ".join(names[:-1]) + " o " + names[-1]
+        alternatives = "; ".join(f"{index}) {name}" for index, name in enumerate(names, start=1))
+        return (
+            f"Quale intendi? {alternatives}. "
+            "Rispondi con il numero o il nome, oppure scrivi «annulla»."
         )
-        return f"Quale intendi: {alternatives}?"
+    if kind == "invalid_clarification":
+        return (
+            "La risposta non identifica una sola alternativa. "
+            "Scegli un numero o un nome indicato, oppure scrivi «annulla»."
+        )
+    if kind == "clarification_cancelled":
+        return "Chiarimento annullato."
     if kind == "custom":
         return "Non accade nulla."
     if kind == "dialogue":

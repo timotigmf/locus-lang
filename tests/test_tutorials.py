@@ -9,7 +9,7 @@ import pytest
 from locus.player import parse_command
 from locus.runtime import instantiate
 from locus.stdlib.authoring import compile_story_file
-from locus.stdlib.game import Session, start, step
+from locus.stdlib.game import Session, parse_session_command, start, step
 from locus.stdlib.render import render
 from locus.stdlib.validation import property_value
 
@@ -167,6 +167,16 @@ def test_inward_outward_tutorial_enters_and_leaves_the_lantern_room() -> None:
     assert "Lanterna" in render(lantern)
     returned = step(lantern.session, parse_command("fuori"))
     assert returned.session.room_id == current.room_id
+
+
+def test_clarification_tutorial_accepts_a_synonym_on_the_next_turn() -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "26_chiarimenti.locus")))
+    asked = step(current, parse_session_command(current, "prendi chiave"))
+    assert asked.event.kind == "ambiguous"
+    assert asked.session.clarification is not None
+    taken = step(asked.session, parse_session_command(asked.session, "scura"))
+    assert taken.event.kind == "taken"
+    assert "chiave di ferro" in render(taken)
 
 
 def test_dungeon_tutorial_awards_points_once_after_the_puzzle() -> None:

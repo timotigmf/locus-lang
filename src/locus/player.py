@@ -90,6 +90,8 @@ class Intent:
     verb: Verb
     noun: str | None = None
     indirect: str | None = None
+    noun_id: str | None = None
+    indirect_id: str | None = None
 
 
 def _tokens(text: str) -> list[tuple[str, bool]] | None:

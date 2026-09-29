@@ -67,6 +67,7 @@ dall'alto verso il basso prima di studiare i moduli.
 23. [Costruire la rosa dei venti](../tutorial/23-la-rosa-dei-venti.md)
 24. [Collegare i livelli del faro](../tutorial/24-i-tre-livelli-del-faro.md)
 25. [Entrare e uscire dalla lanterna](../tutorial/25-entrare-e-uscire.md)
+26. [Scegliere tra oggetti simili](../tutorial/26-scegliere-tra-oggetti.md)
 
 ## Indice per obiettivo
 
@@ -93,6 +94,7 @@ dall'alto verso il basso prima di studiare i moduli.
 | Percorsi diagonali | Nordest, sudest, sudovest, nordovest e inverse | Lezione 23 |
 | Torri e sotterranei | Livelli `su`/`giù`, scale, botole e porte | Lezione 24 |
 | Edifici e grotte | Passaggi `dentro`/`fuori` distinti dal contenimento | Lezione 25 |
+| Nomi ambigui | Chiarimento con numero, nome parziale o sinonimo | Lezioni 5 e 26 |
 
 ## Vocabolario italiano
 
@@ -110,7 +112,8 @@ Comprendi "contenitore stagno" come "custodia impermeabile".
 Un dizionario italiano completo non basta a comprendere “qualsiasi termine”:
 `banco`, per esempio, può indicare un mobile, una scuola, sabbia o pesci. La
 decisione appartiene all'autore e al contesto della storia. LOCUS evita scelte
-silenziose: se due oggetti corrispondono, chiede quale intendi.
+silenziose: se due oggetti corrispondono, chiede quale intendi e accetta la
+risposta nel turno seguente.
 
 ## Riferimenti
 

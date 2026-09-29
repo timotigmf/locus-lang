@@ -731,3 +731,34 @@ La Ada vende la bussola.`;
   await expect(commerce).toContainText("rivendita 3");
   await expect(commerce).toContainText("Bottega");
 });
+
+test("chiarimento a più turni per un nome ambiguo", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.locator("#compileStatus")).toContainText("compilato", {
+    timeout: 90000,
+  });
+  const source = `Titolo: "Le due chiavi".
+La Sala è una stanza.
+La chiave di rame è una chiave nella Sala.
+La chiave di ferro è una chiave nella Sala.
+Comprendi "scura" come "chiave di ferro".`;
+  await page.locator(".cm-content").click();
+  await page.keyboard.press("ControlOrMeta+A");
+  await page.keyboard.insertText(source);
+  await page
+    .getByRole("button", { name: "▶ Compila e prova", exact: true })
+    .click();
+  await expect(page.locator("#compileStatus")).toContainText("compilato", {
+    timeout: 90000,
+  });
+  await page.locator("#command").fill("prendi chiave");
+  await page.locator("#send").click();
+  await expect(page.locator(".story-output").last()).toContainText(
+    "1) chiave di rame; 2) chiave di ferro",
+  );
+  await page.locator("#command").fill("scura");
+  await page.locator("#send").click();
+  await expect(page.locator(".story-output").last()).toContainText(
+    "Hai preso: chiave di ferro.",
+  );
+});

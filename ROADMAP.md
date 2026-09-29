@@ -51,7 +51,8 @@ Ogni pacchetto conserva il core indipendente dalla narrativa interattiva.
 
 1. Gerarchia dei tipi e azioni dell'autore implementate in IR 8.
 2. Sinonimi, locuzioni iniziali e separatori multiparola implementati in IR 11;
-   clitici, pattern liberi e disambiguazione a più turni restano da completare.
+   disambiguazione a più turni implementata nella sessione; clitici e pattern
+   liberi restano da completare.
 3. Relazioni dinamiche direzionali, passaggio segreto, visibilità esplicita e
    oggetti di scenario implementati fino all'IR 13. Luce, trasparenza e punti di
    vista multipli restano pacchetti separati.
@@ -86,6 +87,10 @@ Ogni pacchetto conserva il core indipendente dalla narrativa interattiva.
     distinta dal contenimento implementate; i percorsi a senso unico restano un
     pacchetto separato.
 
+15. Disambiguazione a più turni implementata per oggetto diretto e indiretto,
+    con scelta per numero, nome o sinonimo, annullamento e stato condiviso fra
+    CLI, Studio e release web.
+
 Non si importeranno codice o testi Inform.
 
 ## Studio M5 — 0.5.0a1
@@ -95,5 +100,5 @@ indice, trace, copioni verificabili e release web con runtime incluso. Restano
 fuori scope collaborazione cloud, breakpoint, salvataggi del gioco ed eseguibili nativi.
 
 Estensione compatibile completata: dodici direzioni, incluse rosa dei venti,
-livelli e dentro/fuori, abbreviazioni classiche, nomi parziali non ambigui e
-disambiguazione esplicita. Il dialogo di chiarimento a più turni resta futuro.
+livelli e dentro/fuori, abbreviazioni classiche, nomi parziali e dialogo di
+chiarimento a più turni. Clitici e pronomi restano futuri.

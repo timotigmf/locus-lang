@@ -7,7 +7,7 @@ from locus.player import Intent, parse_command
 from locus.runtime import instantiate
 from locus.stdlib import INSIDE, STATE
 from locus.stdlib.authoring import compile_story
-from locus.stdlib.game import Session, carried, reachable, start, step
+from locus.stdlib.game import Session, carried, parse_session_command, reachable, start, step
 from locus.stdlib.render import render
 from locus.stdlib.validation import property_value, validate_world
 
@@ -74,7 +74,33 @@ def test_partial_name_requires_disambiguation_when_two_keys_are_reachable() -> N
     state = command(session(), "apri scrigno", "opened")
     result = step(state, parse_command("prendi chiave"))
     assert result.event.kind == "ambiguous"
-    assert render(result) == "Quale intendi: chiave di ottone o chiave di ferro?"
+    assert render(result) == (
+        "Quale intendi? 1) chiave di ottone; 2) chiave di ferro. "
+        "Rispondi con il numero o il nome, oppure scrivi «annulla»."
+    )
+    selected = step(result.session, parse_session_command(result.session, "ottone"))
+    assert selected.event.kind == "taken"
+    assert selected.event.entities == (ident(state, "chiave di ottone"),)
+
+
+def test_indirect_object_clarification_resumes_the_original_command() -> None:
+    state = session(
+        "La Sala è una stanza. "
+        'La scatola rossa è un contenitore nella Sala. La scatola rossa ha stato "aperto". '
+        'La scatola blu è un contenitore nella Sala. La scatola blu ha stato "aperto". '
+        "La gemma è una cosa nella Sala."
+    )
+    state = command(state, "prendi gemma", "taken")
+    asked = step(state, parse_session_command(state, "metti gemma nella scatola"))
+    assert asked.event.kind == "ambiguous"
+    assert asked.session.clarification is not None
+    assert asked.session.clarification.argument == "indirect"
+    selected = step(asked.session, parse_session_command(asked.session, "blu"))
+    assert selected.event.kind == "put"
+    assert selected.event.entities == (
+        ident(state, "gemma"),
+        ident(state, "scatola blu"),
+    )
 
 
 def test_nested_container_transport_put_drop_and_cycle_prevention() -> None:

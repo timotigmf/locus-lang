@@ -18,7 +18,7 @@ from locus.media import (
     valid_media_content,
     valid_resource_path,
 )
-from locus.player import Intent, parse_command
+from locus.player import Intent
 from locus.runtime import World, has_type, instantiate
 from locus.stdlib import (
     CURRENCY,
@@ -37,7 +37,7 @@ from locus.stdlib import (
     VEHICLE,
 )
 from locus.stdlib.authoring import compile_story_file
-from locus.stdlib.game import Session, Transition, start, step
+from locus.stdlib.game import Session, Transition, parse_session_command, start, step
 from locus.stdlib.render import render
 
 # Collegamenti relativi al manuale incorporato nella distribuzione web.
@@ -421,6 +421,8 @@ class Studio:
         media_entity = None
         if transition.event.kind in {"look", "examined"} and transition.event.entities:
             media_entity = transition.event.entities[0]
+        clarification = transition.session.clarification
+        labels = {entity.id: entity.label for entity in transition.session.world.entities}
         return {
             "ok": True,
             "text": render(transition),
@@ -444,6 +446,16 @@ class Studio:
             "completed_scenes": list(transition.session.completed_scene_ids),
             "score_log": [asdict(item) for item in transition.session.score_log],
             "scenes": [asdict(item) for item in transition.scenes],
+            "clarification": (
+                {
+                    "argument": clarification.argument,
+                    "candidates": [
+                        {"id": ident, "label": labels[ident]} for ident in clarification.candidates
+                    ],
+                }
+                if clarification is not None
+                else None
+            ),
             "media": [
                 asdict(item)
                 for item in transition.session.world.resources
@@ -466,20 +478,7 @@ class Studio:
             raise ValueError("Comando troppo lungo.")
         transition = step(
             self.session,
-            parse_command(
-                command,
-                self.session.world.actions,
-                dialogue_enabled=bool(self.session.world.dialogues),
-                scene_enabled=bool(self.session.world.scenes),
-                vehicle_enabled=any(
-                    has_type(self.session.world, entity.type_id, VEHICLE)
-                    for entity in self.session.world.entities
-                ),
-                commerce_enabled=any(
-                    has_type(self.session.world, entity.type_id, CURRENCY)
-                    for entity in self.session.world.entities
-                ),
-            ),
+            parse_session_command(self.session, command),
         )
         self.session = transition.session
         self.ended = transition.event.kind == "quit"

@@ -39,6 +39,7 @@ al prompt della storia: lì si scrivono soltanto i comandi del giocatore.
 | [23. La rosa dei venti](23-la-rosa-dei-venti.md) | `examples/tutorial/23_direzioni_diagonali.locus` | Dichiarare, percorrere e mappare le quattro diagonali |
 | [24. I tre livelli del faro](24-i-tre-livelli-del-faro.md) | `examples/tutorial/24_livelli_verticali.locus` | Dichiarare scale e botole con su, giù e `sovrasta` |
 | [25. Entrare e uscire dalla lanterna](25-entrare-e-uscire.md) | `examples/tutorial/25_dentro_fuori.locus` | Distinguere passaggi dentro/fuori e contenimento degli oggetti |
+| [26. Scegliere tra oggetti simili](26-scegliere-tra-oggetti.md) | `examples/tutorial/26_chiarimenti.locus` | Rispondere a un'ambiguità con numero, nome o sinonimo |
 
 Prima prova la versione fornita. Poi modifica un solo elemento e riesegui la
 sequenza di comandi. In caso di errore conserva il messaggio, il file sorgente e

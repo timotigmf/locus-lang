@@ -7,7 +7,7 @@ from locus.player import Intent, parse_command
 from locus.runtime import Entity, World, instantiate
 from locus.stdlib import ROOM, THING, default_kinds, default_relations
 from locus.stdlib.authoring import compile_story
-from locus.stdlib.game import Session, start, step
+from locus.stdlib.game import Session, parse_session_command, start, step
 from locus.stdlib.render import render
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -279,7 +279,8 @@ def test_ambiguous_intent_on_world_constructed_by_host() -> None:
     session = Session(world, "r", ("a", "b"))
     result = step(session, Intent("take", "chiave"))
     assert result.event.kind == "ambiguous"
-    assert result.session is session
+    assert result.session.inventory == session.inventory
+    assert result.session.clarification is not None
 
 
 def test_partial_name_resolves_only_when_unique_in_current_scope() -> None:
@@ -298,7 +299,60 @@ def test_partial_name_resolves_only_when_unique_in_current_scope() -> None:
     two_keys = Session(world, "r", ("a", "b"))
     ambiguous = step(two_keys, parse_command("prendi chiave"))
     assert ambiguous.event.kind == "ambiguous"
-    assert render(ambiguous) == "Quale intendi: chiave di rame o chiave di ferro?"
+    assert render(ambiguous) == (
+        "Quale intendi? 1) chiave di rame; 2) chiave di ferro. "
+        "Rispondi con il numero o il nome, oppure scrivi «annulla»."
+    )
+
+
+def test_ambiguity_can_be_resolved_on_the_next_turn_by_number_or_partial_name() -> None:
+    world = World(
+        (
+            Entity("r", "Sala", ROOM),
+            Entity("a", "chiave di rame", THING),
+            Entity("b", "chiave di ferro", THING),
+        )
+    )
+    initial = Session(world, "r", ("a", "b"))
+    asked = step(initial, parse_session_command(initial, "prendi chiave"))
+    assert asked.session.turn == 0
+    assert asked.session.clarification is not None
+
+    invalid = step(asked.session, parse_session_command(asked.session, "legno"))
+    assert invalid.event.kind == "invalid_clarification"
+    assert invalid.session.clarification == asked.session.clarification
+    assert invalid.session.turn == 0
+
+    selected = step(invalid.session, parse_session_command(invalid.session, "ferro"))
+    assert selected.event.kind == "already_carried"
+    assert selected.event.entities == ("b",)
+    assert selected.session.clarification is None
+
+    asked_again = step(initial, parse_session_command(initial, "prendi chiave"))
+    first = step(asked_again.session, parse_session_command(asked_again.session, "1"))
+    assert first.event.kind == "already_carried"
+    assert first.event.entities == ("a",)
+
+
+def test_clarification_can_be_cancelled_or_replaced_by_a_new_command() -> None:
+    world = World(
+        (
+            Entity("r", "Sala", ROOM),
+            Entity("a", "chiave di rame", THING),
+            Entity("b", "chiave di ferro", THING),
+        )
+    )
+    initial = Session(world, "r", ("a", "b"))
+    asked = step(initial, parse_session_command(initial, "prendi chiave"))
+    cancelled = step(asked.session, parse_session_command(asked.session, "annulla"))
+    assert cancelled.event.kind == "clarification_cancelled"
+    assert cancelled.session.clarification is None
+    assert cancelled.session.turn == 0
+
+    asked_again = step(initial, parse_session_command(initial, "prendi chiave"))
+    looked = step(asked_again.session, parse_session_command(asked_again.session, "guarda"))
+    assert looked.event.kind == "look"
+    assert looked.session.clarification is None
 
 
 def test_missing_object_gets_a_specific_prompt() -> None:

@@ -9,12 +9,12 @@ from typing import Never
 
 from locus.compiler import relation_verbs
 from locus.diagnostics import CompileError
-from locus.player import Intent, parse_command
+from locus.player import Intent
 from locus.project import load_project
-from locus.runtime import has_type, instantiate
-from locus.stdlib import CURRENCY, VEHICLE, default_relations
+from locus.runtime import instantiate
+from locus.stdlib import default_relations
 from locus.stdlib.authoring import compile_story_file
-from locus.stdlib.game import Transition, start, step
+from locus.stdlib.game import Transition, parse_session_command, start, step
 from locus.stdlib.render import render
 
 _USAGE = "uso: locus {controlla,ast,ir,compila,gioca,debug} FILE\n"
@@ -57,20 +57,7 @@ def main(argv: list[str] | None = None) -> int:
                         break
                     transition = step(
                         session,
-                        parse_command(
-                            command,
-                            session.world.actions,
-                            dialogue_enabled=bool(session.world.dialogues),
-                            scene_enabled=bool(session.world.scenes),
-                            vehicle_enabled=any(
-                                has_type(session.world, entity.type_id, VEHICLE)
-                                for entity in session.world.entities
-                            ),
-                            commerce_enabled=any(
-                                has_type(session.world, entity.type_id, CURRENCY)
-                                for entity in session.world.entities
-                            ),
-                        ),
+                        parse_session_command(session, command),
                     )
                     session = transition.session
                     _show(transition, args.command == "debug")

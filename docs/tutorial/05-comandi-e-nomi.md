@@ -58,14 +58,15 @@ sia `chiave di rame` sia `chiave di ferro`, il sistema non sceglie arbitrariamen
 
 ```text
 > prendi chiave
-Quale intendi: chiave di rame o chiave di ferro?
-> prendi chiave di rame
+Quale intendi? 1) chiave di rame; 2) chiave di ferro. Rispondi con il numero o il nome, oppure scrivi «annulla».
+> rame
 Hai preso: chiave di rame.
 ```
 
 Questa richiesta di chiarimento evita che una storia dipenda dall'ordine interno
-degli oggetti. Non è ancora un dialogo a due turni: dopo la domanda occorre ripetere
-il comando completo.
+degli oggetti. Nel turno seguente puoi indicare il numero, il nome completo, una
+parte univoca o un sinonimo. `annulla` rinuncia all'azione; un nuovo comando
+riconosciuto abbandona la domanda e viene eseguito.
 
 ## Prova negativa
 
@@ -88,7 +89,7 @@ Il Molo è una stanza.
 La chiave di ferro è una chiave nel Molo.
 ```
 
-Ricompila e prova `prendi chiave`. Verifica la domanda di disambiguazione, poi
+Ricompila e prova `prendi chiave`. Verifica la domanda, rispondi `ferro`, poi
 sposta la chiave di ferro in una stanza diversa e ripeti. Il comando corto tornerà
 a essere sufficiente perché nel luogo corrente rimane una sola candidata.
 

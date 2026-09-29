@@ -32,6 +32,8 @@ anche `compra MERCE da MERCANTE`, `vendi`/`vendere MERCE a MERCANTE` e
 `sell MERCE to MERCHANT`; il mercante può essere omesso se è l'unico raggiungibile.
 I nomi parziali sono accettati soltanto quando identificano un solo oggetto
 raggiungibile; altrimenti l'evento è `ambiguous` e contiene tutte le alternative.
+Il comando successivo può scegliere per numero, nome completo, frammento univoco
+o sinonimo; `annulla` chiude la domanda. Un altro comando riconosciuto la sostituisce.
 EOF termina senza errore, Ctrl-C termina con codice 130. Prompt soltanto su TTY,
 quindi si possono fornire comandi da stdin per script e transcript.
 Codici: 0 successo, 1 sorgente/file/avvio non valido, 2 invocazione errata.
@@ -47,8 +49,9 @@ Diagnosi su stderr; nessuna scrittura implicita. Dump non caricabili come giochi
   contratto funzionale e irriflessivo di una relazione; tipi/ID già risolti.
 - `stdlib.default_kinds()` / `stdlib.default_kind_parents()` / `stdlib.default_relations()` / `stdlib.default_properties()` / `stdlib.default_actions()`: cataloghi nuovi e sostituibili.
 - `runtime.instantiate(program)`: World immutabile con entità e relazioni.
-- `player.parse_command(text, actions=(), dialogue_enabled=False, scene_enabled=False, vehicle_enabled=False, commerce_enabled=False)`: Intent(verb, noun=None, indirect=None); riceve le azioni compilate del mondo, abilita esplicitamente conversazioni, metacomandi temporali, veicoli e commercio e usa `unknown` per un comando sconosciuto.
+- `player.parse_command(text, actions=(), dialogue_enabled=False, scene_enabled=False, vehicle_enabled=False, commerce_enabled=False)`: Intent(verb, noun=None, indirect=None); analizza un comando isolato e usa `unknown` per un comando sconosciuto.
 - `stdlib.game.start(world)`: Session; ValueError se mancano stanze.
+- `stdlib.game.parse_session_command(session, text)`: Intent; abilita azioni, conversazioni, scene, veicoli e commercio del mondo e interpreta una risposta al chiarimento attivo.
 - `stdlib.game.visible(session)`: ID delle entità percepibili nella stanza e non possedute; considera `visibile`, contenimento e stato dei contenitori.
 - `stdlib.game.step(session, intent, advance_time=True)`: Transition(session, event), senza I/O; l'avvio passa `False` per non consumare un turno con la descrizione iniziale.
 - `stdlib.render.render(transition)`: testo italiano di un evento.
@@ -59,6 +62,9 @@ ActionDeclaration, Declaration, Relation, TypeIR, ActionIR, EntityIR, RelationIR
 ProgramIR, Entity, World, Intent, Session, Event e Transition sono
 dataclass immutabili. Session e World costruite manualmente dal chiamante devono
 avere riferimenti coerenti; non sono un'API di caricamento di dati non fidati.
+`Session.clarification` conserva intento, argomento e candidate di una domanda
+ambigua. Gli ID opzionali di `Intent` sono prodotti dal runtime dopo una scelta e
+non costituiscono identificatori accettati dal testo del giocatore.
 
 `ProgramIR.dialogues` e `World.dialogues` contengono `DialogueIR`, composto da
 `DialogueNodeIR` e `DialogueChoiceIR`. Tutti i riferimenti sono ID risolti. La

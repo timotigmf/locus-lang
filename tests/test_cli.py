@@ -117,6 +117,28 @@ def test_game_cli_transcript(tmp_path: Path) -> None:
     ]
 
 
+def test_game_cli_resumes_an_ambiguous_command(tmp_path: Path) -> None:
+    source = tmp_path / "chiavi.locus"
+    source.write_text(
+        "La Sala è una stanza. La chiave di rame è una cosa nella Sala. "
+        "La chiave di ferro è una cosa nella Sala.",
+        encoding="utf-8",
+    )
+    result = subprocess.run(
+        [sys.executable, "-m", "locus", "gioca", str(source)],
+        input="prendi chiave\n2\nesci\n",
+        cwd=tmp_path,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        env={**os.environ, "PYTHONUTF8": "1"},
+        check=False,
+    )
+    assert result.returncode == 0
+    assert "Quale intendi? 1) chiave di rame; 2) chiave di ferro." in result.stdout
+    assert "Hai preso: chiave di ferro." in result.stdout
+
+
 def test_cli_executes_an_author_command(tmp_path: Path) -> None:
     source = tmp_path / "azione.locus"
     source.write_text(

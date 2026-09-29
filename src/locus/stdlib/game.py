@@ -5,7 +5,7 @@ from typing import Literal
 
 from locus.diagnostics import canonical
 from locus.ir import ActionIR, DialogueIR, DialogueNodeIR, PropertyIR, RelationIR, TableIR
-from locus.player import Intent
+from locus.player import Intent, parse_command
 from locus.rule_model import ActionCall, Address, RelationChange, TableChange, Trace
 from locus.rules import ActionResult, RuleError, execute
 from locus.runtime import Entity, World, has_type
@@ -61,6 +61,8 @@ EventKind = Literal[
     "not_here",
     "not_portable",
     "ambiguous",
+    "invalid_clarification",
+    "clarification_cancelled",
     "no_exit",
     "unknown",
     "missing_noun",
@@ -118,6 +120,13 @@ EventKind = Literal[
 
 
 @dataclass(frozen=True, slots=True)
+class Clarification:
+    intent: Intent
+    argument: Literal["noun", "indirect"]
+    candidates: tuple[str, ...]
+
+
+@dataclass(frozen=True, slots=True)
 class Session:
     world: World
     room_id: str
@@ -132,6 +141,7 @@ class Session:
     score_log: tuple["ScoreEntry", ...] = ()
     vehicle_id: str | None = None
     owned_ids: tuple[str, ...] = ()
+    clarification: Clarification | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -260,8 +270,13 @@ def visible(session: Session) -> tuple[str, ...]:
     )
 
 
-def _resolve(session: Session, name: str) -> Entity | Event:
+def _resolve(session: Session, name: str, selected_id: str | None = None) -> Entity | Event:
     in_scope = [entity for entity in session.world.entities if reachable(session, entity.id)]
+    if selected_id is not None:
+        return next(
+            (entity for entity in in_scope if entity.id == selected_id),
+            Event("not_here"),
+        )
     normalized = canonical(name)
     matches = [entity for entity in in_scope if canonical(entity.label) == normalized]
     if not matches:
@@ -345,8 +360,10 @@ def _set_property(session: Session, entity_id: str, property_id: str, value: Val
     )
 
 
-def _key_error(session: Session, target_id: str, name: str) -> Event | None:
-    key = _resolve(session, name)
+def _key_error(
+    session: Session, target_id: str, name: str, selected_id: str | None
+) -> Event | None:
+    key = _resolve(session, name, selected_id)
     if isinstance(key, Event):
         return key
     if not carried(session, key.id):
@@ -375,7 +392,7 @@ def _opening(session: Session, intent: Intent, entity: Entity) -> Transition:
     elif state == "aperto":
         return Transition(session, Event("already_open", (entity.id,)))
     if intent.indirect:
-        error = _key_error(session, entity.id, intent.indirect)
+        error = _key_error(session, entity.id, intent.indirect, intent.indirect_id)
         if error:
             return Transition(session, error)
     elif state == "bloccato" or intent.verb == "lock":
@@ -385,10 +402,10 @@ def _opening(session: Session, intent: Intent, entity: Entity) -> Transition:
     return _changed(_set_state(session, entity.id, value), kind, entity.id)
 
 
-def _board(session: Session, name: str | None) -> Transition:
+def _board(session: Session, name: str | None, selected_id: str | None = None) -> Transition:
     if name is None:
         return Transition(session, Event("missing_noun"))
-    entity = _resolve(session, name)
+    entity = _resolve(session, name, selected_id)
     if isinstance(entity, Event):
         return Transition(session, entity)
     if not has_type(session.world, entity.type_id, VEHICLE):
@@ -400,11 +417,11 @@ def _board(session: Session, name: str | None) -> Transition:
     return _changed(replace(session, vehicle_id=entity.id), "boarded", entity.id)
 
 
-def _disembark(session: Session, name: str | None) -> Transition:
+def _disembark(session: Session, name: str | None, selected_id: str | None = None) -> Transition:
     if session.vehicle_id is None:
         return Transition(session, Event("not_in_vehicle"))
     if name is not None:
-        entity = _resolve(session, name)
+        entity = _resolve(session, name, selected_id)
         if isinstance(entity, Event):
             return Transition(session, entity)
         if not has_type(session.world, entity.type_id, VEHICLE):
@@ -456,7 +473,16 @@ def _with_offer(session: Session, item_id: str, merchant_id: str) -> Session:
     return replace(session, world=replace(session.world, relations=relations))
 
 
-def _resolve_merchant(session: Session, name: str | None) -> Entity | Event:
+def _resolve_merchant(
+    session: Session, name: str | None, selected_id: str | None = None
+) -> Entity | Event:
+    if selected_id is not None:
+        merchant = _resolve(session, name or "", selected_id)
+        if isinstance(merchant, Event):
+            return merchant
+        if not has_type(session.world, merchant.type_id, MERCHANT):
+            return Event("not_merchant", (merchant.id,))
+        return merchant
     if name is not None:
         merchant = _resolve(session, name)
         if isinstance(merchant, Event):
@@ -476,10 +502,12 @@ def _resolve_merchant(session: Session, name: str | None) -> Entity | Event:
     return merchants[0]
 
 
-def _purchase(session: Session, name: str | None, merchant_name: str | None = None) -> Transition:
+def _purchase(session: Session, intent: Intent) -> Transition:
+    name = intent.noun
+    merchant_name = intent.indirect
     if name is None:
         return Transition(session, Event("missing_noun"))
-    entity = _resolve(session, name)
+    entity = _resolve(session, name, intent.noun_id)
     if isinstance(entity, Event):
         return Transition(session, entity)
     if not has_type(session.world, entity.type_id, MERCHANDISE):
@@ -498,7 +526,7 @@ def _purchase(session: Session, name: str | None, merchant_name: str | None = No
         if not reachable(session, merchant.id):
             return Transition(session, Event("no_merchant"))
         if merchant_name is not None:
-            selected = _resolve_merchant(session, merchant_name)
+            selected = _resolve_merchant(session, merchant_name, intent.indirect_id)
             if isinstance(selected, Event):
                 return Transition(session, selected)
             if selected.id != merchant.id:
@@ -524,17 +552,19 @@ def _purchase(session: Session, name: str | None, merchant_name: str | None = No
     return _changed(changed, "purchased", *entities)
 
 
-def _sell(session: Session, name: str | None, merchant_name: str | None = None) -> Transition:
+def _sell(session: Session, intent: Intent) -> Transition:
+    name = intent.noun
+    merchant_name = intent.indirect
     if name is None:
         return Transition(session, Event("missing_noun"))
-    entity = _resolve(session, name)
+    entity = _resolve(session, name, intent.noun_id)
     if isinstance(entity, Event):
         return Transition(session, entity)
     if not has_type(session.world, entity.type_id, MERCHANDISE):
         return Transition(session, Event("not_sellable", (entity.id,)))
     if not carried(session, entity.id) or entity.id not in session.owned_ids:
         return Transition(session, Event("not_carried", (entity.id,)))
-    merchant = _resolve_merchant(session, merchant_name)
+    merchant = _resolve_merchant(session, merchant_name, intent.indirect_id)
     if isinstance(merchant, Event):
         return Transition(session, merchant)
     resale = integer_property_value(session.world, entity.id, RESALE_PRICE, code="E125")
@@ -566,15 +596,16 @@ def _authored_arguments(
 ) -> tuple[Entity, ...] | Event:
     expected = (action.target_type_id, action.indirect_type_id)
     names = (intent.noun, intent.indirect)
+    selected_ids = (intent.noun_id, intent.indirect_id)
     resolved: list[Entity] = []
-    for name, type_id in zip(names, expected, strict=True):
+    for name, selected_id, type_id in zip(names, selected_ids, expected, strict=True):
         if type_id is None:
             if name is not None:
                 return Event("unknown")
             continue
         if name is None:
             return Event("missing_noun")
-        entity = _resolve(session, name)
+        entity = _resolve(session, name, selected_id)
         if isinstance(entity, Event):
             return entity
         if not has_type(session.world, entity.type_id, type_id):
@@ -638,8 +669,8 @@ def _enter_dialogue(
     )
 
 
-def _talk(session: Session, name: str) -> Transition:
-    speaker = _resolve(session, name)
+def _talk(session: Session, name: str, selected_id: str | None = None) -> Transition:
+    speaker = _resolve(session, name, selected_id)
     if isinstance(speaker, Event):
         return Transition(session, speaker)
     if not has_type(session.world, speaker.type_id, PERSON):
@@ -720,13 +751,13 @@ def _perform(session: Session, intent: Intent) -> Transition:
             Event("money", (currency.id,)) if currency is not None else Event("no_currency"),
         )
     if intent.verb == "buy":
-        return _purchase(session, intent.noun, intent.indirect)
+        return _purchase(session, intent)
     if intent.verb == "sell":
-        return _sell(session, intent.noun, intent.indirect)
+        return _sell(session, intent)
     if intent.verb == "board":
-        return _board(session, intent.noun)
+        return _board(session, intent.noun, intent.noun_id)
     if intent.verb == "exit_vehicle":
-        return _disembark(session, intent.noun)
+        return _disembark(session, intent.noun, intent.noun_id)
     if intent.verb == "look":
         return Transition(session, Event("look", (session.room_id, *visible(session))))
     if intent.verb == "inventory":
@@ -798,7 +829,7 @@ def _perform(session: Session, intent: Intent) -> Transition:
         )
     if intent.verb == "talk":
         return (
-            _talk(session, intent.noun)
+            _talk(session, intent.noun, intent.noun_id)
             if intent.noun is not None
             else Transition(session, Event("missing_noun"))
         )
@@ -807,7 +838,7 @@ def _perform(session: Session, intent: Intent) -> Transition:
         return _perform_authored(session, intent, authored)
     if not intent.noun:
         return Transition(session, Event("missing_noun"))
-    entity = _resolve(session, intent.noun)
+    entity = _resolve(session, intent.noun, intent.noun_id)
     if isinstance(entity, Event):
         return Transition(session, entity)
     if intent.verb == "examine":
@@ -842,7 +873,7 @@ def _perform(session: Session, intent: Intent) -> Transition:
         return _changed(_move(session, entity.id, session.room_id), "dropped", entity.id)
     if not intent.indirect:
         return Transition(session, Event("unknown"))
-    target_entity = _resolve(session, intent.indirect)
+    target_entity = _resolve(session, intent.indirect, intent.indirect_id)
     if isinstance(target_entity, Event):
         return Transition(session, target_entity)
     if not has_type(session.world, target_entity.type_id, CONTAINER):
@@ -1051,11 +1082,15 @@ def _step(session: Session, intent: Intent) -> Transition:
         refs.extend(entity.id for entity in arguments)
         refs.extend([None] * (2 - len(refs)))
     else:
-        for name in (intent.noun, intent.indirect):
+        for name, selected_id in zip(
+            (intent.noun, intent.indirect),
+            (intent.noun_id, intent.indirect_id),
+            strict=True,
+        ):
             if name is None:
                 refs.append(None)
             else:
-                resolved = _resolve(session, name)
+                resolved = _resolve(session, name, selected_id)
                 if isinstance(resolved, Event):
                     return Transition(session, resolved)
                 refs.append(resolved.id)
@@ -1068,10 +1103,120 @@ def _step(session: Session, intent: Intent) -> Transition:
     return Transition(execution.state, event, outputs, execution.trace, execution.value)
 
 
+def _ambiguity_argument(
+    session: Session, intent: Intent, candidates: tuple[str, ...]
+) -> Literal["noun", "indirect"]:
+    for argument, name, selected_id in (
+        ("noun", intent.noun, intent.noun_id),
+        ("indirect", intent.indirect, intent.indirect_id),
+    ):
+        if name is None or selected_id is not None:
+            continue
+        resolved = _resolve(session, name)
+        if isinstance(resolved, Event) and resolved.kind == "ambiguous":
+            if resolved.entities == candidates:
+                return "noun" if argument == "noun" else "indirect"
+    return "indirect" if intent.verb == "sell" else "noun"
+
+
+def _remember_ambiguity(session: Session, intent: Intent, transition: Transition) -> Transition:
+    if transition.event.kind != "ambiguous" or not transition.event.entities:
+        return transition
+    clarification = Clarification(
+        intent,
+        _ambiguity_argument(session, intent, transition.event.entities),
+        transition.event.entities,
+    )
+    return replace(transition, session=replace(transition.session, clarification=clarification))
+
+
+def _clarification_choice(session: Session, selection: str) -> str | None:
+    clarification = session.clarification
+    assert clarification is not None
+    if selection.isdecimal():
+        index = int(selection) - 1
+        return (
+            clarification.candidates[index] if 0 <= index < len(clarification.candidates) else None
+        )
+    normalized = canonical(selection)
+    entities = {
+        entity.id: entity
+        for entity in session.world.entities
+        if entity.id in clarification.candidates
+    }
+    exact = {entity.id for entity in entities.values() if canonical(entity.label) == normalized}
+    exact.update(
+        synonym.target_id
+        for synonym in session.world.synonyms
+        if synonym.target_id in entities and canonical(synonym.alias) == normalized
+    )
+    if len(exact) == 1:
+        return next(iter(exact))
+    if exact:
+        return None
+    words = set(normalized.split())
+    partial = {
+        entity.id
+        for entity in entities.values()
+        if words and words.issubset(set(canonical(entity.label).split()))
+    }
+    partial.update(
+        synonym.target_id
+        for synonym in session.world.synonyms
+        if synonym.target_id in entities
+        and words
+        and words.issubset(set(canonical(synonym.alias).split()))
+    )
+    return next(iter(partial)) if len(partial) == 1 else None
+
+
+def _resume_clarification(session: Session, selection: str | None) -> Transition:
+    clarification = session.clarification
+    assert clarification is not None
+    if not selection:
+        return Transition(session, Event("invalid_clarification", clarification.candidates))
+    selected_id = _clarification_choice(session, selection)
+    if selected_id is None:
+        return Transition(session, Event("invalid_clarification", clarification.candidates))
+    intent = (
+        replace(clarification.intent, noun_id=selected_id)
+        if clarification.argument == "noun"
+        else replace(clarification.intent, indirect_id=selected_id)
+    )
+    cleared = replace(session, clarification=None)
+    return _remember_ambiguity(cleared, intent, _step(cleared, intent))
+
+
+def parse_session_command(session: Session, text: str) -> Intent:
+    normalized = canonical(text)
+    if session.clarification is not None:
+        if normalized in {"annulla", "annulla chiarimento", "cancel"}:
+            return Intent("cancel_clarification")
+        if normalized.isdecimal():
+            return Intent("clarify", normalized)
+    intent = parse_command(
+        text,
+        session.world.actions,
+        dialogue_enabled=bool(session.world.dialogues),
+        scene_enabled=bool(session.world.scenes),
+        vehicle_enabled=any(
+            has_type(session.world, entity.type_id, VEHICLE) for entity in session.world.entities
+        ),
+        commerce_enabled=any(
+            has_type(session.world, entity.type_id, CURRENCY) for entity in session.world.entities
+        ),
+    )
+    if session.clarification is not None and intent.verb == "unknown":
+        return Intent("clarify", normalized or None)
+    return intent
+
+
 _TURNLESS_EVENTS = {
     "unknown",
     "missing_noun",
     "ambiguous",
+    "invalid_clarification",
+    "clarification_cancelled",
     "quit",
     "score",
     "time",
@@ -1127,7 +1272,18 @@ def _advance_scenes(transition: Transition) -> Transition:
 
 
 def step(session: Session, intent: Intent, *, advance_time: bool = True) -> Transition:
-    transition = _step(session, intent)
+    if session.clarification is not None and intent.verb == "clarify":
+        transition = _resume_clarification(session, intent.noun)
+    elif session.clarification is not None and intent.verb == "cancel_clarification":
+        transition = Transition(
+            replace(session, clarification=None),
+            Event("clarification_cancelled"),
+        )
+    else:
+        base = (
+            replace(session, clarification=None) if session.clarification is not None else session
+        )
+        transition = _remember_ambiguity(base, intent, _step(base, intent))
     if (
         not advance_time
         or not transition.session.world.scenes

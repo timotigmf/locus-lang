@@ -87,6 +87,28 @@ def test_bridge_exposes_story_metadata_and_uses_vocabulary() -> None:
     assert studio.command("x cassa")["text"].startswith("custodia\n")
 
 
+def test_bridge_exposes_and_resolves_a_pending_clarification() -> None:
+    studio = Studio()
+    studio.compile(
+        project(
+            "La Sala è una stanza. La chiave di rame è una cosa nella Sala. "
+            "La chiave di ferro è una cosa nella Sala."
+        )
+    )
+    studio.restart()
+    asked = studio.command("prendi chiave")
+    assert asked["clarification"] == {
+        "argument": "noun",
+        "candidates": [
+            {"id": "e2", "label": "chiave di rame"},
+            {"id": "e3", "label": "chiave di ferro"},
+        ],
+    }
+    selected = studio.command("2")
+    assert selected["text"] == "Hai preso: chiave di ferro."
+    assert selected["clarification"] is None
+
+
 def test_failed_compile_invalidates_previous_program() -> None:
     studio = Studio()
     studio.compile(project("La Sala è una stanza."))

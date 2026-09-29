@@ -13,7 +13,8 @@ dentro/fuori, oggetti nascosti e dettagli di
 `scenario`, persone, dialoghi a scelte, scene temporali, punteggio registrato,
 veicoli con movimento del conducente, acquisti, mercanti, rivendita atomica e
 manifest multimediali locali sono modellati nel mondo. Gli autori possono
-dichiarare nuovi comandi tipati nel sorgente.
+dichiarare nuovi comandi tipati nel sorgente. Se un nome indica più oggetti, il
+giocatore può chiarire nel turno seguente con numero, nome parziale o sinonimo.
 Nessuna dipendenza runtime esterna o servizio cloud.
 
 ```locus
@@ -100,6 +101,8 @@ Nelle storie commerciali, `denaro` mostra il saldo, `compra NOME da MERCANTE`
 acquista una merce e `vendi NOME a MERCANTE` la rimette nella scorta quando la
 cassa del venditore è sufficiente. Le due operazioni aggiornano tutti i saldi e
 il passaggio di proprietà atomicamente.
+Quando più oggetti corrispondono, rispondi alla domanda con il numero, il nome o
+un sinonimo; `annulla` chiude il chiarimento senza eseguire l'azione.
 `Inizia nella "Sala".` sceglie il punto iniziale; in assenza, vale la prima stanza. EOF termina la sessione;
 Ctrl-C la interrompe. Vedi il [manuale](docs/manuale/README.md) per un transcript.
 
@@ -123,7 +126,7 @@ diagnostica che conserva il file originale. Ramo GitHub: `codex/milestone-4`.
 
 ## Tutorial in italiano
 
-[Costruisci il faro di Selce](docs/tutorial/README.md): venticinque lezioni, esercizi
+[Costruisci il faro di Selce](docs/tutorial/README.md): ventisei lezioni, esercizi
 con soluzioni, esempi eseguibili e copione verificato automaticamente.
 [Materiali consultati e scelte](docs/architettura/materiali-didattici.md).
 

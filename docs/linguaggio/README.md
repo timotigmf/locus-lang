@@ -27,6 +27,8 @@ I [livelli verticali](livelli-verticali.md) aggiungono `su`/`giù`, il verbo
 relazionale `sovrasta` e una resa distinta nell'atlante.
 [Dentro e fuori](dentro-fuori.md) aggiunge passaggi topologici con `racchiude`
 senza riutilizzare il contenimento degli oggetti.
+La [disambiguazione a più turni](disambiguazione-multiturno.md) conserva la
+domanda nella sessione e riprende l'azione dopo una scelta univoca.
 La [visibilità esplicita](visibilita-scenario.md) aggiunge oggetti nascosti e il
 tipo ambientale non trasportabile `scenario` nell'IR 13.
 Gli [elenchi tipati](liste-tipate.md) aggiungono collezioni omogenee, condizioni

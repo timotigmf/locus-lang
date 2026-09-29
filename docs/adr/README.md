@@ -43,3 +43,4 @@ Le fonti e le licenze sono nel [registro](../architettura/fonti.md).
 - [0026 — direzioni diagonali](0026-direzioni-diagonali.md): rosa dei venti completa nella stdlib e nell'atlante.
 - [0027 — livelli verticali](0027-livelli-verticali.md): su/giù, verbo `sovrasta` e linee di livello.
 - [0028 — dentro/fuori](0028-dentro-fuori.md): navigazione topologica distinta dal contenimento.
+- [0029 — disambiguazione a più turni](0029-disambiguazione-multiturno.md): chiarimento persistente e ripresa tipata dell'azione.
