@@ -48,6 +48,7 @@ al prompt della storia: lì si scrivono soltanto i comandi del giocatore.
 | [32. Ricordare oggetto e strumento](32-pronomi-per-ruolo.md) | `examples/tutorial/32_pronomi_per_ruolo.locus` | Risolvere pronomi diversi nei due ruoli |
 | [33. Scendere senza ritorno](33-passaggi-a-senso-unico.md) | `examples/tutorial/33_senso_unico.locus` | Dichiarare, provare e mappare un passaggio a senso unico |
 | [34. Rivelare una botola senza ritorno](34-passaggio-segreto-senza-ritorno.md) | `examples/tutorial/34_passaggio_unidirezionale_segreto.locus` | Creare da una regola un passaggio segreto a senso unico |
+| [35. Muoversi con frasi naturali](35-comandi-naturali-di-movimento.md) | `examples/tutorial/35_comandi_naturali_movimento.locus` | Usare verbi e preposizioni davanti alle direzioni |
 
 Prima prova la versione fornita. Poi modifica un solo elemento e riesegui la
 sequenza di comandi. In caso di errore conserva il messaggio, il file sorgente e

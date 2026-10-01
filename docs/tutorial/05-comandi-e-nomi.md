@@ -24,12 +24,16 @@ accettate anche alcune convenzioni storiche delle avventure testuali in inglese.
 | `nordest`, `sudest`, `sudovest`, `nordovest` | `ne`, `se`, `so`, `no`, `nw` e forme inglesi | Percorre una diagonale |
 | `su`, `giù` | `alto`, `basso`, `u`, `d`, `up`, `down` | Cambia livello |
 | `dentro`, `fuori` | `interno`, `esterno`, `in`, `inside`, `out`, `outside` | Entra o lascia un luogo collegato |
+| `vai a nord` | `cammina verso nord`, `go north` | Introduce una direzione con un verbo |
 | `prendi chiave` | `get chiave`, `take chiave` | Prende un oggetto |
 | `esci` | `q`, `quit` | Termina la sessione |
 
 Sono disponibili anche `open`, `close`, `drop`, `put ... in ...` e
 `lock ... with ...`. Le forme inglesi sono scorciatoie di input: i messaggi, il
 manuale e il linguaggio dell'autore restano italiani.
+
+La [lezione 35](35-comandi-naturali-di-movimento.md) presenta tutte le forme
+naturali di movimento e le correzioni per una direzione mancante o sconosciuta.
 
 ## Esperimento guidato
 

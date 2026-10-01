@@ -74,12 +74,15 @@ dall'alto verso il basso prima di studiare i moduli.
 30. [Sottintendere soltanto la destinazione](../tutorial/30-clitico-locativo.md)
 31. [Dire «mettilo lì»](../tutorial/31-avverbi-locativi.md)
 32. [Ricordare oggetto e strumento](../tutorial/32-pronomi-per-ruolo.md)
+33. [Scendere senza ritorno](../tutorial/33-passaggi-a-senso-unico.md)
+34. [Rivelare una botola senza ritorno](../tutorial/34-passaggio-segreto-senza-ritorno.md)
+35. [Muoversi con frasi naturali](../tutorial/35-comandi-naturali-di-movimento.md)
 
 ## Indice per obiettivo
 
 | Voglio creare… | Supporto attuale | Da leggere |
 | --- | --- | --- |
-| Dungeon e mappe | Stanze, dodici direzioni, porte e contenitori | Lezioni 1, 6 e 23–25 |
+| Dungeon e mappe | Stanze, dodici direzioni, porte e contenitori | Lezioni 1, 6, 23–25 e 33–35 |
 | Enigmi con chiavi | Porte/contenitori bloccati, regole e rollback | Lezioni 2, 3 e 6 |
 | Punti e tempo | Scene temporali, turni e registro dei premi | Lezioni 6 e 17 |
 | Oggetti complessi | Contenimento annidato, proprietà tipate, stati | Lezione 2 e specifica M2 |
@@ -87,6 +90,8 @@ dall'alto verso il basso prima di studiare i moduli.
 | Verbi e comandi propri | Azioni tipate con sinonimi e locuzioni multiparola | Lezioni 8–11 |
 | Sinonimi | Alias nominali e più forme per le azioni | Lezioni 5, 6 e 9 |
 | Passaggi segreti dinamici | Uscite direzionali create o rimosse dalle regole | Lezione 12 |
+| Botole e percorsi senza ritorno | Archi statici e dinamici a senso unico | Lezioni 33 e 34 |
+| Frasi naturali di movimento | Verbi e preposizioni davanti alle direzioni | Lezione 35 |
 | Dettagli ambientali e oggetti nascosti | `scenario` non trasportabile e proprietà `visibile` | Lezione 13 |
 | Indizi, memoria e cronologie | Elenchi tipati con appartenenza e rollback | Lezione 14 |
 | Cataloghi e registri | Tabelle con colonne tipate e righe transazionali | Lezione 15 |

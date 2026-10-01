@@ -57,7 +57,7 @@ la chiave inaccessibile. Vedi [sintassi e limiti M2](../linguaggio/milestone-2.m
 
 ## Percorso guidato
 
-Per iniziare da zero, segui le [trentadue lezioni del faro](../tutorial/README.md),
+Per iniziare da zero, segui le [trentacinque lezioni del faro](../tutorial/README.md),
 con prove di gioco e soluzioni.
 La [quinta lezione](../tutorial/05-comandi-e-nomi.md) presenta le abbreviazioni
 classiche delle avventure testuali e spiega quando un nome parziale è sufficiente.
@@ -113,3 +113,8 @@ La [trentunesima](../tutorial/31-avverbi-locativi.md) usa `lì` e `là` per
 richiamare la stessa destinazione dopo il verbo `metti`.
 La [trentaduesima](../tutorial/32-pronomi-per-ruolo.md) distingue il referente
 diretto dallo strumento in `aprilo con essa`.
+La [trentatreesima](../tutorial/33-passaggi-a-senso-unico.md) crea una discesa
+senza ritorno; la [trentaquattresima](../tutorial/34-passaggio-segreto-senza-ritorno.md)
+la rivela durante la storia. La
+[trentacinquesima](../tutorial/35-comandi-naturali-di-movimento.md) accetta frasi
+come `vai a nord` e distingue una direzione mancante da una sconosciuta.

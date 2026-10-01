@@ -65,6 +65,8 @@ EventKind = Literal[
     "clarification_cancelled",
     "no_referent",
     "no_indirect_referent",
+    "missing_direction",
+    "invalid_direction",
     "no_exit",
     "unknown",
     "missing_noun",
@@ -744,6 +746,10 @@ def _choose_dialogue(session: Session, selection: str) -> Transition:
 
 
 def _perform(session: Session, intent: Intent) -> Transition:
+    if intent.verb == "missing_direction":
+        return Transition(session, Event("missing_direction"))
+    if intent.verb == "invalid_direction":
+        return Transition(session, Event("invalid_direction"))
     if intent.verb == "no_referent":
         return Transition(session, Event("no_referent"))
     if intent.verb == "no_indirect_referent":
@@ -1308,6 +1314,8 @@ _TURNLESS_EVENTS = {
     "clarification_cancelled",
     "no_referent",
     "no_indirect_referent",
+    "missing_direction",
+    "invalid_direction",
     "quit",
     "score",
     "time",

@@ -124,6 +124,10 @@ esplicito per evitare errori di battitura che creano oggetti.
 
 Comandi giocatore M1: `guarda`, `prendi [la] chiave`, `inventario`, `nord`, `sud`.
 Il parser giocatore produce intenzioni tipate senza riusare questa grammatica.
+Le dodici direzioni accettano anche introduzioni come `vai a nord`, `cammina
+verso sudovest` e `muoviti in alto`; una direzione mancante o sconosciuta
+produce una correzione specifica senza consumare il turno. Il contratto esteso
+è in [Comandi naturali di movimento](docs/linguaggio/comandi-movimento.md).
 Ambiguità, oggetto assente, oggetto già posseduto e uscita assente sono esiti distinti.
 `esci` termina la sessione. Questa limitazione storica è sostituita dalla
 [specifica M2 corrente](docs/linguaggio/milestone-2.md): sono disponibili alias

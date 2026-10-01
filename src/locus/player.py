@@ -65,6 +65,32 @@ _SIMPLE_COMMANDS: dict[str, Verb] = {
     "quit": "quit",
 }
 
+_DIRECTION_COMMANDS: dict[str, Verb] = {
+    word: verb
+    for word, verb in _SIMPLE_COMMANDS.items()
+    if verb
+    in {
+        "north",
+        "south",
+        "east",
+        "west",
+        "northeast",
+        "southeast",
+        "southwest",
+        "northwest",
+        "up",
+        "down",
+        "inward",
+        "outward",
+    }
+}
+_MOVEMENT_COMMANDS = frozenset(
+    {"vai", "cammina", "muoviti", "dirigiti", "procedi", "go", "move", "walk"}
+)
+_MOVEMENT_PREPOSITIONS = frozenset(
+    {"a", "verso", "in", "al", "alla", "allo", "all'", "to", "toward", "towards"}
+)
+
 _ACTION_COMMANDS: dict[str, Verb] = {
     "prendi": "take",
     "get": "take",
@@ -145,11 +171,19 @@ def _tokens(text: str) -> list[tuple[str, bool]] | None:
             while end < len(text) and not text[end].isspace() and text[end] != '"':
                 end += 1
             word = text[index:end]
-            if word.startswith(("nell'", "all'", "dell'", "dall'", "sull'")):
-                prefix = word[:5]
+            articulated = next(
+                (
+                    prefix
+                    for prefix in ("nell'", "all'", "dell'", "dall'", "sull'")
+                    if word.startswith(prefix)
+                ),
+                None,
+            )
+            if articulated is not None:
+                prefix = articulated
                 tokens.append((prefix, False))
-                if word[5:]:
-                    tokens.append((word[5:], False))
+                if word[len(prefix) :]:
+                    tokens.append((word[len(prefix) :], False))
             else:
                 tokens.append((word, False))
             index = end
@@ -204,12 +238,27 @@ def standard_commands(
             *_CLITIC_COMMANDS,
             *_DOUBLE_CLITIC_COMMANDS,
             *_LOCATIVE_CLITIC_COMMANDS,
+            *_MOVEMENT_COMMANDS,
             *dialogue_commands,
             *scene_commands,
             *vehicle_commands,
             *commerce_commands,
         )
     )
+
+
+def _movement_intent(tokens: list[tuple[str, bool]]) -> Intent | None:
+    verb, quoted = tokens[0]
+    if quoted or verb not in _MOVEMENT_COMMANDS:
+        return None
+    rest = tokens[1:]
+    if rest and not rest[0][1] and rest[0][0] in _MOVEMENT_PREPOSITIONS:
+        rest = rest[1:]
+    direction = canonical(_noun(rest) or "")
+    if not direction:
+        return Intent("missing_direction")
+    movement = _DIRECTION_COMMANDS.get(direction)
+    return Intent(movement) if movement is not None else Intent("invalid_direction")
 
 
 def _without_initial_preposition(
@@ -377,6 +426,9 @@ def parse_command(
     verb, quoted = tokens[0]
     if quoted:
         return Intent("unknown")
+    movement = _movement_intent(tokens)
+    if movement is not None:
+        return movement
     if vehicle_enabled:
         vehicle = _vehicle_intent(tokens)
         if vehicle is not None:

@@ -1,0 +1,10 @@
+Titolo: "La rotta della lanterna".
+Autore: "Esempio LOCUS".
+
+La Banchina è una stanza.
+La Lanterna è una stanza.
+La Lanterna è a nord della Banchina.
+
+Inizia nella "Banchina".
+La Banchina ha descrizione "Il sentiero sale verso la lanterna del molo.".
+La Lanterna ha descrizione "Da qui la banchina si trova direttamente a sud.".

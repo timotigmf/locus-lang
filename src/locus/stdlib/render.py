@@ -175,6 +175,11 @@ def render(transition: Transition) -> str:
         "missing_noun": "Indica quale oggetto vuoi esaminare o manipolare.",
         "no_referent": "Non c'è ancora un oggetto a cui riferire il pronome.",
         "no_indirect_referent": ("Non c'è ancora una destinazione a cui riferire il clitico «ci»."),
+        "missing_direction": "Indica in quale direzione vuoi andare.",
+        "invalid_direction": (
+            "Direzione non riconosciuta. Usa nord, sud, est, ovest, le diagonali, "
+            "su, giù, dentro o fuori."
+        ),
         "quit": "A presto.",
         "locked": "È bloccato: serve una chiave adatta.",
         "already_open": "È già aperto.",

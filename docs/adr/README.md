@@ -50,3 +50,6 @@ Le fonti e le licenze sono nel [registro](../architettura/fonti.md).
 - [0033 — clitico locativo](0033-clitico-locativo.md): destinazione ricordata e oggetto esplicito in `mettici`.
 - [0034 — avverbi locativi](0034-avverbi-locativi.md): `lì` e `là` come destinazioni contestuali di `metti`.
 - [0035 — pronomi per ruolo](0035-pronomi-per-ruolo.md): referenti distinti per oggetto diretto e secondo argomento.
+- [0036 — passaggi a senso unico](0036-passaggi-senso-unico.md): origine e destinazione esplicite senza arco inverso.
+- [0037 — relazioni dinamiche unidirezionali](0037-relazioni-dinamiche-unidirezionali.md): creazione e rimozione transazionale di un solo arco.
+- [0038 — comandi naturali di movimento](0038-comandi-naturali-movimento.md): verbi introduttivi e correzioni direzionali precise.

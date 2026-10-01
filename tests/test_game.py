@@ -70,6 +70,18 @@ def make_session() -> Session:
         ("esterno", Intent("outward")),
         ("out", Intent("outward")),
         ("outside", Intent("outward")),
+        ("vai a nord", Intent("north")),
+        ("cammina verso sudovest", Intent("southwest")),
+        ("muoviti in alto", Intent("up")),
+        ("dirigiti all'esterno", Intent("outward")),
+        ("procedi dentro", Intent("inward")),
+        ("go north", Intent("north")),
+        ("move down", Intent("down")),
+        ("walk to northwest", Intent("northwest")),
+        ("vai", Intent("missing_direction")),
+        ("vai verso", Intent("missing_direction")),
+        ("vai alla porta", Intent("invalid_direction")),
+        ("vai nord sud", Intent("invalid_direction")),
         ("esci", Intent("quit")),
         ("q", Intent("quit")),
         ("prendi chiave", Intent("take", "chiave")),
@@ -447,6 +459,16 @@ def test_missing_object_gets_a_specific_prompt() -> None:
     assert render(step(make_session(), parse_command("x"))) == (
         "Indica quale oggetto vuoi esaminare o manipolare."
     )
+
+
+def test_natural_movement_errors_are_specific_and_turnless() -> None:
+    current = make_session()
+    missing = step(current, parse_command("vai"))
+    assert missing.session is current
+    assert render(missing) == "Indica in quale direzione vuoi andare."
+    invalid = step(current, parse_command("vai verso il molo"))
+    assert invalid.session is current
+    assert render(invalid).startswith("Direzione non riconosciuta.")
 
 
 def test_author_synonyms_resolve_in_scope_and_can_be_ambiguous() -> None:

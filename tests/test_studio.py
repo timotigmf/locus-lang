@@ -22,6 +22,23 @@ def test_bridge_matches_story_and_tests_do_not_mutate_session() -> None:
     assert studio.command("prendi chiave")["text"] == "Hai preso: chiave."
 
 
+def test_bridge_accepts_natural_movement_and_explains_invalid_directions() -> None:
+    studio = Studio()
+    studio.compile(
+        project(
+            "La Banchina è una stanza. La Lanterna è una stanza. "
+            "La Lanterna è a nord della Banchina."
+        )
+    )
+    studio.restart()
+    assert studio.command("vai a nord")["text"].startswith("Lanterna\n")
+    assert studio.command("cammina verso sud")["text"].startswith("Banchina\n")
+    before = studio.session
+    invalid = studio.command("vai alla cambusa")
+    assert invalid["text"].startswith("Direzione non riconosciuta.")
+    assert studio.session is before
+
+
 def test_bridge_exposes_current_list_values() -> None:
     studio = Studio()
     source = (

@@ -187,6 +187,19 @@ def test_dynamic_one_way_tutorial_reveals_a_drop_without_return() -> None:
     assert step(crypt.session, parse_command("u")).event.kind == "no_exit"
 
 
+def test_natural_movement_tutorial_uses_the_same_directional_intents() -> None:
+    current = start(
+        instantiate(compile_story_file(TUTORIAL / "35_comandi_naturali_movimento.locus"))
+    )
+    lantern = step(current, parse_command("vai a nord"))
+    assert "Lanterna" in render(lantern)
+    dock = step(lantern.session, parse_command("cammina verso sud"))
+    assert "Banchina" in render(dock)
+    invalid = step(dock.session, parse_command("vai alla cambusa"))
+    assert invalid.session is dock.session
+    assert invalid.event.kind == "invalid_direction"
+
+
 def test_clarification_tutorial_accepts_a_synonym_on_the_next_turn() -> None:
     current = start(instantiate(compile_story_file(TUTORIAL / "26_chiarimenti.locus")))
     asked = step(current, parse_session_command(current, "prendi chiave"))

@@ -27,6 +27,8 @@ I [livelli verticali](livelli-verticali.md) aggiungono `su`/`giù`, il verbo
 relazionale `sovrasta` e una resa distinta nell'atlante.
 [Dentro e fuori](dentro-fuori.md) aggiunge passaggi topologici con `racchiude`
 senza riutilizzare il contenimento degli oggetti.
+I [comandi naturali di movimento](comandi-movimento.md) accettano verbi come
+`vai`, `cammina` e `muoviti` davanti alle dodici direzioni strutturate.
 I [passaggi a senso unico](passaggi-senso-unico.md) dichiarano esplicitamente
 origine, direzione e destinazione senza generare l'arco inverso.
 La [disambiguazione a più turni](disambiguazione-multiturno.md) conserva la

@@ -116,6 +116,9 @@ Ogni pacchetto conserva il core indipendente dalla narrativa interattiva.
 23. Creazione e rimozione dinamica di un singolo arco implementate con la
     qualificazione `a senso unico`, alias verticali e rollback transazionale.
 
+24. Frasi naturali di movimento implementate con verbi italiani, preposizioni
+    facoltative, forme classiche inglesi e correzioni direzionali precise.
+
 Non si importeranno codice o testi Inform.
 
 ## Studio M5 — 0.5.0a1
