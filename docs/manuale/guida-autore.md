@@ -73,6 +73,7 @@ dall'alto verso il basso prima di studiare i moduli.
 29. [Ricordare anche la destinazione](../tutorial/29-clitici-doppi.md)
 30. [Sottintendere soltanto la destinazione](../tutorial/30-clitico-locativo.md)
 31. [Dire «mettilo lì»](../tutorial/31-avverbi-locativi.md)
+32. [Ricordare oggetto e strumento](../tutorial/32-pronomi-per-ruolo.md)
 
 ## Indice per obiettivo
 
@@ -105,6 +106,7 @@ dall'alto verso il basso prima di studiare i moduli.
 | Oggetto e destinazione sottintesi | Doppio clitico `metticelo`/`metticela` | Lezione 29 |
 | Solo destinazione sottintesa | Clitico locativo `mettici OGGETTO` | Lezione 30 |
 | Destinazione con avverbio | `metti OGGETTO lì/là` | Lezione 31 |
+| Oggetto e strumento ricordati | Pronomi distinti per ruolo | Lezione 32 |
 
 ## Vocabolario italiano
 

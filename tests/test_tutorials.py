@@ -236,6 +236,16 @@ def test_locative_adverb_tutorial_reuses_the_destination() -> None:
     assert put.event.kind == "put"
 
 
+def test_role_pronoun_tutorial_reuses_the_last_instrument() -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "32_pronomi_per_ruolo.locus")))
+    current = step(current, parse_session_command(current, "prendi chiave")).session
+    opened = step(current, parse_session_command(current, "apri cofano con chiave"))
+    assert opened.event.kind == "opened"
+    closed = step(opened.session, parse_session_command(opened.session, "chiudilo"))
+    repeated = step(closed.session, parse_session_command(closed.session, "aprilo con essa"))
+    assert repeated.event.kind == "opened"
+
+
 def test_dungeon_tutorial_awards_points_once_after_the_puzzle() -> None:
     current = start(instantiate(compile_story_file(TUTORIAL / "06_sotterraneo.locus")))
     for command in [

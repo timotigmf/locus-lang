@@ -49,3 +49,4 @@ Le fonti e le licenze sono nel [registro](../architettura/fonti.md).
 - [0032 — clitici doppi](0032-clitici-doppi.md): referenti diretto e indiretto separati per `metticelo`/`metticela`.
 - [0033 — clitico locativo](0033-clitico-locativo.md): destinazione ricordata e oggetto esplicito in `mettici`.
 - [0034 — avverbi locativi](0034-avverbi-locativi.md): `lì` e `là` come destinazioni contestuali di `metti`.
+- [0035 — pronomi per ruolo](0035-pronomi-per-ruolo.md): referenti distinti per oggetto diretto e secondo argomento.

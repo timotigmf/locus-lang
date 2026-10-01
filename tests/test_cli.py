@@ -248,6 +248,28 @@ def test_game_cli_accepts_a_locative_adverb(tmp_path: Path) -> None:
     assert "Hai messo moneta dentro scatola." in result.stdout
 
 
+def test_game_cli_resolves_pronouns_by_argument_role(tmp_path: Path) -> None:
+    source = tmp_path / "chiave.locus"
+    source.write_text(
+        "La Sala è una stanza. La chiave è una chiave nella Sala. "
+        'Il cofano è un contenitore nella Sala. Il cofano ha stato "bloccato". '
+        "La chiave apre il cofano.",
+        encoding="utf-8",
+    )
+    result = subprocess.run(
+        [sys.executable, "-m", "locus", "gioca", str(source)],
+        input="prendi chiave\napri cofano con chiave\nchiudilo\naprilo con essa\nesci\n",
+        cwd=tmp_path,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        env={**os.environ, "PYTHONUTF8": "1"},
+        check=False,
+    )
+    assert result.returncode == 0
+    assert result.stdout.count("Hai aperto: cofano.") == 2
+
+
 def test_cli_executes_an_author_command(tmp_path: Path) -> None:
     source = tmp_path / "azione.locus"
     source.write_text(

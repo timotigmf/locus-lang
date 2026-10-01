@@ -159,6 +159,25 @@ def test_bridge_exposes_and_reuses_the_indirect_referent() -> None:
     assert adverb["text"] == "Hai messo moneta dentro scatola."
 
 
+def test_bridge_resolves_pronouns_by_argument_role() -> None:
+    studio = Studio()
+    studio.compile(
+        project(
+            "La Sala è una stanza. La chiave è una chiave nella Sala. "
+            'Il cofano è un contenitore nella Sala. Il cofano ha stato "bloccato". '
+            "La chiave apre il cofano."
+        )
+    )
+    studio.restart()
+    studio.command("prendi chiave")
+    studio.command("apri cofano con chiave")
+    studio.command("chiudilo")
+    result = studio.command("aprilo con essa")
+    assert result["text"] == "Hai aperto: cofano."
+    assert result["referent"] == {"id": "e3", "label": "cofano"}
+    assert result["indirect_referent"] == {"id": "e2", "label": "chiave"}
+
+
 def test_failed_compile_invalidates_previous_program() -> None:
     studio = Studio()
     studio.compile(project("La Sala è una stanza."))

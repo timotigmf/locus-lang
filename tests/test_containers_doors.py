@@ -120,6 +120,29 @@ def test_pronoun_can_fill_a_direct_or_indirect_object() -> None:
     assert put.event.entities[1] == ident(state, "scatola")
 
 
+def test_indirect_pronoun_prefers_the_last_second_object() -> None:
+    state = session()
+    state = command(state, "apri scrigno", "opened")
+    state = command(state, "prendi chiave di ottone", "taken")
+    opened = step(
+        state,
+        parse_session_command(state, "apri porta rossa con chiave di ottone"),
+    )
+    assert opened.event.kind == "opened"
+    assert opened.session.pronoun_id == ident(state, "porta rossa")
+    assert opened.session.indirect_pronoun_id == ident(state, "chiave di ottone")
+
+    closed = step(opened.session, parse_session_command(opened.session, "chiudila"))
+    repeated_intent = parse_session_command(closed.session, "aprila con essa")
+    assert repeated_intent.noun_id == ident(state, "porta rossa")
+    assert repeated_intent.indirect_id == ident(state, "chiave di ottone")
+    repeated = step(
+        closed.session,
+        repeated_intent,
+    )
+    assert repeated.event.kind == "opened"
+
+
 def test_attached_clitic_keeps_an_explicit_second_object() -> None:
     state = session(
         "La Sala è una stanza. "

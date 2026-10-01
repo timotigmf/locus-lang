@@ -10,10 +10,11 @@ Esportazione ZIP del giocatore statico con sorgente della storia e runtime inclu
 
 ## Controlli eseguiti
 
-- 723 test Python passati, incluse rosa dei venti, direzioni verticali e
+- 729 test Python passati, incluse rosa dei venti, direzioni verticali e
   dentro/fuori, alias classici, nomi parziali, sinonimi dichiarati, metadati,
   chiarimenti a più turni, pronomi, clitici singolari, complementi espliciti e
-  clitici doppi, `mettici OGGETTO` e avverbi locativi `lì`/`là`, tutorial,
+  clitici doppi, `mettici OGGETTO`, avverbi locativi `lì`/`là` e pronomi per
+  ruolo, tutorial,
   regole transazionali, adapter Studio e confine del progetto virtuale.
 - Ruff, controllo formato e mypy strict passati.
 - Build wheel e sdist 0.5.0a1 riuscita; build web statica riuscita.
@@ -34,7 +35,7 @@ Esportazione ZIP del giocatore statico con sorgente della storia e runtime inclu
   `esaminala`, lo colloca con `mettila nella scatola` e riusa la destinazione con
   `metticela` per un secondo oggetto e `mettici chiave di ferro` per un oggetto
   nuovamente esplicito; infine usa `metti chiave di rame lì` sulla medesima
-  destinazione.
+  destinazione e verifica `aprilo con essa` con un cofano e la chiave ricordata.
 - Release provata bloccando tutte le richieste diverse dall'hosting locale:
   nessun CDN necessario al giocatore.
 - Audit npm dopo aggiornamento delle dipendenze: zero vulnerabilità note segnalate.

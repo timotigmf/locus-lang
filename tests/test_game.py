@@ -394,6 +394,24 @@ def test_pronouns_and_clitics_reuse_the_last_direct_object() -> None:
     assert dropped.event.kind == "dropped"
 
 
+def test_pronoun_in_each_role_uses_the_matching_referent() -> None:
+    world = World(
+        (
+            Entity("r", "Sala", ROOM),
+            Entity("a", "oggetto", THING),
+            Entity("b", "destinazione", THING),
+        )
+    )
+    session = Session(world, "r", pronoun_id="a", indirect_pronoun_id="b")
+    assert parse_session_command(session, "metti essa in essa") == Intent(
+        "put",
+        "oggetto",
+        "destinazione",
+        "a",
+        "b",
+    )
+
+
 def test_disambiguated_object_becomes_the_pronoun_referent() -> None:
     world = World(
         (

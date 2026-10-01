@@ -25,6 +25,7 @@
 - [Clitici doppi](linguaggio/clitici-doppi.md): richiamare insieme oggetto e destinazione.
 - [Clitico locativo](linguaggio/clitico-locativo.md): sottintendere la destinazione in `mettici OGGETTO`.
 - [Avverbi locativi](linguaggio/avverbi-locativi.md): usare `lì` e `là` come destinazioni contestuali.
+- [Pronomi per ruolo](linguaggio/pronomi-per-ruolo.md): distinguere oggetto diretto e strumento ricordato.
 - [Tipi definiti dall'autore](linguaggio/tipi-autore.md): gerarchia nominale ed ereditarietà singola.
 - [Azioni definite dall'autore](linguaggio/azioni-autore.md): comandi italiani e argomenti tipati.
 - [Sinonimi e separatori delle azioni](linguaggio/grammatica-comandi-autore.md): più forme italiane per lo stesso verbo.

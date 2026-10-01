@@ -100,6 +100,9 @@ tipati separati. La forma `mettici OGGETTO` riusa il solo ruolo locativo senza
 riscrivere il nome esplicito; `metti OGGETTO lì/là` espone lo stesso ruolo come
 avverbio finale. Genere, numero e pattern grammaticali liberi restano passaggi
 successivi del lessico italiano.
+I pronomi ordinari vengono inoltre risolti in base al ruolo dell'argomento:
+diretto e secondo oggetto possono così conservare identità diverse senza una
+scelta lessicale nascosta.
 
 Un dizionario generale può fornire candidati offline, ma non può decidere il
 significato narrativo di parole polisemiche. Il nucleo deve restare riproducibile:

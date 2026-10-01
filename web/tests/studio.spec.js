@@ -743,6 +743,9 @@ La chiave di rame è una chiave nella Sala.
 La chiave di ferro è una chiave nella Sala.
 La scatola è un contenitore nella Sala.
 La scatola ha stato "aperto".
+Il cofano è un contenitore nella Sala.
+Il cofano ha stato "bloccato".
+La chiave di ferro apre il cofano.
 Comprendi "scura" come "chiave di ferro".`;
   await page.locator(".cm-content").click();
   await page.keyboard.press("ControlOrMeta+A");
@@ -802,5 +805,25 @@ Comprendi "scura" come "chiave di ferro".`;
   await page.locator("#send").click();
   await expect(page.locator(".story-output").last()).toContainText(
     "Hai messo chiave di rame dentro scatola.",
+  );
+  await page.locator("#command").fill("prendi chiave di ferro");
+  await page.locator("#send").click();
+  await expect(page.locator(".story-output").last()).toContainText(
+    "Hai preso: chiave di ferro.",
+  );
+  await page.locator("#command").fill("apri cofano con chiave di ferro");
+  await page.locator("#send").click();
+  await expect(page.locator(".story-output").last()).toContainText(
+    "Hai aperto: cofano.",
+  );
+  await page.locator("#command").fill("chiudilo");
+  await page.locator("#send").click();
+  await expect(page.locator(".story-output").last()).toContainText(
+    "Hai chiuso: cofano.",
+  );
+  await page.locator("#command").fill("aprilo con essa");
+  await page.locator("#send").click();
+  await expect(page.locator(".story-output").last()).toContainText(
+    "Hai aperto: cofano.",
   );
 });

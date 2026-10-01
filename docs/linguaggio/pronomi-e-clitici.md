@@ -15,8 +15,11 @@ Il vetro conserva tracce di salsedine.
 ```
 
 Sono riconosciuti `esso`, `essa`, `questo`, `questa`, `quello`, `quella` e
-l'inglese `it`. Possono occupare anche il secondo argomento: dopo aver esaminato
-una scatola, `metti gemma in essa` usa quella scatola.
+l'inglese `it`. Possono occupare anche il secondo argomento. Se esiste un ultimo
+secondo oggetto riuscito, il pronome usa quello; altrimenti ripiega sul referente
+diretto. Dopo aver esaminato una scatola, `metti gemma in essa` continua quindi
+a usare la scatola. La regola completa è nella specifica dei
+[pronomi per ruolo](pronomi-per-ruolo.md).
 
 Le forme unite disponibili sono:
 

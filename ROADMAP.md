@@ -107,6 +107,9 @@ Ogni pacchetto conserva il core indipendente dalla narrativa interattiva.
 20. Avverbi locativi contestuali `lì`/`là` implementati in posizione finale di
     `metti`, con rifiuto delle destinazioni duplicate.
 
+21. Pronomi risolti per ruolo implementati: l'oggetto diretto usa il referente
+    diretto e il secondo oggetto preferisce il referente indiretto disponibile.
+
 Non si importeranno codice o testi Inform.
 
 ## Studio M5 — 0.5.0a1

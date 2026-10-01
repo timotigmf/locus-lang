@@ -1207,7 +1207,11 @@ def _with_pronoun(session: Session, intent: Intent) -> Intent:
             continue
         normalized = canonical(name)
         if normalized in _PRONOUNS:
-            referent_id = session.pronoun_id
+            referent_id = (
+                session.indirect_pronoun_id
+                if argument == "indirect" and session.indirect_pronoun_id is not None
+                else session.pronoun_id
+            )
             missing = "no_referent"
         elif argument == "indirect" and normalized in _INDIRECT_PRONOUNS:
             referent_id = session.indirect_pronoun_id

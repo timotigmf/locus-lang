@@ -39,6 +39,8 @@ Il [clitico locativo](clitico-locativo.md) riusa la stessa destinazione con un
 oggetto diretto ancora esplicito in `mettici OGGETTO`.
 Gli [avverbi locativi](avverbi-locativi.md) esprimono lo stesso ruolo in
 `metti OGGETTO lì` e `metti OGGETTO là`.
+I [pronomi per ruolo](pronomi-per-ruolo.md) permettono al secondo argomento di
+riusare un referente diverso dal primo, come in `aprilo con essa`.
 La [visibilità esplicita](visibilita-scenario.md) aggiunge oggetti nascosti e il
 tipo ambientale non trasportabile `scenario` nell'IR 13.
 Gli [elenchi tipati](liste-tipate.md) aggiungono collezioni omogenee, condizioni

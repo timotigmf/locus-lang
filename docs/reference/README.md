@@ -75,6 +75,8 @@ non costituiscono identificatori accettati dal testo del giocatore.
 `parse_session_command` usa i due ID per pronomi, `metticelo`/`metticela` e
 `mettici OGGETTO`; il parser produce lo stesso ruolo indiretto per
 `metti OGGETTO lì/là`.
+Un pronome ordinario nel secondo ruolo preferisce `indirect_pronoun_id` e ripiega
+su `pronoun_id` soltanto se il primo non è ancora disponibile.
 
 `ProgramIR.dialogues` e `World.dialogues` contengono `DialogueIR`, composto da
 `DialogueNodeIR` e `DialogueChoiceIR`. Tutti i riferimenti sono ID risolti. La
