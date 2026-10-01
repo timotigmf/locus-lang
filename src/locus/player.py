@@ -95,6 +95,10 @@ _CLITIC_COMMANDS: dict[str, tuple[Verb, str]] = {
     "chiudila": ("close", "essa"),
     "lascialo": ("drop", "esso"),
     "lasciala": ("drop", "essa"),
+    "mettilo": ("put", "esso"),
+    "mettila": ("put", "essa"),
+    "bloccalo": ("lock", "esso"),
+    "bloccala": ("lock", "essa"),
 }
 
 
@@ -396,7 +400,7 @@ def parse_command(
     if len(tokens) == 1:
         clitic = _CLITIC_COMMANDS.get(verb)
         if clitic is not None:
-            return Intent(*clitic)
+            return Intent(*clitic) if clitic[0] not in {"put", "lock"} else Intent("unknown")
         standard = _SIMPLE_COMMANDS.get(verb, _ACTION_COMMANDS.get(verb))
         return (
             Intent(standard)
@@ -409,10 +413,17 @@ def parse_command(
         )
     if authored is not None and verb not in _ACTION_COMMANDS and verb not in _SIMPLE_COMMANDS:
         return _author_intent(authored[0], tokens, authored[1])
-    if verb not in _ACTION_COMMANDS:
-        return Intent("unknown")
-    action = _ACTION_COMMANDS[verb]
-    rest = tokens[1:]
+    clitic = _CLITIC_COMMANDS.get(verb)
+    if clitic is not None:
+        action, pronoun = clitic
+        if action not in {"open", "lock", "put"}:
+            return Intent("unknown")
+        rest = [(pronoun, False), *tokens[1:]]
+    else:
+        if verb not in _ACTION_COMMANDS:
+            return Intent("unknown")
+        action = _ACTION_COMMANDS[verb]
+        rest = tokens[1:]
     delimiters = (
         {"in", "into", "nel", "nella", "nello", "nell'"} if action == "put" else {"con", "with"}
     )

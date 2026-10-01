@@ -189,6 +189,17 @@ def test_pronoun_tutorial_reuses_the_last_direct_object() -> None:
     assert "lanterna di vetro" in render(repeated)
 
 
+def test_clitic_complement_tutorial_keeps_the_second_object() -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "28_clitici_con_complemento.locus")))
+    current = step(current, parse_session_command(current, "prendi chiave")).session
+    current = step(current, parse_session_command(current, "esamina cofano")).session
+    opened = step(current, parse_session_command(current, "aprilo con chiave"))
+    assert opened.event.kind == "opened"
+    taken = step(opened.session, parse_session_command(opened.session, "prendi gemma"))
+    put = step(taken.session, parse_session_command(taken.session, "mettila nel cofano"))
+    assert put.event.kind == "put"
+
+
 def test_dungeon_tutorial_awards_points_once_after_the_puzzle() -> None:
     current = start(instantiate(compile_story_file(TUTORIAL / "06_sotterraneo.locus")))
     for command in [

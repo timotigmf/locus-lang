@@ -21,6 +21,7 @@
 - [Metadati e vocabolario](linguaggio/metadati-vocabolario.md): titolo, autore e sinonimi.
 - [Disambiguazione a più turni](linguaggio/disambiguazione-multiturno.md): scegliere per numero, nome o sinonimo.
 - [Pronomi e clitici](linguaggio/pronomi-e-clitici.md): richiamare l'ultimo oggetto diretto.
+- [Clitici con complemento](linguaggio/clitici-con-complemento.md): conservare destinazione o strumento espliciti.
 - [Tipi definiti dall'autore](linguaggio/tipi-autore.md): gerarchia nominale ed ereditarietà singola.
 - [Azioni definite dall'autore](linguaggio/azioni-autore.md): comandi italiani e argomenti tipati.
 - [Sinonimi e separatori delle azioni](linguaggio/grammatica-comandi-autore.md): più forme italiane per lo stesso verbo.

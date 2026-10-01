@@ -24,9 +24,11 @@ Le forme unite disponibili sono:
 | --- | --- |
 | prendere | `prendilo`, `prendila` |
 | esaminare | `esaminalo`, `esaminala` |
-| aprire | `aprilo`, `aprila` |
+| aprire | `aprilo`, `aprila`, anche seguiti da `con CHIAVE` |
 | chiudere | `chiudilo`, `chiudila` |
 | lasciare | `lascialo`, `lasciala` |
+| mettere | `mettilo`, `mettila`, seguiti da `in CONTENITORE` |
+| bloccare | `bloccalo`, `bloccala`, seguiti da `con CHIAVE` |
 
 Una scelta conclusa dopo «Quale intendi?» diventa il nuovo referente. `guarda`,
 inventario, direzioni, errori e azioni fallite non lo cambiano. Se non esiste
@@ -35,5 +37,5 @@ ancora, LOCUS risponde «Non c'è ancora un oggetto a cui riferire il pronome».
 Il modello corrente non assegna un genere grammaticale alle entità: `prendilo` e
 `prendila` sono quindi equivalenti sul piano della risoluzione. Non sono ancora
 supportati plurali, accordo grammaticale, clitici doppi (`metticela`) o clitici
-per tutte le azioni definite dall'autore.
-
+per tutte le azioni definite dall'autore. I complementi espliciti sono descritti
+nella [specifica successiva](clitici-con-complemento.md).

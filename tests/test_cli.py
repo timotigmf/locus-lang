@@ -160,6 +160,28 @@ def test_game_cli_accepts_a_pronoun_and_an_attached_clitic(tmp_path: Path) -> No
     assert result.stdout.count("lanterna\nNon noti nulla di particolare.") == 2
 
 
+def test_game_cli_keeps_the_complement_after_an_attached_clitic(tmp_path: Path) -> None:
+    source = tmp_path / "scatola.locus"
+    source.write_text(
+        "La Sala è una stanza. "
+        'La scatola è un contenitore nella Sala. La scatola ha stato "aperto". '
+        "La gemma è una cosa nella Sala.",
+        encoding="utf-8",
+    )
+    result = subprocess.run(
+        [sys.executable, "-m", "locus", "gioca", str(source)],
+        input="prendi gemma\nmettila nella scatola\nesci\n",
+        cwd=tmp_path,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        env={**os.environ, "PYTHONUTF8": "1"},
+        check=False,
+    )
+    assert result.returncode == 0
+    assert "Hai messo gemma dentro scatola." in result.stdout
+
+
 def test_cli_executes_an_author_command(tmp_path: Path) -> None:
     source = tmp_path / "azione.locus"
     source.write_text(

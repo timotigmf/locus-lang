@@ -94,6 +94,9 @@ Ogni pacchetto conserva il core indipendente dalla narrativa interattiva.
 16. Referente pronominale di sessione e clitici singolari standard implementati;
     accordo grammaticale, plurali e clitici doppi restano pacchetti separati.
 
+17. Clitici diretti con complemento esplicito implementati per mettere, aprire e
+    bloccare; il secondo oggetto conserva risoluzione, sinonimi e chiarimenti.
+
 Non si importeranno codice o testi Inform.
 
 ## Studio M5 — 0.5.0a1
@@ -105,4 +108,5 @@ fuori scope collaborazione cloud, breakpoint, salvataggi del gioco ed eseguibili
 Estensione compatibile completata: dodici direzioni, incluse rosa dei venti,
 livelli e dentro/fuori, abbreviazioni classiche, nomi parziali e dialogo di
 chiarimento a più turni, pronomi singolari e clitici standard. Plurali, accordo
-grammaticale e clitici doppi restano futuri.
+grammaticale e clitici doppi restano futuri; i clitici diretti possono già
+conservare un complemento esplicito.

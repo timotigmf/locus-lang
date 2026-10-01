@@ -69,6 +69,7 @@ dall'alto verso il basso prima di studiare i moduli.
 25. [Entrare e uscire dalla lanterna](../tutorial/25-entrare-e-uscire.md)
 26. [Scegliere tra oggetti simili](../tutorial/26-scegliere-tra-oggetti.md)
 27. [Parlare di un oggetto già noto](../tutorial/27-pronomi-e-clitici.md)
+28. [Conservare il complemento](../tutorial/28-clitici-con-complemento.md)
 
 ## Indice per obiettivo
 
@@ -97,6 +98,7 @@ dall'alto verso il basso prima di studiare i moduli.
 | Edifici e grotte | Passaggi `dentro`/`fuori` distinti dal contenimento | Lezione 25 |
 | Nomi ambigui | Chiarimento con numero, nome parziale o sinonimo | Lezioni 5 e 26 |
 | Riferimenti brevi | Pronomi singolari e clitici standard | Lezione 27 |
+| Comandi brevi a due oggetti | Clitico diretto con destinazione o chiave | Lezione 28 |
 
 ## Vocabolario italiano
 

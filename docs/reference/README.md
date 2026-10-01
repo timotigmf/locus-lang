@@ -22,6 +22,8 @@ get/take, open, close, drop, put, lock.
 Il referente dell'ultima azione riuscita accetta `esso`, `essa`, `questo`,
 `questa`, `quello`, `quella`, `it` e le forme unite `prendilo/a`,
 `esaminalo/a`, `aprilo/a`, `chiudilo/a`, `lascialo/a`.
+`mettilo/a in CONTENITORE`, `aprilo/a con CHIAVE` e
+`bloccalo/a con CHIAVE` conservano il complemento esplicito.
 Quando la storia contiene dialoghi sono disponibili anche `parla con persona`,
 `p persona`, `talk to persona`, il numero della scelta, `scegli testo`, `basta`
 e `fine dialogo`.

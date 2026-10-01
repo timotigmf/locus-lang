@@ -119,6 +119,37 @@ def test_pronoun_can_fill_a_direct_or_indirect_object() -> None:
     assert put.event.entities[1] == ident(state, "scatola")
 
 
+def test_attached_clitic_keeps_an_explicit_second_object() -> None:
+    state = session(
+        "La Sala è una stanza. "
+        'La scatola è un contenitore nella Sala. La scatola ha stato "aperto". '
+        "La gemma è una cosa nella Sala."
+    )
+    taken = step(state, parse_session_command(state, "prendi gemma"))
+    put = step(taken.session, parse_session_command(taken.session, "mettila nella scatola"))
+    assert put.event.kind == "put"
+    assert put.event.entities == (ident(state, "gemma"), ident(state, "scatola"))
+
+
+def test_attached_clitic_can_open_and_lock_with_an_explicit_key() -> None:
+    state = session()
+    state = command(state, "apri scrigno", "opened")
+    state = command(state, "prendi chiave di ottone", "taken")
+    examined = step(state, parse_session_command(state, "esamina porta rossa"))
+    opened = step(
+        examined.session,
+        parse_session_command(examined.session, "aprila con chiave di ottone"),
+    )
+    assert opened.event.kind == "opened"
+    closed = step(opened.session, parse_session_command(opened.session, "chiudila"))
+    assert closed.event.kind == "closed"
+    locked = step(
+        closed.session,
+        parse_session_command(closed.session, "bloccala con chiave di ottone"),
+    )
+    assert locked.event.kind == "lock_success"
+
+
 def test_nested_container_transport_put_drop_and_cycle_prevention() -> None:
     state = session(
         "La Sala è una stanza. Il Corridoio è una stanza. Il Corridoio è a nord della Sala. "

@@ -348,6 +348,7 @@ def test_static_errors(source: str, code: str) -> None:
         ),
         ('Azione "parlare con" senza oggetti con comando "parla".', "E310"),
         ('Azione "salutare" senza oggetti con comando "guarda".', "E311"),
+        ('Azione "riporre" senza oggetti con comando "mettila".', "E311"),
         (
             'Azione "salutare" senza oggetti con comando "saluta". '
             'Azione "inchinarsi" senza oggetti con comando "saluta".',

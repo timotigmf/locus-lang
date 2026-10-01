@@ -741,6 +741,8 @@ test("chiarimento a più turni per un nome ambiguo", async ({ page }) => {
 La Sala è una stanza.
 La chiave di rame è una chiave nella Sala.
 La chiave di ferro è una chiave nella Sala.
+La scatola è un contenitore nella Sala.
+La scatola ha stato "aperto".
 Comprendi "scura" come "chiave di ferro".`;
   await page.locator(".cm-content").click();
   await page.keyboard.press("ControlOrMeta+A");
@@ -764,6 +766,11 @@ Comprendi "scura" come "chiave di ferro".`;
   await page.locator("#command").fill("esaminala");
   await page.locator("#send").click();
   await expect(page.locator(".story-output").last()).toContainText(
-    "chiave di ferro",
+    "Non noti nulla di particolare.",
+  );
+  await page.locator("#command").fill("mettila nella scatola");
+  await page.locator("#send").click();
+  await expect(page.locator(".story-output").last()).toContainText(
+    "Hai messo chiave di ferro dentro scatola.",
   );
 });

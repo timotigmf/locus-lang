@@ -18,6 +18,8 @@ La specifica della [disambiguazione a più turni](docs/linguaggio/disambiguazion
 definisce domande, risposte, annullamento e ripresa dell'azione.
 La specifica di [pronomi e clitici](docs/linguaggio/pronomi-e-clitici.md)
 definisce il referente di sessione e le forme unite dei comandi standard.
+I [clitici con complemento](docs/linguaggio/clitici-con-complemento.md)
+compongono il referente diretto con destinazioni e strumenti espliciti.
 La specifica dei [tipi definiti dall'autore](docs/linguaggio/tipi-autore.md)
 definisce la gerarchia nominale a ereditarietà singola.
 La specifica delle [azioni dell'autore](docs/linguaggio/azioni-autore.md)

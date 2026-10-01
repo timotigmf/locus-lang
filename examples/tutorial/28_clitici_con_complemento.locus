@@ -1,0 +1,12 @@
+Titolo: "Il cofano e il pronome".
+Autore: "Esempio LOCUS".
+
+La Sala è una stanza.
+Inizia nella "Sala".
+La Sala ha descrizione "Un cofano chiuso protegge il ripiano.".
+
+Il cofano è un contenitore nella Sala.
+Il cofano ha stato "bloccato".
+La chiave di bronzo è una chiave nella Sala.
+La chiave di bronzo apre il cofano.
+La gemma è una cosa nella Sala.

@@ -118,6 +118,21 @@ def test_bridge_exposes_the_pronoun_referent_and_accepts_a_clitic() -> None:
     assert studio.command("prendila")["text"] == "Hai preso: lanterna."
 
 
+def test_bridge_accepts_an_attached_clitic_with_a_complement() -> None:
+    studio = Studio()
+    studio.compile(
+        project(
+            "La Sala è una stanza. "
+            'La scatola è un contenitore nella Sala. La scatola ha stato "aperto". '
+            "La gemma è una cosa nella Sala."
+        )
+    )
+    studio.restart()
+    studio.command("prendi gemma")
+    result = studio.command("mettila nella scatola")
+    assert result["text"] == "Hai messo gemma dentro scatola."
+
+
 def test_failed_compile_invalidates_previous_program() -> None:
     studio = Studio()
     studio.compile(project("La Sala è una stanza."))

@@ -31,6 +31,8 @@ La [disambiguazione a più turni](disambiguazione-multiturno.md) conserva la
 domanda nella sessione e riprende l'azione dopo una scelta univoca.
 [Pronomi e clitici](pronomi-e-clitici.md) aggiunge un referente di sessione e
 forme unite italiane per le azioni standard più comuni.
+I [clitici con complemento](clitici-con-complemento.md) combinano il referente
+diretto con un contenitore o una chiave scritti nel comando.
 La [visibilità esplicita](visibilita-scenario.md) aggiunge oggetti nascosti e il
 tipo ambientale non trasportabile `scenario` nell'IR 13.
 Gli [elenchi tipati](liste-tipate.md) aggiungono collezioni omogenee, condizioni

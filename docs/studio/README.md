@@ -51,7 +51,7 @@ il successivo. Non promettiamo correzioni automatiche della semantica. Gli span
 di alcune diagnosi coprono un'intera dichiarazione/regola, come nella CLI.
 Il manuale incorporato è ricercabile per capitolo; la guida dell'autore è la
 pagina iniziale e ogni blocco di codice offre **Copia codice**. Comprende un corso
-in ventisette lezioni, specifiche e tutorial. L'Indice del mondo mostra anche
+in ventotto lezioni, specifiche e tutorial. L'Indice del mondo mostra anche
 dialoghi, scene, veicoli, mercanti e commercio compilati e aggiorna proprietà,
 righe delle tabelle, posizione dei mezzi, saldo, cassa e scorte dopo ogni comando.
 
@@ -86,6 +86,8 @@ numero, il nome o un sinonimo. `annulla` la chiude; anche un nuovo comando compl
 la sostituisce. La stessa sequenza funziona nei copioni e nelle release esportate.
 L'ultimo oggetto diretto riuscito resta disponibile anche a `esso`, `essa`, `it`
 e ai clitici standard come `prendila` ed `esaminalo`.
+Le forme `mettila nella scatola` e `aprilo con chiave` mantengono il secondo
+oggetto esplicito e funzionano anche nei copioni esportati.
 
 ## Test e transcript
 
