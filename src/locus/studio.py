@@ -464,6 +464,14 @@ class Studio:
                 if transition.session.pronoun_id is not None
                 else None
             ),
+            "indirect_referent": (
+                {
+                    "id": transition.session.indirect_pronoun_id,
+                    "label": labels[transition.session.indirect_pronoun_id],
+                }
+                if transition.session.indirect_pronoun_id is not None
+                else None
+            ),
             "media": [
                 asdict(item)
                 for item in transition.session.world.resources

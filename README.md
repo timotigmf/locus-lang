@@ -109,6 +109,8 @@ Dopo aver agito su un oggetto, usa `esso`, `essa`, `quello`, `quella`, `it` o
 le forme unite `prendilo/a`, `esaminalo/a`, `aprilo/a`, `chiudilo/a`, `lascialo/a`.
 Per le azioni a due oggetti sono disponibili anche `mettila nella scatola`,
 `aprilo con chiave` e `bloccala con chiave`.
+Quando una precedente azione riuscita ha stabilito anche la destinazione,
+`metticelo` e `metticela` richiamano insieme l'oggetto diretto e il contenitore.
 `Inizia nella "Sala".` sceglie il punto iniziale; in assenza, vale la prima stanza. EOF termina la sessione;
 Ctrl-C la interrompe. Vedi il [manuale](docs/manuale/README.md) per un transcript.
 
@@ -132,7 +134,7 @@ diagnostica che conserva il file originale. Ramo GitHub: `codex/milestone-4`.
 
 ## Tutorial in italiano
 
-[Costruisci il faro di Selce](docs/tutorial/README.md): ventotto lezioni, esercizi
+[Costruisci il faro di Selce](docs/tutorial/README.md): ventinove lezioni, esercizi
 con soluzioni, esempi eseguibili e copione verificato automaticamente.
 [Materiali consultati e scelte](docs/architettura/materiali-didattici.md).
 

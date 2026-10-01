@@ -64,6 +64,7 @@ EventKind = Literal[
     "invalid_clarification",
     "clarification_cancelled",
     "no_referent",
+    "no_indirect_referent",
     "no_exit",
     "unknown",
     "missing_noun",
@@ -144,6 +145,7 @@ class Session:
     owned_ids: tuple[str, ...] = ()
     clarification: Clarification | None = None
     pronoun_id: str | None = None
+    indirect_pronoun_id: str | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -744,6 +746,8 @@ def _choose_dialogue(session: Session, selection: str) -> Transition:
 def _perform(session: Session, intent: Intent) -> Transition:
     if intent.verb == "no_referent":
         return Transition(session, Event("no_referent"))
+    if intent.verb == "no_indirect_referent":
+        return Transition(session, Event("no_indirect_referent"))
     if intent.verb == "score":
         return Transition(session, Event("score"))
     if intent.verb == "time":
@@ -1193,25 +1197,31 @@ def _resume_clarification(session: Session, selection: str | None) -> Transition
 
 
 _PRONOUNS = frozenset({"esso", "essa", "questo", "questa", "quello", "quella", "it"})
+_INDIRECT_PRONOUNS = frozenset({"ci"})
 
 
 def _with_pronoun(session: Session, intent: Intent) -> Intent:
     for argument in ("noun", "indirect"):
         name = intent.noun if argument == "noun" else intent.indirect
-        if name is None or canonical(name) not in _PRONOUNS:
+        if name is None:
             continue
-        if session.pronoun_id is None:
-            return Intent("no_referent")
+        normalized = canonical(name)
+        if normalized in _PRONOUNS:
+            referent_id = session.pronoun_id
+            missing = "no_referent"
+        elif argument == "indirect" and normalized in _INDIRECT_PRONOUNS:
+            referent_id = session.indirect_pronoun_id
+            missing = "no_indirect_referent"
+        else:
+            continue
+        if referent_id is None:
+            return Intent(missing)
         entity = next(
-            (
-                candidate
-                for candidate in session.world.entities
-                if candidate.id == session.pronoun_id
-            ),
+            (candidate for candidate in session.world.entities if candidate.id == referent_id),
             None,
         )
         if entity is None:
-            return Intent("no_referent")
+            return Intent(missing)
         intent = (
             replace(intent, noun=entity.label, noun_id=entity.id)
             if argument == "noun"
@@ -1244,7 +1254,22 @@ def _remember_reference(session: Session, intent: Intent, transition: Transition
         if isinstance(resolved, Event):
             return transition
         entity_id = resolved.id
-    return replace(transition, session=replace(transition.session, pronoun_id=entity_id))
+    indirect_id = transition.session.indirect_pronoun_id
+    if intent.indirect is not None:
+        if intent.indirect_id is not None:
+            indirect_id = intent.indirect_id
+        else:
+            resolved_indirect = _resolve(session, intent.indirect)
+            if not isinstance(resolved_indirect, Event):
+                indirect_id = resolved_indirect.id
+    return replace(
+        transition,
+        session=replace(
+            transition.session,
+            pronoun_id=entity_id,
+            indirect_pronoun_id=indirect_id,
+        ),
+    )
 
 
 def parse_session_command(session: Session, text: str) -> Intent:
@@ -1278,6 +1303,7 @@ _TURNLESS_EVENTS = {
     "invalid_clarification",
     "clarification_cancelled",
     "no_referent",
+    "no_indirect_referent",
     "quit",
     "score",
     "time",

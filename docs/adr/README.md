@@ -46,3 +46,4 @@ Le fonti e le licenze sono nel [registro](../architettura/fonti.md).
 - [0029 — disambiguazione a più turni](0029-disambiguazione-multiturno.md): chiarimento persistente e ripresa tipata dell'azione.
 - [0030 — riferimenti pronominali](0030-riferimenti-pronominali.md): referente di sessione e clitici standard.
 - [0031 — clitici con complemento](0031-clitici-con-complemento.md): oggetto diretto pronominale e secondo oggetto esplicito.
+- [0032 — clitici doppi](0032-clitici-doppi.md): referenti diretto e indiretto separati per `metticelo`/`metticela`.

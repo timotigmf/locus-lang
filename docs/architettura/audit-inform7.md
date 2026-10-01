@@ -94,6 +94,11 @@ La comprensione italiana richiede quattro livelli indipendenti:
 3. vocabolario contestuale dichiarato dall'autore;
 4. disambiguazione a più turni basata su visibilità, raggiungibilità e tipo.
 
+La sessione implementa ora due referenti distinti per le forme locative
+`metticelo` e `metticela`: il clitico diretto e `ci` vengono risolti in ruoli
+tipati separati. Genere, numero e pattern grammaticali liberi restano passaggi
+successivi del lessico italiano.
+
 Un dizionario generale può fornire candidati offline, ma non può decidere il
 significato narrativo di parole polisemiche. Il nucleo deve restare riproducibile:
 stessa storia e stesso comando devono produrre gli stessi candidati su ogni

@@ -36,6 +36,6 @@ ancora, LOCUS risponde «Non c'è ancora un oggetto a cui riferire il pronome».
 
 Il modello corrente non assegna un genere grammaticale alle entità: `prendilo` e
 `prendila` sono quindi equivalenti sul piano della risoluzione. Non sono ancora
-supportati plurali, accordo grammaticale, clitici doppi (`metticela`) o clitici
-per tutte le azioni definite dall'autore. I complementi espliciti sono descritti
-nella [specifica successiva](clitici-con-complemento.md).
+supportati plurali, accordo grammaticale o clitici per tutte le azioni definite
+dall'autore. I [complementi espliciti](clitici-con-complemento.md) e i
+[clitici doppi locativi](clitici-doppi.md) hanno specifiche separate.

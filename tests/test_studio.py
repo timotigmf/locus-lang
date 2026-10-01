@@ -133,6 +133,25 @@ def test_bridge_accepts_an_attached_clitic_with_a_complement() -> None:
     assert result["text"] == "Hai messo gemma dentro scatola."
 
 
+def test_bridge_exposes_and_reuses_the_indirect_referent() -> None:
+    studio = Studio()
+    studio.compile(
+        project(
+            "La Sala è una stanza. "
+            'La scatola è un contenitore nella Sala. La scatola ha stato "aperto". '
+            "La gemma è una cosa nella Sala. La moneta è una cosa nella Sala."
+        )
+    )
+    studio.restart()
+    studio.command("prendi gemma")
+    first_put = studio.command("metti gemma nella scatola")
+    assert first_put["indirect_referent"] == {"id": "e2", "label": "scatola"}
+    studio.command("prendi moneta")
+    second_put = studio.command("metticela")
+    assert second_put["text"] == "Hai messo moneta dentro scatola."
+    assert second_put["referent"] == {"id": "e4", "label": "moneta"}
+
+
 def test_failed_compile_invalidates_previous_program() -> None:
     studio = Studio()
     studio.compile(project("La Sala è una stanza."))

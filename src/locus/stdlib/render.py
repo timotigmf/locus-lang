@@ -174,6 +174,7 @@ def render(transition: Transition) -> str:
         "unknown": unknown,
         "missing_noun": "Indica quale oggetto vuoi esaminare o manipolare.",
         "no_referent": "Non c'è ancora un oggetto a cui riferire il pronome.",
+        "no_indirect_referent": ("Non c'è ancora una destinazione a cui riferire il clitico «ci»."),
         "quit": "A presto.",
         "locked": "È bloccato: serve una chiave adatta.",
         "already_open": "È già aperto.",

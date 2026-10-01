@@ -133,11 +133,16 @@ prefissi, anche dopo l'articolazione, sono rifiutati.
 conflitto.
 
 Event.kind distingue look, inventory, taken, already_carried, not_here,
-not_portable, ambiguous, no_exit, unknown, quit, boarded, disembarked, money,
+not_portable, ambiguous, no_referent, no_indirect_referent, no_exit, unknown,
+quit, boarded, disembarked, money,
 purchased, sold e gli errori specifici di veicoli e commercio. Event.entities
 contiene ID, mai frasi da reinterpretare. La sessione è pura: il chiamante adotta
 la nuova sessione solo dopo step; la precedente rimane invariata.
 Le azioni dell'autore aggiungono gli eventi `custom` e `wrong_kind`.
+`Session.pronoun_id` conserva l'ultimo oggetto diretto riuscito;
+`Session.indirect_pronoun_id` conserva separatamente l'ultimo secondo oggetto e
+permette al parser di sessione di risolvere `metticelo`/`metticela` senza
+reinterpretare una frase.
 
 ## API aggiunte M2
 

@@ -51,8 +51,8 @@ Ogni pacchetto conserva il core indipendente dalla narrativa interattiva.
 
 1. Gerarchia dei tipi e azioni dell'autore implementate in IR 8.
 2. Sinonimi, locuzioni iniziali e separatori multiparola implementati in IR 11;
-   disambiguazione a più turni, pronomi singolari e clitici standard implementati
-   nella sessione; clitici doppi e pattern liberi restano da completare.
+   disambiguazione a più turni, pronomi singolari, clitici standard e doppio
+   clitico locativo implementati nella sessione; pattern liberi restano da completare.
 3. Relazioni dinamiche direzionali, passaggio segreto, visibilità esplicita e
    oggetti di scenario implementati fino all'IR 13. Luce, trasparenza e punti di
    vista multipli restano pacchetti separati.
@@ -92,10 +92,14 @@ Ogni pacchetto conserva il core indipendente dalla narrativa interattiva.
     CLI, Studio e release web.
 
 16. Referente pronominale di sessione e clitici singolari standard implementati;
-    accordo grammaticale, plurali e clitici doppi restano pacchetti separati.
+    accordo grammaticale, plurali e forme doppie non locative restano pacchetti
+    separati.
 
 17. Clitici diretti con complemento esplicito implementati per mettere, aprire e
     bloccare; il secondo oggetto conserva risoluzione, sinonimi e chiarimenti.
+
+18. Clitici doppi locativi `metticelo`/`metticela` implementati con referenti
+    diretto e indiretto separati nella sessione e diagnostica del ruolo assente.
 
 Non si importeranno codice o testi Inform.
 
@@ -108,5 +112,5 @@ fuori scope collaborazione cloud, breakpoint, salvataggi del gioco ed eseguibili
 Estensione compatibile completata: dodici direzioni, incluse rosa dei venti,
 livelli e dentro/fuori, abbreviazioni classiche, nomi parziali e dialogo di
 chiarimento a più turni, pronomi singolari e clitici standard. Plurali, accordo
-grammaticale e clitici doppi restano futuri; i clitici diretti possono già
-conservare un complemento esplicito.
+grammaticale e forme doppie non locative restano futuri; i clitici diretti possono conservare un
+complemento esplicito e `metticelo`/`metticela` riusano una destinazione ricordata.

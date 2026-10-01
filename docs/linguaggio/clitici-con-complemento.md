@@ -34,7 +34,7 @@ Il referente deve esistere e restare raggiungibile. Destinazione o chiave passan
 attraverso la normale risoluzione di nomi, sinonimi e ambiguità a più turni.
 `mettila` e `bloccala` senza complemento non sono comandi completi.
 
-Non sono ancora disponibili i clitici doppi come `metticela`: richiedono un
-referente separato per la destinazione. I clitici delle azioni definite
-dall'autore richiedono forme dichiarative future.
-
+Le forme doppie `metticelo` e `metticela` sono definite dalla specifica dei
+[clitici doppi](clitici-doppi.md), che aggiunge un referente separato per la
+destinazione. I clitici delle azioni definite dall'autore richiedono forme
+dichiarative future.

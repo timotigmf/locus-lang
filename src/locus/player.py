@@ -101,6 +101,11 @@ _CLITIC_COMMANDS: dict[str, tuple[Verb, str]] = {
     "bloccala": ("lock", "essa"),
 }
 
+_DOUBLE_CLITIC_COMMANDS: dict[str, tuple[Verb, str, str]] = {
+    "metticelo": ("put", "esso", "ci"),
+    "metticela": ("put", "essa", "ci"),
+}
+
 
 @dataclass(frozen=True, slots=True)
 class Intent:
@@ -194,6 +199,7 @@ def standard_commands(
             *_SIMPLE_COMMANDS,
             *_ACTION_COMMANDS,
             *_CLITIC_COMMANDS,
+            *_DOUBLE_CLITIC_COMMANDS,
             *dialogue_commands,
             *scene_commands,
             *vehicle_commands,
@@ -398,6 +404,9 @@ def parse_command(
             return Intent("talk", direct) if direct else Intent("missing_noun")
     authored = _author_match(actions, tokens)
     if len(tokens) == 1:
+        double_clitic = _DOUBLE_CLITIC_COMMANDS.get(verb)
+        if double_clitic is not None:
+            return Intent(*double_clitic)
         clitic = _CLITIC_COMMANDS.get(verb)
         if clitic is not None:
             return Intent(*clitic) if clitic[0] not in {"put", "lock"} else Intent("unknown")
@@ -413,6 +422,8 @@ def parse_command(
         )
     if authored is not None and verb not in _ACTION_COMMANDS and verb not in _SIMPLE_COMMANDS:
         return _author_intent(authored[0], tokens, authored[1])
+    if verb in _DOUBLE_CLITIC_COMMANDS:
+        return Intent("unknown")
     clitic = _CLITIC_COMMANDS.get(verb)
     if clitic is not None:
         action, pronoun = clitic

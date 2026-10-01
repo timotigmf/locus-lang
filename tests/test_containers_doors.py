@@ -101,6 +101,7 @@ def test_indirect_object_clarification_resumes_the_original_command() -> None:
         ident(state, "gemma"),
         ident(state, "scatola blu"),
     )
+    assert selected.session.indirect_pronoun_id == ident(state, "scatola blu")
 
 
 def test_pronoun_can_fill_a_direct_or_indirect_object() -> None:
@@ -148,6 +149,57 @@ def test_attached_clitic_can_open_and_lock_with_an_explicit_key() -> None:
         parse_session_command(closed.session, "bloccala con chiave di ottone"),
     )
     assert locked.event.kind == "lock_success"
+
+
+def test_double_clitic_reuses_direct_and_indirect_referents() -> None:
+    state = session(
+        "La Sala è una stanza. "
+        'La scatola è un contenitore nella Sala. La scatola ha stato "aperto". '
+        "La gemma è una cosa nella Sala. La moneta è una cosa nella Sala."
+    )
+    taken_gem = step(state, parse_session_command(state, "prendi gemma"))
+    first_put = step(
+        taken_gem.session,
+        parse_session_command(taken_gem.session, "metti gemma nella scatola"),
+    )
+    assert first_put.event.kind == "put"
+    assert first_put.session.indirect_pronoun_id == ident(state, "scatola")
+
+    taken_coin = step(
+        first_put.session,
+        parse_session_command(first_put.session, "prendi moneta"),
+    )
+    failed = step(
+        taken_coin.session,
+        parse_session_command(taken_coin.session, "metti moneta nella gemma"),
+    )
+    assert failed.event.kind == "not_container"
+    assert failed.session.indirect_pronoun_id == ident(state, "scatola")
+    second_put = step(
+        failed.session,
+        parse_session_command(failed.session, "metticela"),
+    )
+    assert second_put.event.kind == "put"
+    assert second_put.event.entities == (ident(state, "moneta"), ident(state, "scatola"))
+
+
+def test_double_clitic_reports_the_missing_referent_role() -> None:
+    state = session(
+        "La Sala è una stanza. "
+        'La scatola è un contenitore nella Sala. La scatola ha stato "aperto". '
+        "La gemma è una cosa nella Sala."
+    )
+    missing_direct = step(state, parse_session_command(state, "metticela"))
+    assert missing_direct.event.kind == "no_referent"
+    assert missing_direct.session is state
+
+    taken = step(state, parse_session_command(state, "prendi gemma"))
+    missing_destination = step(taken.session, parse_session_command(taken.session, "metticela"))
+    assert missing_destination.event.kind == "no_indirect_referent"
+    assert missing_destination.session is taken.session
+    assert render(missing_destination) == (
+        "Non c'è ancora una destinazione a cui riferire il clitico «ci»."
+    )
 
 
 def test_nested_container_transport_put_drop_and_cycle_prevention() -> None:
