@@ -84,8 +84,8 @@ Ogni pacchetto conserva il core indipendente dalla narrativa interattiva.
     distinta nell'atlante implementati.
 
 14. Navigazione `dentro`/`fuori`, dichiarazione naturale con `racchiude` e resa
-    distinta dal contenimento implementate; i percorsi a senso unico restano un
-    pacchetto separato.
+    distinta dal contenimento implementate; i percorsi a senso unico sono ora
+    dichiarabili con origine e destinazione esplicite e visibili nell'atlante.
 
 15. Disambiguazione a più turni implementata per oggetto diretto e indiretto,
     con scelta per numero, nome o sinonimo, annullamento e stato condiviso fra
@@ -109,6 +109,9 @@ Ogni pacchetto conserva il core indipendente dalla narrativa interattiva.
 
 21. Pronomi risolti per ruolo implementati: l'oggetto diretto usa il referente
     diretto e il secondo oggetto preferisce il referente indiretto disponibile.
+
+22. Passaggi a senso unico implementati per tutte le direzioni della stdlib,
+    con assenza strutturale dell'inversa e freccia dedicata nell'atlante.
 
 Non si importeranno codice o testi Inform.
 

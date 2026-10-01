@@ -116,6 +116,7 @@ class RelationSpec:
     acyclic: bool = False
     verb: str | None = None
     mutable: bool = False
+    route_aliases: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True, slots=True)

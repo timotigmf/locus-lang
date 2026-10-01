@@ -38,6 +38,7 @@ class Relation:
     predicate: str
     target: str
     span: Span
+    one_way: bool = False
 
 
 @dataclass(frozen=True, slots=True)

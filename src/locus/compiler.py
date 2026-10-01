@@ -62,9 +62,16 @@ def _validate_catalog(
     by_id = {spec.id: spec for spec in relations.values()}
     if len(by_id) != len(relations):
         raise ValueError("Gli identificatori delle relazioni devono essere univoci.")
+    route_names = set(relations)
     for name, spec in relations.items():
         if not name or name != canonical(name) or not spec.id.strip():
             raise ValueError("Il catalogo relazioni richiede nomi canonici e ID non vuoti.")
+        if len(set(spec.route_aliases)) != len(spec.route_aliases) or any(
+            not alias or canonical(alias) != alias or alias in route_names
+            for alias in spec.route_aliases
+        ):
+            raise ValueError("Gli alias di percorso devono essere canonici e univoci.")
+        route_names.update(spec.route_aliases)
         if (
             not type_ids(spec.source_type)
             or not type_ids(spec.target_type)
@@ -114,6 +121,7 @@ def analyze(
         )
     catalog = relations if relations is not None else {}
     type_parents = _validate_catalog(kinds, catalog, kind_parents)
+    route_aliases = {alias: name for name, spec in catalog.items() for alias in spec.route_aliases}
     if any(type_id not in type_parents for type_id in dialogue_actor_types):
         raise ValueError("I tipi ammessi nei dialoghi devono essere dichiarati nel catalogo.")
     kind_symbols = dict(kinds)
@@ -530,10 +538,13 @@ def analyze(
                 raise CompileError("E103", f"Entità non dichiarata: {name}.", fact.span)
             operands.append(symbols[canonical(name)])
         predicate = canonical(fact.predicate)
-        if predicate not in catalog:
+        catalog_name = route_aliases.get(predicate, predicate) if fact.one_way else predicate
+        if catalog_name not in catalog:
             raise CompileError("E104", f"Relazione sconosciuta: {fact.predicate}.", fact.span)
-        spec = catalog[predicate]
-        source, target = reversed(operands) if spec.reverse_operands else operands
+        spec = catalog[catalog_name]
+        source, target = (
+            operands if fact.one_way else reversed(operands) if spec.reverse_operands else operands
+        )
         if not any(
             is_subtype(source.type_id, expected, type_parents)
             for expected in type_ids(spec.source_type)
@@ -549,7 +560,7 @@ def analyze(
                 "E107", "Una relazione non può collegare un'entità a sé stessa.", fact.span
             )
         candidates = [RelationIR(source.id, spec.id, target.id)]
-        if spec.inverse_id is not None:
+        if spec.inverse_id is not None and not fact.one_way:
             candidates.append(RelationIR(target.id, spec.inverse_id, source.id))
         for edge in candidates:
             key = (edge.source_id, edge.predicate_id)

@@ -46,6 +46,7 @@ al prompt della storia: lì si scrivono soltanto i comandi del giocatore.
 | [30. Sottintendere soltanto la destinazione](30-clitico-locativo.md) | `examples/tutorial/30_clitico_locativo.locus` | Usare `mettici` con un oggetto esplicito |
 | [31. Dire «mettilo lì»](31-avverbi-locativi.md) | `examples/tutorial/31_avverbi_locativi.locus` | Richiamare una destinazione con `lì` e `là` |
 | [32. Ricordare oggetto e strumento](32-pronomi-per-ruolo.md) | `examples/tutorial/32_pronomi_per_ruolo.locus` | Risolvere pronomi diversi nei due ruoli |
+| [33. Scendere senza ritorno](33-passaggi-a-senso-unico.md) | `examples/tutorial/33_senso_unico.locus` | Dichiarare, provare e mappare un passaggio a senso unico |
 
 Prima prova la versione fornita. Poi modifica un solo elemento e riesegui la
 sequenza di comandi. In caso di errore conserva il messaggio, il file sorgente e

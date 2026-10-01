@@ -255,6 +255,20 @@ def test_inward_outward_movement_and_inverse() -> None:
     assert returned.session.room_id == current.room_id
 
 
+def test_one_way_passage_has_no_automatic_return() -> None:
+    world = instantiate(
+        compile_story(
+            "La Sala è una stanza. La Cripta è una stanza. Dalla Sala si va a nord verso la Cripta."
+        )
+    )
+    current = start(world)
+    moved = step(current, parse_command("nord"))
+    assert next(e.label for e in world.entities if e.id == moved.session.room_id) == "Cripta"
+    blocked = step(moved.session, parse_command("sud"))
+    assert blocked.event.kind == "no_exit"
+    assert blocked.session is moved.session
+
+
 def test_world_without_rooms_compiles_but_cannot_start_game() -> None:
     world = instantiate(compile_source("La chiave è una cosa.", default_kinds()))
     with pytest.raises(ValueError, match="almeno una stanza"):

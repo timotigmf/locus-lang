@@ -169,6 +169,13 @@ def test_inward_outward_tutorial_enters_and_leaves_the_lantern_room() -> None:
     assert returned.session.room_id == current.room_id
 
 
+def test_one_way_tutorial_does_not_create_the_inverse_exit() -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "33_senso_unico.locus")))
+    crypt = step(current, parse_command("d"))
+    assert "Cripta" in render(crypt)
+    assert step(crypt.session, parse_command("u")).event.kind == "no_exit"
+
+
 def test_clarification_tutorial_accepts_a_synonym_on_the_next_turn() -> None:
     current = start(instantiate(compile_story_file(TUTORIAL / "26_chiarimenti.locus")))
     asked = step(current, parse_session_command(current, "prendi chiave"))

@@ -317,3 +317,21 @@ descrive il contenuto accessibile. I percorsi e i formati sono convalidati e
 compilati in un manifest tipato. Studio e release includono i byte nel progetto;
 `E126` segnala risorse non sicure, assenti o incompatibili. La
 [specifica completa](docs/linguaggio/risorse-multimediali.md) introduce l'IR 21.
+
+## Passaggi a senso unico
+
+La produzione seguente aggiunge un arco direzionale senza generare l'inversa:
+
+```ebnf
+passaggio_unidirezionale = origine nome "si" "va" [ "a" ] predicato
+                           "verso" articolo nome "." ;
+origine = "dalla" | "dal" | "dallo" | "dall'" ;
+```
+
+Nella frase `Dalla Sala si va a nord verso la Cripta.`, gli operandi sono già
+nell'ordine sorgente-destinazione e non seguono l'eventuale inversione usata
+dalla sintassi `La Cripta è a nord della Sala.`. Il lowering emette una normale
+`RelationIR` per `Sala — nord → Cripta` e omette `Cripta — sud → Sala`.
+Catalogo, tipi, conflitti e auto-collegamenti conservano i controlli
+`E104`–`E107`. L'IR resta alla versione 21. Il contratto completo è in
+[Passaggi a senso unico](docs/linguaggio/passaggi-senso-unico.md).

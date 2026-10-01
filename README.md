@@ -8,8 +8,8 @@ Nome **LOCUS provvisorio**; il repository locale si chiama LOCUS.
 Versione `0.5.0a1`: **Studio web, mappa, test ed esportazione di storie per il browser**.
 Proprietà scalari, elenchi e tabelle tipate definiti dall’autore, contenimento annidato,
 accessibilità verificata, tipi dell'autore con ereditarietà singola e azioni con
-due oggetti. Dodici direzioni dinamiche, compresi livelli verticali e
-dentro/fuori, oggetti nascosti e dettagli di
+due oggetti. Dodici direzioni dinamiche, compresi livelli verticali,
+dentro/fuori e passaggi a senso unico, oggetti nascosti e dettagli di
 `scenario`, persone, dialoghi a scelte, scene temporali, punteggio registrato,
 veicoli con movimento del conducente, acquisti, mercanti, rivendita atomica e
 manifest multimediali locali sono modellati nel mondo. Gli autori possono
@@ -140,7 +140,7 @@ diagnostica che conserva il file originale. Ramo GitHub: `codex/milestone-4`.
 
 ## Tutorial in italiano
 
-[Costruisci il faro di Selce](docs/tutorial/README.md): trentadue lezioni, esercizi
+[Costruisci il faro di Selce](docs/tutorial/README.md): trentatré lezioni, esercizi
 con soluzioni, esempi eseguibili e copione verificato automaticamente.
 [Materiali consultati e scelte](docs/architettura/materiali-didattici.md).
 

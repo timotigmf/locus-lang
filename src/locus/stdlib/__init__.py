@@ -130,6 +130,7 @@ def default_relations() -> dict[str, RelationSpec]:
             inverse_id=DOWN,
             verb="sovrasta",
             mutable=True,
+            route_aliases=("su",),
         ),
         "sotto": RelationSpec(
             DOWN,
@@ -138,6 +139,7 @@ def default_relations() -> dict[str, RelationSpec]:
             reverse_operands=True,
             inverse_id=UP,
             mutable=True,
+            route_aliases=("giù", "giu"),
         ),
         "dentro": RelationSpec(
             INWARD,

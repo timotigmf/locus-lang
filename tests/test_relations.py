@@ -67,6 +67,25 @@ def test_east_west_relations_are_inverse() -> None:
     assert RelationIR("e2", "mondo.ovest", "e1") in program.relations
 
 
+@pytest.mark.parametrize("origin", ["Dalla A", "Dal A", "Dallo A", "Dall'A"])
+def test_one_way_relation_keeps_only_the_requested_direction(origin: str) -> None:
+    source = ROOMS + f" {origin} si va a nord verso la B."
+    ast = parse(source, verbs={})
+    assert ast.relations[-1].one_way
+    program = compile_source(source, default_kinds(), relations=default_relations())
+    assert program.relations == (RelationIR("e1", "mondo.nord", "e2"),)
+
+
+def test_one_way_relation_with_unknown_direction_is_rejected() -> None:
+    with pytest.raises(CompileError) as error:
+        compile_source(
+            ROOMS + " Dalla A si va a fianco verso la B.",
+            default_kinds(),
+            relations=default_relations(),
+        )
+    assert error.value.code == "E104"
+
+
 @pytest.mark.parametrize(
     ("predicate", "relation", "inverse"),
     [

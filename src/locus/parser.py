@@ -31,6 +31,7 @@ from locus.schema import Scalar, Value, ValueKind
 
 _LOCATIONS = {"nella", "nel", "nello", "nell"}
 _GENITIVES = {"della", "del", "dello", "dell"}
+_ORIGINS = {"dalla", "dal", "dallo", "dall"}
 _TARGETS = {"alla", "al", "allo", "all", "a"}
 _RESERVED = {
     "è",
@@ -42,6 +43,7 @@ _RESERVED = {
     "come",
     *_LOCATIONS,
     *_GENITIVES,
+    *_ORIGINS,
 }
 
 
@@ -99,7 +101,7 @@ class _Parser:
         if self.current.kind != "WORD" or word not in allowed:
             self.fail("una preposizione: " + ", ".join(sorted(allowed)))
         self.index += 1
-        if word in {"nell", "dell", "all"}:
+        if word in {"nell", "dell", "dall", "all"}:
             self.apostrophe()
         if word == "a":
             self.article(True)
@@ -162,6 +164,22 @@ class _Parser:
         metadata: list[Metadata] = []
         vocabulary: list[Vocabulary] = []
         while self.current.kind != "EOF":
+            if self.current.normalized in _ORIGINS:
+                start = self.current.span
+                self.preposition(_ORIGINS)
+                origin = self.words(stop={"si"})
+                self.keyword("si")
+                self.keyword("va")
+                if self.current.normalized == "a":
+                    self.keyword("a")
+                predicate = self.words(stop={"verso"})
+                self.keyword("verso")
+                self.article(True)
+                destination = self.words()
+                relations.append(
+                    Relation(origin, predicate, destination, self.finish(start), one_way=True)
+                )
+                continue
             if self.current.normalized == "scena":
                 start = self.current.span
                 self.keyword("scena")

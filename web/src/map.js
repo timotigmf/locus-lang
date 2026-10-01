@@ -27,11 +27,17 @@ export function drawMap(data) {
           const sign = link.from === id ? 1 : -1,
             offsets = {
               nord: [0, -155],
+              sud: [0, 155],
               est: [245, 0],
+              ovest: [-245, 0],
               nordest: [245, -155],
               sudest: [245, 155],
+              sudovest: [-245, 155],
+              nordovest: [-245, -155],
               su: [0, -155],
+              giù: [0, 155],
               dentro: [245, 155],
+              fuori: [-245, -155],
             },
             [dx, dy] = offsets[link.direction] ?? [0, -155];
           let x = p.x + dx * sign,
@@ -66,22 +72,23 @@ export function drawMap(data) {
         (d.from === link.from && d.to === link.to) ||
         (d.to === link.from && d.from === link.to),
     );
-    const directions =
-      {
-        nord: "nord / sud",
-        est: "est / ovest",
-        nordest: "nordest / sudovest",
-        sudest: "sudest / nordovest",
-        su: "su / giù",
-        dentro: "dentro / fuori",
-      }[link.direction] ?? link.direction;
-    const topologyStyle =
-      link.direction === "su"
-        ? ' stroke-dasharray="6 4"'
-        : link.direction === "dentro"
-          ? ' stroke-dasharray="2 3"'
-          : "";
-    body += `<path d="M${a.x + 95},${a.y + 35} L${b.x + 95},${b.y + 35}" stroke="#9eb8ad" stroke-width="2"${topologyStyle} fill="none"/><text x="${(a.x + b.x) / 2 + 105}" y="${(a.y + b.y) / 2 + 35}" fill="#687f72" font-size="10">${escape(door?.label ?? directions)}</text>`;
+    const directions = link.oneWay
+      ? link.direction + " (solo andata)"
+      : ({
+          nord: "nord / sud",
+          est: "est / ovest",
+          nordest: "nordest / sudovest",
+          sudest: "sudest / nordovest",
+          su: "su / giù",
+          dentro: "dentro / fuori",
+        }[link.direction] ?? link.direction);
+    const topologyStyle = ["su", "giù"].includes(link.direction)
+      ? ' stroke-dasharray="6 4"'
+      : ["dentro", "fuori"].includes(link.direction)
+        ? ' stroke-dasharray="2 3"'
+        : "";
+    const arrow = link.oneWay ? ' marker-end="url(#freccia-senso-unico)"' : "";
+    body += `<path d="M${a.x + 95},${a.y + 35} L${b.x + 95},${b.y + 35}" stroke="#9eb8ad" stroke-width="2"${topologyStyle}${arrow} fill="none"/><text x="${(a.x + b.x) / 2 + 105}" y="${(a.y + b.y) / 2 + 35}" fill="#687f72" font-size="10">${escape(door?.label ?? directions)}</text>`;
   }
   for (const r of data.rooms) {
     const p = positions.get(r.id);
@@ -95,5 +102,5 @@ export function drawMap(data) {
       : "";
     body += `<g><title>${escape(r.label)}</title><rect x="${p.x}" y="${p.y}" width="190" height="70" rx="8" fill="${initial ? "#e5eee2" : "#fffefa"}" stroke="${initial ? "#698c68" : "#b8cbbf"}"/><text x="${p.x + 16}" y="${p.y + 22}" font-size="8" letter-spacing="1" fill="#6e8677">${initial ? "PUNTO INIZIALE" : "LUOGO"}</text><text x="${p.x + 16}" y="${p.y + 46}" font-size="13" fill="#294a3e">${escape(r.label.length > 23 ? r.label.slice(0, 22) + "…" : r.label)}</text>${vehicleLine}</g>`;
   }
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" role="img" aria-label="Mappa dei luoghi" font-family="system-ui,sans-serif"><title>Mappa LOCUS</title><rect width="100%" height="100%" fill="#f8fbf7"/>${body}<text x="20" y="25" font-size="10" fill="#758b7c">N ↑ · LOCUS / ATLANTE</text></svg>`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" role="img" aria-label="Mappa dei luoghi" font-family="system-ui,sans-serif"><title>Mappa LOCUS</title><defs><marker id="freccia-senso-unico" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#9eb8ad"/></marker></defs><rect width="100%" height="100%" fill="#f8fbf7"/>${body}<text x="20" y="25" font-size="10" fill="#758b7c">N ↑ · LOCUS / ATLANTE</text></svg>`;
 }

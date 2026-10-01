@@ -298,6 +298,31 @@ def test_map_contains_inward_link_once() -> None:
     ]
 
 
+def test_map_marks_a_one_way_passage() -> None:
+    studio = Studio()
+    result = studio.compile(
+        project(
+            "La Sala è una stanza. La Cripta è una stanza. Dalla Sala si va a nord verso la Cripta."
+        )
+    )
+    assert result["map"]["links"] == [
+        {"from": "e1", "to": "e2", "direction": "nord", "oneWay": True},
+    ]
+
+
+def test_map_keeps_a_one_way_passage_in_an_inverse_direction() -> None:
+    studio = Studio()
+    result = studio.compile(
+        project(
+            "La Terrazza è una stanza. La Cripta è una stanza. "
+            "Dalla Terrazza si va giù verso la Cripta."
+        )
+    )
+    assert result["map"]["links"] == [
+        {"from": "e1", "to": "e2", "direction": "giù", "oneWay": True},
+    ]
+
+
 def test_map_updates_when_a_secret_passage_is_revealed() -> None:
     studio = Studio()
     result = studio.compile(

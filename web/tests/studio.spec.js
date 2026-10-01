@@ -33,7 +33,7 @@ test("progetto, compilazione, gioco, test e release statica", async ({
   await page.locator(".cm-content").click();
   await page.keyboard.press("ControlOrMeta+End");
   await page.keyboard.insertText(
-    '\nIl Molo ha immagine "media/molo.png".\nIl Molo ha testo alternativo "Il molo nella foschia.".\nLa Vedetta è una stanza.\nLa Vedetta è a nordest del Molo.\nLa Torre è una stanza.\nLa Torre sovrasta il Molo.\nLa Camera Ottica è una stanza.\nIl Molo racchiude la Camera Ottica.',
+    '\nIl Molo ha immagine "media/molo.png".\nIl Molo ha testo alternativo "Il molo nella foschia.".\nLa Vedetta è una stanza.\nLa Vedetta è a nordest del Molo.\nLa Torre è una stanza.\nLa Torre sovrasta il Molo.\nLa Camera Ottica è una stanza.\nIl Molo racchiude la Camera Ottica.\nLa Scogliera è una stanza.\nDalla Torre si va a est verso la Scogliera.',
   );
   await page
     .getByRole("button", { name: "▶ Compila e prova", exact: true })
@@ -97,6 +97,12 @@ test("progetto, compilazione, gioco, test e release statica", async ({
   );
   await expect(page.locator("#mapCanvas svg")).toContainText("su / giù");
   await expect(page.locator("#mapCanvas svg")).toContainText("dentro / fuori");
+  await expect(page.locator("#mapCanvas svg")).toContainText(
+    "est (solo andata)",
+  );
+  await expect(
+    page.locator('#mapCanvas path[marker-end="url(#freccia-senso-unico)"]'),
+  ).toHaveCount(1);
   await expect(
     page.locator('#mapCanvas path[stroke-dasharray="6 4"]'),
   ).toHaveCount(1);

@@ -50,8 +50,10 @@ Diagnosi su stderr; nessuna scrittura implicita. Dump non caricabili come giochi
 - `parser.parse(text, source='<memoria>')`: AST Program con tipi, entità, relazioni e regole.
 - `compiler.compile_source(text, kinds, source='<memoria>', *, relations=None, properties=None, actions=None, kind_parents=None, reserved_commands=(), dialogue_actor_types=())`: ProgramIR.
 - `compiler.analyze(program, kinds, *, relations=None, properties=None, actions=None, kind_parents=None, reserved_commands=(), dialogue_actor_types=())`: risoluzione a passaggi e lowering.
-- `schema.RelationSpec(id, source_type, target_type, reverse_operands=False, inverse_id=None, acyclic=False, verb=None, mutable=False)`:
-  contratto funzionale e irriflessivo di una relazione; tipi/ID già risolti.
+- `schema.RelationSpec(id, source_type, target_type, reverse_operands=False, inverse_id=None, acyclic=False, verb=None, mutable=False, route_aliases=())`:
+  contratto funzionale e irriflessivo di una relazione; tipi/ID già risolti. Gli
+  alias di percorso sono forme autore canoniche riservate alle dichiarazioni a
+  senso unico, come `giù` per la relazione `sotto`.
 - `stdlib.default_kinds()` / `stdlib.default_kind_parents()` / `stdlib.default_relations()` / `stdlib.default_properties()` / `stdlib.default_actions()`: cataloghi nuovi e sostituibili.
 - `runtime.instantiate(program)`: World immutabile con entità e relazioni.
 - `player.parse_command(text, actions=(), dialogue_enabled=False, scene_enabled=False, vehicle_enabled=False, commerce_enabled=False)`: Intent(verb, noun=None, indirect=None); analizza un comando isolato e usa `unknown` per un comando sconosciuto.

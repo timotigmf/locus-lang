@@ -22,6 +22,7 @@ from locus.player import Intent
 from locus.runtime import World, has_type, instantiate
 from locus.stdlib import (
     CURRENCY,
+    DOWN,
     EAST,
     INSIDE,
     INWARD,
@@ -29,12 +30,17 @@ from locus.stdlib import (
     MERCHANT,
     NORTH,
     NORTHEAST,
+    NORTHWEST,
+    OUTWARD,
     ROOM,
     SIDE_A,
     SIDE_B,
+    SOUTH,
     SOUTHEAST,
+    SOUTHWEST,
     UP,
     VEHICLE,
+    WEST,
 )
 from locus.stdlib.authoring import compile_story_file
 from locus.stdlib.game import Session, Transition, parse_session_command, start, step
@@ -295,20 +301,63 @@ def map_data(model: ProgramIR | World) -> dict[str, Any]:
     rooms = [asdict(entity) for entity in world.entities if has_type(world, entity.type_id, ROOM)]
     link_directions = {
         NORTH: "nord",
+        SOUTH: "sud",
         EAST: "est",
+        WEST: "ovest",
         NORTHEAST: "nordest",
         SOUTHEAST: "sudest",
+        SOUTHWEST: "sudovest",
+        NORTHWEST: "nordovest",
         UP: "su",
+        DOWN: "giù",
         INWARD: "dentro",
+        OUTWARD: "fuori",
+    }
+    inverse_directions = {
+        NORTH: SOUTH,
+        SOUTH: NORTH,
+        EAST: WEST,
+        WEST: EAST,
+        NORTHEAST: SOUTHWEST,
+        SOUTHEAST: NORTHWEST,
+        SOUTHWEST: NORTHEAST,
+        NORTHWEST: SOUTHEAST,
+        UP: DOWN,
+        DOWN: UP,
+        INWARD: OUTWARD,
+        OUTWARD: INWARD,
+    }
+    primary_directions = {NORTH, EAST, NORTHEAST, SOUTHEAST, UP, INWARD}
+    relation_keys = {
+        (edge.source_id, edge.predicate_id, edge.target_id) for edge in world.relations
     }
     links = [
         {
             "from": edge.source_id,
             "to": edge.target_id,
             "direction": link_directions[edge.predicate_id],
+            **(
+                {"oneWay": True}
+                if (
+                    edge.target_id,
+                    inverse_directions[edge.predicate_id],
+                    edge.source_id,
+                )
+                not in relation_keys
+                else {}
+            ),
         }
         for edge in world.relations
         if edge.predicate_id in link_directions
+        and (
+            edge.predicate_id in primary_directions
+            or (
+                edge.target_id,
+                inverse_directions[edge.predicate_id],
+                edge.source_id,
+            )
+            not in relation_keys
+        )
     ]
     doors = []
     for entity in world.entities:
