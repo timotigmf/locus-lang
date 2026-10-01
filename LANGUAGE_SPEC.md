@@ -24,6 +24,8 @@ I [clitici doppi](docs/linguaggio/clitici-doppi.md) mantengono separati il
 referente diretto e il secondo oggetto per `metticelo` e `metticela`.
 Il [clitico locativo](docs/linguaggio/clitico-locativo.md) permette di lasciare
 esplicito l'oggetto in `mettici OGGETTO` e richiamare soltanto la destinazione.
+Gli [avverbi locativi](docs/linguaggio/avverbi-locativi.md) offrono la forma
+equivalente `metti OGGETTO lì` o `metti OGGETTO là`.
 La specifica dei [tipi definiti dall'autore](docs/linguaggio/tipi-autore.md)
 definisce la gerarchia nominale a ereditarietà singola.
 La specifica delle [azioni dell'autore](docs/linguaggio/azioni-autore.md)

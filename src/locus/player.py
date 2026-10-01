@@ -107,6 +107,7 @@ _DOUBLE_CLITIC_COMMANDS: dict[str, tuple[Verb, str, str]] = {
 }
 
 _LOCATIVE_CLITIC_COMMANDS = frozenset({"mettici"})
+_LOCATIVE_PRONOUNS = frozenset({"lì", "là"})
 
 
 @dataclass(frozen=True, slots=True)
@@ -453,8 +454,18 @@ def parse_command(
         {"in", "into", "nel", "nella", "nello", "nell'"} if action == "put" else {"con", "with"}
     )
     splits = [i for i, (word, quoted) in enumerate(rest) if not quoted and word in delimiters]
+    locatives = [
+        i for i, (word, quoted) in enumerate(rest) if not quoted and word in _LOCATIVE_PRONOUNS
+    ]
     indirect = None
-    if action in {"put", "open", "lock"} and splits:
+    if action == "put" and locatives:
+        if len(locatives) != 1 or locatives[0] != len(rest) - 1 or splits:
+            return Intent("unknown")
+        direct = _noun(rest[:-1])
+        if not direct:
+            return Intent("missing_noun")
+        indirect = "ci"
+    elif action in {"put", "open", "lock"} and splits:
         if len(splits) != 1:
             return Intent("unknown")
         index = splits[0]

@@ -51,7 +51,7 @@ il successivo. Non promettiamo correzioni automatiche della semantica. Gli span
 di alcune diagnosi coprono un'intera dichiarazione/regola, come nella CLI.
 Il manuale incorporato è ricercabile per capitolo; la guida dell'autore è la
 pagina iniziale e ogni blocco di codice offre **Copia codice**. Comprende un corso
-in trenta lezioni, specifiche e tutorial. L'Indice del mondo mostra anche
+in trentuno lezioni, specifiche e tutorial. L'Indice del mondo mostra anche
 dialoghi, scene, veicoli, mercanti e commercio compilati e aggiorna proprietà,
 righe delle tabelle, posizione dei mezzi, saldo, cassa e scorte dopo ogni comando.
 
@@ -92,6 +92,8 @@ Le forme `metticelo` e `metticela` riusano invece due referenti separati: l'ulti
 oggetto diretto e l'ultimo secondo oggetto di un'azione riuscita.
 `mettici la moneta` riusa solo il secondo referente e risolve normalmente il
 nome diretto scritto dal giocatore.
+`metti la moneta lì` e `metti la moneta là` offrono la stessa risoluzione con un
+avverbio finale.
 
 ## Test e transcript
 

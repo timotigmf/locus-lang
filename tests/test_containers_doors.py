@@ -227,6 +227,31 @@ def test_locative_clitic_requires_a_remembered_destination() -> None:
     assert result.session is state
 
 
+def test_locative_adverb_reuses_the_remembered_destination() -> None:
+    state = session(
+        "La Sala è una stanza. "
+        'La scatola è un contenitore nella Sala. La scatola ha stato "aperto". '
+        "La gemma è una cosa nella Sala. La moneta è una cosa nella Sala."
+    )
+    state = step(state, parse_session_command(state, "prendi gemma")).session
+    state = step(
+        state,
+        parse_session_command(state, "metti gemma nella scatola"),
+    ).session
+    state = step(state, parse_session_command(state, "prendi moneta")).session
+    put = step(state, parse_session_command(state, "metti la moneta lì"))
+    assert put.event.kind == "put"
+    assert put.event.entities == (ident(state, "moneta"), ident(state, "scatola"))
+
+
+def test_locative_adverb_requires_a_remembered_destination() -> None:
+    state = session("La Sala è una stanza. La moneta è una cosa nella Sala.")
+    state = step(state, parse_session_command(state, "prendi moneta")).session
+    result = step(state, parse_session_command(state, "metti moneta là"))
+    assert result.event.kind == "no_indirect_referent"
+    assert result.session is state
+
+
 def test_nested_container_transport_put_drop_and_cycle_prevention() -> None:
     state = session(
         "La Sala è una stanza. Il Corridoio è una stanza. Il Corridoio è a nord della Sala. "

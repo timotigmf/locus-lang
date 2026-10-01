@@ -104,6 +104,9 @@ Ogni pacchetto conserva il core indipendente dalla narrativa interattiva.
 19. Clitico locativo `mettici OGGETTO` implementato per conservare il nome
     diretto esplicito e richiamare la destinazione già risolta.
 
+20. Avverbi locativi contestuali `lì`/`là` implementati in posizione finale di
+    `metti`, con rifiuto delle destinazioni duplicate.
+
 Non si importeranno codice o testi Inform.
 
 ## Studio M5 — 0.5.0a1
@@ -117,4 +120,4 @@ livelli e dentro/fuori, abbreviazioni classiche, nomi parziali e dialogo di
 chiarimento a più turni, pronomi singolari e clitici standard. Plurali, accordo
 grammaticale e forme doppie non locative restano futuri; i clitici diretti possono conservare un
 complemento esplicito; `metticelo`, `metticela` e `mettici OGGETTO` riusano una
-destinazione ricordata.
+destinazione ricordata, disponibile anche come `lì` o `là` dopo `metti`.

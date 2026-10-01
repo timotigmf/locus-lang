@@ -798,4 +798,9 @@ Comprendi "scura" come "chiave di ferro".`;
   await expect(page.locator(".story-output").last()).toContainText(
     "Hai messo chiave di ferro dentro scatola.",
   );
+  await page.locator("#command").fill("metti chiave di rame lì");
+  await page.locator("#send").click();
+  await expect(page.locator(".story-output").last()).toContainText(
+    "Hai messo chiave di rame dentro scatola.",
+  );
 });

@@ -226,6 +226,28 @@ def test_game_cli_accepts_a_locative_clitic_with_an_explicit_object(tmp_path: Pa
     assert "Hai messo moneta dentro scatola." in result.stdout
 
 
+def test_game_cli_accepts_a_locative_adverb(tmp_path: Path) -> None:
+    source = tmp_path / "scatola.locus"
+    source.write_text(
+        "La Sala è una stanza. "
+        'La scatola è un contenitore nella Sala. La scatola ha stato "aperto". '
+        "La gemma è una cosa nella Sala. La moneta è una cosa nella Sala.",
+        encoding="utf-8",
+    )
+    result = subprocess.run(
+        [sys.executable, "-m", "locus", "gioca", str(source)],
+        input="prendi gemma\nmetti gemma nella scatola\nprendi moneta\nmetti moneta lì\nesci\n",
+        cwd=tmp_path,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        env={**os.environ, "PYTHONUTF8": "1"},
+        check=False,
+    )
+    assert result.returncode == 0
+    assert "Hai messo moneta dentro scatola." in result.stdout
+
+
 def test_cli_executes_an_author_command(tmp_path: Path) -> None:
     source = tmp_path / "azione.locus"
     source.write_text(

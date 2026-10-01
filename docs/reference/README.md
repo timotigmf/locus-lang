@@ -73,7 +73,8 @@ non costituiscono identificatori accettati dal testo del giocatore.
 `Session.pronoun_id` conserva l'ultimo oggetto diretto di un'azione riuscita;
 `Session.indirect_pronoun_id` conserva separatamente l'ultimo secondo oggetto.
 `parse_session_command` usa i due ID per pronomi, `metticelo`/`metticela` e
-`mettici OGGETTO`.
+`mettici OGGETTO`; il parser produce lo stesso ruolo indiretto per
+`metti OGGETTO lì/là`.
 
 `ProgramIR.dialogues` e `World.dialogues` contengono `DialogueIR`, composto da
 `DialogueNodeIR` e `DialogueChoiceIR`. Tutti i riferimenti sono ID risolti. La

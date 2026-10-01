@@ -37,6 +37,8 @@ I [clitici doppi](clitici-doppi.md) aggiungono un referente separato per la
 destinazione delle forme `metticelo` e `metticela`.
 Il [clitico locativo](clitico-locativo.md) riusa la stessa destinazione con un
 oggetto diretto ancora esplicito in `mettici OGGETTO`.
+Gli [avverbi locativi](avverbi-locativi.md) esprimono lo stesso ruolo in
+`metti OGGETTO lì` e `metti OGGETTO là`.
 La [visibilità esplicita](visibilita-scenario.md) aggiunge oggetti nascosti e il
 tipo ambientale non trasportabile `scenario` nell'IR 13.
 Gli [elenchi tipati](liste-tipate.md) aggiungono collezioni omogenee, condizioni

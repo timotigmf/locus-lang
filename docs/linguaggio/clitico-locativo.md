@@ -28,3 +28,6 @@ Il comando usa i normali controlli di `metti`: l'oggetto deve essere trasportato
 la destinazione deve essere un contenitore raggiungibile e aperto, e i cicli di
 contenimento restano vietati. La forma non introduce inferenze grammaticali né
 un significato generale di `ci` per altri verbi.
+
+La costruzione equivalente `metti la moneta lì` è definita nella specifica
+degli [avverbi locativi](avverbi-locativi.md).

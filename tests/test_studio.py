@@ -155,6 +155,8 @@ def test_bridge_exposes_and_reuses_the_indirect_referent() -> None:
     explicit = studio.command("mettici la gemma")
     assert explicit["text"] == "Hai messo gemma dentro scatola."
     assert explicit["referent"] == {"id": "e3", "label": "gemma"}
+    adverb = studio.command("metti la moneta lì")
+    assert adverb["text"] == "Hai messo moneta dentro scatola."
 
 
 def test_failed_compile_invalidates_previous_program() -> None:

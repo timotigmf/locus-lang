@@ -224,6 +224,18 @@ def test_locative_clitic_tutorial_keeps_the_explicit_object() -> None:
     assert put.event.kind == "put"
 
 
+def test_locative_adverb_tutorial_reuses_the_destination() -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "31_avverbi_locativi.locus")))
+    current = step(current, parse_session_command(current, "prendi bussola")).session
+    current = step(
+        current,
+        parse_session_command(current, "metti bussola nel baule"),
+    ).session
+    current = step(current, parse_session_command(current, "prendi sestante")).session
+    put = step(current, parse_session_command(current, "metti il sestante lì"))
+    assert put.event.kind == "put"
+
+
 def test_dungeon_tutorial_awards_points_once_after_the_puzzle() -> None:
     current = start(instantiate(compile_story_file(TUTORIAL / "06_sotterraneo.locus")))
     for command in [
