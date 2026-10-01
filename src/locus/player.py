@@ -106,6 +106,8 @@ _DOUBLE_CLITIC_COMMANDS: dict[str, tuple[Verb, str, str]] = {
     "metticela": ("put", "essa", "ci"),
 }
 
+_LOCATIVE_CLITIC_COMMANDS = frozenset({"mettici"})
+
 
 @dataclass(frozen=True, slots=True)
 class Intent:
@@ -200,6 +202,7 @@ def standard_commands(
             *_ACTION_COMMANDS,
             *_CLITIC_COMMANDS,
             *_DOUBLE_CLITIC_COMMANDS,
+            *_LOCATIVE_CLITIC_COMMANDS,
             *dialogue_commands,
             *scene_commands,
             *vehicle_commands,
@@ -404,6 +407,8 @@ def parse_command(
             return Intent("talk", direct) if direct else Intent("missing_noun")
     authored = _author_match(actions, tokens)
     if len(tokens) == 1:
+        if verb in _LOCATIVE_CLITIC_COMMANDS:
+            return Intent("missing_noun")
         double_clitic = _DOUBLE_CLITIC_COMMANDS.get(verb)
         if double_clitic is not None:
             return Intent(*double_clitic)
@@ -422,6 +427,15 @@ def parse_command(
         )
     if authored is not None and verb not in _ACTION_COMMANDS and verb not in _SIMPLE_COMMANDS:
         return _author_intent(authored[0], tokens, authored[1])
+    if verb in _LOCATIVE_CLITIC_COMMANDS:
+        rest = tokens[1:]
+        if any(
+            not quoted and word in {"in", "into", "nel", "nella", "nello", "nell'"}
+            for word, quoted in rest
+        ):
+            return Intent("unknown")
+        direct = _noun(rest)
+        return Intent("put", direct, "ci") if direct else Intent("missing_noun")
     if verb in _DOUBLE_CLITIC_COMMANDS:
         return Intent("unknown")
     clitic = _CLITIC_COMMANDS.get(verb)

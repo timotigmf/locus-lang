@@ -212,6 +212,18 @@ def test_double_clitic_tutorial_reuses_the_destination() -> None:
     assert put.event.kind == "put"
 
 
+def test_locative_clitic_tutorial_keeps_the_explicit_object() -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "30_clitico_locativo.locus")))
+    current = step(current, parse_session_command(current, "prendi gettone rosso")).session
+    current = step(
+        current,
+        parse_session_command(current, "metti gettone rosso nella cassetta"),
+    ).session
+    current = step(current, parse_session_command(current, "prendi gettone blu")).session
+    put = step(current, parse_session_command(current, "mettici il gettone blu"))
+    assert put.event.kind == "put"
+
+
 def test_dungeon_tutorial_awards_points_once_after_the_puzzle() -> None:
     current = start(instantiate(compile_story_file(TUTORIAL / "06_sotterraneo.locus")))
     for command in [

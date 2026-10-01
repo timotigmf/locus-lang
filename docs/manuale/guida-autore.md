@@ -71,6 +71,7 @@ dall'alto verso il basso prima di studiare i moduli.
 27. [Parlare di un oggetto già noto](../tutorial/27-pronomi-e-clitici.md)
 28. [Conservare il complemento](../tutorial/28-clitici-con-complemento.md)
 29. [Ricordare anche la destinazione](../tutorial/29-clitici-doppi.md)
+30. [Sottintendere soltanto la destinazione](../tutorial/30-clitico-locativo.md)
 
 ## Indice per obiettivo
 
@@ -101,6 +102,7 @@ dall'alto verso il basso prima di studiare i moduli.
 | Riferimenti brevi | Pronomi singolari e clitici standard | Lezione 27 |
 | Comandi brevi a due oggetti | Clitico diretto con destinazione o chiave | Lezione 28 |
 | Oggetto e destinazione sottintesi | Doppio clitico `metticelo`/`metticela` | Lezione 29 |
+| Solo destinazione sottintesa | Clitico locativo `mettici OGGETTO` | Lezione 30 |
 
 ## Vocabolario italiano
 

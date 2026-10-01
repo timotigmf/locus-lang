@@ -43,6 +43,7 @@ al prompt della storia: lì si scrivono soltanto i comandi del giocatore.
 | [27. Parlare di un oggetto già noto](27-pronomi-e-clitici.md) | `examples/tutorial/27_pronomi_e_clitici.locus` | Usare pronomi e clitici per l'ultimo oggetto diretto |
 | [28. Conservare il complemento](28-clitici-con-complemento.md) | `examples/tutorial/28_clitici_con_complemento.locus` | Combinare un clitico con contenitore o chiave espliciti |
 | [29. Ricordare anche la destinazione](29-clitici-doppi.md) | `examples/tutorial/29_clitici_doppi.locus` | Usare `metticelo` e `metticela` con due referenti separati |
+| [30. Sottintendere soltanto la destinazione](30-clitico-locativo.md) | `examples/tutorial/30_clitico_locativo.locus` | Usare `mettici` con un oggetto esplicito |
 
 Prima prova la versione fornita. Poi modifica un solo elemento e riesegui la
 sequenza di comandi. In caso di errore conserva il messaggio, il file sorgente e

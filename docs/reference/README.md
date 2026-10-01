@@ -71,7 +71,9 @@ avere riferimenti coerenti; non sono un'API di caricamento di dati non fidati.
 ambigua. Gli ID opzionali di `Intent` sono prodotti dal runtime dopo una scelta e
 non costituiscono identificatori accettati dal testo del giocatore.
 `Session.pronoun_id` conserva l'ultimo oggetto diretto di un'azione riuscita;
-`parse_session_command` risolve pronomi e clitici verso quell'ID.
+`Session.indirect_pronoun_id` conserva separatamente l'ultimo secondo oggetto.
+`parse_session_command` usa i due ID per pronomi, `metticelo`/`metticela` e
+`mettici OGGETTO`.
 
 `ProgramIR.dialogues` e `World.dialogues` contengono `DialogueIR`, composto da
 `DialogueNodeIR` e `DialogueChoiceIR`. Tutti i riferimenti sono ID risolti. La
@@ -139,10 +141,6 @@ purchased, sold e gli errori specifici di veicoli e commercio. Event.entities
 contiene ID, mai frasi da reinterpretare. La sessione è pura: il chiamante adotta
 la nuova sessione solo dopo step; la precedente rimane invariata.
 Le azioni dell'autore aggiungono gli eventi `custom` e `wrong_kind`.
-`Session.pronoun_id` conserva l'ultimo oggetto diretto riuscito;
-`Session.indirect_pronoun_id` conserva separatamente l'ultimo secondo oggetto e
-permette al parser di sessione di risolvere `metticelo`/`metticela` senza
-reinterpretare una frase.
 
 ## API aggiunte M2
 

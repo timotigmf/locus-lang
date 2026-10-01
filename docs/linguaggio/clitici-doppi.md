@@ -37,3 +37,6 @@ una chiave o un altro oggetto incompatibile, l'azione fallisce come la forma
 estesa. `metticelo` e `metticela` non applicano ancora l'accordo grammaticale;
 plurali e clitici delle azioni definite dall'autore restano fuori da questo
 incremento.
+
+La forma complementare `mettici la moneta`, che sottintende soltanto il
+contenitore, è descritta nella specifica del [clitico locativo](clitico-locativo.md).

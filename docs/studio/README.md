@@ -51,7 +51,7 @@ il successivo. Non promettiamo correzioni automatiche della semantica. Gli span
 di alcune diagnosi coprono un'intera dichiarazione/regola, come nella CLI.
 Il manuale incorporato è ricercabile per capitolo; la guida dell'autore è la
 pagina iniziale e ogni blocco di codice offre **Copia codice**. Comprende un corso
-in ventinove lezioni, specifiche e tutorial. L'Indice del mondo mostra anche
+in trenta lezioni, specifiche e tutorial. L'Indice del mondo mostra anche
 dialoghi, scene, veicoli, mercanti e commercio compilati e aggiorna proprietà,
 righe delle tabelle, posizione dei mezzi, saldo, cassa e scorte dopo ogni comando.
 
@@ -90,6 +90,8 @@ Le forme `mettila nella scatola` e `aprilo con chiave` mantengono il secondo
 oggetto esplicito e funzionano anche nei copioni esportati.
 Le forme `metticelo` e `metticela` riusano invece due referenti separati: l'ultimo
 oggetto diretto e l'ultimo secondo oggetto di un'azione riuscita.
+`mettici la moneta` riusa solo il secondo referente e risolve normalmente il
+nome diretto scritto dal giocatore.
 
 ## Test e transcript
 

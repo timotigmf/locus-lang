@@ -1,0 +1,11 @@
+Titolo: "La destinazione sottintesa".
+Autore: "Esempio LOCUS".
+
+La Sala è una stanza.
+Inizia nella "Sala".
+La Sala ha descrizione "Una cassetta aperta raccoglie i gettoni del faro.".
+
+La cassetta è un contenitore nella Sala.
+La cassetta ha stato "aperto".
+Il gettone rosso è una cosa nella Sala.
+Il gettone blu è una cosa nella Sala.

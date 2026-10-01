@@ -101,6 +101,9 @@ Ogni pacchetto conserva il core indipendente dalla narrativa interattiva.
 18. Clitici doppi locativi `metticelo`/`metticela` implementati con referenti
     diretto e indiretto separati nella sessione e diagnostica del ruolo assente.
 
+19. Clitico locativo `mettici OGGETTO` implementato per conservare il nome
+    diretto esplicito e richiamare la destinazione già risolta.
+
 Non si importeranno codice o testi Inform.
 
 ## Studio M5 — 0.5.0a1
@@ -113,4 +116,5 @@ Estensione compatibile completata: dodici direzioni, incluse rosa dei venti,
 livelli e dentro/fuori, abbreviazioni classiche, nomi parziali e dialogo di
 chiarimento a più turni, pronomi singolari e clitici standard. Plurali, accordo
 grammaticale e forme doppie non locative restano futuri; i clitici diretti possono conservare un
-complemento esplicito e `metticelo`/`metticela` riusano una destinazione ricordata.
+complemento esplicito; `metticelo`, `metticela` e `mettici OGGETTO` riusano una
+destinazione ricordata.

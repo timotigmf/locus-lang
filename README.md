@@ -111,6 +111,8 @@ Per le azioni a due oggetti sono disponibili anche `mettila nella scatola`,
 `aprilo con chiave` e `bloccala con chiave`.
 Quando una precedente azione riuscita ha stabilito anche la destinazione,
 `metticelo` e `metticela` richiamano insieme l'oggetto diretto e il contenitore.
+`mettici la moneta` conserva invece il nome diretto e sottintende soltanto il
+contenitore ricordato.
 `Inizia nella "Sala".` sceglie il punto iniziale; in assenza, vale la prima stanza. EOF termina la sessione;
 Ctrl-C la interrompe. Vedi il [manuale](docs/manuale/README.md) per un transcript.
 
@@ -134,7 +136,7 @@ diagnostica che conserva il file originale. Ramo GitHub: `codex/milestone-4`.
 
 ## Tutorial in italiano
 
-[Costruisci il faro di Selce](docs/tutorial/README.md): ventinove lezioni, esercizi
+[Costruisci il faro di Selce](docs/tutorial/README.md): trenta lezioni, esercizi
 con soluzioni, esempi eseguibili e copione verificato automaticamente.
 [Materiali consultati e scelte](docs/architettura/materiali-didattici.md).
 

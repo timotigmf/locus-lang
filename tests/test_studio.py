@@ -150,6 +150,11 @@ def test_bridge_exposes_and_reuses_the_indirect_referent() -> None:
     second_put = studio.command("metticela")
     assert second_put["text"] == "Hai messo moneta dentro scatola."
     assert second_put["referent"] == {"id": "e4", "label": "moneta"}
+    studio.command("prendi gemma")
+    studio.command("prendi moneta")
+    explicit = studio.command("mettici la gemma")
+    assert explicit["text"] == "Hai messo gemma dentro scatola."
+    assert explicit["referent"] == {"id": "e3", "label": "gemma"}
 
 
 def test_failed_compile_invalidates_previous_program() -> None:

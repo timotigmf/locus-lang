@@ -96,7 +96,8 @@ La comprensione italiana richiede quattro livelli indipendenti:
 
 La sessione implementa ora due referenti distinti per le forme locative
 `metticelo` e `metticela`: il clitico diretto e `ci` vengono risolti in ruoli
-tipati separati. Genere, numero e pattern grammaticali liberi restano passaggi
+tipati separati. La forma `mettici OGGETTO` riusa il solo ruolo locativo senza
+riscrivere il nome esplicito. Genere, numero e pattern grammaticali liberi restano passaggi
 successivi del lessico italiano.
 
 Un dizionario generale può fornire candidati offline, ma non può decidere il
