@@ -185,12 +185,18 @@ class RuleParser:
             value = self.cursor.value()
         elif word in {"crea", "rimuovi"}:
             self.cursor.keyword("relazione")
+            one_way = False
+            if self.cursor.current.normalized == "a":
+                self.cursor.keyword("a")
+                self.cursor.keyword("senso")
+                self.cursor.keyword("unico")
+                one_way = True
             name = self.quoted()
             self.cursor.keyword("da")
             source = self.quoted()
             self.cursor.keyword("a")
             target = self.quoted()
-            relation = RelationSyntax(name, source, target)
+            relation = RelationSyntax(name, source, target, one_way)
             word += "_relazione"
         elif word not in {"continua", "interrompi"}:
             raise CompileError("E302", "Istruzione di regola non riconosciuta.", start)

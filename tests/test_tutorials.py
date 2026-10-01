@@ -176,6 +176,17 @@ def test_one_way_tutorial_does_not_create_the_inverse_exit() -> None:
     assert step(crypt.session, parse_command("u")).event.kind == "no_exit"
 
 
+def test_dynamic_one_way_tutorial_reveals_a_drop_without_return() -> None:
+    current = start(
+        instantiate(compile_story_file(TUTORIAL / "34_passaggio_unidirezionale_segreto.locus"))
+    )
+    assert step(current, parse_command("d")).event.kind == "no_exit"
+    revealed = step(current, parse_command("esamina leva"))
+    crypt = step(revealed.session, parse_command("d"))
+    assert "Cripta" in render(crypt)
+    assert step(crypt.session, parse_command("u")).event.kind == "no_exit"
+
+
 def test_clarification_tutorial_accepts_a_synonym_on_the_next_turn() -> None:
     current = start(instantiate(compile_story_file(TUTORIAL / "26_chiarimenti.locus")))
     asked = step(current, parse_session_command(current, "prendi chiave"))

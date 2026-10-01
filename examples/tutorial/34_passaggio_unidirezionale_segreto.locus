@@ -1,0 +1,24 @@
+Titolo: "La botola del faro".
+Autore: "Esempio LOCUS".
+
+La Sala è una stanza.
+La Cripta è una stanza.
+Inizia nella "Sala".
+La Sala ha descrizione "Una leva arrugginita sporge accanto a una lastra di pietra.".
+La Cripta ha descrizione "La botola si è richiusa molto più in alto.".
+
+La leva è una cosa nella Sala.
+La leva ha descrizione "Il contrappeso sembra ancora collegato alla botola.".
+La aperta è una proprietà logica.
+
+Regola "apri la botola" per esaminare "leva" nella fase dopo
+quando "aperta" di "leva" è falso:
+    crea relazione a senso unico "giù" da "Sala" a "Cripta";
+    imposta "aperta" di "leva" a vero;
+    dì "La lastra ruota e scopre una discesa senza appigli.";
+Fine regola.
+
+Regola "botola già aperta" per esaminare "leva" nella fase dopo
+quando "aperta" di "leva" è vero:
+    dì "La botola è già aperta.";
+Fine regola.

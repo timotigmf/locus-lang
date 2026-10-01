@@ -53,8 +53,7 @@ freccia orientata. L'etichetta mostra la sola direzione seguita da
 
 ## Limiti
 
-Le regole dinamiche continuano a creare e rimuovere insieme una relazione e la
-sua inversa. Una futura estensione potrà rendere esplicita la direzionalità
-anche negli effetti delle regole. Un passaggio a senso unico non implica da
-solo caduta, teletrasporto, danno o blocco narrativo: tali conseguenze vanno
-modellate con regole e proprietà.
+Le regole dinamiche usano `crea relazione a senso unico ...` e `rimuovi
+relazione a senso unico ...` per modificare un solo arco. Un passaggio a senso
+unico non implica da solo caduta, teletrasporto, danno o blocco narrativo: tali
+conseguenze vanno modellate con regole e proprietà.

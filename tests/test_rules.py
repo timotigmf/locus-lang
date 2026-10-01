@@ -307,6 +307,7 @@ def test_replacement_can_invoke_an_author_action() -> None:
         (rule('dì "x";', extra="priorità 1000001"), "E309"),
         (rule('dì "x";', extra="quando " + "non " * 66 + "vero"), "E302"),
         (rule('crea relazione "ignota" da "Sala" a "Sala";'), "E312"),
+        (rule('crea relazione a senso unico "ignota" da "Sala" a "Sala";'), "E312"),
         (rule('crea relazione "nella" da "leva" a "Sala";'), "E312"),
         (rule('crea relazione "nord" da "leva" a "Sala";'), "E305"),
         (rule('crea relazione "nord" da "Sala" a "Sala";'), "E312"),
@@ -547,6 +548,65 @@ Fine regola.
     )
     assert len(hidden.session.world.relations) == len(initial.world.relations)
     assert step(hidden.session, parse_command("nord")).event.kind == "no_exit"
+
+
+def test_secret_one_way_passage_changes_only_the_requested_arc() -> None:
+    source = """
+La Cripta è una stanza.
+Azione "sigillare" senza oggetti con comando "sigilla varco".
+Regola "rivela la caduta" per esaminare "leva" nella fase dopo:
+    crea relazione a senso unico "nord" da "Sala" a "Cripta";
+Fine regola.
+Regola "sigilla la caduta" per sigillare nella fase invece:
+    rimuovi relazione a senso unico "nord" da "Sala" a "Cripta";
+Fine regola.
+"""
+    initial = session(source)
+    revealed = step(initial, parse_command("esamina leva"))
+    assert len(revealed.session.world.relations) == len(initial.world.relations) + 1
+    moved = step(revealed.session, parse_command("nord"))
+    assert moved.session.room_id != revealed.session.room_id
+    assert step(moved.session, parse_command("sud")).event.kind == "no_exit"
+
+    hidden = step(
+        moved.session,
+        parse_command("sigilla varco", moved.session.world.actions),
+    )
+    assert hidden.session.world.relations == initial.world.relations
+
+
+def test_dynamic_one_way_route_alias_is_structured_in_ir() -> None:
+    compiled = compile_story(
+        BASE
+        + """
+La Cripta è una stanza.
+Regola "apri la botola" per esaminare "leva" nella fase dopo:
+    crea relazione a senso unico "giù" da "Sala" a "Cripta";
+Fine regola.
+"""
+    )
+    change = compiled.rules[0].effects[0].relation
+    assert change is not None
+    assert change.edges == (RelationEdge("e1", "mondo.sotto", "e4"),)
+
+
+def test_one_way_removal_preserves_the_opposite_arc() -> None:
+    initial = session(
+        """
+La Cripta è una stanza.
+La Cripta è a nord della Sala.
+Regola "blocca la salita" per esaminare "leva" nella fase dopo:
+    rimuovi relazione a senso unico "nord" da "Sala" a "Cripta";
+Fine regola.
+"""
+    )
+    changed = step(initial, parse_command("esamina leva"))
+    triples = {
+        (edge.source_id, edge.predicate_id, edge.target_id)
+        for edge in changed.session.world.relations
+    }
+    assert ("e1", "mondo.nord", "e4") not in triples
+    assert ("e4", "mondo.sud", "e1") in triples
 
 
 def test_relation_change_rolls_back_on_failure_and_conflict() -> None:

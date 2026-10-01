@@ -225,7 +225,8 @@ possono avere prefissi ambigui. L'IR corrente è la versione 21.
 Le regole possono usare `crea relazione "nord" da "Sala" a "Cripta";` e
 `rimuovi relazione ...;` per modificare i collegamenti direzionali. Il compilatore
 risolve gli ID, controlla tipi e mutabilità e incorpora le inverse nello stesso
-effetto. Il runtime applica il cambiamento nella transazione della regola. Gli
+effetto. La qualificazione `a senso unico` omette l'inversa per creare o
+rimuovere un solo arco. Il runtime applica il cambiamento nella transazione della regola. Gli
 usi non validi producono `E312`; si veda la
 [specifica completa](docs/linguaggio/relazioni-dinamiche.md). Questa estensione
 introduce l'IR 12 ed è conservata nell'IR 21; la stdlib attuale comprende anche

@@ -157,9 +157,19 @@ def lower_rules(
         return TableChange(table.id, row)
 
     def relation_change(
-        name: str, source_name: str, target_name: str, span: Span
+        name: str,
+        source_name: str,
+        target_name: str,
+        one_way: bool,
+        span: Span,
     ) -> RelationChange:
-        spec = relations.get(canonical(name))
+        relation_name = canonical(name)
+        spec = relations.get(relation_name)
+        if spec is None and one_way:
+            spec = next(
+                (item for item in relations.values() if relation_name in item.route_aliases),
+                None,
+            )
         if spec is None:
             raise CompileError("E312", f"Relazione sconosciuta: {name}.", span)
         if not spec.mutable:
@@ -181,7 +191,7 @@ def lower_rules(
         ):
             raise CompileError("E305", f"Tipi incompatibili per la relazione {name}.", span)
         edges = [RelationEdge(source.id, spec.id, target.id)]
-        if spec.inverse_id is not None:
+        if spec.inverse_id is not None and not one_way:
             edges.append(RelationEdge(target.id, spec.inverse_id, source.id))
         return RelationChange(tuple(edges))
 
@@ -248,6 +258,7 @@ def lower_rules(
                     syntax.relation.name,
                     syntax.relation.source,
                     syntax.relation.target,
+                    syntax.relation.one_way,
                     syntax.span,
                 )
                 if syntax.relation is not None

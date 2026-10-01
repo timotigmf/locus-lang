@@ -129,6 +129,7 @@ class RelationSyntax:
     name: str
     source: str
     target: str
+    one_way: bool = False
 
 
 @dataclass(frozen=True, slots=True)

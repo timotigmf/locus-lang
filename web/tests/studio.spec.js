@@ -329,7 +329,9 @@ Fine regola.`;
   await expect(page.locator("#index")).toContainText("insieme a");
 });
 
-test("passaggio segreto aggiorna navigazione e mappa", async ({ page }) => {
+test("passaggio segreto a senso unico aggiorna navigazione e mappa", async ({
+  page,
+}) => {
   await page.goto("/");
   await expect(page.locator("#compileStatus")).toContainText("compilato", {
     timeout: 90000,
@@ -339,7 +341,7 @@ La Sala è una stanza.
 La Cripta è una stanza.
 La leva è una cosa nella Sala.
 Regola "rivela" per esaminare "leva" nella fase dopo:
-    crea relazione "nord" da "Sala" a "Cripta";
+    crea relazione a senso unico "nord" da "Sala" a "Cripta";
     dì "Il varco è aperto.";
 Fine regola.`;
   await page.locator(".cm-content").click();
@@ -355,12 +357,22 @@ Fine regola.`;
   await page.locator("#send").click();
   await expect(page.locator("#transcript")).toContainText("Il varco è aperto.");
   await expect(page.locator("#mapSummary")).toContainText("1 collegamenti");
+  await page.getByRole("button", { name: "Mappa", exact: true }).click();
+  await expect(page.locator("#mapCanvas svg")).toContainText(
+    "nord (solo andata)",
+  );
+  await expect(
+    page.locator('#mapCanvas path[marker-end="url(#freccia-senso-unico)"]'),
+  ).toHaveCount(1);
+  await page.getByRole("button", { name: "Storia", exact: true }).click();
   await page.locator("#command").fill("nord");
   await page.locator("#send").click();
   await expect(page.locator("#transcript")).toContainText("Cripta");
   await page.locator("#command").fill("sud");
   await page.locator("#send").click();
-  await expect(page.locator("#transcript")).toContainText("Sala");
+  await expect(page.locator(".story-output").last()).toContainText(
+    "Non c'è alcun passaggio in quella direzione.",
+  );
 });
 
 test("scenario rivela un oggetto inizialmente invisibile", async ({ page }) => {

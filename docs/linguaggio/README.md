@@ -20,7 +20,7 @@ deterministiche e diagnostica delle collisioni di prefisso nell'IR 10.
 I [separatori multiparola](separatori-multiparola.md) aggiungono locuzioni fisse
 fra due oggetti e articolazione dell'ultima preposizione nell'IR 11.
 Le [relazioni dinamiche](relazioni-dinamiche.md) permettono alle regole di creare
-o rimuovere passaggi cardinali transazionali nell'IR 12.
+o rimuovere passaggi transazionali, anche a senso unico, nell'IR 12.
 Le [direzioni diagonali](direzioni-diagonali.md) completano la rosa dei venti
 nella stdlib, nel runtime e nell'atlante senza cambiare la forma dell'IR 21.
 I [livelli verticali](livelli-verticali.md) aggiungono `su`/`giù`, il verbo

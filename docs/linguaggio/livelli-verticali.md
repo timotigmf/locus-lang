@@ -44,5 +44,5 @@ sposta il livello sulla prima colonna libera senza cambiare il grafo compilato.
 
 I livelli sono topologici: non hanno quota, altezza o distanza numerica. La
 [navigazione dentro/fuori](dentro-fuori.md) usa relazioni distinte dal
-contenimento `mondo.dentro`. I percorsi a senso unico richiedono una specifica
-successiva.
+contenimento `mondo.dentro`. I [passaggi a senso unico](passaggi-senso-unico.md)
+e le [relazioni dinamiche](relazioni-dinamiche.md) coprono anche `su` e `giù`.

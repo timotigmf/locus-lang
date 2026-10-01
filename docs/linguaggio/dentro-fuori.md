@@ -46,5 +46,6 @@ linee continue della rosa dei venti e dal tratteggio dei livelli verticali.
 ## Limiti
 
 Il collegamento è topologico: non implica contenimento fisico, regione, edificio
-o visibilità. Ogni luogo ha una sola destinazione per direzione. Percorsi a
-senso unico e regioni con più accessi richiedono specifiche separate.
+o visibilità. Ogni luogo ha una sola destinazione per direzione. I
+[passaggi a senso unico](passaggi-senso-unico.md) possono usare anche `dentro`
+e `fuori`; regioni con più accessi richiedono una specifica separata.

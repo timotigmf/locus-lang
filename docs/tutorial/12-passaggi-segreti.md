@@ -58,3 +58,6 @@ aggiorna i testi. Il ritorno sarà `ovest`.
 
 La sintassi completa e le diagnosi sono nel riferimento sulle
 [relazioni dinamiche](../linguaggio/relazioni-dinamiche.md).
+
+Per aprire un passaggio dal quale non si può tornare, continua con
+[Passaggio segreto senza ritorno](34-passaggio-segreto-senza-ritorno.md).

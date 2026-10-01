@@ -340,6 +340,24 @@ def test_map_updates_when_a_secret_passage_is_revealed() -> None:
     assert studio.command("nord")["room"] == "e2"
 
 
+def test_map_marks_a_dynamic_one_way_passage_after_reveal() -> None:
+    studio = Studio()
+    result = studio.compile(
+        project(
+            "La Sala è una stanza. La Cripta è una stanza. "
+            "La leva è una cosa nella Sala. "
+            'Regola "caduta" per esaminare "leva" nella fase dopo: '
+            'crea relazione a senso unico "nord" da "Sala" a "Cripta"; Fine regola.'
+        )
+    )
+    assert result["map"]["links"] == []
+    studio.restart()
+    revealed = studio.command("esamina leva")
+    assert revealed["map"]["links"] == [
+        {"from": "e1", "to": "e2", "direction": "nord", "oneWay": True},
+    ]
+
+
 def test_dynamic_relation_diagnostic_links_the_reference() -> None:
     studio = Studio()
     result = studio.compile(

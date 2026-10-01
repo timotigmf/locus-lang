@@ -113,6 +113,9 @@ Ogni pacchetto conserva il core indipendente dalla narrativa interattiva.
 22. Passaggi a senso unico implementati per tutte le direzioni della stdlib,
     con assenza strutturale dell'inversa e freccia dedicata nell'atlante.
 
+23. Creazione e rimozione dinamica di un singolo arco implementate con la
+    qualificazione `a senso unico`, alias verticali e rollback transazionale.
+
 Non si importeranno codice o testi Inform.
 
 ## Studio M5 — 0.5.0a1

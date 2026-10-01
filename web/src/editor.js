@@ -89,6 +89,8 @@ const words = [
   "crea",
   "rimuovi",
   "relazione",
+  "senso",
+  "unico",
   "da",
   "apre",
   "vende",
