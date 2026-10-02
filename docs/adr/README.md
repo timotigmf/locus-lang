@@ -57,3 +57,4 @@ Le fonti e le licenze sono nel [registro](../architettura/fonti.md).
 - [0040 — azione standard di attesa](0040-attesa-standard.md): comando senza oggetti, rulebook e avanzamento temporale.
 - [0041 — guardare un oggetto](0041-guarda-con-oggetto.md): distinzione per arità e riuso strutturato di `esaminare`.
 - [0042 — aiuto in partita](0042-aiuto-in-partita.md): metacomando contestuale derivato dal mondo compilato.
+- [0043 — ripetere un comando](0043-ripetere-comando.md): ultimo intento riuscito conservato nella sessione.

@@ -40,6 +40,7 @@
 - [Attendere](linguaggio/attendere.md): far trascorrere un turno con una azione standard personalizzabile.
 - [Guardare ed esaminare](linguaggio/guardare-esaminare.md): usare `guarda NOME` e altri alias naturali.
 - [Aiuto in partita](linguaggio/aiuto-in-partita.md): mostrare i comandi disponibili nel mondo corrente.
+- [Ripetere un comando](linguaggio/ripetere-comando.md): rieseguire l'ultimo intento riuscito.
 - [Elenchi tipati](linguaggio/liste-tipate.md): raccolte omogenee, appartenenza e rollback.
 - [Tabelle tipate](linguaggio/tabelle-tipate.md): colonne nominate e righe transazionali.
 - [Persone e dialoghi](linguaggio/dialoghi-strutturati.md): conversazioni a nodi e scelte multi-turno.

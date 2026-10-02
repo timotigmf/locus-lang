@@ -28,9 +28,12 @@ descrivono il luogo.
 `aiuto`, `comandi`, `help` e `?` mostrano il nucleo dei comandi e le categorie
 abilitate dal mondo, comprese le forme delle azioni dell'autore. Il metacomando
 non avanza le scene, non attraversa il rulebook e resta disponibile nei dialoghi.
+`ancora`, `ripeti`, `again` e `g` rieseguono l'ultimo intento riuscito. Errori,
+fallimenti e metacomandi non lo sostituiscono; una scelta di disambiguazione
+viene conservata come ID e ogni ripetizione riuscita avanza normalmente le scene.
 Alias classici: l/look, x/examine, i/inv/inventory, n/north, s/south, e/east,
 o/w/west, ne/northeast, se/southeast, so/southwest, no/nw/northwest,
-u/up/alto, d/down/giu/basso, in/inside, out/outside, z/wait, ?/help, q/quit,
+u/up/alto, d/down/giu/basso, in/inside, out/outside, z/wait, g/again, ?/help, q/quit,
 get/take, examine/inspect, open, close, drop, put, lock.
 Il referente dell'ultima azione riuscita accetta `esso`, `essa`, `questo`,
 `questa`, `quello`, `quella`, `it` e le forme unite `prendilo/a`,
@@ -87,6 +90,10 @@ ambigua. Gli ID opzionali di `Intent` sono prodotti dal runtime dopo una scelta 
 non costituiscono identificatori accettati dal testo del giocatore.
 `Session.pronoun_id` conserva l'ultimo oggetto diretto di un'azione riuscita;
 `Session.indirect_pronoun_id` conserva separatamente l'ultimo secondo oggetto.
+`Session.last_intent` conserva l'ultimo comando riuscito ripetibile; gli ID
+risolti dopo un chiarimento restano nell'intento e impediscono una nuova scelta.
+`Transition.succeeded` distingue il successo dal rollback quando l'azione passa
+nel rulebook; vale `None` per le transizioni dirette che non richiedono tale esito.
 `parse_session_command` usa i due ID per pronomi, `metticelo`/`metticela` e
 `mettici OGGETTO`; il parser produce lo stesso ruolo indiretto per
 `metti OGGETTO lì/là`.

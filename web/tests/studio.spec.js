@@ -104,6 +104,12 @@ test("progetto, compilazione, gioco, test e release statica", async ({
   await expect(page.locator(".story-output").last()).toContainText(
     "Stato: aperto.",
   );
+  await page.locator("#command").fill("g");
+  await page.locator("#send").click();
+  await expect(page.locator(".player-command").last()).toHaveText("› g");
+  await expect(page.locator(".story-output").last()).toContainText(
+    "Stato: aperto.",
+  );
   await page.locator("#command").fill("x scatola");
   await page.locator("#send").click();
   await expect(page.locator(".player-command").last()).toContainText(

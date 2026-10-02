@@ -57,7 +57,7 @@ la chiave inaccessibile. Vedi [sintassi e limiti M2](../linguaggio/milestone-2.m
 
 ## Percorso guidato
 
-Per iniziare da zero, segui le [trentanove lezioni del faro](../tutorial/README.md),
+Per iniziare da zero, segui le [quaranta lezioni del faro](../tutorial/README.md),
 con prove di gioco e soluzioni.
 La [quinta lezione](../tutorial/05-comandi-e-nomi.md) presenta le abbreviazioni
 classiche delle avventure testuali e spiega quando un nome parziale è sufficiente.
@@ -126,3 +126,5 @@ La [trentottesima](../tutorial/38-guardare-gli-oggetti.md) distingue `guarda`
 dal naturale `guarda NOME` e condivide alias e disambiguazione di `esaminare`.
 La [trentanovesima](../tutorial/39-chiedere-aiuto.md) introduce `aiuto`, `comandi`,
 `help` e `?`, con un elenco adattato alle capacità e alle azioni della storia.
+La [quarantesima](../tutorial/40-ripetere-un-comando.md) usa `ancora`, `ripeti`,
+`again` e `g` per rieseguire l'ultimo intento riuscito senza perdere una scelta.

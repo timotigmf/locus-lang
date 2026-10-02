@@ -53,6 +53,7 @@ al prompt della storia: lì si scrivono soltanto i comandi del giocatore.
 | [37. Aspettare la tempesta](37-aspettare-la-tempesta.md) | `examples/tutorial/37_aspettare.locus` | Far trascorrere un turno con `attendi`, `aspetta`, `z` e `wait` |
 | [38. Guardare gli oggetti](38-guardare-gli-oggetti.md) | `examples/tutorial/38_guardare_oggetti.locus` | Distinguere `guarda` da `guarda NOME` e usare alias naturali |
 | [39. Chiedere aiuto](39-chiedere-aiuto.md) | `examples/tutorial/39_aiuto_in_partita.locus` | Consultare comandi contestuali e azioni della storia senza avanzare il turno |
+| [40. Ripetere un comando](40-ripetere-un-comando.md) | `examples/tutorial/40_ripetere_comando.locus` | Rieseguire l'ultimo intento riuscito con regole, chiarimenti e tempo |
 
 Prima prova la versione fornita. Poi modifica un solo elemento e riesegui la
 sequenza di comandi. In caso di errore conserva il messaggio, il file sorgente e

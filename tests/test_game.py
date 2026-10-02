@@ -27,6 +27,10 @@ def make_session() -> Session:
         ("comandi", Intent("help")),
         ("help", Intent("help")),
         ("?", Intent("help")),
+        ("ancora", Intent("repeat")),
+        ("ripeti", Intent("repeat")),
+        ("again", Intent("repeat")),
+        ("g", Intent("repeat")),
         (" GUARDA ", Intent("look")),
         ("l", Intent("look")),
         ("look", Intent("look")),
@@ -224,7 +228,8 @@ def test_wait_has_an_explicit_default_without_changing_the_world() -> None:
     session = make_session()
     result = step(session, parse_command("attendi"))
     assert result.event.kind == "waited"
-    assert result.session is session
+    assert result.session.world is session.world
+    assert result.session.last_intent == Intent("wait")
     assert render(result) == "Il tempo passa."
 
 
@@ -248,6 +253,65 @@ def test_help_is_turnless_and_lists_authored_commands() -> None:
     assert "- storia: turno, punteggio;" in text
     assert "azioni della storia: suona." in text
     assert parse_session_command(current, "aiuto movimento") == Intent("unknown")
+
+
+def test_repeat_replays_the_last_successful_command_without_remembering_failures() -> None:
+    current = make_session()
+    missing = step(current, parse_session_command(current, "ancora"))
+    assert missing.event.kind == "no_previous_command"
+    assert missing.session is current
+
+    taken = step(current, parse_session_command(current, "prendi chiave"))
+    assert taken.event.kind == "taken"
+    assert taken.session.last_intent == Intent("take", "chiave")
+
+    unknown = step(taken.session, parse_session_command(taken.session, "salta"))
+    assert unknown.session.last_intent == taken.session.last_intent
+    repeated = step(unknown.session, parse_session_command(unknown.session, "g"))
+    assert repeated.event.kind == "already_carried"
+    assert repeated.session.last_intent == taken.session.last_intent
+
+    helped = step(repeated.session, parse_session_command(repeated.session, "aiuto"))
+    assert helped.session.last_intent == taken.session.last_intent
+
+
+def test_repeat_advances_scenes_for_each_replayed_wait() -> None:
+    current = start(
+        instantiate(
+            compile_story(
+                "La Sala è una stanza. "
+                'Scena "prova" dal turno 1 al turno 3: '
+                'Inizio "Inizia.". Fine "Finisce.". Fine scena.'
+            )
+        )
+    )
+    waited = step(current, parse_session_command(current, "attendi"))
+    repeated = step(waited.session, parse_session_command(waited.session, "again"))
+    assert waited.session.turn == 1
+    assert repeated.event.kind == "waited"
+    assert repeated.session.turn == 2
+
+
+def test_repeat_reuses_the_object_selected_during_clarification() -> None:
+    current = start(
+        instantiate(
+            compile_story(
+                "La Sala è una stanza. La chiave di rame è una cosa nella Sala. "
+                "La chiave di ferro è una cosa nella Sala."
+            )
+        )
+    )
+    asked = step(current, parse_session_command(current, "esamina chiave"))
+    asked_again = step(asked.session, parse_session_command(asked.session, "ripeti"))
+    assert asked_again.event.kind == "ambiguous"
+    assert asked_again.session.clarification is not None
+
+    selected = step(asked_again.session, parse_session_command(asked_again.session, "2"))
+    assert selected.event.entities == ("e3",)
+    assert selected.session.last_intent == Intent("examine", "chiave", noun_id="e3")
+    repeated = step(selected.session, parse_session_command(selected.session, "g"))
+    assert repeated.event.kind == "examined"
+    assert repeated.event.entities == ("e3",)
 
 
 def test_east_west_movement_and_inverse() -> None:

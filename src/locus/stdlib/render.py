@@ -24,7 +24,7 @@ def _help(transition: Transition) -> str:
         "- luogo e oggetti: guarda, guarda NOME, esamina NOME (x), prendi, lascia, "
         "metti, apri, chiudi, blocca, inventario (i);",
         "- movimento: nord/sud/est/ovest (n/s/e/o), diagonali, su/giù, dentro/fuori, indietro;",
-        "- sessione: attendi (z), aiuto (?), esci (q).",
+        "- sessione: attendi (z), ripeti (g), aiuto (?), esci (q).",
     ]
     if world.dialogues:
         lines.append("- dialoghi: parla con NOME, scegli NUMERO, basta;")
@@ -185,7 +185,8 @@ def render(transition: Transition) -> str:
         "sudest, sudovest, nordovest, su, giù, dentro, fuori o esci. Sono "
         "disponibili anche le abbreviazioni l, x, i, n, s, e, o, ne, se, so, "
         "no, u, d, z e q; usa indietro per tornare all'ultimo luogo lasciato; dopo "
-        "un oggetto noto puoi usare esso, essa o forme come prendila."
+        "un oggetto noto puoi usare esso, essa o forme come prendila; usa g per "
+        "ripetere l'ultimo comando riuscito."
     )
     if world.dialogues:
         unknown += " Per conversare usa parla con NOME."
@@ -197,6 +198,7 @@ def render(transition: Transition) -> str:
         unknown += " Per il commercio usa compra NOME, vendi NOME a MERCANTE e denaro per il saldo."
     messages = {
         "rule": "Azione gestita dalle regole.",
+        "no_previous_command": "Non c'è ancora un comando riuscito da ripetere.",
         "already_carried": "Hai già questo oggetto.",
         "not_here": "Non trovi qui quell'oggetto.",
         "not_portable": "Non puoi prendere questo elemento.",

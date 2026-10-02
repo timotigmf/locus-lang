@@ -141,6 +141,10 @@ attraversa il rulebook e fa avanzare l'orologio delle scene. Si veda
 `aiuto`, `comandi`, `help` e `?` mostrano i comandi disponibili nel mondo
 corrente, comprese le forme delle azioni dell'autore, senza consumare un turno.
 Si veda [Aiuto contestuale](docs/linguaggio/aiuto-in-partita.md).
+La sessione conserva inoltre l'ultimo intento riuscito: `ancora`, `ripeti`,
+`again` e `g` lo eseguono nuovamente senza rianalizzare il testo. Fallimenti e
+metacomandi non lo sostituiscono. Si veda
+[Ripetere un comando](docs/linguaggio/ripetere-comando.md).
 Ambiguità, oggetto assente, oggetto già posseduto e uscita assente sono esiti distinti.
 `esci` termina la sessione. Questa limitazione storica è sostituita dalla
 [specifica M2 corrente](docs/linguaggio/milestone-2.md): sono disponibili alias

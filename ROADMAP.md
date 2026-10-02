@@ -131,6 +131,9 @@ Ogni pacchetto conserva il core indipendente dalla narrativa interattiva.
 28. Aiuto contestuale in partita implementato con `aiuto`, `comandi`, `help` e
     `?`, categorie abilitate dal mondo e azioni dell'autore, senza avanzare il turno.
 
+29. Ripetizione dell'ultimo intento riuscito implementata con `ancora`, `ripeti`,
+    `again` e `g`, conservando disambiguazione, rollback e avanzamento temporale.
+
 Non si importeranno codice o testi Inform.
 
 ## Studio M5 — 0.5.0a1

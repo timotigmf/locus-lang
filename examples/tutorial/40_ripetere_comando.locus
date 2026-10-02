@@ -1,0 +1,20 @@
+Titolo: "I rintocchi della torre".
+Autore: "Esempio LOCUS".
+
+La Torre è una stanza.
+Inizia nella "Torre".
+La Torre ha descrizione "La campana attende sopra una scala di pietra.".
+
+La campana è una cosa nella Torre.
+La campana ha descrizione "Una campana di bronzo segnata dal sale.".
+
+Azione "suonare" su una cosa con comando "suona".
+
+Regola "rintocco" per suonare "campana" nella fase invece:
+    dì "La campana risponde con un rintocco profondo.";
+Fine regola.
+
+Scena "eco nella torre" dal turno 1 al turno 4:
+    Inizio "L'eco comincia a salire lungo le scale.".
+    Fine "L'ultimo rintocco si perde verso il mare.".
+Fine scena.

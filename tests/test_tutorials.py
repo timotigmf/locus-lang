@@ -138,6 +138,23 @@ def test_help_tutorial_lists_story_actions_without_advancing_time() -> None:
     assert parse_session_command(current, "aiuto movimento").verb == "unknown"
 
 
+def test_repeat_tutorial_replays_authored_action_and_wait() -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "40_ripetere_comando.locus")))
+    missing = step(current, parse_session_command(current, "g"))
+    assert missing.event.kind == "no_previous_command"
+    assert missing.session is current
+
+    rung = step(current, parse_session_command(current, "suona campana"))
+    repeated_rung = step(rung.session, parse_session_command(rung.session, "ancora"))
+    assert "rintocco profondo" in render(rung)
+    assert "rintocco profondo" in render(repeated_rung)
+
+    waited = step(repeated_rung.session, parse_session_command(repeated_rung.session, "attendi"))
+    repeated_wait = step(waited.session, parse_session_command(waited.session, "ripeti"))
+    assert repeated_wait.event.kind == "waited"
+    assert repeated_wait.session.turn == waited.session.turn + 1
+
+
 def test_compass_rose_tutorial_traverses_all_diagonals() -> None:
     current = start(instantiate(compile_story_file(TUTORIAL / "23_direzioni_diagonali.locus")))
     assert step(current, parse_command("nord")).event.kind == "no_exit"

@@ -137,6 +137,15 @@ def test_bridge_exposes_contextual_player_help() -> None:
     assert helped["turn"] == 0
 
 
+def test_bridge_repeats_the_last_successful_player_command() -> None:
+    studio = Studio()
+    assert studio.compile(project("La Sala è una stanza. La leva è una cosa nella Sala."))["ok"]
+    studio.restart()
+    first = studio.command("esamina leva")
+    repeated = studio.command("g")
+    assert first["text"] == repeated["text"]
+
+
 def test_bridge_exposes_and_resolves_a_pending_clarification() -> None:
     studio = Studio()
     studio.compile(

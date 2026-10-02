@@ -55,6 +55,7 @@ from locus.stdlib.validation import (
 EventKind = Literal[
     "rule",
     "help",
+    "no_previous_command",
     "look",
     "inventory",
     "waited",
@@ -168,6 +169,7 @@ class Session:
     pronoun_id: str | None = None
     indirect_pronoun_id: str | None = None
     previous_room_id: str | None = None
+    last_intent: Intent | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -214,6 +216,7 @@ class Transition:
     result: Value | None = None
     dialogue: tuple[DialogueStep, ...] = ()
     scenes: tuple[SceneStep, ...] = ()
+    succeeded: bool | None = None
 
 
 def start(world: World) -> Session:
@@ -1150,7 +1153,14 @@ def _step(session: Session, intent: Intent) -> Transition:
         value = execution.value
         outputs = (*outputs, "vero" if value is True else "falso" if value is False else str(value))
     event = next((item for item in reversed(outputs) if isinstance(item, Event)), Event("rule"))
-    return Transition(execution.state, event, outputs, execution.trace, execution.value)
+    return Transition(
+        execution.state,
+        event,
+        outputs,
+        execution.trace,
+        execution.value,
+        succeeded=execution.outcome != "fallita",
+    )
 
 
 def _ambiguity_argument(
@@ -1220,7 +1230,9 @@ def _clarification_choice(session: Session, selection: str) -> str | None:
     return next(iter(partial)) if len(partial) == 1 else None
 
 
-def _resume_clarification(session: Session, selection: str | None) -> Transition:
+def _resume_clarification(
+    session: Session, selection: str | None, *, remember: bool = True
+) -> Transition:
     clarification = session.clarification
     assert clarification is not None
     if not selection:
@@ -1235,7 +1247,8 @@ def _resume_clarification(session: Session, selection: str | None) -> Transition
     )
     cleared = replace(session, clarification=None)
     transition = _remember_ambiguity(cleared, intent, _step(cleared, intent))
-    return _remember_reference(cleared, intent, transition)
+    transition = _remember_reference(cleared, intent, transition)
+    return _remember_repeatable_intent(transition, intent) if remember else transition
 
 
 _PRONOUNS = frozenset({"esso", "essa", "questo", "questa", "quello", "quella", "it"})
@@ -1344,6 +1357,7 @@ def parse_session_command(session: Session, text: str) -> Intent:
 
 _TURNLESS_EVENTS = {
     "help",
+    "no_previous_command",
     "unknown",
     "missing_noun",
     "ambiguous",
@@ -1361,6 +1375,34 @@ _TURNLESS_EVENTS = {
     "dialogue_active",
     "no_active_dialogue",
 }
+
+_REPEATABLE_SUCCESS_EVENTS = {
+    "rule",
+    "look",
+    "inventory",
+    "waited",
+    "taken",
+    "opened",
+    "closed",
+    "lock_success",
+    "put",
+    "dropped",
+    "examined",
+    "custom",
+    "boarded",
+    "disembarked",
+    "purchased",
+    "sold",
+}
+
+
+def _remember_repeatable_intent(transition: Transition, intent: Intent) -> Transition:
+    if transition.succeeded is False or transition.event.kind not in _REPEATABLE_SUCCESS_EVENTS:
+        return transition
+    return replace(
+        transition,
+        session=replace(transition.session, last_intent=intent),
+    )
 
 
 def _advance_scenes(transition: Transition) -> Transition:
@@ -1408,10 +1450,19 @@ def _advance_scenes(transition: Transition) -> Transition:
 
 
 def step(session: Session, intent: Intent, *, advance_time: bool = True) -> Transition:
+    original_verb = intent.verb
+    if intent.verb == "repeat":
+        if session.clarification is not None:
+            intent = session.clarification.intent
+        elif session.last_intent is not None:
+            intent = session.last_intent
+        else:
+            transition = Transition(session, Event("no_previous_command"))
+            return transition
     if session.clarification is not None and intent.verb == "help":
         transition = _perform(session, intent)
     elif session.clarification is not None and intent.verb == "clarify":
-        transition = _resume_clarification(session, intent.noun)
+        transition = _resume_clarification(session, intent.noun, remember=advance_time)
     elif session.clarification is not None and intent.verb == "cancel_clarification":
         transition = Transition(
             replace(session, clarification=None),
@@ -1423,6 +1474,8 @@ def step(session: Session, intent: Intent, *, advance_time: bool = True) -> Tran
         )
         transition = _remember_ambiguity(base, intent, _step(base, intent))
         transition = _remember_reference(base, intent, transition)
+    if advance_time and original_verb != "clarify":
+        transition = _remember_repeatable_intent(transition, intent)
     if (
         not advance_time
         or not transition.session.world.scenes

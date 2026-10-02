@@ -37,6 +37,8 @@ e `back` senza aggirare il grafo corrente.
 da `guarda NOME` e raccoglie alias italiani nell'unico intento `examine`.
 L'[aiuto in partita](aiuto-in-partita.md) elenca comandi standard e azioni
 dell'autore in base alle capacità del mondo corrente senza consumare un turno.
+[Ripetere un comando](ripetere-comando.md) conserva l'ultimo intento riuscito e
+lo riesegue con `ancora`, `ripeti`, `again` o `g`.
 I [passaggi a senso unico](passaggi-senso-unico.md) dichiarano esplicitamente
 origine, direzione e destinazione senza generare l'arco inverso.
 La [disambiguazione a più turni](disambiguazione-multiturno.md) conserva la

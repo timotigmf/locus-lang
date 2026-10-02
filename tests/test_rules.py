@@ -157,6 +157,11 @@ def test_failure_rolls_back_all_phases(phase: str) -> None:
     result = step(initial, parse_command("prendi leva"))
     assert result.session is initial
     assert render(result) == "Negato"
+    remembered = step(initial, parse_command("attendi")).session
+    failed = step(remembered, parse_command("prendi leva"))
+    assert failed.succeeded is False
+    assert failed.session.last_intent == remembered.last_intent
+    assert step(failed.session, parse_command("g")).event.kind == "waited"
 
 
 def test_default_action_failure_rolls_back() -> None:
@@ -388,6 +393,8 @@ def test_static_errors(source: str, code: str) -> None:
         ('Azione "controllare" senza oggetti con comando "inspect".', "E311"),
         ('Azione "assistere" senza oggetti con comando "aiuto".', "E311"),
         ('Azione "assistere" senza oggetti con comando "help".', "E311"),
+        ('Azione "ripetere" senza oggetti con comando "ripeti".', "E311"),
+        ('Azione "ripetere" senza oggetti con comando "g".', "E311"),
         (
             'Azione "salutare" senza oggetti con comando "saluta". '
             'Azione "inchinarsi" senza oggetti con comando "saluta".',
