@@ -80,6 +80,7 @@ dall'alto verso il basso prima di studiare i moduli.
 36. [Tornare sui propri passi](../tutorial/36-tornare-sui-propri-passi.md)
 37. [Aspettare la tempesta](../tutorial/37-aspettare-la-tempesta.md)
 38. [Guardare gli oggetti con parole naturali](../tutorial/38-guardare-gli-oggetti.md)
+39. [Chiedere aiuto durante la partita](../tutorial/39-chiedere-aiuto.md)
 
 ## Indice per obiettivo
 
@@ -98,6 +99,7 @@ dall'alto verso il basso prima di studiare i moduli.
 | Ritorno rapido | Memoria dell'ultimo luogo nel grafo corrente | Lezione 36 |
 | Attesa e tempo | Azione standard personalizzabile e scene a turni | Lezione 37 |
 | Esame naturale | `guarda NOME`, alias italiani e chiarimenti | Lezione 38 |
+| Aiuto del giocatore | Elenco contestuale, alias e azioni dell'autore | Lezione 39 |
 | Dettagli ambientali e oggetti nascosti | `scenario` non trasportabile e proprietà `visibile` | Lezione 13 |
 | Indizi, memoria e cronologie | Elenchi tipati con appartenenza e rollback | Lezione 14 |
 | Cataloghi e registri | Tabelle con colonne tipate e righe transazionali | Lezione 15 |

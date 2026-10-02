@@ -25,9 +25,12 @@ può essere personalizzata dalle regole e fa avanzare le scene.
 `guarda NOME`, `osserva NOME`, `ispeziona NOME`, `controlla NOME`, `look at
 NOME` e `inspect NOME` eseguono `examine`; `guarda` e `look` senza nome
 descrivono il luogo.
+`aiuto`, `comandi`, `help` e `?` mostrano il nucleo dei comandi e le categorie
+abilitate dal mondo, comprese le forme delle azioni dell'autore. Il metacomando
+non avanza le scene, non attraversa il rulebook e resta disponibile nei dialoghi.
 Alias classici: l/look, x/examine, i/inv/inventory, n/north, s/south, e/east,
 o/w/west, ne/northeast, se/southeast, so/southwest, no/nw/northwest,
-u/up/alto, d/down/giu/basso, in/inside, out/outside, z/wait, q/quit,
+u/up/alto, d/down/giu/basso, in/inside, out/outside, z/wait, ?/help, q/quit,
 get/take, examine/inspect, open, close, drop, put, lock.
 Il referente dell'ultima azione riuscita accetta `esso`, `essa`, `questo`,
 `questa`, `quello`, `quella`, `it` e le forme unite `prendilo/a`,

@@ -121,6 +121,22 @@ def test_bridge_exposes_story_metadata_and_uses_vocabulary() -> None:
     assert studio.command("x cassa")["text"].startswith("custodia\n")
 
 
+def test_bridge_exposes_contextual_player_help() -> None:
+    studio = Studio()
+    result = studio.compile(
+        project(
+            "La Sala è una stanza. La campana è una cosa nella Sala. "
+            'Azione "suonare" su una cosa con comando "suona".'
+        )
+    )
+    assert result["ok"]
+    studio.restart()
+    helped = studio.command("?")
+    assert "Comandi principali:" in helped["text"]
+    assert "azioni della storia: suona." in helped["text"]
+    assert helped["turn"] == 0
+
+
 def test_bridge_exposes_and_resolves_a_pending_clarification() -> None:
     studio = Studio()
     studio.compile(

@@ -138,6 +138,9 @@ attraversa il rulebook e fa avanzare l'orologio delle scene. Si veda
 `guarda` senza oggetto descrive il luogo; `guarda NOME`, `osserva NOME`,
 `ispeziona NOME` e `controlla NOME` producono invece l'azione strutturata
 `esaminare`. Si veda [Guardare ed esaminare](docs/linguaggio/guardare-esaminare.md).
+`aiuto`, `comandi`, `help` e `?` mostrano i comandi disponibili nel mondo
+corrente, comprese le forme delle azioni dell'autore, senza consumare un turno.
+Si veda [Aiuto contestuale](docs/linguaggio/aiuto-in-partita.md).
 Ambiguità, oggetto assente, oggetto già posseduto e uscita assente sono esiti distinti.
 `esci` termina la sessione. Questa limitazione storica è sostituita dalla
 [specifica M2 corrente](docs/linguaggio/milestone-2.md): sono disponibili alias

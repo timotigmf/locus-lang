@@ -1,0 +1,15 @@
+Titolo: "Il rintocco della torre".
+Autore: "Esempio LOCUS".
+
+La "Sala della Campana" è una stanza.
+Inizia nella "Sala della Campana".
+La "Sala della Campana" ha descrizione "Una fune scende dalla grande campana di bronzo.".
+
+La campana è una cosa nella "Sala della Campana".
+La campana ha descrizione "Il bronzo porta incisa una rosa dei venti.".
+
+Azione "suonare" su una cosa con comando "suona".
+
+Regola "rintocco" per suonare "campana" nella fase invece:
+    dì "Un rintocco attraversa la torre.";
+Fine regola.

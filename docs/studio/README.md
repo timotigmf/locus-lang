@@ -51,7 +51,9 @@ il successivo. Non promettiamo correzioni automatiche della semantica. Gli span
 di alcune diagnosi coprono un'intera dichiarazione/regola, come nella CLI.
 Il manuale incorporato è ricercabile per capitolo; la guida dell'autore è la
 pagina iniziale e ogni blocco di codice offre **Copia codice**. Comprende un corso
-in trentotto lezioni, specifiche e tutorial. L'Indice del mondo mostra anche
+in trentanove lezioni, specifiche e tutorial. Nel pannello di gioco `aiuto`
+mostra i comandi contestuali e le azioni definite dalla storia senza consumare
+un turno. L'Indice del mondo mostra anche
 dialoghi, scene, veicoli, mercanti e commercio compilati e aggiorna proprietà,
 righe delle tabelle, posizione dei mezzi, saldo, cassa e scorte dopo ogni comando.
 

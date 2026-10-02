@@ -93,6 +93,12 @@ test("progetto, compilazione, gioco, test e release statica", async ({
   await expect(page.locator("#transcript")).toContainText(
     "Hai aperto: custodia.",
   );
+  await page.locator("#command").fill("aiuto");
+  await page.locator("#send").click();
+  await expect(page.locator(".player-command").last()).toContainText("aiuto");
+  await expect(page.locator(".story-output").last()).toContainText(
+    "Comandi principali:",
+  );
   await page.locator("#command").fill("guarda custodia");
   await page.locator("#send").click();
   await expect(page.locator(".story-output").last()).toContainText(

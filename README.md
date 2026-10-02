@@ -101,6 +101,8 @@ sessione e `fuori` percorre il passaggio verso l'esterno. `aspetta`, `z` e
 `wait` equivalgono ad `attendi` e fanno trascorrere un turno.
 `guarda NOME`, `osserva NOME`, `ispeziona NOME` e `controlla NOME` esaminano
 un oggetto; `guarda` senza nome continua a descrivere il luogo.
+`aiuto`, `comandi`, `help` e `?` mostrano un riepilogo contestuale senza far
+avanzare il turno; sono incluse anche le azioni dichiarate dalla storia.
 Nelle storie con scene, `turno` o `tempo` mostra l'orologio narrativo e
 `punteggio` o `score` mostra i punti accumulati.
 Nelle storie commerciali, `denaro` mostra il saldo, `compra NOME da MERCANTE`
@@ -144,7 +146,7 @@ diagnostica che conserva il file originale. Ramo GitHub: `codex/milestone-4`.
 
 ## Tutorial in italiano
 
-[Costruisci il faro di Selce](docs/tutorial/README.md): trentotto lezioni, esercizi
+[Costruisci il faro di Selce](docs/tutorial/README.md): trentanove lezioni, esercizi
 con soluzioni, esempi eseguibili e copione verificato automaticamente.
 [Materiali consultati e scelte](docs/architettura/materiali-didattici.md).
 

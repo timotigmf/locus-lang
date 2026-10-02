@@ -127,6 +127,17 @@ def test_tutorial_accepts_classic_abbreviation_and_unique_partial_name() -> None
     assert "chiave di rame" in render(taken)
 
 
+def test_help_tutorial_lists_story_actions_without_advancing_time() -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "39_aiuto_in_partita.locus")))
+    helped = step(current, parse_session_command(current, "aiuto"))
+    assert helped.session is current
+    assert helped.session.turn == 0
+    assert "azioni della storia: suona." in render(helped)
+    rung = step(helped.session, parse_session_command(helped.session, "suona campana"))
+    assert "rintocco attraversa la torre" in render(rung)
+    assert parse_session_command(current, "aiuto movimento").verb == "unknown"
+
+
 def test_compass_rose_tutorial_traverses_all_diagonals() -> None:
     current = start(instantiate(compile_story_file(TUTORIAL / "23_direzioni_diagonali.locus")))
     assert step(current, parse_command("nord")).event.kind == "no_exit"
@@ -416,6 +427,9 @@ def test_dialogue_tutorial_branches_cycles_and_ends() -> None:
         return render(transition)
 
     assert "Chiedi della tempesta" in command("parla con guardiana")
+    dialogue_id = current.dialogue_id
+    assert "Comandi principali:" in command("aiuto")
+    assert current.dialogue_id == dialogue_id
     assert "tre notti" in command("1")
     assert "posa il registro" in command("scegli torna alle domande")
     assert "sotto la campana" in command("scegli chiave")

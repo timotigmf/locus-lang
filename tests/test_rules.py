@@ -386,6 +386,8 @@ def test_static_errors(source: str, code: str) -> None:
         ('Azione "sostare" senza oggetti con comando "z".', "E311"),
         ('Azione "osservare" senza oggetti con comando "osserva".', "E311"),
         ('Azione "controllare" senza oggetti con comando "inspect".', "E311"),
+        ('Azione "assistere" senza oggetti con comando "aiuto".', "E311"),
+        ('Azione "assistere" senza oggetti con comando "help".', "E311"),
         (
             'Azione "salutare" senza oggetti con comando "saluta". '
             'Azione "inchinarsi" senza oggetti con comando "saluta".',

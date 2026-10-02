@@ -128,6 +128,9 @@ Ogni pacchetto conserva il core indipendente dalla narrativa interattiva.
 27. `guarda NOME`, `osserva`, `ispeziona` e `controlla` implementati come forme
     strutturate di `esaminare`, con compatibilità `look at` e disambiguazione comune.
 
+28. Aiuto contestuale in partita implementato con `aiuto`, `comandi`, `help` e
+    `?`, categorie abilitate dal mondo e azioni dell'autore, senza avanzare il turno.
+
 Non si importeranno codice o testi Inform.
 
 ## Studio M5 — 0.5.0a1

@@ -17,6 +17,30 @@ from locus.stdlib.game import Transition
 from locus.stdlib.validation import property_value
 
 
+def _help(transition: Transition) -> str:
+    world = transition.session.world
+    lines = [
+        "Comandi principali:",
+        "- luogo e oggetti: guarda, guarda NOME, esamina NOME (x), prendi, lascia, "
+        "metti, apri, chiudi, blocca, inventario (i);",
+        "- movimento: nord/sud/est/ovest (n/s/e/o), diagonali, su/giù, dentro/fuori, indietro;",
+        "- sessione: attendi (z), aiuto (?), esci (q).",
+    ]
+    if world.dialogues:
+        lines.append("- dialoghi: parla con NOME, scegli NUMERO, basta;")
+    if world.scenes:
+        lines.append("- storia: turno, punteggio;")
+    if any(has_type(world, entity.type_id, VEHICLE) for entity in world.entities):
+        lines.append("- veicoli: sali/entra in NOME, scendi;")
+    if any(has_type(world, entity.type_id, CURRENCY) for entity in world.entities):
+        lines.append("- commercio: denaro, compra NOME, vendi NOME a MERCANTE;")
+    authored = sorted({command for action in world.actions for command in action.commands})
+    if authored:
+        lines.append("- azioni della storia: " + ", ".join(authored) + ".")
+    lines.append("Puoi usare un nome parziale quando identifica un solo oggetto raggiungibile.")
+    return "\n".join(lines)
+
+
 def render(transition: Transition) -> str:
     if transition.outputs:
         return "\n".join(
@@ -27,6 +51,8 @@ def render(transition: Transition) -> str:
     entities = {entity.id: entity for entity in world.entities}
     names = [entities[ident].label for ident in transition.event.entities]
     kind = transition.event.kind
+    if kind == "help":
+        return _help(transition)
     if kind == "look":
         objects = ", ".join(names[1:]) if len(names) > 1 else "nessun oggetto"
         description = property_value(world, transition.event.entities[0], DESCRIPTION)
@@ -153,7 +179,8 @@ def render(transition: Transition) -> str:
     if kind == "no_currency":
         return "La storia non dichiara alcuna valuta."
     unknown = (
-        "Comando non riconosciuto. Usa guarda, guarda NOME, esamina, prendi, lascia, metti, "
+        "Comando non riconosciuto. Scrivi «aiuto» per l'elenco completo. Usa guarda, "
+        "guarda NOME, esamina, prendi, lascia, metti, "
         "apri, chiudi, blocca, inventario, attendi, nord, sud, est, ovest, nordest, "
         "sudest, sudovest, nordovest, su, giù, dentro, fuori o esci. Sono "
         "disponibili anche le abbreviazioni l, x, i, n, s, e, o, ne, se, so, "

@@ -10,6 +10,10 @@ from locus.schema import separator_variants
 Verb = str
 
 _SIMPLE_COMMANDS: dict[str, Verb] = {
+    "aiuto": "help",
+    "comandi": "help",
+    "help": "help",
+    "?": "help",
     "guarda": "look",
     "l": "look",
     "look": "look",
@@ -244,7 +248,7 @@ def standard_commands(
         if include_commerce
         else ()
     )
-    return frozenset(
+    commands = frozenset(
         (
             *_SIMPLE_COMMANDS,
             *_ACTION_COMMANDS,
@@ -258,6 +262,9 @@ def standard_commands(
             *commerce_commands,
         )
     )
+    # La punteggiatura è riconosciuta dal parser del giocatore, ma non è una
+    # forma dichiarabile dall'autore e quindi non entra nel catalogo lessicale.
+    return commands - {"?"}
 
 
 def _movement_intent(tokens: list[tuple[str, bool]]) -> Intent | None:

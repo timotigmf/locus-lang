@@ -35,6 +35,8 @@ e `back` senza aggirare il grafo corrente.
 `aspetta`, `z` e `wait` e l'integrazione con regole e scene.
 [Guardare ed esaminare](guardare-esaminare.md) distingue `guarda` senza oggetto
 da `guarda NOME` e raccoglie alias italiani nell'unico intento `examine`.
+L'[aiuto in partita](aiuto-in-partita.md) elenca comandi standard e azioni
+dell'autore in base alle capacità del mondo corrente senza consumare un turno.
 I [passaggi a senso unico](passaggi-senso-unico.md) dichiarano esplicitamente
 origine, direzione e destinazione senza generare l'arco inverso.
 La [disambiguazione a più turni](disambiguazione-multiturno.md) conserva la

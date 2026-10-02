@@ -54,6 +54,7 @@ from locus.stdlib.validation import (
 
 EventKind = Literal[
     "rule",
+    "help",
     "look",
     "inventory",
     "waited",
@@ -784,6 +785,8 @@ def _back_direction(session: Session) -> Intent | Event:
 
 
 def _perform(session: Session, intent: Intent) -> Transition:
+    if intent.verb == "help":
+        return Transition(session, Event("help"))
     if intent.verb == "missing_direction":
         return Transition(session, Event("missing_direction"))
     if intent.verb == "invalid_direction":
@@ -1084,7 +1087,7 @@ def _step(session: Session, intent: Intent) -> Transition:
             )
             return Transition(session, Event("dialogue_active", (dialogue.speaker_id,)))
         return _perform(session, intent)
-    if session.dialogue_id is not None and intent.verb != "quit":
+    if session.dialogue_id is not None and intent.verb not in {"help", "quit"}:
         dialogue = next(item for item in session.world.dialogues if item.id == session.dialogue_id)
         return Transition(session, Event("dialogue_active", (dialogue.speaker_id,)))
     if intent.verb == "back":
@@ -1340,6 +1343,7 @@ def parse_session_command(session: Session, text: str) -> Intent:
 
 
 _TURNLESS_EVENTS = {
+    "help",
     "unknown",
     "missing_noun",
     "ambiguous",
@@ -1404,7 +1408,9 @@ def _advance_scenes(transition: Transition) -> Transition:
 
 
 def step(session: Session, intent: Intent, *, advance_time: bool = True) -> Transition:
-    if session.clarification is not None and intent.verb == "clarify":
+    if session.clarification is not None and intent.verb == "help":
+        transition = _perform(session, intent)
+    elif session.clarification is not None and intent.verb == "clarify":
         transition = _resume_clarification(session, intent.noun)
     elif session.clarification is not None and intent.verb == "cancel_clarification":
         transition = Transition(

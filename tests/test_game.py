@@ -23,6 +23,10 @@ def make_session() -> Session:
 @pytest.mark.parametrize(
     ("command", "intent"),
     [
+        ("aiuto", Intent("help")),
+        ("comandi", Intent("help")),
+        ("help", Intent("help")),
+        ("?", Intent("help")),
         (" GUARDA ", Intent("look")),
         ("l", Intent("look")),
         ("look", Intent("look")),
@@ -224,6 +228,28 @@ def test_wait_has_an_explicit_default_without_changing_the_world() -> None:
     assert render(result) == "Il tempo passa."
 
 
+def test_help_is_turnless_and_lists_authored_commands() -> None:
+    current = start(
+        instantiate(
+            compile_story(
+                "La Sala è una stanza. La campana è una cosa nella Sala. "
+                'Azione "suonare" su una cosa con comando "suona". '
+                'Scena "prova" dal turno 1 al turno 2: '
+                'Inizio "Inizia.". Fine "Finisce.". Fine scena.'
+            )
+        )
+    )
+    result = step(current, parse_session_command(current, "aiuto"))
+    text = render(result)
+    assert result.event.kind == "help"
+    assert result.session is current
+    assert result.session.turn == 0
+    assert "Comandi principali:" in text
+    assert "- storia: turno, punteggio;" in text
+    assert "azioni della storia: suona." in text
+    assert parse_session_command(current, "aiuto movimento") == Intent("unknown")
+
+
 def test_east_west_movement_and_inverse() -> None:
     world = instantiate(
         compile_source(
@@ -388,7 +414,12 @@ def test_ambiguity_can_be_resolved_on_the_next_turn_by_number_or_partial_name() 
     assert asked.session.turn == 0
     assert asked.session.clarification is not None
 
-    invalid = step(asked.session, parse_session_command(asked.session, "legno"))
+    helped = step(asked.session, parse_session_command(asked.session, "?"))
+    assert helped.event.kind == "help"
+    assert helped.session.clarification == asked.session.clarification
+    assert helped.session.turn == 0
+
+    invalid = step(helped.session, parse_session_command(helped.session, "legno"))
     assert invalid.event.kind == "invalid_clarification"
     assert invalid.session.clarification == asked.session.clarification
     assert invalid.session.turn == 0
