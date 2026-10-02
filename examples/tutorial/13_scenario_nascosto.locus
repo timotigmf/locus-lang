@@ -20,7 +20,7 @@ quando "scoperta" di "chiave d'argento" è falso:
     dì "La luna rientra nella parete e una chiave d'argento cade sul pavimento.";
 Fine regola.
 
-Regola "vano già aperto" per esaminare "cielo stellato" nella fase dopo
+Regola "vano già aperto" per esaminare "cielo stellato" nella fase dopo priorità 10
 quando "scoperta" di "chiave d'argento" è vero:
     dì "Il piccolo vano dietro la luna è ormai vuoto.";
 Fine regola.

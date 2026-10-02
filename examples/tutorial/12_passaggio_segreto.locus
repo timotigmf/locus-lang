@@ -21,7 +21,7 @@ quando "rivelato" di "leva" è falso:
     dì "La leva scatta: la parete scorre e rivela un passaggio a nord.";
 Fine regola.
 
-Regola "leva già azionata" per esaminare "leva" nella fase dopo
+Regola "leva già azionata" per esaminare "leva" nella fase dopo priorità 10
 quando "rivelato" di "leva" è vero:
     dì "Il passaggio è già aperto.";
 Fine regola.

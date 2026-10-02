@@ -18,7 +18,7 @@ quando "aperta" di "leva" è falso:
     dì "La lastra ruota e scopre una discesa senza appigli.";
 Fine regola.
 
-Regola "botola già aperta" per esaminare "leva" nella fase dopo
+Regola "botola già aperta" per esaminare "leva" nella fase dopo priorità 10
 quando "aperta" di "leva" è vero:
     dì "La botola è già aperta.";
 Fine regola.

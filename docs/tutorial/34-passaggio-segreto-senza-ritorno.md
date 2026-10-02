@@ -45,3 +45,20 @@ due luoghi separati.
 Il [riferimento sulle relazioni dinamiche](../linguaggio/relazioni-dinamiche.md)
 descrive controlli statici, rollback e differenza fra effetti bidirezionali e a
 senso unico.
+
+## Prima scoperta e visite successive
+
+Nell'esempio completo la regola che racconta lo stato già scoperto ha
+`priorità 10`; quella che effettua la scoperta mantiene la priorità predefinita
+0. Le priorità maggiori vengono valutate per prime. Così, alla prima azione,
+il messaggio «già aperto» non compare insieme all'annuncio della scoperta.
+Alle azioni successive compare soltanto il messaggio di stato già noto.
+
+Le condizioni leggono lo stato corrente prima di ogni regola: due condizioni
+opposte non formano automaticamente un «se/altrimenti». Senza questa priorità,
+la prima regola può cambiare il flag e rendere applicabile la seconda nella
+stessa azione.
+
+**Prova negativa:** avvia una nuova partita, esamina il dettaglio, poi ripeti
+l'esame e usa `g`. La scoperta deve essere raccontata una sola volta; il testo
+per le visite successive deve apparire soltanto dal secondo esame.

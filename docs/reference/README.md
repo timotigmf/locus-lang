@@ -223,3 +223,10 @@ La fase `dopo` non rende un premio unico: per impedire duplicazioni dopo
 `lascia` e `prendi`, usa un flag logico nella condizione e aggiornalo insieme
 al contatore. Il contatore dell'autore è distinto da `Session.score`.
 Vedi il [sotterraneo completo](../tutorial/06-sotterraneo-enigma-punti.md).
+
+### Condizioni successive nella stessa fase
+
+Le condizioni sono rivalutate sullo stato aggiornato e non equivalgono a un
+blocco «se/altrimenti». Per i messaggi di prima scoperta e di visita successiva,
+la [lezione 13](../tutorial/13-visibilita-scenario.md) valuta prima il caso già
+scoperto con `priorità 10`, poi il caso che cambia il flag con priorità 0.

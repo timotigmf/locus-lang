@@ -591,3 +591,29 @@ def test_final_world_matches_story() -> None:
     assert property_of(current, "lanterna", "segnale") is False
     assert len(current.inventory) == 1
     assert next(e.label for e in current.world.entities if e.id == current.room_id) == "Terrazza"
+
+
+@pytest.mark.parametrize(
+    ("filename", "command", "first_text", "repeat_text"),
+    [
+        ("12_passaggio_segreto.locus", "x leva", "La leva scatta", "Il passaggio è già aperto."),
+        ("13_scenario_nascosto.locus", "x cielo", "cade sul pavimento", "Il piccolo vano"),
+        (
+            "34_passaggio_unidirezionale_segreto.locus",
+            "x leva",
+            "La lastra ruota",
+            "La botola è già aperta.",
+        ),
+    ],
+)
+def test_discovery_tutorials_separate_first_and_later_messages(
+    filename: str, command: str, first_text: str, repeat_text: str
+) -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / filename)))
+    first = step(current, parse_session_command(current, command))
+    assert first_text in render(first)
+    assert repeat_text not in render(first)
+    for text in (command, "g"):
+        repeated = step(first.session, parse_session_command(first.session, text))
+        assert repeat_text in render(repeated)
+        assert first_text not in render(repeated)

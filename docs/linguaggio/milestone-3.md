@@ -41,6 +41,11 @@ Condizioni: `"proprietà" di "oggetto" è valore`, oppure `è diverso da`,
 I confronti ordinati richiedono numeri. `non`, `e`, `o` hanno questa precedenza,
 con cortocircuito; parentesi per raggruppare, massimo 64 livelli annidati.
 Le condizioni vengono rivalutate sullo stato corrente prima di ogni regola.
+Due condizioni opposte non costituiscono un ramo esclusivo: una regola può
+modificare il valore letto dalla successiva. Per distinguere una prima scoperta
+dalle visite successive, valuta prima il caso già scoperto (priorità maggiore)
+e poi quello che cambia il flag. Gli esempi delle lezioni 12, 13 e 34 applicano
+questo schema senza interrompere le altre fasi dell'azione.
 
 | Istruzione | Effetto |
 | --- | --- |

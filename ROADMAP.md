@@ -151,3 +151,6 @@ destinazione ricordata, disponibile anche come `lì` o `là` dopo `metti`.
 
 Verifica didattica: il premio della lezione 6 è protetto anche dopo aver
 lasciato e ripreso il tesoro; tutorial e regressione coprono la sequenza.
+
+Verifica didattica: le lezioni 12, 13 e 34 distinguono il messaggio di prima
+scoperta da quello delle visite successive tramite priorità esplicite.
