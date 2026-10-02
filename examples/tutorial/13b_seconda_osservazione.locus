@@ -1,0 +1,33 @@
+Titolo: "La seconda osservazione".
+Autore: "Esempio LOCUS".
+
+La Sala è una stanza.
+Inizia nella "Sala".
+Il mosaico è uno scenario nella Sala.
+Il mosaico ha descrizione "Una tessera lunare sporge fra le stelle.".
+La chiave è una chiave nella Sala.
+La chiave ha visibile falso.
+La osservazioni è una proprietà numerica.
+La scoperta è una proprietà logica.
+
+Regola "conta gli esami" per esaminare "mosaico" nella fase dopo priorità 20
+quando "scoperta" di "mosaico" è falso:
+    aumenta "osservazioni" di "mosaico" di 1;
+Fine regola.
+
+Regola "vano noto" per esaminare "mosaico" nella fase dopo priorità 10
+quando "scoperta" di "mosaico" è vero:
+    dì "Il vano è già aperto.";
+Fine regola.
+
+Regola "primo indizio" per esaminare "mosaico" nella fase dopo
+quando "osservazioni" di "mosaico" è 1:
+    dì "La luna sembra mobile: osservandola meglio potresti capire il meccanismo.";
+Fine regola.
+
+Regola "secondo esame" per esaminare "mosaico" nella fase dopo
+quando "osservazioni" di "mosaico" è almeno 2 e "scoperta" di "mosaico" è falso:
+    imposta "visibile" di "chiave" a vero;
+    imposta "scoperta" di "mosaico" a vero;
+    dì "La tessera scatta e rivela una chiave.";
+Fine regola.

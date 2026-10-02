@@ -113,3 +113,11 @@ Limiti: niente variabili locali, riferimenti al destinatario implicito, funzioni
 espressioni aritmetiche generali, regole su relazioni,
 salvataggi o debugger interattivo. Le regole sono compilate in IR strutturata;
 non esiste un caricatore JSON per input esterno. Non è una parità funzionale con Inform.
+
+## Contatori locali di azione
+
+Un incremento nella fase `dopo` conta le esecuzioni riuscite dell'azione
+selezionata, non tutti i comandi del giocatore. Una condizione su un flag può
+arrestare il conteggio al completamento di un enigma. La
+[seconda osservazione](../tutorial/13-visibilita-scenario.md) è un esempio
+eseguibile di questo schema con priorità e soglia numerica.

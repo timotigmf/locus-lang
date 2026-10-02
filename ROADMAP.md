@@ -154,3 +154,6 @@ lasciato e ripreso il tesoro; tutorial e regressione coprono la sequenza.
 
 Verifica didattica: le lezioni 12, 13 e 34 distinguono il messaggio di prima
 scoperta da quello delle visite successive tramite priorità esplicite.
+
+Didattica: soluzione completa della seconda osservazione nella lezione 13,
+con contatore locale, indizio progressivo e rivelazione unica verificati.

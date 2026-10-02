@@ -33,11 +33,67 @@ La proprietà `scoperta` dell'esempio distingue la prima osservazione dalle
 successive. `visibile` controlla invece il campo d'azione reale del giocatore:
 non basta omettere un oggetto dalla descrizione testuale.
 
-**Esercizio.** Fai ricomparire la chiave soltanto dopo aver esaminato due volte
-l'affresco.
+## Esercizio risolto: osservare due volte
 
-**Soluzione.** Aggiungi una proprietà numerica, aumentala nella regola e sposta
-`imposta "visibile" ... a vero` in una seconda regola con condizione `almeno 2`.
+Fai apparire la chiave soltanto dopo due esami del mosaico. La soluzione completa
+è `examples/tutorial/13b_seconda_osservazione.locus`; puoi anche copiare questo
+sorgente in un progetto nuovo:
+
+```locus
+Titolo: "La seconda osservazione".
+Autore: "Esempio LOCUS".
+
+La Sala è una stanza.
+Inizia nella "Sala".
+Il mosaico è uno scenario nella Sala.
+Il mosaico ha descrizione "Una tessera lunare sporge fra le stelle.".
+La chiave è una chiave nella Sala.
+La chiave ha visibile falso.
+La osservazioni è una proprietà numerica.
+La scoperta è una proprietà logica.
+
+Regola "conta gli esami" per esaminare "mosaico" nella fase dopo priorità 20
+quando "scoperta" di "mosaico" è falso:
+    aumenta "osservazioni" di "mosaico" di 1;
+Fine regola.
+
+Regola "vano noto" per esaminare "mosaico" nella fase dopo priorità 10
+quando "scoperta" di "mosaico" è vero:
+    dì "Il vano è già aperto.";
+Fine regola.
+
+Regola "primo indizio" per esaminare "mosaico" nella fase dopo
+quando "osservazioni" di "mosaico" è 1:
+    dì "La luna sembra mobile: osservandola meglio potresti capire il meccanismo.";
+Fine regola.
+
+Regola "secondo esame" per esaminare "mosaico" nella fase dopo
+quando "osservazioni" di "mosaico" è almeno 2 e "scoperta" di "mosaico" è falso:
+    imposta "visibile" di "chiave" a vero;
+    imposta "scoperta" di "mosaico" a vero;
+    dì "La tessera scatta e rivela una chiave.";
+Fine regola.
+```
+
+La regola con priorità 20 conta gli esami finché la scoperta non è avvenuta.
+Quella con priorità 10 controlla se il vano era già noto. Infine le regole a
+priorità 0 distinguono il primo indizio dalla scoperta: vedono già il contatore
+aggiornato. Il flag arresta sia il conteggio sia la rivelazione dopo il secondo
+esame, anche quando la chiave è ormai nell'inventario.
+
+| Comando | Risultato atteso |
+| --- | --- |
+| `guarda` | Non incrementa il numero di osservazioni |
+| `x mosaico` | Indizio sulla luna mobile, chiave ancora nascosta |
+| `prendi chiave` | Fallisce e non incrementa il contatore |
+| `g` | Ripete l'esame riuscito: scopre la chiave al secondo esame |
+| `prendi chiave` | Raccoglie la chiave |
+| `x mosaico` | Vano già aperto, nessuna nuova chiave |
+
+**Variante:** cambia la soglia in tre osservazioni e la condizione del primo
+indizio in `è minore di 3`. Verifica che il secondo esame dia ancora un indizio
+e soltanto il terzo riveli la chiave. Cambiare soltanto la soglia lascerebbe il
+secondo esame senza un messaggio di avanzamento.
 
 Consulta la specifica su [visibilità e scenario](../linguaggio/visibilita-scenario.md)
 per contenitori, inventario, rollback e limiti.

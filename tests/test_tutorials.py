@@ -617,3 +617,27 @@ def test_discovery_tutorials_separate_first_and_later_messages(
         repeated = step(first.session, parse_session_command(first.session, text))
         assert repeat_text in render(repeated)
         assert first_text not in render(repeated)
+
+
+def test_second_observation_solution_counts_only_successful_examinations() -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "13b_seconda_osservazione.locus")))
+    for text in ("guarda", "prendi chiave", "x assente", "aiuto"):
+        current = step(current, parse_session_command(current, text)).session
+        assert property_of(current, "mosaico", "osservazioni") == 0
+    first = step(current, parse_session_command(current, "x mosaico"))
+    assert "La luna sembra mobile" in render(first)
+    assert "rivela una chiave" not in render(first)
+    assert property_of(first.session, "chiave", "visibile") is False
+    missing = step(first.session, parse_session_command(first.session, "prendi chiave"))
+    assert missing.event.kind == "not_here"
+    second = step(missing.session, parse_session_command(missing.session, "g"))
+    assert "rivela una chiave" in render(second)
+    assert "già aperto" not in render(second)
+    assert property_of(second.session, "mosaico", "osservazioni") == 2
+    taken = step(second.session, parse_session_command(second.session, "prendi chiave"))
+    assert taken.event.kind == "taken"
+    repeated = step(taken.session, parse_session_command(taken.session, "x mosaico"))
+    assert "Il vano è già aperto." in render(repeated)
+    assert "rivela una chiave" not in render(repeated)
+    assert property_of(repeated.session, "mosaico", "osservazioni") == 2
+    assert repeated.session.inventory == taken.session.inventory

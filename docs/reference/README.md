@@ -230,3 +230,8 @@ Le condizioni sono rivalutate sullo stato aggiornato e non equivalgono a un
 blocco «se/altrimenti». Per i messaggi di prima scoperta e di visita successiva,
 la [lezione 13](../tutorial/13-visibilita-scenario.md) valuta prima il caso già
 scoperto con `priorità 10`, poi il caso che cambia il flag con priorità 0.
+
+La soluzione [della seconda osservazione](../tutorial/13-visibilita-scenario.md)
+combina contatore numerico, soglia e flag: priorità 20 per contare, 10 per il
+caso già scoperto e 0 per rivelare. Solo gli esami riusciti contano; il conteggio
+si ferma alla scoperta e non dipende dai turni globali delle scene.
