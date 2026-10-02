@@ -56,6 +56,7 @@ EventKind = Literal[
     "rule",
     "look",
     "inventory",
+    "waited",
     "taken",
     "already_carried",
     "not_here",
@@ -819,6 +820,8 @@ def _perform(session: Session, intent: Intent) -> Transition:
                 tuple(ident for ident in session.inventory if reachable(session, ident)),
             ),
         )
+    if intent.verb == "wait":
+        return Transition(session, Event("waited"))
     if intent.verb in DIRECTION_PREDICATES:
         predicate = DIRECTION_PREDICATES[intent.verb]
         target = next(
@@ -1056,6 +1059,7 @@ class _RuleHost:
         success = transition.event.kind in {
             "look",
             "inventory",
+            "waited",
             "taken",
             "opened",
             "closed",
@@ -1098,6 +1102,7 @@ def _step(session: Session, intent: Intent) -> Transition:
             not in {
                 "look",
                 "inventory",
+                "wait",
                 "north",
                 "south",
                 "east",

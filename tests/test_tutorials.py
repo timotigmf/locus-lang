@@ -444,6 +444,28 @@ def test_scene_tutorial_tracks_turns_and_awards_points_once() -> None:
     assert len(current.score_log) == 1
 
 
+def test_wait_tutorial_advances_the_storm_and_awards_points() -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "37_aspettare.locus")))
+
+    def command(text: str) -> str:
+        nonlocal current
+        transition = step(
+            current,
+            parse_command(text, current.world.actions, scene_enabled=True),
+        )
+        current = transition.session
+        return render(transition)
+
+    first = command("attendi")
+    assert "Il tempo passa." in first
+    assert "Conti le gocce" in first
+    assert "Un tuono" in first
+    assert current.turn == 1
+    assert "La pioggia si allontana" in command("z")
+    assert command("punteggio") == "Punteggio: 2."
+    assert current.turn == 2
+
+
 def test_vehicle_tutorial_moves_vehicle_with_player() -> None:
     current = start(instantiate(compile_story_file(TUTORIAL / "18_bicicletta_in_movimento.locus")))
 

@@ -132,6 +132,9 @@ La sessione ricorda inoltre l'ultimo luogo lasciato: `indietro`, `torna`,
 `vai indietro` e `back` percorrono un arco esistente verso quel luogo senza
 aggirare porte o passaggi a senso unico. Si veda
 [Tornare al luogo precedente](docs/linguaggio/ritorno-indietro.md).
+L'azione senza oggetti `attendere` accetta `attendi`, `aspetta`, `z` e `wait`,
+attraversa il rulebook e fa avanzare l'orologio delle scene. Si veda
+[Attendere e far trascorrere un turno](docs/linguaggio/attendere.md).
 Ambiguità, oggetto assente, oggetto già posseduto e uscita assente sono esiti distinti.
 `esci` termina la sessione. Questa limitazione storica è sostituita dalla
 [specifica M2 corrente](docs/linguaggio/milestone-2.md): sono disponibili alias

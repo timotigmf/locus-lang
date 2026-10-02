@@ -29,6 +29,10 @@ def make_session() -> Session:
         ("inventario", Intent("inventory")),
         ("i", Intent("inventory")),
         ("inv", Intent("inventory")),
+        ("attendi", Intent("wait")),
+        ("aspetta", Intent("wait")),
+        ("z", Intent("wait")),
+        ("wait", Intent("wait")),
         ("nord", Intent("north")),
         ("n", Intent("north")),
         ("sud", Intent("south")),
@@ -204,6 +208,14 @@ def test_sessions_are_independent() -> None:
     session = make_session()
     assert step(session, Intent("take", "chiave")).session.inventory
     assert make_session() == session
+
+
+def test_wait_has_an_explicit_default_without_changing_the_world() -> None:
+    session = make_session()
+    result = step(session, parse_command("attendi"))
+    assert result.event.kind == "waited"
+    assert result.session is session
+    assert render(result) == "Il tempo passa."
 
 
 def test_east_west_movement_and_inverse() -> None:

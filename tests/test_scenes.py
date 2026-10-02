@@ -87,6 +87,21 @@ def test_parser_errors_do_not_advance_scene_time() -> None:
     assert parse_command("punteggio", scene_enabled=True).verb == "score"
 
 
+def test_wait_advances_time_and_can_be_customized_by_rules() -> None:
+    source = SOURCE + (
+        'Regola "ascolta il vento" per attendere nella fase dopo: '
+        'dì "Le imposte tremano."; Fine regola.'
+    )
+    current = start(instantiate(compile_story(source)))
+    result = command(current, "z")
+    assert result.event.kind == "waited"
+    assert result.session.turn == 1
+    assert render(result) == (
+        "Il tempo passa.\nLe imposte tremano.\nIl vento comincia a scuotere le finestre."
+    )
+    assert [item.name for item in result.trace] == ["ascolta il vento"]
+
+
 @pytest.mark.parametrize(
     ("source", "code"),
     [

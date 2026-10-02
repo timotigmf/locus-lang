@@ -12,7 +12,7 @@ sorgente e il runtime non interpreta frasi LOCUS.
 Un'azione può richiedere zero, uno o due oggetti:
 
 ```locus
-Azione "attendere" senza oggetti con comando "attendi".
+Azione "meditare" senza oggetti con comando "medita".
 Azione "salutare" su una persona con comando "saluta".
 Azione "mostrare" su una cosa con una persona con comando "mostra" e separatore "a".
 ```
@@ -70,7 +70,8 @@ e controllata staticamente.
 Il nome di un'azione deve essere unico nel catalogo del progetto. Una ripetizione
 o la ridefinizione di un'azione della libreria produce `E310`. Il comando deve
 essere unico e non può occupare forme standard come `guarda`, `prendi`, `x` o
-`nord`; una forma non valida, un duplicato o un separatore incoerente produce
+`nord`; sono riservati anche `attendi`, `aspetta`, `z` e `wait`. Una forma non
+valida, un duplicato o un separatore incoerente produce
 `E311`. Un tipo assente produce `E102`; un oggetto di tipo errato in una regola
 produce `E305`. Durante il gioco un oggetto raggiungibile ma incompatibile riceve
 un rifiuto esplicito, senza eseguire regole né modificare lo stato.

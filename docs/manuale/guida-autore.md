@@ -78,6 +78,7 @@ dall'alto verso il basso prima di studiare i moduli.
 34. [Rivelare una botola senza ritorno](../tutorial/34-passaggio-segreto-senza-ritorno.md)
 35. [Muoversi con frasi naturali](../tutorial/35-comandi-naturali-di-movimento.md)
 36. [Tornare sui propri passi](../tutorial/36-tornare-sui-propri-passi.md)
+37. [Aspettare la tempesta](../tutorial/37-aspettare-la-tempesta.md)
 
 ## Indice per obiettivo
 
@@ -94,6 +95,7 @@ dall'alto verso il basso prima di studiare i moduli.
 | Botole e percorsi senza ritorno | Archi statici e dinamici a senso unico | Lezioni 33 e 34 |
 | Frasi naturali di movimento | Verbi e preposizioni davanti alle direzioni | Lezione 35 |
 | Ritorno rapido | Memoria dell'ultimo luogo nel grafo corrente | Lezione 36 |
+| Attesa e tempo | Azione standard personalizzabile e scene a turni | Lezione 37 |
 | Dettagli ambientali e oggetti nascosti | `scenario` non trasportabile e proprietà `visibile` | Lezione 13 |
 | Indizi, memoria e cronologie | Elenchi tipati con appartenenza e rollback | Lezione 14 |
 | Cataloghi e registri | Tabelle con colonne tipate e righe transazionali | Lezione 15 |

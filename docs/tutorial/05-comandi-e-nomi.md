@@ -26,6 +26,7 @@ accettate anche alcune convenzioni storiche delle avventure testuali in inglese.
 | `dentro`, `fuori` | `interno`, `esterno`, `in`, `inside`, `out`, `outside` | Entra o lascia un luogo collegato |
 | `vai a nord` | `cammina verso nord`, `go north` | Introduce una direzione con un verbo |
 | `indietro`, `torna` | `back`, `go back` | Ritorna al luogo appena lasciato |
+| `attendi`, `aspetta` | `z`, `wait` | Fa trascorrere un turno senza modificare il mondo |
 | `prendi chiave` | `get chiave`, `take chiave` | Prende un oggetto |
 | `esci` | `q`, `quit` | Termina la sessione |
 

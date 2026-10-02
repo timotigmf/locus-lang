@@ -54,3 +54,4 @@ Le fonti e le licenze sono nel [registro](../architettura/fonti.md).
 - [0037 — relazioni dinamiche unidirezionali](0037-relazioni-dinamiche-unidirezionali.md): creazione e rimozione transazionale di un solo arco.
 - [0038 — comandi naturali di movimento](0038-comandi-naturali-movimento.md): verbi introduttivi e correzioni direzionali precise.
 - [0039 — ritorno al luogo precedente](0039-ritorno-al-luogo-precedente.md): memoria di sessione e riuso del movimento direzionale.
+- [0040 — azione standard di attesa](0040-attesa-standard.md): comando senza oggetti, rulebook e avanzamento temporale.

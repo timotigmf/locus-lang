@@ -14,15 +14,17 @@
 
 `gioca`: guarda, esamina, prendi, lascia, metti, apri, chiudi, blocca,
 inventario, nord, sud, est, ovest, nordest, sudest, sudovest, nordovest, su, giù,
-dentro, fuori, indietro, esci.
+dentro, fuori, indietro, attendi, esci.
 Le direzioni accettano anche `vai`, `cammina`, `muoviti`, `dirigiti` o
 `procedi`, con preposizione facoltativa: per esempio `vai a nord`, `cammina
 verso sudovest` e `muoviti in alto`. Sono compatibili `go`, `move` e `walk`.
 `indietro`, `torna`, `torna indietro`, `vai indietro`, `back` e `go back`
 percorrono l'arco disponibile verso l'ultimo luogo lasciato.
+`attendi`, `aspetta`, `z` e `wait` eseguono l'azione standard `attendere`, che
+può essere personalizzata dalle regole e fa avanzare le scene.
 Alias classici: l/look, x/examine, i/inv/inventory, n/north, s/south, e/east,
 o/w/west, ne/northeast, se/southeast, so/southwest, no/nw/northwest,
-u/up/alto, d/down/giu/basso, in/inside, out/outside, q/quit,
+u/up/alto, d/down/giu/basso, in/inside, out/outside, z/wait, q/quit,
 get/take, open, close, drop, put, lock.
 Il referente dell'ultima azione riuscita accetta `esso`, `essa`, `questo`,
 `questa`, `quello`, `quella`, `it` e le forme unite `prendilo/a`,

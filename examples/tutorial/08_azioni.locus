@@ -12,7 +12,6 @@ Il "sigillo d'argilla" è una cosa nella Sala delle Udienze.
 La fiducia è una proprietà numerica.
 Il custode ha fiducia 0.
 
-Azione "attendere" senza oggetti con comando "attendi".
 Azione "salutare" su una persona con comando "saluta".
 Azione "mostrare" su una cosa con una persona con comando "mostra" e separatore "a".
 

@@ -190,6 +190,7 @@ def default_actions() -> dict[str, ActionSpec]:
     return {
         "guardare": ActionSpec("look", 0, 0),
         "inventariare": ActionSpec("inventory", 0, 0),
+        "attendere": ActionSpec("wait", 0, 0),
         "andare a nord": ActionSpec("north", 0, 0),
         "andare a sud": ActionSpec("south", 0, 0),
         "andare a est": ActionSpec("east", 0, 0),

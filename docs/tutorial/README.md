@@ -50,6 +50,7 @@ al prompt della storia: lì si scrivono soltanto i comandi del giocatore.
 | [34. Rivelare una botola senza ritorno](34-passaggio-segreto-senza-ritorno.md) | `examples/tutorial/34_passaggio_unidirezionale_segreto.locus` | Creare da una regola un passaggio segreto a senso unico |
 | [35. Muoversi con frasi naturali](35-comandi-naturali-di-movimento.md) | `examples/tutorial/35_comandi_naturali_movimento.locus` | Usare verbi e preposizioni davanti alle direzioni |
 | [36. Tornare sui propri passi](36-tornare-sui-propri-passi.md) | `examples/tutorial/36_tornare_indietro.locus` | Ricordare un luogo senza aggirare passaggi a senso unico |
+| [37. Aspettare la tempesta](37-aspettare-la-tempesta.md) | `examples/tutorial/37_aspettare.locus` | Far trascorrere un turno con `attendi`, `aspetta`, `z` e `wait` |
 
 Prima prova la versione fornita. Poi modifica un solo elemento e riesegui la
 sequenza di comandi. In caso di errore conserva il messaggio, il file sorgente e

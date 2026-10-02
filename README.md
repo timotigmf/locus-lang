@@ -93,11 +93,12 @@ Il ramo `main` viene mantenuto separato fino all'integrazione delle modifiche.
 
 Dopo l'avvio: `guarda`, `prendi la chiave`, `inventario`, `nord`, `sud`, `est`,
 `ovest`, `nordest`, `sudest`, `sudovest`, `nordovest`, `su`, `giù`, `dentro`,
-`fuori`, `indietro`, `esci`. Sono equivalenti frasi come `vai a nord`, `cammina verso
+`fuori`, `indietro`, `attendi`, `esci`. Sono equivalenti frasi come `vai a nord`, `cammina verso
 sudovest` e `muoviti in alto`. Le diagonali si
 abbreviano in `ne`, `se`, `so`, `no` (`nw` è accettato per nordovest); `su` e
 `giù` usano anche `u` e `d`. `in` equivale a `dentro`; `esci` termina la
-sessione e `fuori` percorre il passaggio verso l'esterno.
+sessione e `fuori` percorre il passaggio verso l'esterno. `aspetta`, `z` e
+`wait` equivalgono ad `attendi` e fanno trascorrere un turno.
 Nelle storie con scene, `turno` o `tempo` mostra l'orologio narrativo e
 `punteggio` o `score` mostra i punti accumulati.
 Nelle storie commerciali, `denaro` mostra il saldo, `compra NOME da MERCANTE`
@@ -141,7 +142,7 @@ diagnostica che conserva il file originale. Ramo GitHub: `codex/milestone-4`.
 
 ## Tutorial in italiano
 
-[Costruisci il faro di Selce](docs/tutorial/README.md): trentasei lezioni, esercizi
+[Costruisci il faro di Selce](docs/tutorial/README.md): trentasette lezioni, esercizi
 con soluzioni, esempi eseguibili e copione verificato automaticamente.
 [Materiali consultati e scelte](docs/architettura/materiali-didattici.md).
 

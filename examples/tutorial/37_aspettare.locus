@@ -1,0 +1,16 @@
+Titolo: "La pioggia sulla torre".
+Autore: "Esempio LOCUS".
+
+La Torre è una stanza.
+Inizia nella "Torre".
+La Torre ha descrizione "Le prime nuvole coprono la città.".
+
+Scena "il temporale" dal turno 1 al turno 2:
+    Inizio "Un tuono scuote i vetri.".
+    Fine "La pioggia si allontana oltre i tetti.".
+    Punti 2.
+Fine scena.
+
+Regola "gocce" per attendere nella fase dopo:
+    dì "Conti le gocce sul davanzale.";
+Fine regola.

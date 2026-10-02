@@ -122,6 +122,9 @@ Ogni pacchetto conserva il core indipendente dalla narrativa interattiva.
 25. Ritorno al luogo precedente implementato nella sessione con `indietro`,
     rispetto di porte, veicoli e archi a senso unico, senza cambiare l'IR.
 
+26. Azione standard `attendere` implementata con alias italiani e classici,
+    passaggio nel rulebook e avanzamento dell'orologio delle scene.
+
 Non si importeranno codice o testi Inform.
 
 ## Studio M5 — 0.5.0a1

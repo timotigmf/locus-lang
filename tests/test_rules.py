@@ -26,12 +26,12 @@ AUTHOR_ACTIONS = """
 Una persona è un tipo di cosa.
 Il custode è una persona nella Sala.
 Il sigillo è una cosa nella Sala.
-Azione "attendere" senza oggetti con comando "attendi" e sinonimo "aspetta".
+Azione "meditare" senza oggetti con comando "medita" e sinonimo "rifletti".
 Azione "salutare" su una persona con comando "saluta" e sinonimo "riverisci".
 Azione "mostrare" su una cosa con una persona con comando "mostra"
     e sinonimo "esibisci" e sinonimo "fai vedere"
     e separatore "a" e separatore "verso".
-Regola "attesa" per attendere nella fase invece: dì "Il tempo passa."; Fine regola.
+Regola "meditazione" per meditare nella fase invece: dì "La mente si acquieta."; Fine regola.
 Regola "saluto" per salutare "custode" nella fase invece:
     dì "Il custode ricambia il saluto.";
 Fine regola.
@@ -224,8 +224,8 @@ def test_author_actions_with_zero_one_and_two_typed_objects() -> None:
         intent = parse_command(command, current.world.actions)
         return render(step(current, intent))
 
-    assert run("attendi") == "Il tempo passa."
-    assert run("aspetta") == "Il tempo passa."
+    assert run("medita") == "La mente si acquieta."
+    assert run("rifletti") == "La mente si acquieta."
     assert run("saluta il custode") == "Il custode ricambia il saluto."
     assert run("riverisci il custode") == "Il custode ricambia il saluto."
     assert run("mostra il sigillo al custode") == "Il custode riconosce il sigillo."
@@ -367,6 +367,8 @@ def test_static_errors(source: str, code: str) -> None:
         ('Azione "riporre" senza oggetti con comando "mettici".', "E311"),
         ('Azione "andare" senza oggetti con comando "vai".', "E311"),
         ('Azione "ritornare" senza oggetti con comando "indietro".', "E311"),
+        ('Azione "sostare" senza oggetti con comando "attendi".', "E311"),
+        ('Azione "sostare" senza oggetti con comando "z".', "E311"),
         (
             'Azione "salutare" senza oggetti con comando "saluta". '
             'Azione "inchinarsi" senza oggetti con comando "saluta".',

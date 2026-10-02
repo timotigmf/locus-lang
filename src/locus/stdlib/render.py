@@ -38,6 +38,8 @@ def render(transition: Transition) -> str:
         return f"{names[0]}{detail}{aboard}\nVedi: {objects}."
     if kind == "inventory":
         return "Inventario: " + (", ".join(names) if names else "vuoto") + "."
+    if kind == "waited":
+        return "Il tempo passa."
     if kind == "score":
         return f"Punteggio: {transition.session.score}."
     if kind == "time":
@@ -152,10 +154,10 @@ def render(transition: Transition) -> str:
         return "La storia non dichiara alcuna valuta."
     unknown = (
         "Comando non riconosciuto. Usa guarda, esamina, prendi, lascia, metti, "
-        "apri, chiudi, blocca, inventario, nord, sud, est, ovest, nordest, "
+        "apri, chiudi, blocca, inventario, attendi, nord, sud, est, ovest, nordest, "
         "sudest, sudovest, nordovest, su, giù, dentro, fuori o esci. Sono "
         "disponibili anche le abbreviazioni l, x, i, n, s, e, o, ne, se, so, "
-        "no, u, d e q; usa indietro per tornare all'ultimo luogo lasciato; dopo "
+        "no, u, d, z e q; usa indietro per tornare all'ultimo luogo lasciato; dopo "
         "un oggetto noto puoi usare esso, essa o forme come prendila."
     )
     if world.dialogues:

@@ -1,7 +1,7 @@
 # 8. Creare azioni e comandi
 
 Il progetto completo è `examples/tutorial/08_azioni.locus`. La lezione introduce
-tre comandi italiani: uno senza oggetti, uno con un oggetto tipato e uno con due.
+due azioni italiane con oggetti tipati e personalizza l'azione standard `attendere`.
 
 ```locus
 Titolo: "Il custode del sigillo".
@@ -18,7 +18,6 @@ Il "sigillo d'argilla" è una cosa nella Sala delle Udienze.
 La fiducia è una proprietà numerica.
 Il custode ha fiducia 0.
 
-Azione "attendere" senza oggetti con comando "attendi".
 Azione "salutare" su una persona con comando "saluta".
 Azione "mostrare" su una cosa con una persona con comando "mostra" e separatore "a".
 
@@ -44,11 +43,12 @@ Fine regola.
 ## Prova guidata
 
 Esegui `saluta custode`, `mostra sigillo al custode`, `saluta custode` e
-`attendi`. Il primo saluto usa la risposta prudente. Mostrare il sigillo aumenta
+`attendi`. `attendere` appartiene già alla libreria e può ricevere regole senza
+una dichiarazione `Azione`. Il primo saluto usa la risposta prudente. Mostrare il sigillo aumenta
 `fiducia`; il secondo saluto attiva la regola con priorità maggiore e condizione
 vera. `al` viene riconosciuto come forma articolata del separatore `a`.
 
-Apri **Indice del mondo**: sotto le entità compare la tabella delle azioni con
+Apri **Indice del mondo**: sotto le entità compare la tabella delle azioni d'autore con
 comando, tipi richiesti e separatore. Il trace distingue la regola esclusa per
 condizione falsa da quella eseguita.
 

@@ -13,17 +13,12 @@ L'amuleto è una reliquia nella Sala delle Insegne.
 La fiducia è una proprietà numerica.
 Il custode ha fiducia 0.
 
-Azione "attendere" senza oggetti con comando "attendi" e sinonimo "aspetta".
 Azione "salutare" su una persona con comando "saluta"
     e sinonimo "riverisci" e sinonimo "inchinati".
 Azione "mostrare" su una reliquia con una persona con comando "mostra"
     e sinonimo "esibisci" e separatore "a" e separatore "verso".
 Azione "parlare" su una persona con una cosa con comando "parla"
     e sinonimo "racconta" e separatore "di" e separatore "su".
-
-Regola "attesa" per attendere nella fase invece:
-    dì "Il custode attende senza perdere di vista l'amuleto.";
-Fine regola.
 
 Regola "saluto" per salutare "custode" nella fase invece:
     dì "Il custode ricambia il saluto.";

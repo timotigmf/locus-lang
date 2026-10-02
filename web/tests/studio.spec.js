@@ -43,6 +43,11 @@ test("progetto, compilazione, gioco, test e release statica", async ({
     "alt",
     "Il molo nella foschia.",
   );
+  await page.locator("#command").fill("z");
+  await page.locator("#send").click();
+  await expect(page.locator(".story-output").last()).toContainText(
+    "Il tempo passa.",
+  );
   await page.locator("#command").fill("e");
   await page.locator("#send").click();
   const absentExit = page.locator(".story-output", {
