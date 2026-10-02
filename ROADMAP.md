@@ -163,3 +163,6 @@ conservando stato e turno; casi numerici e testuali verificati nella lezione 16.
 
 Robustezza del giocatore: numeri molto lunghi nei dialoghi e nei chiarimenti
 non interrompono la partita; zeri iniziali e cifre decimali Unicode preservati.
+
+Chiarimenti: una risposta errata ripresenta nomi e numeri delle candidate,
+con recupero verificato per risposta vuota, ambigua, assente e fuori intervallo.

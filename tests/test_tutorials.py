@@ -689,3 +689,17 @@ def test_numeric_choices_are_bounded_without_rejecting_leading_zeroes(
         assert result.session is current
         recovered = step(current, parse_session_command(current, "1"))
         assert recovered.event.kind == ("dialogue" if mode == "dialogue" else "taken")
+
+
+@pytest.mark.parametrize("answer", ["99", "chiave", "oro", ""])
+def test_clarification_error_keeps_numbered_candidates_visible(answer: str) -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "26_chiarimenti.locus")))
+    current = step(current, parse_session_command(current, "prendi chiave")).session
+    invalid = step(current, parse_session_command(current, answer))
+    assert invalid.event.kind == "invalid_clarification"
+    assert invalid.session is current
+    assert "1) chiave di rame; 2) chiave di ferro" in render(invalid)
+    recovered = step(invalid.session, parse_session_command(invalid.session, "2"))
+    assert recovered.event.kind == "taken"
+    assert "chiave di ferro" in render(recovered)
+    assert recovered.session.clarification is None

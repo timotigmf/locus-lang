@@ -47,3 +47,12 @@ resta attiva. Rispondi `0001` per scegliere la prima chiave. Gli zeri iniziali
 non cambiano il numero; una sequenza molto lunga incollata per errore non deve
 interrompere la partita. Il copione `26_chiarimenti.comandi` contiene una prova
 breve con errore, correzione e controllo dell'inventario.
+
+## Ritrovare le alternative dopo un errore
+
+Dopo `prendi chiave`, rispondi `chiave`, `oro` oppure `99`: LOCUS spiega che
+la risposta non identifica un oggetto e ripresenta `1) chiave di rame;
+2) chiave di ferro`. I numeri restano gli stessi della domanda iniziale.
+Puoi quindi digitare `2` per prendere quella di ferro oppure `annulla` per
+abbandonare il chiarimento. Anche una risposta vuota conserva la domanda.
+Non occorre risalire nella trascrizione per ritrovare le alternative.

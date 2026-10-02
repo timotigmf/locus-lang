@@ -43,3 +43,8 @@ convertire l'intera stringa in un intero illimitato. Anche un numero incollato
 molto lungo produce il normale errore di scelta e conserva la sessione. Zero
 non seleziona alcuna alternativa; gli zeri iniziali sono ammessi (`0001` vale
 `1`), anche con cifre decimali Unicode.
+
+La presentazione di `invalid_clarification` include nuovamente le candidate
+nello stesso ordine e con gli stessi numeri della domanda. Il messaggio
+distingue la risposta non valida dalla domanda iniziale e ricorda il comando
+`annulla`. Questa presentazione non modifica lo stato né consuma un turno.

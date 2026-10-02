@@ -248,3 +248,7 @@ Le selezioni numeriche di dialoghi e chiarimenti sono limitate dal numero
 delle alternative durante la lettura delle cifre. Input lunghi fuori intervallo
 restituiscono i consueti eventi di scelta non valida, senza eccezioni di
 conversione e senza perdere la domanda corrente.
+
+`invalid_clarification` trasporta gli ID delle candidate come `ambiguous`.
+Il renderer mostra di nuovo nomi e numerazione senza ricalcolare la risoluzione
+o riordinare gli oggetti. Vedi la [lezione 26](../tutorial/26-scegliere-tra-oggetti.md).
