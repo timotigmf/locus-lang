@@ -125,6 +125,9 @@ Ogni pacchetto conserva il core indipendente dalla narrativa interattiva.
 26. Azione standard `attendere` implementata con alias italiani e classici,
     passaggio nel rulebook e avanzamento dell'orologio delle scene.
 
+27. `guarda NOME`, `osserva`, `ispeziona` e `controlla` implementati come forme
+    strutturate di `esaminare`, con compatibilità `look at` e disambiguazione comune.
+
 Non si importeranno codice o testi Inform.
 
 ## Studio M5 — 0.5.0a1

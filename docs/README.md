@@ -38,6 +38,7 @@
 - [Comandi naturali di movimento](linguaggio/comandi-movimento.md): verbi e preposizioni davanti alle direzioni.
 - [Tornare al luogo precedente](linguaggio/ritorno-indietro.md): memoria di un passo nel grafo corrente.
 - [Attendere](linguaggio/attendere.md): far trascorrere un turno con una azione standard personalizzabile.
+- [Guardare ed esaminare](linguaggio/guardare-esaminare.md): usare `guarda NOME` e altri alias naturali.
 - [Elenchi tipati](linguaggio/liste-tipate.md): raccolte omogenee, appartenenza e rollback.
 - [Tabelle tipate](linguaggio/tabelle-tipate.md): colonne nominate e righe transazionali.
 - [Persone e dialoghi](linguaggio/dialoghi-strutturati.md): conversazioni a nodi e scelte multi-turno.

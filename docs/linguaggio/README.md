@@ -33,6 +33,8 @@ I [comandi naturali di movimento](comandi-movimento.md) accettano verbi come
 e `back` senza aggirare il grafo corrente.
 [Attendere](attendere.md) aggiunge l'azione standard senza oggetti, gli alias
 `aspetta`, `z` e `wait` e l'integrazione con regole e scene.
+[Guardare ed esaminare](guardare-esaminare.md) distingue `guarda` senza oggetto
+da `guarda NOME` e raccoglie alias italiani nell'unico intento `examine`.
 I [passaggi a senso unico](passaggi-senso-unico.md) dichiarano esplicitamente
 origine, direzione e destinazione senza generare l'arco inverso.
 La [disambiguazione a più turni](disambiguazione-multiturno.md) conserva la

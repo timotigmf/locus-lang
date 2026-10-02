@@ -98,6 +98,12 @@ def make_session() -> Session:
         ("get chiave", Intent("take", "chiave")),
         ("x custodia", Intent("examine", "custodia")),
         ("examine custodia", Intent("examine", "custodia")),
+        ("guarda la custodia", Intent("examine", "custodia")),
+        ("osserva custodia", Intent("examine", "custodia")),
+        ("ispeziona custodia", Intent("examine", "custodia")),
+        ("controlla custodia", Intent("examine", "custodia")),
+        ("look at the custodia", Intent("examine", "custodia")),
+        ("inspect custodia", Intent("examine", "custodia")),
         ("prendi la chiave", Intent("take", "chiave")),
         ("prendi l’oggetto", Intent("take", "oggetto")),
         ("prendi il caffè", Intent("take", "caffè")),
@@ -476,6 +482,16 @@ def test_missing_object_gets_a_specific_prompt() -> None:
     assert render(step(make_session(), parse_command("x"))) == (
         "Indica quale oggetto vuoi esaminare o manipolare."
     )
+
+
+def test_look_with_an_object_examines_it_while_bare_look_describes_the_room() -> None:
+    session = make_session()
+    assert step(session, parse_command("guarda")).event.kind == "look"
+    examined = step(session, parse_command("guarda chiave"))
+    assert examined.event.kind == "examined"
+    assert examined.event.entities == ("e3",)
+    assert render(examined).startswith("chiave\n")
+    assert step(session, parse_command("osserva")).event.kind == "missing_noun"
 
 
 def test_natural_movement_errors_are_specific_and_turnless() -> None:

@@ -18,7 +18,7 @@ accettate anche alcune convenzioni storiche delle avventure testuali in inglese.
 | Forma italiana | Forma compatibile | Azione |
 | --- | --- | --- |
 | `guarda` | `l`, `look` | Ripete la descrizione del luogo |
-| `esamina custodia` | `x custodia`, `examine custodia` | Mostra dettagli e stato |
+| `esamina custodia`, `guarda custodia` | `x custodia`, `look at custodia` | Mostra dettagli e stato |
 | `inventario` | `i`, `inv`, `inventory` | Elenca ciò che porti |
 | `nord`, `sud`, `est`, `ovest` | `n`, `s`, `e`, `o`, `w` e forme inglesi | Si sposta sulla mappa |
 | `nordest`, `sudest`, `sudovest`, `nordovest` | `ne`, `se`, `so`, `no`, `nw` e forme inglesi | Percorre una diagonale |
@@ -33,6 +33,7 @@ accettate anche alcune convenzioni storiche delle avventure testuali in inglese.
 Sono disponibili anche `open`, `close`, `drop`, `put ... in ...` e
 `lock ... with ...`. Le forme inglesi sono scorciatoie di input: i messaggi, il
 manuale e il linguaggio dell'autore restano italiani.
+`osserva`, `ispeziona` e `controlla` sono ulteriori forme italiane di `esamina`.
 
 La [lezione 35](35-comandi-naturali-di-movimento.md) presenta tutte le forme
 naturali di movimento e le correzioni per una direzione mancante o sconosciuta.

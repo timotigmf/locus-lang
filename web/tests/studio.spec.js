@@ -93,9 +93,19 @@ test("progetto, compilazione, gioco, test e release statica", async ({
   await expect(page.locator("#transcript")).toContainText(
     "Hai aperto: custodia.",
   );
+  await page.locator("#command").fill("guarda custodia");
+  await page.locator("#send").click();
+  await expect(page.locator(".story-output").last()).toContainText(
+    "Stato: aperto.",
+  );
   await page.locator("#command").fill("x scatola");
   await page.locator("#send").click();
-  await expect(page.locator("#transcript")).toContainText("Stato: aperto.");
+  await expect(page.locator(".player-command").last()).toContainText(
+    "x scatola",
+  );
+  await expect(page.locator(".story-output").last()).toContainText(
+    "Stato: aperto.",
+  );
   await page.locator("#command").fill("prendi chiave");
   await page.locator("#send").click();
   await expect(page.locator("#transcript")).toContainText(

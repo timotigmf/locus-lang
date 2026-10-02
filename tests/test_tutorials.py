@@ -466,6 +466,23 @@ def test_wait_tutorial_advances_the_storm_and_awards_points() -> None:
     assert current.turn == 2
 
 
+def test_natural_examination_tutorial_shares_resolution_and_clarification() -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "38_guardare_oggetti.locus")))
+    looked = step(current, parse_session_command(current, "guarda"))
+    assert looked.event.kind == "look"
+    examined = step(looked.session, parse_session_command(looked.session, "guarda custodia"))
+    assert examined.event.kind == "examined"
+    assert "Cuoio scuro" in render(examined)
+    asked = step(
+        examined.session,
+        parse_session_command(examined.session, "osserva medaglione"),
+    )
+    assert asked.event.kind == "ambiguous"
+    selected = step(asked.session, parse_session_command(asked.session, "argento"))
+    assert selected.event.kind == "examined"
+    assert "luna" in render(selected)
+
+
 def test_vehicle_tutorial_moves_vehicle_with_player() -> None:
     current = start(instantiate(compile_story_file(TUTORIAL / "18_bicicletta_in_movimento.locus")))
 

@@ -179,6 +179,21 @@ def test_back_uses_the_directional_rulebook() -> None:
     assert any(item.name == "ritorno" for item in returned.trace)
 
 
+def test_natural_look_alias_uses_the_examination_rulebook() -> None:
+    initial = session(
+        rule(
+            'dì "Sotto la leva compare un numero.";',
+            phase="dopo",
+            name="indizio",
+            action='esaminare "leva"',
+        )
+    )
+    result = step(initial, parse_command("guarda leva"))
+    assert result.event.kind == "examined"
+    assert "Sotto la leva" in render(result)
+    assert [item.name for item in result.trace] == ["indizio"]
+
+
 def test_instead_and_description() -> None:
     initial = session(
         rule('dì "Personalizzato";', phase="invece") + rule('dì "Dopo";', phase="dopo", name="dopo")
@@ -369,6 +384,8 @@ def test_static_errors(source: str, code: str) -> None:
         ('Azione "ritornare" senza oggetti con comando "indietro".', "E311"),
         ('Azione "sostare" senza oggetti con comando "attendi".', "E311"),
         ('Azione "sostare" senza oggetti con comando "z".', "E311"),
+        ('Azione "osservare" senza oggetti con comando "osserva".', "E311"),
+        ('Azione "controllare" senza oggetti con comando "inspect".', "E311"),
         (
             'Azione "salutare" senza oggetti con comando "saluta". '
             'Azione "inchinarsi" senza oggetti con comando "saluta".',

@@ -153,7 +153,7 @@ def render(transition: Transition) -> str:
     if kind == "no_currency":
         return "La storia non dichiara alcuna valuta."
     unknown = (
-        "Comando non riconosciuto. Usa guarda, esamina, prendi, lascia, metti, "
+        "Comando non riconosciuto. Usa guarda, guarda NOME, esamina, prendi, lascia, metti, "
         "apri, chiudi, blocca, inventario, attendi, nord, sud, est, ovest, nordest, "
         "sudest, sudovest, nordovest, su, giù, dentro, fuori o esci. Sono "
         "disponibili anche le abbreviazioni l, x, i, n, s, e, o, ne, se, so, "

@@ -135,6 +135,9 @@ aggirare porte o passaggi a senso unico. Si veda
 L'azione senza oggetti `attendere` accetta `attendi`, `aspetta`, `z` e `wait`,
 attraversa il rulebook e fa avanzare l'orologio delle scene. Si veda
 [Attendere e far trascorrere un turno](docs/linguaggio/attendere.md).
+`guarda` senza oggetto descrive il luogo; `guarda NOME`, `osserva NOME`,
+`ispeziona NOME` e `controlla NOME` producono invece l'azione strutturata
+`esaminare`. Si veda [Guardare ed esaminare](docs/linguaggio/guardare-esaminare.md).
 Ambiguità, oggetto assente, oggetto già posseduto e uscita assente sono esiti distinti.
 `esci` termina la sessione. Questa limitazione storica è sostituita dalla
 [specifica M2 corrente](docs/linguaggio/milestone-2.md): sono disponibili alias

@@ -99,6 +99,12 @@ _MOVEMENT_PREPOSITIONS = frozenset(
 )
 
 _ACTION_COMMANDS: dict[str, Verb] = {
+    "guarda": "examine",
+    "osserva": "examine",
+    "ispeziona": "examine",
+    "controlla": "examine",
+    "look": "examine",
+    "inspect": "examine",
     "prendi": "take",
     "get": "take",
     "take": "take",
@@ -523,6 +529,8 @@ def parse_command(
             return Intent("unknown")
         action = _ACTION_COMMANDS[verb]
         rest = tokens[1:]
+        if action == "examine" and verb == "look":
+            rest = _without_initial_preposition(rest, frozenset({"at"}))
     delimiters = (
         {"in", "into", "nel", "nella", "nello", "nell'"} if action == "put" else {"con", "with"}
     )

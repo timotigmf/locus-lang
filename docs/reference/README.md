@@ -22,10 +22,13 @@ verso sudovest` e `muoviti in alto`. Sono compatibili `go`, `move` e `walk`.
 percorrono l'arco disponibile verso l'ultimo luogo lasciato.
 `attendi`, `aspetta`, `z` e `wait` eseguono l'azione standard `attendere`, che
 può essere personalizzata dalle regole e fa avanzare le scene.
+`guarda NOME`, `osserva NOME`, `ispeziona NOME`, `controlla NOME`, `look at
+NOME` e `inspect NOME` eseguono `examine`; `guarda` e `look` senza nome
+descrivono il luogo.
 Alias classici: l/look, x/examine, i/inv/inventory, n/north, s/south, e/east,
 o/w/west, ne/northeast, se/southeast, so/southwest, no/nw/northwest,
 u/up/alto, d/down/giu/basso, in/inside, out/outside, z/wait, q/quit,
-get/take, open, close, drop, put, lock.
+get/take, examine/inspect, open, close, drop, put, lock.
 Il referente dell'ultima azione riuscita accetta `esso`, `essa`, `questo`,
 `questa`, `quello`, `quella`, `it` e le forme unite `prendilo/a`,
 `esaminalo/a`, `aprilo/a`, `chiudilo/a`, `lascialo/a`.

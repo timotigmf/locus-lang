@@ -1,0 +1,16 @@
+Titolo: "I medaglioni dell'archivio".
+Autore: "Esempio LOCUS".
+
+La Archivio è una stanza.
+Inizia nella "Archivio".
+La Archivio ha descrizione "Scaffali numerati circondano un tavolo di quercia.".
+
+La custodia è un contenitore nella Archivio.
+La custodia ha descrizione "Cuoio scuro, cucito con filo rosso.".
+
+Il "medaglione di bronzo" è una cosa nella Archivio.
+Il "medaglione di bronzo" ha descrizione "Una torre è incisa nel bronzo.".
+
+Il "medaglione d'argento" è una cosa nella Archivio.
+Il "medaglione d'argento" ha descrizione "Una luna è incisa nell'argento.".
+Comprendi "argento" come "medaglione d'argento".
