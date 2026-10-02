@@ -25,6 +25,7 @@ accettate anche alcune convenzioni storiche delle avventure testuali in inglese.
 | `su`, `giù` | `alto`, `basso`, `u`, `d`, `up`, `down` | Cambia livello |
 | `dentro`, `fuori` | `interno`, `esterno`, `in`, `inside`, `out`, `outside` | Entra o lascia un luogo collegato |
 | `vai a nord` | `cammina verso nord`, `go north` | Introduce una direzione con un verbo |
+| `indietro`, `torna` | `back`, `go back` | Ritorna al luogo appena lasciato |
 | `prendi chiave` | `get chiave`, `take chiave` | Prende un oggetto |
 | `esci` | `q`, `quit` | Termina la sessione |
 

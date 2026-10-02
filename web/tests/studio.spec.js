@@ -55,6 +55,12 @@ test("progetto, compilazione, gioco, test e release statica", async ({
   await page.locator("#command").fill("vai a nordest");
   await page.locator("#send").click();
   await expect(page.locator(".story-output").last()).toContainText("Vedetta");
+  await page.locator("#command").fill("indietro");
+  await page.locator("#send").click();
+  await expect(page.locator(".story-output").last()).toContainText("Molo");
+  await page.locator("#command").fill("ne");
+  await page.locator("#send").click();
+  await expect(page.locator(".story-output").last()).toContainText("Vedetta");
   await page.locator("#command").fill("so");
   await page.locator("#send").click();
   await expect(page.locator(".story-output").last()).toContainText("Molo");

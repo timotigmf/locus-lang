@@ -36,6 +36,7 @@
 - [Livelli verticali](linguaggio/livelli-verticali.md): su/giù, scale, botole e mappa a livelli.
 - [Dentro e fuori](linguaggio/dentro-fuori.md): entrate e uscite topologiche distinte dal contenimento.
 - [Comandi naturali di movimento](linguaggio/comandi-movimento.md): verbi e preposizioni davanti alle direzioni.
+- [Tornare al luogo precedente](linguaggio/ritorno-indietro.md): memoria di un passo nel grafo corrente.
 - [Elenchi tipati](linguaggio/liste-tipate.md): raccolte omogenee, appartenenza e rollback.
 - [Tabelle tipate](linguaggio/tabelle-tipate.md): colonne nominate e righe transazionali.
 - [Persone e dialoghi](linguaggio/dialoghi-strutturati.md): conversazioni a nodi e scelte multi-turno.

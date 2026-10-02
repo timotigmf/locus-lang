@@ -88,6 +88,11 @@ def test_board_move_and_disembark_move_vehicle_atomically() -> None:
     assert "Sei a bordo di: saetta rossa." in render(moved)
     assert "saetta rossa" not in render(moved).split("Vedi: ", 1)[1]
 
+    reversed_move = command(moved.session, "indietro")
+    assert reversed_move.session.room_id == current.room_id
+    assert reversed_move.session.room_id == vehicle_location(reversed_move.session)
+    moved = command(reversed_move.session, "est")
+
     left = command(moved.session, "scendi dalla saetta")
     assert left.event.kind == "disembarked"
     assert left.session.vehicle_id is None

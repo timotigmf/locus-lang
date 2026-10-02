@@ -47,11 +47,11 @@ def test_locked_door_solution_and_bidirectional_state() -> None:
     state = command(state, "apri la porta rossa con la chiave di ottone", "opened")
     state = command(state, "nord", "look")
     state = command(state, "chiudi la porta rossa", "closed")
-    state = command(state, "sud", "door_closed")
+    state = command(state, "indietro", "door_closed")
     state = command(state, "blocca la porta rossa con la chiave di ottone", "lock_success")
     state = command(state, "apri la porta rossa", "locked")
     state = command(state, "apri la porta rossa con la chiave di ottone", "opened")
-    state = command(state, "sud", "look")
+    state = command(state, "indietro", "look")
     assert state.room_id == initial.room_id
     assert initial.inventory == ()
     assert property_value(initial.world, ident(initial, "porta rossa"), STATE) == "bloccato"

@@ -67,6 +67,8 @@ EventKind = Literal[
     "no_indirect_referent",
     "missing_direction",
     "invalid_direction",
+    "no_previous_room",
+    "cannot_return",
     "no_exit",
     "unknown",
     "missing_noun",
@@ -122,6 +124,21 @@ EventKind = Literal[
     "merchant_no_funds",
 ]
 
+DIRECTION_PREDICATES = {
+    "north": NORTH,
+    "south": SOUTH,
+    "east": EAST,
+    "west": WEST,
+    "northeast": NORTHEAST,
+    "southeast": SOUTHEAST,
+    "southwest": SOUTHWEST,
+    "northwest": NORTHWEST,
+    "up": UP,
+    "down": DOWN,
+    "inward": INWARD,
+    "outward": OUTWARD,
+}
+
 
 @dataclass(frozen=True, slots=True)
 class Clarification:
@@ -148,6 +165,7 @@ class Session:
     clarification: Clarification | None = None
     pronoun_id: str | None = None
     indirect_pronoun_id: str | None = None
+    previous_room_id: str | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -745,6 +763,25 @@ def _choose_dialogue(session: Session, selection: str) -> Transition:
     )
 
 
+def _back_direction(session: Session) -> Intent | Event:
+    if session.previous_room_id is None:
+        return Event("no_previous_room")
+    back_verb = next(
+        (
+            verb
+            for verb, predicate in DIRECTION_PREDICATES.items()
+            if any(
+                edge.source_id == session.room_id
+                and edge.predicate_id == predicate
+                and edge.target_id == session.previous_room_id
+                for edge in session.world.relations
+            )
+        ),
+        None,
+    )
+    return Intent(back_verb) if back_verb is not None else Event("cannot_return")
+
+
 def _perform(session: Session, intent: Intent) -> Transition:
     if intent.verb == "missing_direction":
         return Transition(session, Event("missing_direction"))
@@ -782,22 +819,8 @@ def _perform(session: Session, intent: Intent) -> Transition:
                 tuple(ident for ident in session.inventory if reachable(session, ident)),
             ),
         )
-    directions = {
-        "north": NORTH,
-        "south": SOUTH,
-        "east": EAST,
-        "west": WEST,
-        "northeast": NORTHEAST,
-        "southeast": SOUTHEAST,
-        "southwest": SOUTHWEST,
-        "northwest": NORTHWEST,
-        "up": UP,
-        "down": DOWN,
-        "inward": INWARD,
-        "outward": OUTWARD,
-    }
-    if intent.verb in directions:
-        predicate = directions[intent.verb]
+    if intent.verb in DIRECTION_PREDICATES:
+        predicate = DIRECTION_PREDICATES[intent.verb]
         target = next(
             (
                 edge.target_id
@@ -818,7 +841,7 @@ def _perform(session: Session, intent: Intent) -> Transition:
         moved = session
         if session.vehicle_id is not None:
             moved = _move(session, session.vehicle_id, target)
-        moved = replace(moved, room_id=target)
+        moved = replace(moved, room_id=target, previous_room_id=session.room_id)
         validate_session(
             moved.world, moved.inventory, moved.room_id, moved.vehicle_id, moved.owned_ids
         )
@@ -1060,6 +1083,11 @@ def _step(session: Session, intent: Intent) -> Transition:
     if session.dialogue_id is not None and intent.verb != "quit":
         dialogue = next(item for item in session.world.dialogues if item.id == session.dialogue_id)
         return Transition(session, Event("dialogue_active", (dialogue.speaker_id,)))
+    if intent.verb == "back":
+        backward = _back_direction(session)
+        if isinstance(backward, Event):
+            return Transition(session, backward)
+        intent = backward
     authored = _authored_action(session, intent.verb)
     if (
         not session.world.rules

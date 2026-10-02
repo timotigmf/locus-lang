@@ -60,6 +60,9 @@ _SIMPLE_COMMANDS: dict[str, Verb] = {
     "esterno": "outward",
     "out": "outward",
     "outside": "outward",
+    "indietro": "back",
+    "torna": "back",
+    "back": "back",
     "esci": "quit",
     "q": "quit",
     "quit": "quit",
@@ -257,8 +260,19 @@ def _movement_intent(tokens: list[tuple[str, bool]]) -> Intent | None:
     direction = canonical(_noun(rest) or "")
     if not direction:
         return Intent("missing_direction")
+    if direction in {"indietro", "back"}:
+        return Intent("back")
     movement = _DIRECTION_COMMANDS.get(direction)
     return Intent(movement) if movement is not None else Intent("invalid_direction")
+
+
+def _back_intent(tokens: list[tuple[str, bool]]) -> Intent | None:
+    if tokens in (
+        [("torna", False), ("indietro", False)],
+        [("go", False), ("back", False)],
+    ):
+        return Intent("back")
+    return None
 
 
 def _without_initial_preposition(
@@ -426,6 +440,9 @@ def parse_command(
     verb, quoted = tokens[0]
     if quoted:
         return Intent("unknown")
+    backward = _back_intent(tokens)
+    if backward is not None:
+        return backward
     movement = _movement_intent(tokens)
     if movement is not None:
         return movement

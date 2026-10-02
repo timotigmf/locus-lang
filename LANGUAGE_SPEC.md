@@ -128,6 +128,10 @@ Le dodici direzioni accettano anche introduzioni come `vai a nord`, `cammina
 verso sudovest` e `muoviti in alto`; una direzione mancante o sconosciuta
 produce una correzione specifica senza consumare il turno. Il contratto esteso
 è in [Comandi naturali di movimento](docs/linguaggio/comandi-movimento.md).
+La sessione ricorda inoltre l'ultimo luogo lasciato: `indietro`, `torna`,
+`vai indietro` e `back` percorrono un arco esistente verso quel luogo senza
+aggirare porte o passaggi a senso unico. Si veda
+[Tornare al luogo precedente](docs/linguaggio/ritorno-indietro.md).
 Ambiguità, oggetto assente, oggetto già posseduto e uscita assente sono esiti distinti.
 `esci` termina la sessione. Questa limitazione storica è sostituita dalla
 [specifica M2 corrente](docs/linguaggio/milestone-2.md): sono disponibili alias

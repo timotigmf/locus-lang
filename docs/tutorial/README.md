@@ -49,6 +49,7 @@ al prompt della storia: lì si scrivono soltanto i comandi del giocatore.
 | [33. Scendere senza ritorno](33-passaggi-a-senso-unico.md) | `examples/tutorial/33_senso_unico.locus` | Dichiarare, provare e mappare un passaggio a senso unico |
 | [34. Rivelare una botola senza ritorno](34-passaggio-segreto-senza-ritorno.md) | `examples/tutorial/34_passaggio_unidirezionale_segreto.locus` | Creare da una regola un passaggio segreto a senso unico |
 | [35. Muoversi con frasi naturali](35-comandi-naturali-di-movimento.md) | `examples/tutorial/35_comandi_naturali_movimento.locus` | Usare verbi e preposizioni davanti alle direzioni |
+| [36. Tornare sui propri passi](36-tornare-sui-propri-passi.md) | `examples/tutorial/36_tornare_indietro.locus` | Ricordare un luogo senza aggirare passaggi a senso unico |
 
 Prima prova la versione fornita. Poi modifica un solo elemento e riesegui la
 sequenza di comandi. In caso di errore conserva il messaggio, il file sorgente e

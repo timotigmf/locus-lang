@@ -77,6 +77,7 @@ dall'alto verso il basso prima di studiare i moduli.
 33. [Scendere senza ritorno](../tutorial/33-passaggi-a-senso-unico.md)
 34. [Rivelare una botola senza ritorno](../tutorial/34-passaggio-segreto-senza-ritorno.md)
 35. [Muoversi con frasi naturali](../tutorial/35-comandi-naturali-di-movimento.md)
+36. [Tornare sui propri passi](../tutorial/36-tornare-sui-propri-passi.md)
 
 ## Indice per obiettivo
 
@@ -92,6 +93,7 @@ dall'alto verso il basso prima di studiare i moduli.
 | Passaggi segreti dinamici | Uscite direzionali create o rimosse dalle regole | Lezione 12 |
 | Botole e percorsi senza ritorno | Archi statici e dinamici a senso unico | Lezioni 33 e 34 |
 | Frasi naturali di movimento | Verbi e preposizioni davanti alle direzioni | Lezione 35 |
+| Ritorno rapido | Memoria dell'ultimo luogo nel grafo corrente | Lezione 36 |
 | Dettagli ambientali e oggetti nascosti | `scenario` non trasportabile e proprietà `visibile` | Lezione 13 |
 | Indizi, memoria e cronologie | Elenchi tipati con appartenenza e rollback | Lezione 14 |
 | Cataloghi e registri | Tabelle con colonne tipate e righe transazionali | Lezione 15 |

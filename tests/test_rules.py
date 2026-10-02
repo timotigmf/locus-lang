@@ -166,6 +166,19 @@ def test_default_action_failure_rolls_back() -> None:
     assert result.event.kind == "no_exit"
 
 
+def test_back_uses_the_directional_rulebook() -> None:
+    initial = session(
+        "La Cripta è una stanza. La Cripta è a nord della Sala. "
+        'Regola "ritorno" per andare a sud nella fase dopo: '
+        'dì "Riconosci le tue orme."; Fine regola.'
+    )
+    crypt = step(initial, parse_command("nord"))
+    returned = step(crypt.session, parse_command("indietro"))
+    assert returned.session.room_id == initial.room_id
+    assert "Riconosci le tue orme." in render(returned)
+    assert any(item.name == "ritorno" for item in returned.trace)
+
+
 def test_instead_and_description() -> None:
     initial = session(
         rule('dì "Personalizzato";', phase="invece") + rule('dì "Dopo";', phase="dopo", name="dopo")
@@ -353,6 +366,7 @@ def test_static_errors(source: str, code: str) -> None:
         ('Azione "riporre" senza oggetti con comando "metticela".', "E311"),
         ('Azione "riporre" senza oggetti con comando "mettici".', "E311"),
         ('Azione "andare" senza oggetti con comando "vai".', "E311"),
+        ('Azione "ritornare" senza oggetti con comando "indietro".', "E311"),
         (
             'Azione "salutare" senza oggetti con comando "saluta". '
             'Azione "inchinarsi" senza oggetti con comando "saluta".',

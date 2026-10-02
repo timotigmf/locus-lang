@@ -39,6 +39,23 @@ def test_bridge_accepts_natural_movement_and_explains_invalid_directions() -> No
     assert studio.session is before
 
 
+def test_bridge_exposes_and_uses_the_previous_room() -> None:
+    studio = Studio()
+    studio.compile(
+        project(
+            "La Banchina è una stanza. La Lanterna è una stanza. "
+            "La Lanterna è a nord della Banchina."
+        )
+    )
+    started = studio.restart()
+    assert started["previous_room"] is None
+    moved = studio.command("nord")
+    assert moved["previous_room"] == started["room"]
+    returned = studio.command("indietro")
+    assert returned["room"] == started["room"]
+    assert returned["previous_room"] == moved["room"]
+
+
 def test_bridge_exposes_current_list_values() -> None:
     studio = Studio()
     source = (

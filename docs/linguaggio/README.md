@@ -29,6 +29,8 @@ relazionale `sovrasta` e una resa distinta nell'atlante.
 senza riutilizzare il contenimento degli oggetti.
 I [comandi naturali di movimento](comandi-movimento.md) accettano verbi come
 `vai`, `cammina` e `muoviti` davanti alle dodici direzioni strutturate.
+[Tornare al luogo precedente](ritorno-indietro.md) aggiunge `indietro`, `torna`
+e `back` senza aggirare il grafo corrente.
 I [passaggi a senso unico](passaggi-senso-unico.md) dichiarano esplicitamente
 origine, direzione e destinazione senza generare l'arco inverso.
 La [disambiguazione a più turni](disambiguazione-multiturno.md) conserva la

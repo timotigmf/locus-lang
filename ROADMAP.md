@@ -119,6 +119,9 @@ Ogni pacchetto conserva il core indipendente dalla narrativa interattiva.
 24. Frasi naturali di movimento implementate con verbi italiani, preposizioni
     facoltative, forme classiche inglesi e correzioni direzionali precise.
 
+25. Ritorno al luogo precedente implementato nella sessione con `indietro`,
+    rispetto di porte, veicoli e archi a senso unico, senza cambiare l'IR.
+
 Non si importeranno codice o testi Inform.
 
 ## Studio M5 — 0.5.0a1

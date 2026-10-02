@@ -53,3 +53,4 @@ Le fonti e le licenze sono nel [registro](../architettura/fonti.md).
 - [0036 — passaggi a senso unico](0036-passaggi-senso-unico.md): origine e destinazione esplicite senza arco inverso.
 - [0037 — relazioni dinamiche unidirezionali](0037-relazioni-dinamiche-unidirezionali.md): creazione e rimozione transazionale di un solo arco.
 - [0038 — comandi naturali di movimento](0038-comandi-naturali-movimento.md): verbi introduttivi e correzioni direzionali precise.
+- [0039 — ritorno al luogo precedente](0039-ritorno-al-luogo-precedente.md): memoria di sessione e riuso del movimento direzionale.

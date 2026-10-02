@@ -477,6 +477,7 @@ class Studio:
             "text": render(transition),
             "trace": [asdict(item) for item in transition.trace],
             "room": transition.session.room_id,
+            "previous_room": transition.session.previous_room_id,
             "inventory": list(transition.session.inventory),
             "vehicle": transition.session.vehicle_id,
             "owned": list(transition.session.owned_ids),

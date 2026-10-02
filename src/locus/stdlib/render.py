@@ -155,7 +155,8 @@ def render(transition: Transition) -> str:
         "apri, chiudi, blocca, inventario, nord, sud, est, ovest, nordest, "
         "sudest, sudovest, nordovest, su, giù, dentro, fuori o esci. Sono "
         "disponibili anche le abbreviazioni l, x, i, n, s, e, o, ne, se, so, "
-        "no, u, d e q; dopo un oggetto noto puoi usare esso, essa o forme come prendila."
+        "no, u, d e q; usa indietro per tornare all'ultimo luogo lasciato; dopo "
+        "un oggetto noto puoi usare esso, essa o forme come prendila."
     )
     if world.dialogues:
         unknown += " Per conversare usa parla con NOME."
@@ -180,6 +181,8 @@ def render(transition: Transition) -> str:
             "Direzione non riconosciuta. Usa nord, sud, est, ovest, le diagonali, "
             "su, giù, dentro o fuori."
         ),
+        "no_previous_room": "Non hai ancora lasciato un luogo a cui tornare.",
+        "cannot_return": "Non puoi tornare indietro da qui.",
         "quit": "A presto.",
         "locked": "È bloccato: serve una chiave adatta.",
         "already_open": "È già aperto.",

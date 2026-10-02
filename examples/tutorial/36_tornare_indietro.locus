@@ -1,0 +1,14 @@
+Titolo: "I passi nella cripta".
+Autore: "Esempio LOCUS".
+
+La Banchina è una stanza.
+La Lanterna è una stanza.
+La Cripta è una stanza.
+
+La Lanterna è a nord della Banchina.
+Dalla Lanterna si va giù verso la Cripta.
+
+Inizia nella "Banchina".
+La Banchina ha descrizione "La lanterna del molo si alza a nord.".
+La Lanterna ha descrizione "Una botola aperta conduce soltanto verso il basso.".
+La Cripta ha descrizione "La botola si è richiusa troppo in alto.".

@@ -12,6 +12,7 @@ cammina verso sudovest
 muoviti in alto
 dirigiti all'esterno
 procedi dentro
+vai indietro
 ```
 
 Sono riconosciuti `vai`, `cammina`, `muoviti`, `dirigiti` e `procedi`. Le forme
@@ -23,6 +24,8 @@ articolate necessarie, come `all'esterno`.
 La destinazione resta una delle dodici direzioni strutturate: cardinali,
 diagonali, `su`/`giù` e `dentro`/`fuori`. Il parser produce lo stesso intento
 tipato della forma breve; il runtime non reinterpreta la frase.
+`vai indietro` è l'eccezione esplicita e usa la
+[memoria del luogo precedente](ritorno-indietro.md).
 
 ## Correzioni precise
 

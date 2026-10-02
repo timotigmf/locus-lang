@@ -78,6 +78,11 @@ def make_session() -> Session:
         ("go north", Intent("north")),
         ("move down", Intent("down")),
         ("walk to northwest", Intent("northwest")),
+        ("indietro", Intent("back")),
+        ("torna", Intent("back")),
+        ("torna indietro", Intent("back")),
+        ("vai indietro", Intent("back")),
+        ("go back", Intent("back")),
         ("vai", Intent("missing_direction")),
         ("vai verso", Intent("missing_direction")),
         ("vai alla porta", Intent("invalid_direction")),
@@ -469,6 +474,37 @@ def test_natural_movement_errors_are_specific_and_turnless() -> None:
     invalid = step(current, parse_command("vai verso il molo"))
     assert invalid.session is current
     assert render(invalid).startswith("Direzione non riconosciuta.")
+
+
+def test_back_returns_to_the_previous_room_and_can_toggle() -> None:
+    current = make_session()
+    missing = step(current, parse_command("indietro"))
+    assert missing.session is current
+    assert render(missing) == "Non hai ancora lasciato un luogo a cui tornare."
+
+    corridor = step(current, parse_command("nord"))
+    assert corridor.session.previous_room_id == current.room_id
+    kitchen = step(corridor.session, parse_command("torna indietro"))
+    assert kitchen.session.room_id == current.room_id
+    assert kitchen.session.previous_room_id == corridor.session.room_id
+    assert "Cucina" in render(kitchen)
+    again = step(kitchen.session, parse_command("back"))
+    assert again.session.room_id == corridor.session.room_id
+
+
+def test_back_respects_a_one_way_passage() -> None:
+    current = start(
+        instantiate(
+            compile_story(
+                "La Terrazza è una stanza. La Cripta è una stanza. "
+                "Dalla Terrazza si va giù verso la Cripta."
+            )
+        )
+    )
+    crypt = step(current, parse_command("giù"))
+    blocked = step(crypt.session, parse_command("indietro"))
+    assert blocked.session is crypt.session
+    assert render(blocked) == "Non puoi tornare indietro da qui."
 
 
 def test_author_synonyms_resolve_in_scope_and_can_be_ambiguous() -> None:

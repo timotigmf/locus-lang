@@ -200,6 +200,19 @@ def test_natural_movement_tutorial_uses_the_same_directional_intents() -> None:
     assert invalid.event.kind == "invalid_direction"
 
 
+def test_back_tutorial_returns_normally_but_not_after_the_one_way_drop() -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "36_tornare_indietro.locus")))
+    assert step(current, parse_command("indietro")).event.kind == "no_previous_room"
+    lantern = step(current, parse_command("nord"))
+    dock = step(lantern.session, parse_command("torna indietro"))
+    assert "Banchina" in render(dock)
+    lantern_again = step(dock.session, parse_command("back"))
+    crypt = step(lantern_again.session, parse_command("giù"))
+    blocked = step(crypt.session, parse_command("indietro"))
+    assert blocked.event.kind == "cannot_return"
+    assert blocked.session is crypt.session
+
+
 def test_clarification_tutorial_accepts_a_synonym_on_the_next_turn() -> None:
     current = start(instantiate(compile_story_file(TUTORIAL / "26_chiarimenti.locus")))
     asked = step(current, parse_session_command(current, "prendi chiave"))

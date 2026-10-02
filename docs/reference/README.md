@@ -14,10 +14,12 @@
 
 `gioca`: guarda, esamina, prendi, lascia, metti, apri, chiudi, blocca,
 inventario, nord, sud, est, ovest, nordest, sudest, sudovest, nordovest, su, giù,
-dentro, fuori, esci.
+dentro, fuori, indietro, esci.
 Le direzioni accettano anche `vai`, `cammina`, `muoviti`, `dirigiti` o
 `procedi`, con preposizione facoltativa: per esempio `vai a nord`, `cammina
 verso sudovest` e `muoviti in alto`. Sono compatibili `go`, `move` e `walk`.
+`indietro`, `torna`, `torna indietro`, `vai indietro`, `back` e `go back`
+percorrono l'arco disponibile verso l'ultimo luogo lasciato.
 Alias classici: l/look, x/examine, i/inv/inventory, n/north, s/south, e/east,
 o/w/west, ne/northeast, se/southeast, so/southwest, no/nw/northwest,
 u/up/alto, d/down/giu/basso, in/inside, out/outside, q/quit,
