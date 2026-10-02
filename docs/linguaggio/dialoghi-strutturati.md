@@ -66,6 +66,11 @@ avanzano il mondo. Ogni passaggio produce un record di trace con dialogo, nodo,
 scelta ed esito. La sessione conserva i nodi già visitati. Parlare di nuovo con
 la persona ricomincia dal primo nodo senza cancellare questa memoria.
 
+Una scelta inesistente, fuori intervallo o testualmente ambigua restituisce
+`invalid_choice` senza cambiare la sessione. La presentazione ripropone le
+opzioni numerate del nodo corrente, senza ripetere la battuta o avanzare il
+turno. Il giocatore può correggere la risposta nello stesso dialogo.
+
 Lo Studio elenca dialoghi, persona, numero di nodi e nodo iniziale nell'Indice
 del mondo. Il pannello **Regole e trace** mostra il nodo percorso e la scelta.
 

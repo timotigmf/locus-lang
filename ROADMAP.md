@@ -157,3 +157,6 @@ scoperta da quello delle visite successive tramite priorità esplicite.
 
 Didattica: soluzione completa della seconda osservazione nella lezione 13,
 con contatore locale, indizio progressivo e rivelazione unica verificati.
+
+Dialoghi: una risposta errata ripresenta le scelte del nodo corrente,
+conservando stato e turno; casi numerici e testuali verificati nella lezione 16.

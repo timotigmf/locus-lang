@@ -119,7 +119,22 @@ def render(transition: Transition) -> str:
     if kind == "no_dialogue":
         return f"{names[0]} non ha ancora un dialogo definito."
     if kind == "invalid_choice":
-        return "Scegli una delle opzioni indicate, usando il numero o il testo della scelta."
+        message = "Scegli una delle opzioni indicate, usando il numero o il testo della scelta."
+        session = transition.session
+        node = next(
+            (
+                node
+                for dialogue in world.dialogues
+                if dialogue.id == session.dialogue_id
+                for node in dialogue.nodes
+                if node.id == session.dialogue_node_id
+            ),
+            None,
+        )
+        if node is None:
+            return message
+        options = [f"{index}. {choice.label}" for index, choice in enumerate(node.choices, 1)]
+        return "\n".join([message, *options])
     if kind == "dialogue_active":
         return "La conversazione è in corso: scegli un'opzione oppure scrivi «basta»."
     if kind == "no_active_dialogue":

@@ -641,3 +641,23 @@ def test_second_observation_solution_counts_only_successful_examinations() -> No
     assert "rivela una chiave" not in render(repeated)
     assert property_of(repeated.session, "mosaico", "osservazioni") == 2
     assert repeated.session.inventory == taken.session.inventory
+
+
+@pytest.mark.parametrize("selection", ["0", "99", "scegli assente", "scegli chiedi"])
+def test_dialogue_error_redisplays_current_choices_without_changing_state(selection: str) -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "16_dialogo_guardiana.locus")))
+    current = step(current, parse_session_command(current, "parla con guardiana")).session
+    invalid = step(current, parse_session_command(current, selection))
+    assert invalid.event.kind == "invalid_choice"
+    assert invalid.session is current
+    assert "1. Chiedi della tempesta" in render(invalid)
+    assert "2. Chiedi della chiave" in render(invalid)
+    assert "3. Saluta e concludi" in render(invalid)
+    assert "posa il registro" not in render(invalid)
+    advanced = step(current, parse_session_command(current, "1")).session
+    retry = step(advanced, parse_session_command(advanced, "99"))
+    assert retry.session is advanced
+    assert "1. Torna alle domande" in render(retry)
+    assert "Chiedi della chiave" not in render(retry)
+    recovered = step(retry.session, parse_session_command(retry.session, "1"))
+    assert "posa il registro" in render(recovered)

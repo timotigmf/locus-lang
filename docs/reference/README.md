@@ -235,3 +235,11 @@ La soluzione [della seconda osservazione](../tutorial/13-visibilita-scenario.md)
 combina contatore numerico, soglia e flag: priorità 20 per contare, 10 per il
 caso già scoperto e 0 per rivelare. Solo gli esami riusciti contano; il conteggio
 si ferma alla scoperta e non dipende dai turni globali delle scene.
+
+### Scelte di dialogo non valide
+
+`invalid_choice` conserva la sessione. `stdlib.render.render` ricava dal nodo
+attivo l'elenco numerato delle alternative e lo ripresenta dopo il messaggio
+di correzione. Non ripete la battuta e non produce nuove visite o trace.
+La [lezione 16](../tutorial/16-dialogo-guardiana.md) include prove con numero
+fuori intervallo e testo ambiguo.
