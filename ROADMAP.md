@@ -166,3 +166,6 @@ non interrompono la partita; zeri iniziali e cifre decimali Unicode preservati.
 
 Chiarimenti: una risposta errata ripresenta nomi e numeri delle candidate,
 con recupero verificato per risposta vuota, ambigua, assente e fuori intervallo.
+
+Aiuto: le azioni dell'autore mostrano ora argomenti e separatori accettati,
+con alias e forme a zero, uno o due oggetti derivati dal catalogo compilato.

@@ -252,3 +252,7 @@ conversione e senza perdere la domanda corrente.
 `invalid_clarification` trasporta gli ID delle candidate come `ambiguous`.
 Il renderer mostra di nuovo nomi e numerazione senza ricalcolare la risoluzione
 o riordinare gli oggetti. Vedi la [lezione 26](../tutorial/26-scegliere-tra-oggetti.md).
+
+L'aiuto delle azioni dell'autore deriva arità e separatori da `ActionIR`:
+`NOME` indica il primo argomento e `ALTRO` il secondo. Le forme sono ordinate
+e deduplicate; tutte le combinazioni di alias e separatori vengono mostrate.

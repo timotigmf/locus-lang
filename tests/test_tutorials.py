@@ -8,7 +8,7 @@ import pytest
 
 from locus.player import parse_command
 from locus.runtime import instantiate
-from locus.stdlib.authoring import compile_story_file
+from locus.stdlib.authoring import compile_story, compile_story_file
 from locus.stdlib.game import Session, parse_session_command, start, step
 from locus.stdlib.render import render
 from locus.stdlib.validation import property_value
@@ -132,7 +132,7 @@ def test_help_tutorial_lists_story_actions_without_advancing_time() -> None:
     helped = step(current, parse_session_command(current, "aiuto"))
     assert helped.session is current
     assert helped.session.turn == 0
-    assert "azioni della storia: suona." in render(helped)
+    assert "azioni della storia: suona NOME." in render(helped)
     rung = step(helped.session, parse_session_command(helped.session, "suona campana"))
     assert "rintocco attraversa la torre" in render(rung)
     assert parse_session_command(current, "aiuto movimento").verb == "unknown"
@@ -703,3 +703,36 @@ def test_clarification_error_keeps_numbered_candidates_visible(answer: str) -> N
     assert recovered.event.kind == "taken"
     assert "chiave di ferro" in render(recovered)
     assert recovered.session.clarification is None
+
+
+def test_help_shows_authored_arity_aliases_and_separators() -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "09_sinonimi_azioni.locus")))
+    helped = step(current, parse_session_command(current, "aiuto"))
+    assert helped.session is current
+    text = render(helped)
+    for form in (
+        "saluta NOME",
+        "riverisci NOME",
+        "mostra NOME a ALTRO",
+        "mostra NOME verso ALTRO",
+        "esibisci NOME a ALTRO",
+        "parla NOME di ALTRO",
+    ):
+        assert form in text
+    assert "saluta NOME con ALTRO" not in text
+    assert "riconosce" in render(
+        step(current, parse_session_command(current, "mostra amuleto a custode"))
+    )
+
+
+def test_help_does_not_add_arguments_to_zero_arity_actions() -> None:
+    current = start(
+        instantiate(
+            compile_story(
+                'La Sala è una stanza. Azione "meditare" senza oggetti con comando "medita".'
+            )
+        )
+    )
+    text = render(step(current, parse_session_command(current, "aiuto")))
+    assert "azioni della storia: medita." in text
+    assert "medita NOME" not in text

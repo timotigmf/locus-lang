@@ -16,7 +16,7 @@ Fine regola.
 ## Prova guidata
 
 1. Scrivi `aiuto`: compaiono movimento, oggetti e comandi di sessione.
-2. Cerca l'ultima riga: `suona` appare fra le azioni della storia.
+2. Cerca l'ultima riga: `suona NOME` appare fra le azioni della storia.
 3. Scrivi `suona campana` e verifica il rintocco.
 4. Prova anche `comandi`, `help` e `?`: producono lo stesso elenco.
 
@@ -32,8 +32,19 @@ LOCUS risponde come a un comando sconosciuto, suggerendo il comando completo
 ## Esercizio
 
 Aggiungi all'esempio una seconda azione con comando `ascolta`. Ricompila e
-controlla che l'aiuto mostri `ascolta, suona` in ordine stabile, senza dover
+controlla che l'aiuto mostri `ascolta NOME, suona NOME` in ordine stabile, senza dover
 aggiornare manualmente un elenco.
 
 Il [riferimento sull'aiuto in partita](../linguaggio/aiuto-in-partita.md)
 descrive il comportamento contestuale e i limiti attuali.
+
+## Comandi con due oggetti
+
+Apri `examples/tutorial/09_sinonimi_azioni.locus` e digita `aiuto`. Troverai
+forme come `mostra NOME a ALTRO` e `mostra NOME verso ALTRO`, oltre ai sinonimi
+con `esibisci`. Sostituisci i segnaposto: `mostra amuleto a custode` esegue
+l'azione. Un comando come `saluta NOME` richiede invece un solo oggetto.
+Le forme senza oggetti non ricevono segnaposto.
+
+L'aiuto illustra la struttura accettata, ma non rivela quali oggetti risolvono
+un enigma e non sostituisce i controlli di tipo o raggiungibilità.

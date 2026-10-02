@@ -251,7 +251,7 @@ def test_help_is_turnless_and_lists_authored_commands() -> None:
     assert result.session.turn == 0
     assert "Comandi principali:" in text
     assert "- storia: turno, punteggio;" in text
-    assert "azioni della storia: suona." in text
+    assert "azioni della storia: suona NOME." in text
     assert parse_session_command(current, "aiuto movimento") == Intent("unknown")
 
 

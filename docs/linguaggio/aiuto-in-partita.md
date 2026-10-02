@@ -13,8 +13,12 @@ help
 
 LOCUS mostra i comandi principali divisi per attività. L'elenco si adatta al
 mondo compilato: dialoghi, scene, veicoli e commercio compaiono soltanto quando
-la storia li contiene. Le forme iniziali delle azioni definite dall'autore
-sono raccolte dalla IR, ordinate e mostrate nella sezione «azioni della storia».
+la storia li contiene. Le forme delle azioni definite dall'autore sono raccolte dalla IR, ordinate
+e mostrate nella sezione «azioni della storia». Le azioni senza argomenti
+mostrano il solo comando; quelle con un oggetto aggiungono `NOME`; quelle con
+due aggiungono il separatore e `ALTRO`. Sinonimi e separatori alternativi
+compaiono nelle combinazioni accettate, per esempio `mostra NOME a ALTRO`.
+`NOME` e `ALTRO` sono segnaposto da sostituire con i nomi degli oggetti.
 
 L'aiuto è un metacomando: non consuma un turno, non attiva regole e non cambia
 il mondo. Durante una conversazione o una domanda di chiarimento resta

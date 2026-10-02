@@ -34,7 +34,16 @@ def _help(transition: Transition) -> str:
         lines.append("- veicoli: sali/entra in NOME, scendi;")
     if any(has_type(world, entity.type_id, CURRENCY) for entity in world.entities):
         lines.append("- commercio: denaro, compra NOME, vendi NOME a MERCANTE;")
-    authored = sorted({command for action in world.actions for command in action.commands})
+    authored = sorted(
+        {
+            command
+            + (" NOME" if action.target_type_id is not None else "")
+            + (f" {separator} ALTRO" if action.indirect_type_id is not None else "")
+            for action in world.actions
+            for command in action.commands
+            for separator in (action.separators or ("con",))
+        }
+    )
     if authored:
         lines.append("- azioni della storia: " + ", ".join(authored) + ".")
     lines.append("Puoi usare un nome parziale quando identifica un solo oggetto raggiungibile.")

@@ -133,7 +133,7 @@ def test_bridge_exposes_contextual_player_help() -> None:
     studio.restart()
     helped = studio.command("?")
     assert "Comandi principali:" in helped["text"]
-    assert "azioni della storia: suona." in helped["text"]
+    assert "azioni della storia: suona NOME." in helped["text"]
     assert helped["turn"] == 0
 
 
