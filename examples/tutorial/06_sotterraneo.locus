@@ -22,6 +22,7 @@ Il "idolo d'ambra" è una cosa nella Cripta.
 
 Il registro è una cosa.
 La punti è una proprietà numerica.
+La premiato è una proprietà logica.
 Il registro ha punti 0.
 
 Comprendi "scatola" come "cassetta".
@@ -29,7 +30,9 @@ Comprendi "scrigno" come "cassetta".
 Comprendi "reliquia" come "idolo d'ambra".
 Comprendi "statua" come "idolo d'ambra".
 
-Regola "premio della cripta" per prendere "idolo d'ambra" nella fase dopo:
+Regola "premio della cripta" per prendere "idolo d'ambra" nella fase dopo
+quando "premiato" di "registro" è falso:
+    imposta "premiato" di "registro" a vero;
     aumenta "punti" di "registro" di 10;
     dì "Hai risolto l'enigma della cripta e ottenuto dieci punti.";
 Fine regola.

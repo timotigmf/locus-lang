@@ -357,3 +357,11 @@ dalla sintassi `La Cripta è a nord della Sala.`. Il lowering emette una normale
 Catalogo, tipi, conflitti e auto-collegamenti conservano i controlli
 `E104`–`E107`. L'IR resta alla versione 21. Il contratto completo è in
 [Passaggi a senso unico](docs/linguaggio/passaggi-senso-unico.md).
+
+## Premi definiti tramite regole
+
+Una regola nella fase `dopo` può scattare a ogni azione riuscita, anche dopo
+aver lasciato e ripreso lo stesso oggetto. Per un premio unico l'autore
+usa una proprietà logica nella condizione e la imposta insieme all'incremento.
+La [lezione 6](docs/tutorial/06-sotterraneo-enigma-punti.md) mostra questo
+contratto esistente, senza modificare il linguaggio o l'IR.

@@ -216,3 +216,10 @@ metadati, tipi, entità, proprietà, relazioni, vocabolario, azioni, regole,
 tabelle, dialoghi, scene, veicoli, commercio e risorse. Il filtro opera sul testo
 visualizzato senza ricompilare. **Scarica JSON** produce
 `indice-mondo-locus.json` con l'IR completa e la relativa `version`.
+
+### Premi delle regole dell'autore
+
+La fase `dopo` non rende un premio unico: per impedire duplicazioni dopo
+`lascia` e `prendi`, usa un flag logico nella condizione e aggiornalo insieme
+al contatore. Il contatore dell'autore è distinto da `Session.score`.
+Vedi il [sotterraneo completo](../tutorial/06-sotterraneo-enigma-punti.md).

@@ -335,6 +335,14 @@ def test_dungeon_tutorial_awards_points_once_after_the_puzzle() -> None:
     repeated = step(current, parse_command("prendi statua"))
     assert repeated.session is current
     assert property_of(repeated.session, "registro", "punti") == 10
+    for _ in range(3):
+        dropped = step(current, parse_command("lascia reliquia"))
+        assert dropped.event.kind == "dropped"
+        retaken = step(dropped.session, parse_command("prendi statua"))
+        assert retaken.event.kind == "taken"
+        assert property_of(retaken.session, "registro", "punti") == 10
+        assert "ottenuto dieci punti" not in render(retaken)
+        current = retaken.session
 
 
 def test_author_action_tutorial_checks_types_and_updates_state() -> None:

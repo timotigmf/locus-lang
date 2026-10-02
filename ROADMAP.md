@@ -148,3 +148,6 @@ chiarimento a più turni, pronomi singolari e clitici standard. Plurali, accordo
 grammaticale e forme doppie non locative restano futuri; i clitici diretti possono conservare un
 complemento esplicito; `metticelo`, `metticela` e `mettici OGGETTO` riusano una
 destinazione ricordata, disponibile anche come `lì` o `là` dopo `metti`.
+
+Verifica didattica: il premio della lezione 6 è protetto anche dopo aver
+lasciato e ripreso il tesoro; tutorial e regressione coprono la sequenza.
