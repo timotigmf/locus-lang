@@ -160,3 +160,6 @@ con contatore locale, indizio progressivo e rivelazione unica verificati.
 
 Dialoghi: una risposta errata ripresenta le scelte del nodo corrente,
 conservando stato e turno; casi numerici e testuali verificati nella lezione 16.
+
+Robustezza del giocatore: numeri molto lunghi nei dialoghi e nei chiarimenti
+non interrompono la partita; zeri iniziali e cifre decimali Unicode preservati.

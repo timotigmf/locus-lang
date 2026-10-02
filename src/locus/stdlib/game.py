@@ -713,6 +713,16 @@ def _talk(session: Session, name: str, selected_id: str | None = None) -> Transi
     return _enter_dialogue(session, dialogue, dialogue.start_node_id)
 
 
+def _choice_index(selection: str, count: int) -> int | None:
+    """Resolve decimal digits without constructing an unbounded integer."""
+    value = 0
+    for digit in selection:
+        value = value * 10 + int(digit)
+        if value > count:
+            return None
+    return value - 1 if value else None
+
+
 def _choose_dialogue(session: Session, selection: str) -> Transition:
     dialogue = next(
         (item for item in session.world.dialogues if item.id == session.dialogue_id),
@@ -723,8 +733,8 @@ def _choose_dialogue(session: Session, selection: str) -> Transition:
     node = _dialogue_node(dialogue, session.dialogue_node_id)
     choice = None
     if selection.isdecimal():
-        index = int(selection) - 1
-        if 0 <= index < len(node.choices):
+        index = _choice_index(selection, len(node.choices))
+        if index is not None:
             choice = node.choices[index]
     else:
         normalized = canonical(selection)
@@ -1194,10 +1204,8 @@ def _clarification_choice(session: Session, selection: str) -> str | None:
     clarification = session.clarification
     assert clarification is not None
     if selection.isdecimal():
-        index = int(selection) - 1
-        return (
-            clarification.candidates[index] if 0 <= index < len(clarification.candidates) else None
-        )
+        index = _choice_index(selection, len(clarification.candidates))
+        return clarification.candidates[index] if index is not None else None
     normalized = canonical(selection)
     entities = {
         entity.id: entity

@@ -39,3 +39,11 @@ silenziosa.
 
 Nel pannello **Test**, registra `prendi chiave` e `2`. Il transcript conserva sia
 la domanda sia l'azione ripresa, quindi controlla anche le regressioni del dialogo.
+
+## Correggere un numero fuori intervallo
+
+Dopo `prendi chiave`, prova `0000` oppure un numero molto grande: la domanda
+resta attiva. Rispondi `0001` per scegliere la prima chiave. Gli zeri iniziali
+non cambiano il numero; una sequenza molto lunga incollata per errore non deve
+interrompere la partita. Il copione `26_chiarimenti.comandi` contiene una prova
+breve con errore, correzione e controllo dell'inventario.

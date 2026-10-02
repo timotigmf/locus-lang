@@ -35,3 +35,11 @@ la semantica è identica nei tre ambienti.
 Pronomi e clitici singolari sono descritti nella
 [specifica dedicata](pronomi-e-clitici.md). Il chiarimento riguarda una sola
 posizione dell'argomento alla volta.
+
+## Robustezza delle risposte numeriche
+
+Le risposte decimali sono confrontate con il numero delle alternative senza
+convertire l'intera stringa in un intero illimitato. Anche un numero incollato
+molto lungo produce il normale errore di scelta e conserva la sessione. Zero
+non seleziona alcuna alternativa; gli zeri iniziali sono ammessi (`0001` vale
+`1`), anche con cifre decimali Unicode.

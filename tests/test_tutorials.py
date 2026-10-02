@@ -661,3 +661,31 @@ def test_dialogue_error_redisplays_current_choices_without_changing_state(select
     assert "Chiedi della chiave" not in render(retry)
     recovered = step(retry.session, parse_session_command(retry.session, "1"))
     assert "posa il registro" in render(recovered)
+
+
+@pytest.mark.parametrize("mode", ["dialogue", "clarification"])
+@pytest.mark.parametrize(
+    ("selection", "valid"),
+    [("9" * 5000, False), ("0" * 5000, False), ("0" * 5000 + "1", True), ("٠١", True)],
+    ids=["huge", "zero", "leading-zeroes", "unicode"],
+)
+def test_numeric_choices_are_bounded_without_rejecting_leading_zeroes(
+    mode: str, selection: str, valid: bool
+) -> None:
+    filename, opening = (
+        ("16_dialogo_guardiana.locus", "parla con guardiana")
+        if mode == "dialogue"
+        else ("26_chiarimenti.locus", "prendi chiave")
+    )
+    current = start(instantiate(compile_story_file(TUTORIAL / filename)))
+    current = step(current, parse_session_command(current, opening)).session
+    result = step(current, parse_session_command(current, selection))
+    if valid:
+        assert result.event.kind == ("dialogue" if mode == "dialogue" else "taken")
+    else:
+        assert result.event.kind == (
+            "invalid_choice" if mode == "dialogue" else "invalid_clarification"
+        )
+        assert result.session is current
+        recovered = step(current, parse_session_command(current, "1"))
+        assert recovered.event.kind == ("dialogue" if mode == "dialogue" else "taken")

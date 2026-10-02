@@ -81,3 +81,11 @@ regola, non interpolano proprietà e non cambiano parlante. Ogni persona ha un
 solo dialogo. Argomenti liberamente digitati, conoscenze condivise, scelte
 visibili soltanto in certe condizioni e modifiche transazionali del mondo sono
 estensioni successive del contratto, non testo reinterpretato dal runtime.
+
+## Robustezza delle risposte numeriche
+
+Le risposte decimali sono confrontate con il numero delle alternative senza
+convertire l'intera stringa in un intero illimitato. Anche un numero incollato
+molto lungo produce il normale errore di scelta e conserva la sessione. Zero
+non seleziona alcuna alternativa; gli zeri iniziali sono ammessi (`0001` vale
+`1`), anche con cifre decimali Unicode.

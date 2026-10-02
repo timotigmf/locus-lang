@@ -243,3 +243,8 @@ attivo l'elenco numerato delle alternative e lo ripresenta dopo il messaggio
 di correzione. Non ripete la battuta e non produce nuove visite o trace.
 La [lezione 16](../tutorial/16-dialogo-guardiana.md) include prove con numero
 fuori intervallo e testo ambiguo.
+
+Le selezioni numeriche di dialoghi e chiarimenti sono limitate dal numero
+delle alternative durante la lettura delle cifre. Input lunghi fuori intervallo
+restituiscono i consueti eventi di scelta non valida, senza eccezioni di
+conversione e senza perdere la domanda corrente.
