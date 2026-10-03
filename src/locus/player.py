@@ -221,6 +221,12 @@ def _noun(tokens: list[tuple[str, bool]]) -> str | None:
     return " ".join(token for token, _ in tokens) or None
 
 
+def parse_noun_phrase(text: str) -> str | None:
+    """Parse a standalone player noun using the same rules as action arguments."""
+    tokens = _tokens(canonical(text).replace("’", "'"))
+    return _noun(tokens) if tokens else None
+
+
 def standard_commands(
     *,
     include_dialogue: bool = False,

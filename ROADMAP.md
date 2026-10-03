@@ -178,3 +178,6 @@ mondi con dialoghi, senza perdere la domanda su risposte incomplete o ambigue.
 
 Dialoghi: testo delle scelte accettato senza prefisso quando non coincide
 con un comando; errori e ambiguità ripresentano le alternative correnti.
+
+Chiarimenti: articoli e nomi quotati condividono le regole nominali dei comandi,
+con conservazione della domanda per articoli isolati o nomi ancora ambigui.

@@ -694,3 +694,60 @@ def test_dialogue_choice_named_like_command_requires_prefix_or_number() -> None:
     selected = step(current, parse_session_command(current, "scegli Aiuto"))
     assert selected.event.kind == "dialogue_end"
     assert selected.session.dialogue_id is None
+
+
+@pytest.mark.parametrize(
+    "answer",
+    [
+        "la chiave di ferro",
+        "scegli la chiave di ferro",
+        '"chiave di ferro"',
+        'scegli "chiave di ferro"',
+    ],
+)
+def test_clarification_accepts_articles_and_quoted_names(answer: str) -> None:
+    current = start(
+        instantiate(
+            compile_story(
+                "La Sala è una stanza. La chiave di rame è una chiave nella Sala. "
+                "La chiave di ferro è una chiave nella Sala."
+            )
+        )
+    )
+    current = step(current, parse_session_command(current, "prendi chiave")).session
+    result = step(current, parse_session_command(current, answer))
+    assert result.event.kind == "taken"
+    assert "chiave di ferro" in render(result)
+
+
+def test_clarification_article_alone_does_not_select_an_object() -> None:
+    current = start(
+        instantiate(
+            compile_story(
+                "La Sala è una stanza. La chiave di rame è una chiave nella Sala. "
+                "La chiave di ferro è una chiave nella Sala."
+            )
+        )
+    )
+    current = step(current, parse_session_command(current, "prendi chiave")).session
+    for answer in ("la", "scegli la", "la chiave", '"chiave'):
+        result = step(current, parse_session_command(current, answer))
+        assert result.event.kind == "invalid_clarification"
+        assert result.session is current
+
+
+@pytest.mark.parametrize(
+    ("text", "expected"),
+    [
+        ("l’anello", "anello"),
+        ('"la luna"', "la luna"),
+        ("la", None),
+        ("  LA   chiave  ", "chiave"),
+    ],
+)
+def test_standalone_noun_phrase_uses_player_article_and_quote_rules(
+    text: str, expected: str | None
+) -> None:
+    from locus.player import parse_noun_phrase
+
+    assert parse_noun_phrase(text) == expected

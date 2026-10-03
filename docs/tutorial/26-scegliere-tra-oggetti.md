@@ -64,3 +64,11 @@ Dopo `prendi chiave` puoi scrivere `scegli 2`, `scegli ferro` oppure
 Il prefisso funziona anche nelle storie che contengono conversazioni.
 `scegli chiave` resta ambiguo; `scegli` da solo è incompleto: in entrambi
 i casi la domanda rimane aperta e puoi correggerti con `scegli 2`.
+
+## Rispondere con articoli e virgolette
+
+Alla domanda su quale chiave prendere, puoi rispondere `la chiave di ferro`
+oppure `scegli "chiave di ferro"`. L'articolo non cambia l'oggetto scelto.
+`la chiave` resta ambiguo e `la` da solo non identifica nulla: in entrambi
+i casi puoi correggere la risposta senza ricominciare il comando.
+Se un articolo appartiene al nome stesso, racchiudi il nome fra virgolette.

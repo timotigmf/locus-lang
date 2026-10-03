@@ -270,3 +270,8 @@ Durante un dialogo, `parse_session_command` converte l'esito `unknown` del
 parser ordinario in `Intent("dialogue_choice", testo)`. La corrispondenza
 resta esatta o parziale univoca; comandi riconosciuti e chiarimenti mantengono
 la precedenza. Il parser isolato `parse_command` non assume uno stato attivo.
+
+`player.parse_noun_phrase(text)` restituisce il nome normalizzato o `None`,
+riusando tokenizzazione, articoli e virgolette degli argomenti dei comandi.
+Il risolutore dei chiarimenti usa questa funzione prima di confrontare nomi
+e sinonimi; la scelta numerica mantiene il proprio percorso limitato.

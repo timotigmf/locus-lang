@@ -5,7 +5,7 @@ from typing import Literal
 
 from locus.diagnostics import canonical
 from locus.ir import ActionIR, DialogueIR, DialogueNodeIR, PropertyIR, RelationIR, TableIR
-from locus.player import Intent, parse_command
+from locus.player import Intent, parse_command, parse_noun_phrase
 from locus.rule_model import ActionCall, Address, RelationChange, TableChange, Trace
 from locus.rules import ActionResult, RuleError, execute
 from locus.runtime import Entity, World, has_type
@@ -1206,7 +1206,7 @@ def _clarification_choice(session: Session, selection: str) -> str | None:
     if selection.isdecimal():
         index = _choice_index(selection, len(clarification.candidates))
         return clarification.candidates[index] if index is not None else None
-    normalized = canonical(selection)
+    normalized = parse_noun_phrase(selection) or ""
     entities = {
         entity.id: entity
         for entity in session.world.entities

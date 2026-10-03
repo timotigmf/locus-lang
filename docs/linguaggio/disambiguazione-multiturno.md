@@ -61,3 +61,12 @@ Questa precedenza è limitata al chiarimento attivo: fuori da esso, `scegli`
 conserva il comportamento del parser ordinario, incluse le scelte di dialogo
 e le eventuali azioni dell'autore. Non viene aggiunta una parola riservata
 al compilatore e l'IR resta invariata.
+
+## Articoli e nomi fra virgolette
+
+Le risposte nominali seguono le stesse regole degli argomenti dei comandi:
+`la chiave di ferro` e `scegli "chiave di ferro"` selezionano la chiave indicata.
+L'articolo iniziale non quotato viene rimosso; l'apostrofo tipografico è
+normalizzato. Le virgolette preservano un articolo che fa parte del nome,
+come in `"la luna"`. Un articolo da solo o un nome ancora ambiguo conserva
+la domanda e ripresenta le alternative.
