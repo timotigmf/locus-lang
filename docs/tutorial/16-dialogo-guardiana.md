@@ -108,3 +108,58 @@ Il testo mostrato al giocatore mantiene sempre la punteggiatura originale.
 
 **Prova negativa:** crea due scelte «Chiave?» e «Chiave!». `chiave` deve
 chiedere una correzione; `scegli Chiave?` deve selezionare esattamente la prima.
+
+## Laboratorio: dialogare mentre il tempo passa
+
+Apri `examples/tutorial/16b_dialogo_e_tempo.locus`, oppure copia il sorgente
+seguente. La scena dell'alba serve a osservare l'orologio durante un dialogo:
+
+```locus
+Titolo: "Tre battute prima dell'alba".
+Autore: "Esempio LOCUS".
+
+La Torre è una stanza.
+Inizia nella "Torre".
+La guardiana è una persona nella Torre.
+
+Dialogo "attesa dell'alba" con "guardiana":
+    Nodo "inizio" dice "La guardiana osserva il cielo.":
+        Scelta "Chiedi della tempesta" porta a "tempesta".
+        Scelta "Saluta" termina.
+    Fine nodo.
+    Nodo "tempesta" dice "Il vento si sta placando.":
+        Scelta "Torna alle domande" porta a "inizio".
+    Fine nodo.
+Fine dialogo.
+
+Scena "alba" dal turno 1 al turno 3:
+    Inizio "Il cielo comincia a schiarire.".
+    Fine "Il primo raggio raggiunge il faro.".
+    Punti 5.
+Fine scena.
+```
+
+Esegui il copione `16b_dialogo_e_tempo.comandi` senza aggiungere altri comandi
+tra i passaggi:
+
+| Comando | Turno dopo il comando | Risultato |
+| --- | --- | --- |
+| `parla con guardiana` | 1 | Apertura del dialogo e inizio dell'alba |
+| `aiuto` | 1 | Elenco dei comandi e scelte correnti |
+| `99` | 1 | Errore, dialogo ancora aperto |
+| `tempesta` | 2 | Battuta sul vento |
+| `basta` | 3 | Fine dialogo, conclusione dell'alba e 5 punti |
+| `turno`, `punteggio` | 3 | Mostrano tempo e premio senza modificarli |
+| `attendi` | 4 | Passa un turno, nessun secondo premio |
+
+L'avvio automatico non conta come comando. Durante la conversazione usa
+**Regole e trace** per osservare i passaggi e le scene; consulta `turno` e
+`punteggio` dopo aver chiuso il dialogo.
+
+I cinque punti premiano la conclusione temporale della scena, non la risposta
+«tempesta»: anche altre azioni riuscite possono far arrivare il terzo turno.
+Le scelte del dialogo non hanno ancora effetti o premi propri.
+
+**Esercizio:** sostituisci `basta` con `Torna alle domande`. L'alba deve finire
+allo stesso terzo turno mentre la conversazione resta aperta. Termina poi il
+dialogo e verifica che il premio sia sempre cinque.

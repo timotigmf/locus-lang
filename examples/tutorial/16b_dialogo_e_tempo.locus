@@ -1,0 +1,22 @@
+Titolo: "Tre battute prima dell'alba".
+Autore: "Esempio LOCUS".
+
+La Torre è una stanza.
+Inizia nella "Torre".
+La guardiana è una persona nella Torre.
+
+Dialogo "attesa dell'alba" con "guardiana":
+    Nodo "inizio" dice "La guardiana osserva il cielo.":
+        Scelta "Chiedi della tempesta" porta a "tempesta".
+        Scelta "Saluta" termina.
+    Fine nodo.
+    Nodo "tempesta" dice "Il vento si sta placando.":
+        Scelta "Torna alle domande" porta a "inizio".
+    Fine nodo.
+Fine dialogo.
+
+Scena "alba" dal turno 1 al turno 3:
+    Inizio "Il cielo comincia a schiarire.".
+    Fine "Il primo raggio raggiunge il faro.".
+    Punti 5.
+Fine scena.

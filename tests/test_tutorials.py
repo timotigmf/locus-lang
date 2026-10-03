@@ -835,3 +835,28 @@ def test_dialogue_article_fallback_preserves_existing_partial_answers() -> None:
     selected = step(current, parse_session_command(current, "scegli la tempesta"))
     assert "tre notti" in render(selected)
     assert selected.dialogue[0].choice_label == "Chiedi della tempesta"
+
+
+@pytest.mark.parametrize("third", ["basta", "Torna alle domande"])
+def test_dialogue_scene_clock_ignores_errors_and_rewards_once(third: str) -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "16b_dialogo_e_tempo.locus")))
+    current = step(current, parse_session_command(current, "parla con guardiana")).session
+    assert current.turn == 1
+    for text in ("aiuto", "99", "assente"):
+        result = step(current, parse_session_command(current, text))
+        assert result.session is current
+        assert result.session.turn == 1
+    current = step(current, parse_session_command(current, "tempesta")).session
+    assert current.turn == 2
+    ended = step(current, parse_session_command(current, third))
+    assert ended.session.turn == 3
+    assert "primo raggio" in render(ended)
+    assert ended.session.score == 5
+    assert len(ended.session.score_log) == 1
+    assert (ended.session.dialogue_id is None) == (third == "basta")
+    current = ended.session
+    if current.dialogue_id is not None:
+        current = step(current, parse_session_command(current, "basta")).session
+    waited = step(current, parse_session_command(current, "attendi"))
+    assert waited.session.score == 5
+    assert len(waited.session.score_log) == 1

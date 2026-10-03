@@ -199,3 +199,6 @@ senza perdere la compatibilità con risposte parziali come `la tempesta`.
 
 Dialoghi: selezione parziale tollerante alla punteggiatura e agli apostrofi,
 con precedenza delle etichette esatte e rifiuto delle risposte ambigue.
+
+Didattica: laboratorio dialogo e tempo con errori senza consumo di turno,
+scena conclusa durante la conversazione e premio temporale non duplicabile.

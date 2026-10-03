@@ -131,3 +131,11 @@ e `orologio` può scegliere «Chiedi dell’orologio!».
 Se più etichette contengono le stesse parole, la risposta resta ambigua.
 Con «Chiave?» e «Chiave!», usa il testo esatto o il numero; la sola
 punteggiatura non seleziona alcuna opzione. Gli accenti restano significativi.
+
+## Dialoghi e scene temporali
+
+Quando il mondo dichiara scene, l'apertura, una scelta valida e la chiusura
+del dialogo avanzano l'orologio come azioni riconosciute. Aiuto e risposte
+non valide non avanzano il turno. Una scena può terminare mentre il dialogo
+resta aperto: il premio appartiene alla scena, non alla scelta. Il laboratorio
+[della lezione 16](../tutorial/16-dialogo-guardiana.md) verifica entrambi i casi.

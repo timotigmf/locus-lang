@@ -303,3 +303,7 @@ La risoluzione testuale dei dialoghi confronta prima l'etichetta esatta,
 unificando i due apostrofi, poi le parole Unicode separate dalla punteggiatura.
 Le corrispondenze multiple restano `invalid_choice`; il testo visualizzato
 e il trace conservano l'etichetta originale.
+
+`16b_dialogo_e_tempo.locus` combina dialogo e scena: gli eventi conversazionali
+validi avanzano `Session.turn`, gli errori e l'aiuto no. Il premio della scena
+resta unico anche quando la conversazione continua oltre il turno finale.
