@@ -90,3 +90,11 @@ Gli articoli di un'etichetta come «La chiave» vengono conservati.
 **Prova negativa:** dimentica la virgoletta finale. LOCUS ripresenta le
 opzioni senza terminare il dialogo; correggi digitando l'etichetta completa
 con entrambe le virgolette oppure il suo numero.
+
+## Etichette simili e articoli
+
+Se due scelte si chiamano «La chiave» e «Chiave», `scegli la chiave` seleziona
+esattamente «La chiave»; `scegli chiave` seleziona «Chiave». Il parser non
+scarta un articolo prima di cercare l'etichetta completa.
+Nell'esempio della guardiana, `scegli la tempesta` continua invece a trovare
+«Chiedi della tempesta», perché non esiste un'etichetta più precisa.

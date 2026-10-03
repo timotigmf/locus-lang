@@ -796,3 +796,20 @@ def test_quoted_dialogue_answers_preserve_literal_choice_labels(answer: str) -> 
     selected = step(current, parse_session_command(current, answer))
     assert selected.event.kind == "dialogue_end"
     assert selected.dialogue[0].choice_label == answer.strip('"')
+
+
+@pytest.mark.parametrize("answer", ["scegli la chiave", 'scegli "La chiave"', "la chiave"])
+def test_dialogue_exact_label_with_article_precedes_shorter_label(answer: str) -> None:
+    current = start(
+        instantiate(
+            compile_story(
+                "La Sala è una stanza. La guida è una persona nella Sala. "
+                'Dialogo "titoli" con "guida": Nodo "inizio" dice "Scegli un titolo.": '
+                'Scelta "La chiave" termina. Scelta "Chiave" termina. Fine nodo. Fine dialogo.'
+            )
+        )
+    )
+    current = step(current, parse_session_command(current, "parla con guida")).session
+    selected = step(current, parse_session_command(current, answer))
+    assert selected.event.kind == "dialogue_end"
+    assert selected.dialogue[0].choice_label == "La chiave"

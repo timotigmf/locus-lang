@@ -193,3 +193,6 @@ confronto con chiusura riuscita e verifiche di grafo, proprietà e messaggi.
 
 Dialoghi: risposte dirette fra virgolette supportate anche per etichette
 che coincidono con comandi; articoli conservati e virgolette incomplete gestite.
+
+Dialoghi: corretta la precedenza delle etichette con articolo dopo `scegli`,
+senza perdere la compatibilità con risposte parziali come `la tempesta`.

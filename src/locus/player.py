@@ -504,7 +504,7 @@ def parse_command(
         if len(tokens) == 1 and verb.isdecimal():
             return Intent("dialogue_choice", verb)
         if verb == "scegli":
-            choice = _noun(tokens[1:])
+            choice = " ".join(token for token, _ in tokens[1:]) or None
             return Intent("dialogue_choice", choice) if choice else Intent("unknown")
         if verb == "basta" or (
             verb == "fine" and len(tokens) == 2 and tokens[1] == ("dialogo", False)

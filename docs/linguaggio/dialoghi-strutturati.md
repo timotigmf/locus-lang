@@ -111,3 +111,13 @@ Aiuto, mentre `aiuto` senza virgolette conserva il significato di comando.
 Virgolette non chiuse o etichette assenti producono una scelta non valida
 e lasciano aperta la conversazione. Fuori dal dialogo non avviene questa
 interpretazione contestuale.
+
+## Precedenza delle etichette esatte
+
+`scegli` conserva gli articoli della risposta: con le opzioni «La chiave» e
+«Chiave», `scegli la chiave` seleziona la prima. Il confronto esatto precede
+quello per parole parziali. Solo se nessuna opzione corrisponde al testo
+completo o alle sue parole, si prova la forma senza articolo iniziale per
+conservare risposte come `scegli la tempesta` per «Chiedi della tempesta».
+Un insieme di più corrispondenze resta ambiguo e non viene ristretto
+arbitrariamente eliminando l'articolo.

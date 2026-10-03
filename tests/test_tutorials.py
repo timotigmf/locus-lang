@@ -827,3 +827,11 @@ def test_transactional_mechanism_restores_graph_properties_and_output() -> None:
     assert (
         step(closed.session, parse_session_command(closed.session, "nord")).event.kind == "no_exit"
     )
+
+
+def test_dialogue_article_fallback_preserves_existing_partial_answers() -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "16_dialogo_guardiana.locus")))
+    current = step(current, parse_session_command(current, "parla con guardiana")).session
+    selected = step(current, parse_session_command(current, "scegli la tempesta"))
+    assert "tre notti" in render(selected)
+    assert selected.dialogue[0].choice_label == "Chiedi della tempesta"

@@ -748,6 +748,13 @@ def _choose_dialogue(session: Session, selection: str) -> Transition:
                 for item in node.choices
                 if words and words.issubset(set(canonical(item.label).split()))
             ]
+            if not partial:
+                words = set((parse_noun_phrase(selection) or "").split())
+                partial = [
+                    item
+                    for item in node.choices
+                    if words and words.issubset(set(canonical(item.label).split()))
+                ]
             if len(partial) == 1:
                 choice = partial[0]
     if choice is None:

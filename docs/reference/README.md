@@ -294,3 +294,7 @@ della chiusura definitiva.
 gli articoli. Il parser di sessione lo usa per risposte dirette durante
 un dialogo; le virgolette sono sintattiche e quelle non chiuse danno `None`.
 I comandi riconosciuti senza virgolette mantengono la precedenza.
+
+Le risposte di dialogo con prefisso `scegli` conservano gli articoli per
+il confronto esatto. La rimozione dell'articolo è soltanto un ripiego quando
+non esistono corrispondenze esatte o parziali con il testo originale.
