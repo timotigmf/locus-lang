@@ -426,7 +426,7 @@ class _Parser:
                 directive = self.current.normalized
                 self.keyword(directive)
                 if directive == "inizia":
-                    self.keyword("nella")
+                    self.preposition(_LOCATIONS)
                 name = RuleParser(self).quoted()
                 span = self.finish(start)
                 if directive == "includi":

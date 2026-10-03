@@ -251,3 +251,20 @@ def test_optional_project_boundary(tmp_path: Path) -> None:
         load_project(entry, allowed_root=entry.parent)
     assert outside.exists()
     assert len(load_project(entry).declarations) == 1
+
+
+@pytest.mark.parametrize("preposition", ["nella", "nel", "nello", "nell'", "nell’"])
+def test_entry_accepts_articulated_location_forms(preposition: str) -> None:
+    source = f'La Sala è una stanza. Il Mercato è una stanza. Inizia {preposition} "Mercato".'
+    session = start(instantiate(compile_story(source)))
+    assert "Mercato" in render(step(session, parse_command("guarda")))
+    with pytest.raises(CompileError, match="E406"):
+        compile_story(source + ' Inizia nella "Sala".')
+
+
+@pytest.mark.parametrize("preposition", ["in", "al", "nell"])
+def test_entry_rejects_incomplete_or_wrong_prepositions(preposition: str) -> None:
+    with pytest.raises(CompileError) as error:
+        compile_story(f'La Sala è una stanza. Inizia {preposition} "Sala".')
+    assert error.value.code == "E002"
+    assert error.value.span.line == 1

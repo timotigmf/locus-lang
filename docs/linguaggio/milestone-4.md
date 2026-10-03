@@ -87,3 +87,13 @@ Il runtime non conosce percorsi né direttive e non apre file.
 File mancanti e cicli puntano alla direttiva responsabile; errori interni puntano
 al sorgente incluso. E103 resta l'errore per un'entità iniziale non dichiarata.
 Le normali diagnosi sintattiche E002 si applicano a direttive incomplete.
+
+## Preposizioni del punto iniziale
+
+La direttiva accetta `Inizia nella "Sala".`, `Inizia nel "Mercato".`,
+`Inizia nello "Studio".` e `Inizia nell'"Atrio".`. L'apostrofo può essere
+diritto o tipografico; il nome resta obbligatoriamente fra virgolette.
+Le forme usano lo stesso punto iniziale nell'AST e nell'IR. Non viene
+verificato l'accordo grammaticale con il nome. `in`, `al` e `nell` senza
+apostrofo sono rifiutati con `E002`. Un secondo ingresso, anche espresso
+con una preposizione diversa, resta un errore `E406`.

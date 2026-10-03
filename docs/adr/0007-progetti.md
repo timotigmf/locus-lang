@@ -37,3 +37,9 @@ eseguono due volte regole. Il caricatore legge file locali indicati dall'autore,
 anche fuori dalla directory tramite `..`/symlink: non è un sandbox. Percorsi assoluti,
 URL e sintassi specifica Windows rifiutati per portabilità. Revisione prima di
 namespace, package manager, caricamento remoto, editor incrementale o filesystem virtuale.
+
+## Estensione del 3 ottobre 2026
+
+`Inizia` riusa le preposizioni articolate delle collocazioni (`nella`, `nel`,
+`nello`, `nell'`), mantenendo il nome quotato e la stessa struttura `EntryPoint`.
+Nessuna modifica di caricamento, risoluzione o IR.

@@ -208,3 +208,6 @@ chiarimenti, senza perdere la domanda né avanzare l'orologio.
 
 Didattica: soluzione con due mercanti, chiarimento del compratore, trasferimento
 di scorta e rifiuti atomici per venditore sbagliato o fondi insufficienti.
+
+Sintassi autore: punto iniziale esprimibile con `nel`, `nello` e `nell'`,
+oltre a `nella`, con invariati controlli di unicità e destinazione.

@@ -315,3 +315,8 @@ esclusi dall'avanzamento delle scene e dalla memoria dell'ultimo comando.
 `20b_due_mercanti.locus` verifica la scelta del destinatario di una vendita,
 la consultazione del saldo durante il chiarimento e il successivo riacquisto
 dalla nuova scorta. Include una variante di rifiuto per cassa insufficiente.
+
+`Inizia` usa le stesse preposizioni articolate di collocazione: `nella`,
+`nel`, `nello`, `nell'` (anche con apostrofo tipografico). La variante
+ortografica non cambia `EntryPoint`, la risoluzione del luogo o i codici
+E103/E406/E407. Il nome iniziale resta quotato.

@@ -365,3 +365,7 @@ aver lasciato e ripreso lo stesso oggetto. Per un premio unico l'autore
 usa una proprietà logica nella condizione e la imposta insieme all'incremento.
 La [lezione 6](docs/tutorial/06-sotterraneo-enigma-punti.md) mostra questo
 contratto esistente, senza modificare il linguaggio o l'IR.
+
+La direttiva del punto iniziale accetta le preposizioni articolate `nella`,
+`nel`, `nello` e `nell'`, seguite dal nome quotato: `Inizia nel "Mercato".`.
+Le varianti condividono i controlli M4 e non modificano l'IR.
