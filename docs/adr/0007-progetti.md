@@ -41,5 +41,9 @@ namespace, package manager, caricamento remoto, editor incrementale o filesystem
 ## Estensione del 3 ottobre 2026
 
 `Inizia` riusa le preposizioni articolate delle collocazioni (`nella`, `nel`,
-`nello`, `nell'`), mantenendo il nome quotato e la stessa struttura `EntryPoint`.
+`nello`, `nell'`), mantenendo la stessa struttura `EntryPoint`.
 Nessuna modifica di caricamento, risoluzione o IR.
+
+Il nome del punto iniziale può anche essere non quotato: riusa la produzione
+nominale delle dichiarazioni. Le virgolette restano disponibili per i nomi
+complessi e obbligatorie per i percorsi di `Includi`.

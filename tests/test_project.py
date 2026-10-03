@@ -268,3 +268,25 @@ def test_entry_rejects_incomplete_or_wrong_prepositions(preposition: str) -> Non
         compile_story(f'La Sala è una stanza. Inizia {preposition} "Sala".')
     assert error.value.code == "E002"
     assert error.value.span.line == 1
+
+
+@pytest.mark.parametrize(
+    "directive", ["Inizia nel Mercato Coperto.", 'Inizia nel "Mercato Coperto".']
+)
+def test_entry_accepts_unquoted_multiword_room_name(directive: str) -> None:
+    compiled = compile_story("La Sala è una stanza. Il Mercato Coperto è una stanza. " + directive)
+    current = start(instantiate(compiled))
+    assert "Mercato Coperto" in render(step(current, parse_command("guarda")))
+
+
+@pytest.mark.parametrize(
+    "source,code",
+    [
+        ("La Sala è una stanza. Inizia nella Assente.", "E103"),
+        ("La Sala è una stanza. Inizia nella.", "E002"),
+        ("Includi mondo.locus.", "E002"),
+    ],
+)
+def test_unquoted_entry_preserves_diagnostics_and_quoted_inclusions(source: str, code: str) -> None:
+    with pytest.raises(CompileError, match=code):
+        compile_story(source)

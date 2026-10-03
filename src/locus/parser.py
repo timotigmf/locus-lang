@@ -427,7 +427,9 @@ class _Parser:
                 self.keyword(directive)
                 if directive == "inizia":
                     self.preposition(_LOCATIONS)
-                name = RuleParser(self).quoted()
+                    name = self.words()
+                else:
+                    name = RuleParser(self).quoted()
                 span = self.finish(start)
                 if directive == "includi":
                     inclusions.append(Inclusion(name, span))

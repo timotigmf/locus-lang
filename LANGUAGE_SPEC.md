@@ -367,5 +367,5 @@ La [lezione 6](docs/tutorial/06-sotterraneo-enigma-punti.md) mostra questo
 contratto esistente, senza modificare il linguaggio o l'IR.
 
 La direttiva del punto iniziale accetta le preposizioni articolate `nella`,
-`nel`, `nello` e `nell'`, seguite dal nome quotato: `Inizia nel "Mercato".`.
+`nel`, `nello` e `nell'`, seguite dal nome, anche non quotato: `Inizia nel "Mercato".`.
 Le varianti condividono i controlli M4 e non modificano l'IR.

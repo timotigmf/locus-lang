@@ -211,3 +211,6 @@ di scorta e rifiuti atomici per venditore sbagliato o fondi insufficienti.
 
 Sintassi autore: punto iniziale esprimibile con `nel`, `nello` e `nell'`,
 oltre a `nella`, con invariati controlli di unicità e destinazione.
+
+Sintassi autore: `Inizia nel Mercato Coperto.` accetta nomi non quotati,
+riusando le dichiarazioni nominali senza modificare i percorsi di inclusione.

@@ -92,8 +92,16 @@ Le normali diagnosi sintattiche E002 si applicano a direttive incomplete.
 
 La direttiva accetta `Inizia nella "Sala".`, `Inizia nel "Mercato".`,
 `Inizia nello "Studio".` e `Inizia nell'"Atrio".`. L'apostrofo può essere
-diritto o tipografico; il nome resta obbligatoriamente fra virgolette.
+diritto o tipografico; il nome può essere quotato oppure seguire la sintassi dei nomi nelle dichiarazioni.
 Le forme usano lo stesso punto iniziale nell'AST e nell'IR. Non viene
 verificato l'accordo grammaticale con il nome. `in`, `al` e `nell` senza
 apostrofo sono rifiutati con `E002`. Un secondo ingresso, anche espresso
 con una preposizione diversa, resta un errore `E406`.
+
+## Nomi non quotati
+
+`Inizia nel Mercato Coperto.` equivale a `Inizia nel "Mercato Coperto".`.
+Le parole del nome vengono raccolte fino al punto finale; i nomi con parole
+riservate o apostrofi interni richiedono le virgolette, come nelle dichiarazioni.
+Un nome assente produce `E103`; la mancanza del nome produce `E002`.
+`Includi` conserva invece l'obbligo di un percorso fra virgolette.

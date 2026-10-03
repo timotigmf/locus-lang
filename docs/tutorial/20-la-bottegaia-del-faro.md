@@ -67,7 +67,7 @@ Titolo: "Due banchi al mercato".
 Autore: "Esempio LOCUS".
 
 Il Mercato è una stanza.
-Inizia nel "Mercato".
+Inizia nel Mercato.
 Il credito è una valuta.
 Il credito ha saldo 20.
 La Ada è una mercante nel Mercato.
@@ -97,7 +97,7 @@ prodotto, non cambiano automaticamente in base al venditore.
 richiede tre crediti e viene rifiutata: mantieni bussola e saldo 13, mentre
 Bruno conserva i suoi due crediti. Non avviene alcun trasferimento parziale.
 
-La direttiva `Inizia nel "Mercato".` sceglie il luogo iniziale. Puoi usare
-anche `nella`, `nello` o `nell'` secondo il nome; le virgolette sono obbligatorie.
+La direttiva `Inizia nel Mercato.` sceglie il luogo iniziale. Puoi usare
+anche `nella`, `nello` o `nell'` secondo il nome; le virgolette servono per nomi con parole riservate o segni speciali.
 Una seconda direttiva `Inizia` non aggiunge una partenza alternativa: produce
 `E406`, anche quando usa una preposizione diversa.

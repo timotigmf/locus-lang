@@ -319,4 +319,8 @@ dalla nuova scorta. Include una variante di rifiuto per cassa insufficiente.
 `Inizia` usa le stesse preposizioni articolate di collocazione: `nella`,
 `nel`, `nello`, `nell'` (anche con apostrofo tipografico). La variante
 ortografica non cambia `EntryPoint`, la risoluzione del luogo o i codici
-E103/E406/E407. Il nome iniziale resta quotato.
+E103/E406/E407. Il nome iniziale segue la sintassi nominale delle dichiarazioni, con virgolette facoltative.
+
+Il parser usa la stessa produzione nominale delle dichiarazioni per `Inizia`,
+conservando un solo `EntryPoint`. `Includi` continua a richiedere una stringa
+quotata: l'estensione dei nomi non cambia il caricamento dei file.
