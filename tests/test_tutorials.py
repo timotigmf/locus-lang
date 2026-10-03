@@ -762,3 +762,21 @@ def test_help_reminds_pending_choices_without_answering_them(alias: str) -> None
     assert "tre notti" not in render(helped)
     ended = step(helped.session, parse_session_command(helped.session, "basta")).session
     assert "Conversazione in corso" not in render(step(ended, parse_session_command(ended, alias)))
+
+
+@pytest.mark.parametrize("answer", ["chiave", "Chiedi della chiave"])
+def test_dialogue_accepts_unprefixed_choice_text(answer: str) -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "16_dialogo_guardiana.locus")))
+    assert parse_session_command(current, answer).verb == "unknown"
+    current = step(current, parse_session_command(current, "parla con guardiana")).session
+    for invalid in ("chiedi", "assente", "scegli", ""):
+        failed = step(current, parse_session_command(current, invalid))
+        assert failed.event.kind == "invalid_choice"
+        assert failed.session is current
+        assert "2. Chiedi della chiave" in render(failed)
+    blocked = step(current, parse_session_command(current, "nord"))
+    assert blocked.event.kind == "dialogue_active"
+    assert blocked.session is current
+    selected = step(current, parse_session_command(current, answer))
+    assert "sotto la campana" in render(selected)
+    assert selected.session.dialogue_id is None

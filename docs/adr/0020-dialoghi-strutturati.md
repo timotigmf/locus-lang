@@ -45,3 +45,10 @@ Studio, CLI e release condividono lo stesso grafo e lo stesso stato multi-turno.
 I nodi finali e le scelte terminali hanno comportamento esplicito. Questo primo
 contratto supporta dialoghi ramificati e ciclici, ma le battute restano statiche
 finché condizioni, effetti e conoscenze non ricevono un'estensione dedicata.
+
+## Precisazione del 3 ottobre 2026
+
+Il parser di sessione accetta anche il testo di una scelta senza `scegli`
+quando il parser ordinario non riconosce un comando. Riusa l'intento e la
+risoluzione esistenti, senza cambiare il grafo o l'IR. Numeri e prefisso
+restano necessari per etichette che coincidono con comandi riconosciuti.

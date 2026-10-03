@@ -1362,6 +1362,8 @@ def parse_session_command(session: Session, text: str) -> Intent:
     )
     if session.clarification is not None and intent.verb == "unknown":
         return Intent("clarify", normalized or None)
+    if session.dialogue_id is not None and intent.verb == "unknown":
+        return Intent("dialogue_choice", normalized or None)
     return _with_pronoun(session, intent)
 
 

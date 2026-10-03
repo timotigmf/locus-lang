@@ -675,3 +675,22 @@ def test_explicit_choice_resumes_clarification_with_or_without_dialogues(
     assert result.event.kind == "taken"
     assert "chiave di ferro" in render(result)
     assert result.session.clarification is None
+
+
+def test_dialogue_choice_named_like_command_requires_prefix_or_number() -> None:
+    current = start(
+        instantiate(
+            compile_story(
+                "La Sala è una stanza. La guida è una persona nella Sala. "
+                'Dialogo "prova" con "guida": Nodo "inizio" dice "Decidi.": '
+                'Scelta "Aiuto" termina. Fine nodo. Fine dialogo.'
+            )
+        )
+    )
+    current = step(current, parse_session_command(current, "parla con guida")).session
+    helped = step(current, parse_session_command(current, "aiuto"))
+    assert helped.event.kind == "help"
+    assert helped.session is current
+    selected = step(current, parse_session_command(current, "scegli Aiuto"))
+    assert selected.event.kind == "dialogue_end"
+    assert selected.session.dialogue_id is None

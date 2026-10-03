@@ -265,3 +265,8 @@ Con un chiarimento attivo, `parse_session_command` riconosce il prefisso
 `scegli` e produce `Intent("clarify", risposta)` prima del parser ordinario.
 Non occorre abilitare i dialoghi; la risposta usa la stessa risoluzione di
 numeri, nomi e sinonimi già prevista per le risposte senza prefisso.
+
+Durante un dialogo, `parse_session_command` converte l'esito `unknown` del
+parser ordinario in `Intent("dialogue_choice", testo)`. La corrispondenza
+resta esatta o parziale univoca; comandi riconosciuti e chiarimenti mantengono
+la precedenza. Il parser isolato `parse_command` non assume uno stato attivo.

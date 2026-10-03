@@ -89,3 +89,15 @@ convertire l'intera stringa in un intero illimitato. Anche un numero incollato
 molto lungo produce il normale errore di scelta e conserva la sessione. Zero
 non seleziona alcuna alternativa; gli zeri iniziali sono ammessi (`0001` vale
 `1`), anche con cifre decimali Unicode.
+
+## Risposte testuali senza prefisso
+
+Durante un dialogo, un testo che non è un comando riconosciuto viene cercato
+fra le scelte del nodo corrente. `chiave` equivale quindi a `scegli chiave`
+se identifica una sola opzione. Un testo ambiguo, assente o vuoto produce
+`invalid_choice` e ripresenta le alternative senza avanzare la conversazione.
+
+I comandi riconosciuti mantengono la precedenza: `aiuto` mostra l'aiuto e
+`basta` termina il dialogo. Per scegliere un'etichetta che coincide con un
+comando, usa il suo numero o il prefisso `scegli`. Fuori dalla conversazione
+non viene interpretata alcuna risposta testuale contestuale.

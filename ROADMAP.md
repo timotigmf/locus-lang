@@ -175,3 +175,6 @@ attive con numerazione stabile e istruzioni per rispondere o annullare.
 
 Chiarimenti: risposte esplicite `scegli NUMERO/NOME` supportate anche nei
 mondi con dialoghi, senza perdere la domanda su risposte incomplete o ambigue.
+
+Dialoghi: testo delle scelte accettato senza prefisso quando non coincide
+con un comando; errori e ambiguità ripresentano le alternative correnti.

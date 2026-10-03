@@ -67,3 +67,15 @@ passare un turno. `basta` resta disponibile per uscire dalla conversazione.
 
 Il copione `examples/tutorial/16_dialogo_guardiana.comandi` raccoglie questa
 prova: copiane i comandi nel giocatore per controllare il recupero dagli errori.
+
+## Rispondere direttamente con l'argomento
+
+Avvia il dialogo e scrivi `chiave`, senza `scegli`: raggiungi il nodo finale.
+Puoi anche digitare `Chiedi della chiave`. `chiedi` da solo corrisponde a due
+opzioni e ripresenta l'elenco; `assente` non corrisponde a nessuna opzione.
+Anche un invio vuoto o `scegli` senza argomento conserva il dialogo e mostra
+le scelte disponibili.
+
+Questa comodità vale per il testo che non è già un comando: per esempio
+`aiuto` continua a mostrare l'aiuto. Se una tua scelta si chiama proprio
+«Aiuto», selezionala con il numero oppure con `scegli Aiuto`.
