@@ -260,3 +260,8 @@ e deduplicate; tutte le combinazioni di alias e separatori vengono mostrate.
 L'evento `help` presenta anche `Session.clarification.candidates` o le scelte
 del nodo di dialogo attivo. È una lettura della sessione: numerazione e ordine
 sono conservati, nessuna risposta viene eseguita e nessun nodo viene visitato.
+
+Con un chiarimento attivo, `parse_session_command` riconosce il prefisso
+`scegli` e produce `Intent("clarify", risposta)` prima del parser ordinario.
+Non occorre abilitare i dialoghi; la risposta usa la stessa risoluzione di
+numeri, nomi e sinonimi già prevista per le risposte senza prefisso.

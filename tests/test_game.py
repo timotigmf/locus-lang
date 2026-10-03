@@ -645,3 +645,33 @@ def test_author_synonyms_resolve_in_scope_and_can_be_ambiguous() -> None:
     assert step(state, parse_command("prendi baule")).event.entities == ("e3",)
     ambiguous = step(state, parse_command("x cassa"))
     assert ambiguous.event.kind == "ambiguous"
+
+
+@pytest.mark.parametrize("with_dialogue", [False, True])
+@pytest.mark.parametrize("answer", ["scegli 2", "scegli ferro", "SCEGLI   scura"])
+def test_explicit_choice_resumes_clarification_with_or_without_dialogues(
+    with_dialogue: bool, answer: str
+) -> None:
+    source = (
+        "La Sala è una stanza. La chiave di rame è una chiave nella Sala. "
+        "La chiave di ferro è una chiave nella Sala. "
+        'Comprendi "scura" come "chiave di ferro".'
+    )
+    if with_dialogue:
+        source += (
+            'La guida è una persona nella Sala. Dialogo "saluto" con "guida": '
+            'Nodo "inizio" dice "Buongiorno.": Fine nodo. Fine dialogo.'
+        )
+    current = start(instantiate(compile_story(source)))
+    assert parse_session_command(current, "scegli 2").verb == (
+        "dialogue_choice" if with_dialogue else "unknown"
+    )
+    current = step(current, parse_session_command(current, "prendi chiave")).session
+    for invalid in ("scegli", "scegli 99", "scegli chiave"):
+        result = step(current, parse_session_command(current, invalid))
+        assert result.event.kind == "invalid_clarification"
+        assert result.session is current
+    result = step(current, parse_session_command(current, answer))
+    assert result.event.kind == "taken"
+    assert "chiave di ferro" in render(result)
+    assert result.session.clarification is None

@@ -48,3 +48,16 @@ La presentazione di `invalid_clarification` include nuovamente le candidate
 nello stesso ordine e con gli stessi numeri della domanda. Il messaggio
 distingue la risposta non valida dalla domanda iniziale e ricorda il comando
 `annulla`. Questa presentazione non modifica lo stato né consuma un turno.
+
+## Risposta esplicita con «scegli»
+
+Durante una domanda aperta, `scegli 2`, `scegli ferro` e `scegli scura`
+equivalgono al numero, nome parziale o sinonimo senza prefisso. La risposta
+viene assegnata al chiarimento anche se la storia contiene dialoghi.
+`scegli` senza argomento, un numero fuori intervallo o un nome ambiguo
+conservano la domanda e producono `invalid_clarification`.
+
+Questa precedenza è limitata al chiarimento attivo: fuori da esso, `scegli`
+conserva il comportamento del parser ordinario, incluse le scelte di dialogo
+e le eventuali azioni dell'autore. Non viene aggiunta una parola riservata
+al compilatore e l'IR resta invariata.

@@ -1344,6 +1344,8 @@ def parse_session_command(session: Session, text: str) -> Intent:
     if session.clarification is not None:
         if normalized in {"annulla", "annulla chiarimento", "cancel"}:
             return Intent("cancel_clarification")
+        if normalized == "scegli" or normalized.startswith("scegli "):
+            return Intent("clarify", normalized.removeprefix("scegli").strip() or None)
         if normalized.isdecimal():
             return Intent("clarify", normalized)
     intent = parse_command(

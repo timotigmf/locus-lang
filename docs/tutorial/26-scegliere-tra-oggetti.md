@@ -56,3 +56,11 @@ la risposta non identifica un oggetto e ripresenta `1) chiave di rame;
 Puoi quindi digitare `2` per prendere quella di ferro oppure `annulla` per
 abbandonare il chiarimento. Anche una risposta vuota conserva la domanda.
 Non occorre risalire nella trascrizione per ritrovare le alternative.
+
+## Rispondere con una frase esplicita
+
+Dopo `prendi chiave` puoi scrivere `scegli 2`, `scegli ferro` oppure
+`scegli scura`: tutte e tre prendono la chiave di ferro dell'esempio.
+Il prefisso funziona anche nelle storie che contengono conversazioni.
+`scegli chiave` resta ambiguo; `scegli` da solo è incompleto: in entrambi
+i casi la domanda rimane aperta e puoi correggerti con `scegli 2`.

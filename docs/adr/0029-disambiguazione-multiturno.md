@@ -39,3 +39,9 @@ dal parser delle frasi dell'autore.
 I test coprono selezione per numero, nome parziale e sinonimo, risposta invalida,
 annullamento, sostituzione con un nuovo comando e secondo oggetto ambiguo.
 
+
+## Precisazione del 3 ottobre 2026
+
+Il chiarimento attivo accetta anche il prefisso esplicito `scegli`. Ha
+precedenza sul comando conversazionale omonimo soltanto mentre la domanda
+è aperta; riusa lo stesso intento e non aggiunge stato o sintassi all'IR.

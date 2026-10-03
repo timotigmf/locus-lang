@@ -172,3 +172,6 @@ con alias e forme a zero, uno o due oggetti derivati dal catalogo compilato.
 
 Aiuto contestuale: durante chiarimenti e dialoghi ripresenta le alternative
 attive con numerazione stabile e istruzioni per rispondere o annullare.
+
+Chiarimenti: risposte esplicite `scegli NUMERO/NOME` supportate anche nei
+mondi con dialoghi, senza perdere la domanda su risposte incomplete o ambigue.
