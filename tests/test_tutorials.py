@@ -860,3 +860,44 @@ def test_dialogue_scene_clock_ignores_errors_and_rewards_once(third: str) -> Non
     waited = step(current, parse_session_command(current, "attendi"))
     assert waited.session.score == 5
     assert len(waited.session.score_log) == 1
+
+
+def test_two_merchants_solution_transfers_stock_and_preserves_failed_transactions() -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "20b_due_mercanti.locus")))
+    failed = step(current, parse_session_command(current, "compra bussola da Bruno"))
+    assert failed.event.kind == "wrong_merchant"
+    assert failed.session is current
+    current = step(current, parse_session_command(current, "compra bussola da Ada")).session
+    assert property_of(current, "credito", "saldo") == 13
+    asked = step(current, parse_session_command(current, "vendi bussola"))
+    assert asked.event.kind == "ambiguous"
+    assert (
+        step(asked.session, parse_session_command(asked.session, "denaro")).session is asked.session
+    )
+    invalid = step(asked.session, parse_session_command(asked.session, "scegli 99"))
+    assert invalid.session is asked.session
+    sold = step(invalid.session, parse_session_command(invalid.session, "scegli Bruno"))
+    assert sold.event.kind == "sold"
+    assert not sold.session.inventory
+    assert property_of(sold.session, "credito", "saldo") == 16
+    assert property_of(sold.session, "Ada", "cassa") == 32
+    assert property_of(sold.session, "Bruno", "cassa") == 7
+    wrong = step(sold.session, parse_session_command(sold.session, "compra bussola da Ada"))
+    assert wrong.event.kind == "wrong_merchant"
+    assert wrong.session is sold.session
+    bought = step(sold.session, parse_session_command(sold.session, "compra bussola da Bruno"))
+    assert bought.event.kind == "purchased"
+    assert property_of(bought.session, "credito", "saldo") == 9
+    assert property_of(bought.session, "Bruno", "cassa") == 14
+
+
+def test_two_merchants_solution_rejects_insufficient_buyer_cash() -> None:
+    source = (TUTORIAL / "20b_due_mercanti.locus").read_text().replace("ha cassa 10", "ha cassa 2")
+    current = start(instantiate(compile_story(source)))
+    current = step(current, parse_session_command(current, "compra bussola da Ada")).session
+    failed = step(current, parse_session_command(current, "vendi bussola a Bruno"))
+    assert failed.event.kind == "merchant_no_funds"
+    assert failed.session is current
+    assert property_of(current, "credito", "saldo") == 13
+    assert property_of(current, "Bruno", "cassa") == 2
+    assert len(current.inventory) == 1

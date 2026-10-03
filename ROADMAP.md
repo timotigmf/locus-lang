@@ -205,3 +205,6 @@ scena conclusa durante la conversazione e premio temporale non duplicabile.
 
 Consultazioni: tempo, punteggio e saldo disponibili durante dialoghi e
 chiarimenti, senza perdere la domanda né avanzare l'orologio.
+
+Didattica: soluzione con due mercanti, chiarimento del compratore, trasferimento
+di scorta e rifiuti atomici per venditore sbagliato o fondi insufficienti.

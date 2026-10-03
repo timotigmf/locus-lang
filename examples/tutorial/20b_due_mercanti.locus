@@ -1,0 +1,15 @@
+Titolo: "Due banchi al mercato".
+Autore: "Esempio LOCUS".
+
+Il Mercato è una stanza.
+Inizia nella "Mercato".
+Il credito è una valuta.
+Il credito ha saldo 20.
+La Ada è una mercante nel Mercato.
+La Ada ha cassa 25.
+Il Bruno è un mercante nel Mercato.
+Il Bruno ha cassa 10.
+La bussola è un prodotto nel Mercato.
+La bussola ha prezzo 7.
+La bussola ha prezzo di rivendita 3.
+La Ada vende la bussola.

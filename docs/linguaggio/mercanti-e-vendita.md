@@ -96,3 +96,8 @@ pagina e mostra venditore, cassa, prezzi e posizione nell'Indice del mondo.
 IR 20 conserva una sola valuta e una singola copia per entità. Quantità, cataloghi
 che generano copie, più valute, cambio, credito, contrattazione, tasse e mercanti
 itineranti richiedono incrementi successivi.
+
+La [soluzione con due mercanti](../tutorial/20-la-bottegaia-del-faro.md)
+verifica il trasferimento di una merce da una scorta all'altra tramite
+acquisto e rivendita. Venditore sbagliato e cassa insufficiente non modificano
+saldi o possesso; il prezzo di riacquisto resta quello dichiarato sul prodotto.

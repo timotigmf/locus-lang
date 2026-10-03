@@ -311,3 +311,7 @@ resta unico anche quando la conversazione continua oltre il turno finale.
 Gli intenti `help`, `time`, `score` e `money` sono consultazioni: il dispatcher
 li esegue senza chiudere `Session.clarification` o il dialogo attivo. Restano
 esclusi dall'avanzamento delle scene e dalla memoria dell'ultimo comando.
+
+`20b_due_mercanti.locus` verifica la scelta del destinatario di una vendita,
+la consultazione del saldo durante il chiarimento e il successivo riacquisto
+dalla nuova scorta. Include una variante di rifiuto per cassa insufficiente.
