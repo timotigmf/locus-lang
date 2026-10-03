@@ -26,7 +26,7 @@ Le forme unite disponibili sono:
 | Azione | Forme |
 | --- | --- |
 | prendere | `prendilo`, `prendila` |
-| esaminare | `esaminalo`, `esaminala` |
+| esaminare | `esaminalo`, `esaminala`, `guardalo`, `guardala`, `osservalo`, `osservala`, `ispezionalo`, `ispezionala`, `controllalo`, `controllala` |
 | aprire | `aprilo`, `aprila`, anche seguiti da `con CHIAVE` |
 | chiudere | `chiudilo`, `chiudila` |
 | lasciare | `lascialo`, `lasciala` |

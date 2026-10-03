@@ -34,3 +34,9 @@ sinonimi, nomi parziali, disambiguazione e pronomi restano quelli dell'azione
 Le regole `per esaminare` intercettano tutte le forme senza conoscere l'alias
 digitato. Test di parser, runtime, diagnostica, tutorial e browser verificano la
 distinzione tra `guarda` e `guarda NOME`.
+
+## Estensione del 3 ottobre 2026
+
+Le forme clitiche di guarda, osserva, ispeziona e controlla riusano `examine`
+e il referente diretto già previsto per esaminalo/esaminala. Nessuna nuova
+azione o modifica dell'IR; arità, accessibilità e regole restano comuni.

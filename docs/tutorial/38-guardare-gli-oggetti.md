@@ -34,3 +34,15 @@ il rulebook riceve la stessa azione strutturata.
 
 Il [riferimento su guardare ed esaminare](../linguaggio/guardare-esaminare.md)
 elenca alias, errori e rapporto con la disambiguazione.
+
+## Richiamare l'oggetto appena osservato
+
+Dopo `guarda custodia`, puoi digitare `guardala`, `osservala`, `ispezionala`
+o `controllala`: tutte esaminano lo stesso oggetto. Sono disponibili anche
+le forme maschili `guardalo`, `osservalo`, `ispezionalo` e `controllalo`.
+Usano il referente dell'ultimo oggetto diretto, come `esaminalo`.
+
+In una nuova partita, prima di identificare un oggetto, `guardala` segnala
+che manca un referente. `guardala custodia` non è una forma valida: usa
+il clitico da solo oppure `guarda custodia`. Non è ancora verificato
+l'accordo grammaticale tra il clitico e il nome dell'oggetto.

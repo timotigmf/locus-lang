@@ -826,3 +826,22 @@ def test_boolean_short_circuit() -> None:
     comparison = Condition("uguale", Address("assente", "assente"), 0)
     assert evaluate(Condition("o", operands=(Condition("vero"), comparison)), read)
     assert not evaluate(Condition("e", operands=(Condition("falso"), comparison)), read)
+
+
+@pytest.mark.parametrize(
+    "command",
+    [
+        "guardalo",
+        "guardala",
+        "osservalo",
+        "osservala",
+        "ispezionalo",
+        "ispezionala",
+        "controllalo",
+        "controllala",
+    ],
+)
+def test_examination_clitics_cannot_be_redefined(command: str) -> None:
+    with pytest.raises(CompileError) as error:
+        compile_story(BASE + f'Azione "prova" senza oggetti con comando "{command}".')
+    assert error.value.code == "E311"

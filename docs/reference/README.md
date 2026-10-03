@@ -275,3 +275,8 @@ la precedenza. Il parser isolato `parse_command` non assume uno stato attivo.
 riusando tokenizzazione, articoli e virgolette degli argomenti dei comandi.
 Il risolutore dei chiarimenti usa questa funzione prima di confrontare nomi
 e sinonimi; la scelta numerica mantiene il proprio percorso limitato.
+
+I clitici `guardalo/guardala`, `osservalo/osservala`,
+`ispezionalo/ispezionala` e `controllalo/controllala` producono l'intento
+`examine` con pronome diretto. Riutilizzano referente, controlli e regole
+di `esaminare`; sono forme standard riservate (`E311` in caso di collisione).

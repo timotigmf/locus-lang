@@ -181,3 +181,6 @@ con un comando; errori e ambiguità ripresentano le alternative correnti.
 
 Chiarimenti: articoli e nomi quotati condividono le regole nominali dei comandi,
 con conservazione della domanda per articoli isolati o nomi ancora ambigui.
+
+Esame naturale: aggiunti i clitici di guarda, osserva, ispeziona e controlla,
+con referente diretto condiviso e collisioni autore diagnosticate.

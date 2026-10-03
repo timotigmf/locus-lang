@@ -751,3 +751,27 @@ def test_standalone_noun_phrase_uses_player_article_and_quote_rules(
     from locus.player import parse_noun_phrase
 
     assert parse_noun_phrase(text) == expected
+
+
+@pytest.mark.parametrize(
+    "command",
+    [
+        "guardalo",
+        "guardala",
+        "osservalo",
+        "osservala",
+        "ispezionalo",
+        "ispezionala",
+        "controllalo",
+        "controllala",
+    ],
+)
+def test_natural_examination_clitics_reuse_the_last_object(command: str) -> None:
+    current = make_session()
+    assert step(current, parse_session_command(current, command)).event.kind == "no_referent"
+    examined = step(current, parse_session_command(current, "x chiave"))
+    assert examined.event.kind == "examined"
+    repeated = step(examined.session, parse_session_command(examined.session, command))
+    assert repeated.event.kind == "examined"
+    assert repeated.event.entities == examined.event.entities
+    assert parse_command(command + " chiave").verb == "unknown"
