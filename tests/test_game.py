@@ -853,3 +853,30 @@ def test_dialogue_punctuation_does_not_choose_between_ambiguous_labels(answer: s
     assert invalid.session is current
     exact = step(current, parse_session_command(current, "scegli Chiave?"))
     assert exact.dialogue[0].choice_label == "Chiave?"
+
+
+@pytest.mark.parametrize("pending", ["prendi chiave", "parla con guida"])
+@pytest.mark.parametrize(
+    ("query", "event"), [("turno", "time"), ("punteggio", "score"), ("denaro", "money")]
+)
+def test_status_queries_preserve_pending_questions(pending: str, query: str, event: str) -> None:
+    current = start(
+        instantiate(
+            compile_story(
+                "La Sala è una stanza. La chiave di rame è una chiave nella Sala. "
+                "La chiave di ferro è una chiave nella Sala. La guida è una persona nella Sala. "
+                "Il credito è una valuta. Il credito ha saldo 12. "
+                'Dialogo "prova" con "guida": Nodo "inizio" dice "Dimmi.": '
+                'Scelta "Saluta" termina. Fine nodo. Fine dialogo. '
+                'Scena "attesa" dal turno 1 al turno 5: '
+                'Inizio "Inizia.". Fine "Finisce.". Fine scena.'
+            )
+        )
+    )
+    current = step(current, parse_session_command(current, pending)).session
+    result = step(current, parse_session_command(current, query))
+    assert result.event.kind == event
+    assert result.session is current
+    assert not result.scenes
+    resumed = step(result.session, parse_session_command(result.session, "1"))
+    assert resumed.event.kind == ("taken" if pending == "prendi chiave" else "dialogue_end")

@@ -202,3 +202,6 @@ con precedenza delle etichette esatte e rifiuto delle risposte ambigue.
 
 Didattica: laboratorio dialogo e tempo con errori senza consumo di turno,
 scena conclusa durante la conversazione e premio temporale non duplicabile.
+
+Consultazioni: tempo, punteggio e saldo disponibili durante dialoghi e
+chiarimenti, senza perdere la domanda né avanzare l'orologio.

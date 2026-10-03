@@ -153,8 +153,8 @@ tra i passaggi:
 | `attendi` | 4 | Passa un turno, nessun secondo premio |
 
 L'avvio automatico non conta come comando. Durante la conversazione usa
-**Regole e trace** per osservare i passaggi e le scene; consulta `turno` e
-`punteggio` dopo aver chiuso il dialogo.
+**Regole e trace** per osservare i passaggi e le scene; puoi consultare `turno` e
+`punteggio` anche durante il dialogo senza interromperlo.
 
 I cinque punti premiano la conclusione temporale della scena, non la risposta
 «tempesta»: anche altre azioni riuscite possono far arrivare il terzo turno.
@@ -163,3 +163,12 @@ Le scelte del dialogo non hanno ancora effetti o premi propri.
 **Esercizio:** sostituisci `basta` con `Torna alle domande`. L'alba deve finire
 allo stesso terzo turno mentre la conversazione resta aperta. Termina poi il
 dialogo e verifica che il premio sia sempre cinque.
+
+## Consultare tempo e punteggio senza interrompere
+
+Nel laboratorio dell'alba, dopo `parla con guardiana`, scrivi `turno` e
+`punteggio`: vedrai turno 1 e zero punti. Il dialogo resta aperto e puoi
+rispondere `tempesta`. Nei mondi con valuta, anche `denaro` mostra il saldo
+senza cambiare nodo o far passare il tempo.
+Queste consultazioni conservano anche un chiarimento sugli oggetti ancora
+aperto: puoi controllare il saldo e poi rispondere al numero richiesto.

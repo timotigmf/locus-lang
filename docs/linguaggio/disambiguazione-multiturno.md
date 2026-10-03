@@ -70,3 +70,11 @@ L'articolo iniziale non quotato viene rimosso; l'apostrofo tipografico è
 normalizzato. Le virgolette preservano un articolo che fa parte del nome,
 come in `"la luna"`. Un articolo da solo o un nome ancora ambiguo conserva
 la domanda e ripresenta le alternative.
+
+## Consultazioni durante una domanda
+
+I metacomandi informativi `aiuto`, `turno`, `punteggio` e `denaro`, quando
+abilitati nel mondo, conservano dialogo e chiarimento correnti. Non consumano
+un turno, non eseguono regole e non sostituiscono l'ultimo comando ripetibile.
+Le azioni ordinarie conservano il comportamento previsto: bloccate durante
+un dialogo, oppure sostitutive di un chiarimento.

@@ -1102,7 +1102,12 @@ class _RuleHost:
         return ActionResult(transition.session, success, (transition.event,))
 
 
+_INFORMATION_COMMANDS = frozenset({"help", "time", "score", "money"})
+
+
 def _step(session: Session, intent: Intent) -> Transition:
+    if intent.verb in _INFORMATION_COMMANDS:
+        return _perform(session, intent)
     if intent.verb in {"dialogue_choice", "end_dialogue", "talk"}:
         if session.dialogue_id is not None and intent.verb == "talk":
             dialogue = next(
@@ -1481,7 +1486,7 @@ def step(session: Session, intent: Intent, *, advance_time: bool = True) -> Tran
         else:
             transition = Transition(session, Event("no_previous_command"))
             return transition
-    if session.clarification is not None and intent.verb == "help":
+    if session.clarification is not None and intent.verb in _INFORMATION_COMMANDS:
         transition = _perform(session, intent)
     elif session.clarification is not None and intent.verb == "clarify":
         transition = _resume_clarification(session, intent.noun, remember=advance_time)

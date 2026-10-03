@@ -307,3 +307,7 @@ e il trace conservano l'etichetta originale.
 `16b_dialogo_e_tempo.locus` combina dialogo e scena: gli eventi conversazionali
 validi avanzano `Session.turn`, gli errori e l'aiuto no. Il premio della scena
 resta unico anche quando la conversazione continua oltre il turno finale.
+
+Gli intenti `help`, `time`, `score` e `money` sono consultazioni: il dispatcher
+li esegue senza chiudere `Session.clarification` o il dialogo attivo. Restano
+esclusi dall'avanzamento delle scene e dalla memoria dell'ultimo comando.

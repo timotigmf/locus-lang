@@ -139,3 +139,11 @@ del dialogo avanzano l'orologio come azioni riconosciute. Aiuto e risposte
 non valide non avanzano il turno. Una scena può terminare mentre il dialogo
 resta aperto: il premio appartiene alla scena, non alla scelta. Il laboratorio
 [della lezione 16](../tutorial/16-dialogo-guardiana.md) verifica entrambi i casi.
+
+## Consultazioni durante una domanda
+
+I metacomandi informativi `aiuto`, `turno`, `punteggio` e `denaro`, quando
+abilitati nel mondo, conservano dialogo e chiarimento correnti. Non consumano
+un turno, non eseguono regole e non sostituiscono l'ultimo comando ripetibile.
+Le azioni ordinarie conservano il comportamento previsto: bloccate durante
+un dialogo, oppure sostitutive di un chiarimento.
