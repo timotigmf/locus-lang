@@ -217,3 +217,6 @@ riusando le dichiarazioni nominali senza modificare i percorsi di inclusione.
 
 Didattica: laboratorio della lezione 4 con testi separati, sorgenti copiabili,
 copione invariato e diagnosi localizzate per modulo assente o nome errato.
+
+Didattica: soluzione completa della lezione 18 con due veicoli, cambio controllato,
+parcheggio persistente e percorso negativo senza uscite.

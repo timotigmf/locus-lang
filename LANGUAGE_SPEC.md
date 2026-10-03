@@ -372,3 +372,6 @@ Le varianti condividono i controlli M4 e non modificano l'IR.
 
 La lezione 4 verifica la separazione dei testi in un modulo M4: stesso copione,
 con errori E402 sulla direttiva e E103 nel sorgente incluso originale.
+
+La lezione 18 verifica due mezzi indipendenti: cambio solo dopo la discesa,
+mezzo parcheggiato fermo e viaggio bloccato senza separare il conducente.

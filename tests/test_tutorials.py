@@ -10,6 +10,7 @@ import pytest
 from locus.diagnostics import CompileError
 from locus.player import parse_command
 from locus.runtime import instantiate
+from locus.stdlib import INSIDE
 from locus.stdlib.authoring import compile_story, compile_story_file
 from locus.stdlib.game import Session, parse_session_command, start, step
 from locus.stdlib.render import render
@@ -930,3 +931,43 @@ def test_tutorial_text_module_reports_unknown_entity_in_original_file(tmp_path: 
     assert error.value.code == "E103"
     assert error.value.span.source == str(texts.resolve())
     assert error.value.span.line == 1
+
+
+def test_two_vehicle_lesson_keeps_parked_vehicle_and_rejects_invalid_switch() -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "18b_due_mezzi.locus")))
+    ids = {entity.label: entity.id for entity in current.world.entities}
+
+    def command(text: str) -> str:
+        nonlocal current
+        transition = step(current, parse_session_command(current, text))
+        current = transition.session
+        return transition.event.kind
+
+    def location(label: str) -> str:
+        return next(
+            edge.target_id
+            for edge in current.world.relations
+            if edge.source_id == ids[label] and edge.predicate_id == INSIDE
+        )
+
+    assert command("sali sul triciclo") == "boarded"
+    for text, expected in (
+        ("sali sulla saetta", "already_in_vehicle"),
+        ("scendi dalla saetta", "wrong_vehicle"),
+        ("nord", "no_exit"),
+    ):
+        before = current
+        assert command(text) == expected
+        assert current == before
+    command("est")
+    assert current.vehicle_id == ids["triciclo blu"]
+    assert current.room_id == location("triciclo blu") == ids["Piazza"]
+    assert location("saetta rossa") == ids["Rimessa"]
+    assert command("scendi") == "disembarked"
+    command("ovest")
+    assert current.vehicle_id is None
+    assert location("triciclo blu") == ids["Piazza"]
+    assert command("sali sulla saetta") == "boarded"
+    command("est")
+    assert current.room_id == location("saetta rossa") == location("triciclo blu") == ids["Piazza"]
+    assert current.vehicle_id == ids["saetta rossa"]

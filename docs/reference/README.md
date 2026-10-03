@@ -328,3 +328,7 @@ quotata: l'estensione dei nomi non cambia il caricamento dei file.
 La [lezione 4](../tutorial/04-progetto.md) include un modulo dei testi completo.
 Il copione CLI ne verifica la parità di comportamento; i test negativi controllano
 file e riga per inclusione assente e riferimento a entità non dichiarata.
+
+Il laboratorio `18b_due_mezzi.locus` della [lezione 18](../tutorial/18-bicicletta-in-movimento.md)
+verifica posizione di entrambi i veicoli, discesa, cambio e rifiuti senza mutazioni.
+Non introduce carico o passeggeri.
