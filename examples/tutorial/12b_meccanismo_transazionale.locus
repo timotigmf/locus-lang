@@ -1,0 +1,28 @@
+Titolo: "Il contrappeso difettoso".
+Autore: "Esempio LOCUS".
+
+La Sala è una stanza.
+La Cripta è una stanza.
+La Cripta è a nord della Sala.
+Inizia nella "Sala".
+La Sala ha descrizione "Il passaggio verso nord è aperto.".
+Il meccanismo è uno scenario nella Sala.
+La chiuso è una proprietà logica.
+
+Azione "tentare chiusura" senza oggetti con comando "tenta chiusura".
+Azione "chiudere passaggio" senza oggetti con comando "aziona chiusura".
+
+Regola "guasto del contrappeso" per tentare chiusura nella fase invece:
+    rimuovi relazione "nord" da "Sala" a "Cripta";
+    imposta "chiuso" di "meccanismo" a vero;
+    imposta "descrizione" di "Sala" a "Il passaggio è chiuso.";
+    dì "La parete si richiude.";
+    fallisci "Il contrappeso cede: il passaggio resta aperto.";
+Fine regola.
+
+Regola "chiusura riuscita" per chiudere passaggio nella fase invece:
+    rimuovi relazione "nord" da "Sala" a "Cripta";
+    imposta "chiuso" di "meccanismo" a vero;
+    imposta "descrizione" di "Sala" a "Il passaggio è chiuso.";
+    dì "La parete si richiude.";
+Fine regola.

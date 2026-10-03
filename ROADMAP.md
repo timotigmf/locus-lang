@@ -187,3 +187,6 @@ con referente diretto condiviso e collisioni autore diagnosticate.
 
 Didattica: esercizio delle due campane completato con sorgente copiabile,
 copione e verifica di entrambe le scelte; chiarita la precedenza dei nomi esatti.
+
+Didattica: laboratorio completo del contrappeso con fallimento transazionale,
+confronto con chiusura riuscita e verifiche di grafo, proprietà e messaggi.

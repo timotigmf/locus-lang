@@ -804,3 +804,26 @@ def test_two_bells_solution_repeats_the_selected_identity(choice: str, descripti
             assert result.event.entities == selected.event.entities
             assert description in render(result)
         current = result.session
+
+
+def test_transactional_mechanism_restores_graph_properties_and_output() -> None:
+    current = start(
+        instantiate(compile_story_file(TUTORIAL / "12b_meccanismo_transazionale.locus"))
+    )
+    failed = step(current, parse_session_command(current, "tenta chiusura"))
+    assert failed.session is current
+    assert render(failed) == "Il contrappeso cede: il passaggio resta aperto."
+    assert property_of(current, "meccanismo", "chiuso") is False
+    assert property_of(current, "Sala", "descrizione") == "Il passaggio verso nord è aperto."
+    north = step(current, parse_session_command(current, "nord"))
+    assert north.session.room_id != current.room_id
+    south = step(north.session, parse_session_command(north.session, "sud"))
+    assert south.session.room_id == current.room_id
+    closed = step(south.session, parse_session_command(south.session, "aziona chiusura"))
+    assert render(closed) == "La parete si richiude."
+    assert property_of(closed.session, "meccanismo", "chiuso") is True
+    assert property_of(closed.session, "Sala", "descrizione") == "Il passaggio è chiuso."
+    assert len(closed.session.world.relations) == len(current.world.relations) - 2
+    assert (
+        step(closed.session, parse_session_command(closed.session, "nord")).event.kind == "no_exit"
+    )

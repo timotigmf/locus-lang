@@ -284,3 +284,8 @@ di `esaminare`; sono forme standard riservate (`E311` in caso di collisione).
 L'esempio `40b_due_campane.locus` verifica che `Session.last_intent` conservi
 l'ID selezionato da un chiarimento, sia scegliendo per numero sia tramite
 sinonimo. I nomi composti evitano che un nome esatto impedisca l'ambiguità.
+
+`12b_meccanismo_transazionale.locus` illustra il ripristino simultaneo di
+relazioni, proprietà e output su fallimento, confrontato con la stessa
+chiusura riuscita. Il copione incluso attraversa entrambe le direzioni prima
+della chiusura definitiva.

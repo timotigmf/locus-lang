@@ -78,3 +78,65 @@ stessa azione.
 **Prova negativa:** avvia una nuova partita, esamina il dettaglio, poi ripeti
 l'esame e usa `g`. La scoperta deve essere raccontata una sola volta; il testo
 per le visite successive deve apparire soltanto dal secondo esame.
+
+## Laboratorio completo: un guasto senza effetti parziali
+
+Apri `examples/tutorial/12b_meccanismo_transazionale.locus`, oppure copia
+questo progetto in un nuovo file dello Studio:
+
+```locus
+Titolo: "Il contrappeso difettoso".
+Autore: "Esempio LOCUS".
+
+La Sala è una stanza.
+La Cripta è una stanza.
+La Cripta è a nord della Sala.
+Inizia nella "Sala".
+La Sala ha descrizione "Il passaggio verso nord è aperto.".
+Il meccanismo è uno scenario nella Sala.
+La chiuso è una proprietà logica.
+
+Azione "tentare chiusura" senza oggetti con comando "tenta chiusura".
+Azione "chiudere passaggio" senza oggetti con comando "aziona chiusura".
+
+Regola "guasto del contrappeso" per tentare chiusura nella fase invece:
+    rimuovi relazione "nord" da "Sala" a "Cripta";
+    imposta "chiuso" di "meccanismo" a vero;
+    imposta "descrizione" di "Sala" a "Il passaggio è chiuso.";
+    dì "La parete si richiude.";
+    fallisci "Il contrappeso cede: il passaggio resta aperto.";
+Fine regola.
+
+Regola "chiusura riuscita" per chiudere passaggio nella fase invece:
+    rimuovi relazione "nord" da "Sala" a "Cripta";
+    imposta "chiuso" di "meccanismo" a vero;
+    imposta "descrizione" di "Sala" a "Il passaggio è chiuso.";
+    dì "La parete si richiude.";
+Fine regola.
+```
+
+`tenta chiusura` prova a rimuovere il passaggio, cambiare il flag e aggiornare
+la descrizione. Il fallimento finale annulla tutte queste modifiche e scarta
+anche la frase «La parete si richiude». Compare soltanto il motivo del guasto.
+Questo è il ripristino transazionale: non serve scrivere istruzioni inverse
+per ogni proprietà o uscita già modificata.
+
+Esegui il copione `12b_meccanismo_transazionale.comandi` e confronta:
+
+| Prova | Stato e risultato attesi |
+| --- | --- |
+| `tenta chiusura` | Solo il messaggio del contrappeso; flag `chiuso` falso |
+| `guarda` | Descrizione del passaggio aperto |
+| `nord`, poi `sud` | Entrambi gli archi sono ancora percorribili |
+| `aziona chiusura` | Chiusura riuscita; flag vero |
+| `guarda` | Descrizione del passaggio chiuso |
+| `nord` | Nessuna uscita in quella direzione |
+
+Controlla anche Mappa e Indice: il guasto lascia il collegamento presente,
+mentre la chiusura riuscita lo rimuove insieme all'inversa. Le regole
+dell'esempio sono azioni globali: esegui la chiusura dalla Sala, come nel
+copione. Non è un modello di leva azionabile soltanto quando la raggiungi.
+
+**Esercizio:** aggiungi una seconda proprietà da modificare prima di `fallisci`
+e verifica nell'Indice che torni al valore iniziale. Conserva una versione
+senza fallimento per confrontare la modifica riuscita.

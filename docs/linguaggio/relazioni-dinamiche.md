@@ -78,3 +78,7 @@ Il sorgente non può ancora dichiarare nuovi schemi di relazione. La versione
 corrente riguarda le dodici direzioni della libreria.
 Visibilità degli oggetti e porte segrete come entità richiedono specifiche
 successive.
+
+Il [laboratorio del contrappeso](../tutorial/12-passaggi-segreti.md) confronta
+una rimozione seguita da `fallisci` con una riuscita: verifica entrambe le
+direzioni, un flag, la descrizione e lo scarto dei messaggi intermedi.
