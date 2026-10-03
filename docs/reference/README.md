@@ -324,3 +324,7 @@ E103/E406/E407. Il nome iniziale segue la sintassi nominale delle dichiarazioni,
 Il parser usa la stessa produzione nominale delle dichiarazioni per `Inizia`,
 conservando un solo `EntryPoint`. `Includi` continua a richiedere una stringa
 quotata: l'estensione dei nomi non cambia il caricamento dei file.
+
+La [lezione 4](../tutorial/04-progetto.md) include un modulo dei testi completo.
+Il copione CLI ne verifica la parità di comportamento; i test negativi controllano
+file e riga per inclusione assente e riferimento a entità non dichiarata.

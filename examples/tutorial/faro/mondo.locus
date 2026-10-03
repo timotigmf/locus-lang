@@ -6,7 +6,6 @@ La segnale è una proprietà logica.
 
 Il Molo è una stanza.
 La Terrazza è a nord del Molo.
-Il Molo ha descrizione "Il passaggio a nord conduce alla terrazza. Una custodia contiene la chiave.".
 La custodia è un contenitore nel Molo.
 La chiave di rame è una chiave nella custodia.
 Il portello è una porta.

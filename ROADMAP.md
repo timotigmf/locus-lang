@@ -214,3 +214,6 @@ oltre a `nella`, con invariati controlli di unicità e destinazione.
 
 Sintassi autore: `Inizia nel Mercato Coperto.` accetta nomi non quotati,
 riusando le dichiarazioni nominali senza modificare i percorsi di inclusione.
+
+Didattica: laboratorio della lezione 4 con testi separati, sorgenti copiabili,
+copione invariato e diagnosi localizzate per modulo assente o nome errato.

@@ -3,11 +3,12 @@
 Esegui `locus debug examples/tutorial/04_faro.locus`.
 
 Obiettivo: raggiungere la Terrazza e scoprire il segnale. Il portello è bloccato;
-la chiave è in una custodia chiusa. La storia usa tre file:
+la chiave è in una custodia chiusa. La storia usa quattro file:
 
 - `04_faro.locus`: include i moduli e sceglie il Molo come inizio.
 - `faro/mondo.locus`: luoghi, collegamenti, porta, oggetti e proprietà.
 - `faro/regole.locus`: comportamento della lanterna; include a sua volta il mondo.
+- `faro/testi.locus`: descrizione iniziale del Molo.
 
 Il mondo viene caricato una sola volta anche se entrambi i file lo includono.
 Il file principale non include la lezione 3 completa: quella ha già un punto
@@ -56,6 +57,44 @@ racconto o se il mondo ha smesso di comportarsi correttamente. Un'altra persona
 può provare comandi che il percorso previsto non copre: il copione non sostituisce
 una prova di gioco libera.
 
-**Esercizio.** Sposta la descrizione del Molo in un file `faro/testi.locus` e includilo.
-**Soluzione.** Sposta l'assegnazione, non copiarla, e aggiungi un `Includi` nel file
-principale. Gli oggetti restano dichiarati nel mondo; i riferimenti fra file funzionano.
+## Laboratorio: separare i testi
+
+La versione completa include già la soluzione dell'esercizio: la descrizione
+del Molo vive in `faro/testi.locus`. Il file principale è copiabile così:
+
+```text
+Includi "faro/mondo.locus".
+Includi "faro/regole.locus".
+Includi "faro/testi.locus".
+Inizia nel Molo.
+```
+
+Il contenuto completo di `faro/testi.locus` è:
+
+```text
+Il Molo ha descrizione "Il passaggio a nord conduce alla terrazza. Una custodia contiene la chiave.".
+```
+
+Questi due blocchi sono parti di un progetto: il file dei testi richiede anche
+la dichiarazione del Molo, presente in `mondo.locus`. Compila il file principale,
+non il solo modulo dei testi. Nello Studio conserva i percorsi indicati quando
+aggiungi i file al progetto e scegli `04_faro.locus` come file principale.
+
+`Inizia nel Molo.` sceglie esplicitamente la partenza, anche se il mondo dichiara
+prima la Terrazza. Il nome può essere non quotato; il percorso di `Includi`
+richiede invece le virgolette. Il percorso si calcola dalla cartella del file
+che contiene la direttiva: nelle regole basta `Includi "mondo.locus".`, mentre
+nel principale serve il prefisso `faro/`.
+
+**Prova positiva.** Esegui il copione della lezione: l'uscita resta identica alla
+versione con il testo nel mondo. Separare i file non cambia la partita.
+
+**Prova negativa.** Rinomina temporaneamente `faro/testi.locus` senza aggiornare
+l'inclusione. La compilazione restituisce `E402` sulla terza riga del principale,
+che contiene il percorso non più trovato. Ripristina il nome per correggere
+l'errore. Se cambi soltanto il nome del Molo nel modulo, invece, il riferimento
+non dichiarato produce `E103` nel file dei testi.
+
+**Esercizio ulteriore.** Sposta anche la descrizione della lanterna nel modulo
+dei testi, rimuovendo l'assegnazione dal mondo. Ripeti il copione per verificare
+che la riorganizzazione conservi il comportamento.

@@ -369,3 +369,6 @@ contratto esistente, senza modificare il linguaggio o l'IR.
 La direttiva del punto iniziale accetta le preposizioni articolate `nella`,
 `nel`, `nello` e `nell'`, seguite dal nome, anche non quotato: `Inizia nel "Mercato".`.
 Le varianti condividono i controlli M4 e non modificano l'IR.
+
+La lezione 4 verifica la separazione dei testi in un modulo M4: stesso copione,
+con errori E402 sulla direttiva e E103 nel sorgente incluso originale.

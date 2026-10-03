@@ -1,4 +1,5 @@
 import os
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -6,6 +7,7 @@ from typing import cast
 
 import pytest
 
+from locus.diagnostics import CompileError
 from locus.player import parse_command
 from locus.runtime import instantiate
 from locus.stdlib.authoring import compile_story, compile_story_file
@@ -901,3 +903,30 @@ def test_two_merchants_solution_rejects_insufficient_buyer_cash() -> None:
     assert property_of(current, "credito", "saldo") == 13
     assert property_of(current, "Bruno", "cassa") == 2
     assert len(current.inventory) == 1
+
+
+def test_tutorial_text_module_reports_missing_file_at_include(tmp_path: Path) -> None:
+    shutil.copytree(TUTORIAL / "faro", tmp_path / "faro")
+    main = tmp_path / "04_faro.locus"
+    shutil.copyfile(TUTORIAL / "04_faro.locus", main)
+    (tmp_path / "faro" / "testi.locus").unlink()
+    with pytest.raises(CompileError) as error:
+        compile_story_file(main)
+    assert error.value.code == "E402"
+    assert error.value.span.source == str(main.resolve())
+    assert error.value.span.line == 3
+
+
+def test_tutorial_text_module_reports_unknown_entity_in_original_file(tmp_path: Path) -> None:
+    shutil.copytree(TUTORIAL / "faro", tmp_path / "faro")
+    main = tmp_path / "04_faro.locus"
+    shutil.copyfile(TUTORIAL / "04_faro.locus", main)
+    texts = tmp_path / "faro" / "testi.locus"
+    texts.write_text(
+        texts.read_text(encoding="utf-8").replace("Il Molo", "Il Porto"), encoding="utf-8"
+    )
+    with pytest.raises(CompileError) as error:
+        compile_story_file(main)
+    assert error.value.code == "E103"
+    assert error.value.span.source == str(texts.resolve())
+    assert error.value.span.line == 1
