@@ -169,3 +169,6 @@ con recupero verificato per risposta vuota, ambigua, assente e fuori intervallo.
 
 Aiuto: le azioni dell'autore mostrano ora argomenti e separatori accettati,
 con alias e forme a zero, uno o due oggetti derivati dal catalogo compilato.
+
+Aiuto contestuale: durante chiarimenti e dialoghi ripresenta le alternative
+attive con numerazione stabile e istruzioni per rispondere o annullare.

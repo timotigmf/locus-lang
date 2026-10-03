@@ -48,3 +48,14 @@ Le forme senza oggetti non ricevono segnaposto.
 
 L'aiuto illustra la struttura accettata, ma non rivela quali oggetti risolvono
 un enigma e non sostituisce i controlli di tipo o raggiungibilità.
+
+## Ritrovare una domanda aperta
+
+Apri l'esempio della lezione 26, scrivi `prendi chiave` e poi `aiuto`: oltre
+ai comandi ritrovi le due chiavi numerate. Rispondi `2` per scegliere quella
+di ferro, oppure `annulla`. L'aiuto non ha cancellato il chiarimento.
+
+Nell'esempio della lezione 16, scrivi `parla con guardiana`, `1`, `?`: l'aiuto
+mostra `1. Torna alle domande`, la scelta del nodo attuale. Non mostra le tre
+opzioni iniziali e non ripete la battuta della tempesta. Usa `basta` per
+terminare la conversazione: il successivo aiuto non mostra più scelte attive.

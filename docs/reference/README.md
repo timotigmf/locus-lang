@@ -256,3 +256,7 @@ o riordinare gli oggetti. Vedi la [lezione 26](../tutorial/26-scegliere-tra-ogge
 L'aiuto delle azioni dell'autore deriva arità e separatori da `ActionIR`:
 `NOME` indica il primo argomento e `ALTRO` il secondo. Le forme sono ordinate
 e deduplicate; tutte le combinazioni di alias e separatori vengono mostrate.
+
+L'evento `help` presenta anche `Session.clarification.candidates` o le scelte
+del nodo di dialogo attivo. È una lettura della sessione: numerazione e ordine
+sono conservati, nessuna risposta viene eseguita e nessun nodo viene visitato.

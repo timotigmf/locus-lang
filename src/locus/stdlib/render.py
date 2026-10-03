@@ -47,6 +47,24 @@ def _help(transition: Transition) -> str:
     if authored:
         lines.append("- azioni della storia: " + ", ".join(authored) + ".")
     lines.append("Puoi usare un nome parziale quando identifica un solo oggetto raggiungibile.")
+    session = transition.session
+    if session.clarification is not None:
+        labels = {entity.id: entity.label for entity in world.entities}
+        lines.append("Chiarimento in corso: rispondi con numero o nome, oppure annulla.")
+        lines.extend(
+            f"{index}. {labels[ident]}"
+            for index, ident in enumerate(session.clarification.candidates, 1)
+        )
+    elif session.dialogue_id is not None:
+        lines.append("Conversazione in corso: scegli un'opzione, oppure scrivi «basta».")
+        lines.extend(
+            f"{index}. {choice.label}"
+            for dialogue in world.dialogues
+            if dialogue.id == session.dialogue_id
+            for node in dialogue.nodes
+            if node.id == session.dialogue_node_id
+            for index, choice in enumerate(node.choices, 1)
+        )
     return "\n".join(lines)
 
 

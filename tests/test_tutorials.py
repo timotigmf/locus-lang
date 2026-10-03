@@ -736,3 +736,29 @@ def test_help_does_not_add_arguments_to_zero_arity_actions() -> None:
     text = render(step(current, parse_session_command(current, "aiuto")))
     assert "azioni della storia: medita." in text
     assert "medita NOME" not in text
+
+
+@pytest.mark.parametrize("alias", ["aiuto", "comandi", "help", "?"])
+def test_help_reminds_pending_choices_without_answering_them(alias: str) -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "26_chiarimenti.locus")))
+    idle = render(step(current, parse_session_command(current, alias)))
+    assert "Chiarimento in corso" not in idle
+    current = step(current, parse_session_command(current, "prendi chiave")).session
+    helped = step(current, parse_session_command(current, alias))
+    assert helped.session is current
+    assert "1. chiave di rame" in render(helped)
+    assert "2. chiave di ferro" in render(helped)
+    assert "oppure annulla" in render(helped)
+    assert step(helped.session, parse_session_command(helped.session, "2")).event.kind == "taken"
+
+    current = start(instantiate(compile_story_file(TUTORIAL / "16_dialogo_guardiana.locus")))
+    current = step(current, parse_session_command(current, "parla con guardiana")).session
+    current = step(current, parse_session_command(current, "1")).session
+    helped = step(current, parse_session_command(current, alias))
+    assert helped.session is current
+    assert "1. Torna alle domande" in render(helped)
+    assert "Chiedi della chiave" not in render(helped)
+    assert "basta" in render(helped)
+    assert "tre notti" not in render(helped)
+    ended = step(helped.session, parse_session_command(helped.session, "basta")).session
+    assert "Conversazione in corso" not in render(step(ended, parse_session_command(ended, alias)))

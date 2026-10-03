@@ -37,3 +37,10 @@ Il catalogo elenca le forme di comando, non spiega le regole specifiche di ogni
 storia. L'autore deve descrivere enigmi e convenzioni narrative nel testo della
 propria opera. Il manuale incorporato nello Studio resta la fonte approfondita
 per sintassi, esempi copiabili e diagnostica.
+
+## Domande ancora aperte
+
+Durante un chiarimento l'aiuto aggiunge le candidate numerate e ricorda
+`annulla`. Durante un dialogo aggiunge le scelte del nodo corrente e ricorda
+`basta`. Non ripete la battuta né effettua una scelta; l'ordine delle opzioni
+resta identico. Senza domande aperte queste sezioni non vengono mostrate.
