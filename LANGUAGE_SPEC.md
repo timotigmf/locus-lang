@@ -375,3 +375,6 @@ con errori E402 sulla direttiva e E103 nel sorgente incluso originale.
 
 La lezione 18 verifica due mezzi indipendenti: cambio solo dopo la discesa,
 mezzo parcheggiato fermo e viaggio bloccato senza separare il conducente.
+
+La lezione 19 verifica il possesso commerciale dopo aver lasciato una merce:
+ricomprarla è rifiutato anche con fondi insufficienti; riprenderla non addebita il prezzo.

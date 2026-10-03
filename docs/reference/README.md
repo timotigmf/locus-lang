@@ -332,3 +332,7 @@ file e riga per inclusione assente e riferimento a entità non dichiarata.
 Il laboratorio `18b_due_mezzi.locus` della [lezione 18](../tutorial/18-bicicletta-in-movimento.md)
 verifica posizione di entrambi i veicoli, discesa, cambio e rifiuti senza mutazioni.
 Non introduce carico o passeggeri.
+
+Il laboratorio `19b_mappa_pagata.locus` della [lezione 19](../tutorial/19-il-mercato-del-faro.md)
+distingue inventario e `owned_ids`, verificando saldo, posizione e rifiuti atomici
+dopo acquisto, abbandono e recupero della merce.

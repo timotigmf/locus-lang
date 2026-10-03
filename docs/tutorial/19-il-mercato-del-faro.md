@@ -59,3 +59,44 @@ invarianti, alias, regole e limiti del primo incremento commerciale.
 
 La [lezione 20](20-la-bottegaia-del-faro.md) assegna le merci a una bottegaia e
 aggiunge cassa, scorte e rivendita.
+
+## Soluzione: lasciare e riprendere una merce pagata
+
+Apri `examples/tutorial/19b_mappa_pagata.locus` oppure copia il sorgente completo:
+
+```locus
+Titolo: "La mappa già pagata".
+Autore: "Esempio LOCUS".
+
+La Bottega è una stanza.
+Inizia nella Bottega.
+Il credito portuale è una valuta.
+Il credito portuale ha saldo 15.
+La bussola tascabile è un prodotto nella Bottega.
+La bussola tascabile ha prezzo 7.
+La mappa nautica è un prodotto nella Bottega.
+La mappa nautica ha prezzo 5.
+La corda cerata è un prodotto nella Bottega.
+La corda cerata ha prezzo 9.
+```
+
+| Comando | Risultato da controllare |
+| --- | --- |
+| `prendi mappa` | Rifiuto: devi pagarla; saldo 15 |
+| `compra bussola` | Bussola in inventario; saldo 8 |
+| `compra mappa` | Mappa in inventario; saldo 3 |
+| `lascia mappa` | Mappa in Bottega; saldo ancora 3 |
+| `compra mappa` | È già tua: usa `prendi`, senza un secondo pagamento |
+| `prendi mappa` | Mappa di nuovo in inventario; saldo 3 |
+| `compra corda` | Fondi insufficienti; corda in Bottega, saldo 3 |
+| `denaro` | Conferma il saldo finale |
+
+Il possesso registrato è distinto dall'inventario: lasciare la mappa sposta
+l'oggetto, ma non annulla l'acquisto. Per questo puoi riprenderla anche se
+non hai più i cinque crediti del prezzo. Il tentativo di ricomprarla deve
+riconoscere il possesso precedente prima di verificare i fondi.
+
+Nell'Indice controlla saldo e posizione dopo ciascun passo. La prova automatica
+verifica anche che entrambi i tentativi di acquisto rifiutati conservino l'intera
+sessione. Questa storia non contiene un mercante: per trasferire nuovamente
+la proprietà tramite una vendita, passa alla lezione 20.

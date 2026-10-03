@@ -971,3 +971,41 @@ def test_two_vehicle_lesson_keeps_parked_vehicle_and_rejects_invalid_switch() ->
     command("est")
     assert current.room_id == location("saetta rossa") == location("triciclo blu") == ids["Piazza"]
     assert current.vehicle_id == ids["saetta rossa"]
+
+
+def test_paid_map_lesson_preserves_ownership_after_dropping() -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "19b_mappa_pagata.locus")))
+    ids = {entity.label: entity.id for entity in current.world.entities}
+
+    def command(text: str) -> str:
+        nonlocal current
+        transition = step(current, parse_session_command(current, text))
+        current = transition.session
+        return transition.event.kind
+
+    before = current
+    command("prendi mappa")
+    assert current == before
+    for text, balance in (("compra bussola", 8), ("compra mappa", 3)):
+        command(text)
+        assert property_of(current, "credito portuale", "saldo") == balance
+    assert ids["mappa nautica"] in current.inventory
+    command("lascia mappa")
+    assert ids["mappa nautica"] not in current.inventory
+    assert ids["mappa nautica"] in current.owned_ids
+    before = current
+    assert command("compra mappa") == "already_owned"
+    assert current == before
+    command("prendi mappa")
+    assert ids["mappa nautica"] in current.inventory
+    assert property_of(current, "credito portuale", "saldo") == 3
+    before = current
+    assert command("compra corda") == "insufficient_funds"
+    assert current == before
+    assert ids["corda cerata"] not in current.owned_ids
+    assert any(
+        edge.source_id == ids["corda cerata"]
+        and edge.predicate_id == INSIDE
+        and edge.target_id == ids["Bottega"]
+        for edge in current.world.relations
+    )

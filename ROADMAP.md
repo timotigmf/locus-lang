@@ -220,3 +220,6 @@ copione invariato e diagnosi localizzate per modulo assente o nome errato.
 
 Didattica: soluzione completa della lezione 18 con due veicoli, cambio controllato,
 parcheggio persistente e percorso negativo senza uscite.
+
+Didattica: soluzione completa della mappa già pagata nella lezione 19,
+con saldo progressivo, recupero senza addebito e rifiuti atomici verificati.
