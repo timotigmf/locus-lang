@@ -1,5 +1,6 @@
 """Transizioni IF pure con contenimento, stati e intenti a due oggetti."""
 
+import re
 from dataclasses import dataclass, replace
 from typing import Literal
 
@@ -737,23 +738,25 @@ def _choose_dialogue(session: Session, selection: str) -> Transition:
         if index is not None:
             choice = node.choices[index]
     else:
-        normalized = canonical(selection)
-        exact = [item for item in node.choices if canonical(item.label) == normalized]
+        normalized = canonical(selection).replace("’", "'")
+        exact = [
+            item for item in node.choices if canonical(item.label).replace("’", "'") == normalized
+        ]
         if len(exact) == 1:
             choice = exact[0]
         elif not exact:
-            words = set(normalized.split())
+            words = set(re.findall(r"[^\W_]+", normalized))
             partial = [
                 item
                 for item in node.choices
-                if words and words.issubset(set(canonical(item.label).split()))
+                if words and words.issubset(set(re.findall(r"[^\W_]+", canonical(item.label))))
             ]
             if not partial:
-                words = set((parse_noun_phrase(selection) or "").split())
+                words = set(re.findall(r"[^\W_]+", parse_noun_phrase(selection) or ""))
                 partial = [
                     item
                     for item in node.choices
-                    if words and words.issubset(set(canonical(item.label).split()))
+                    if words and words.issubset(set(re.findall(r"[^\W_]+", canonical(item.label))))
                 ]
             if len(partial) == 1:
                 choice = partial[0]

@@ -813,3 +813,43 @@ def test_dialogue_exact_label_with_article_precedes_shorter_label(answer: str) -
     selected = step(current, parse_session_command(current, answer))
     assert selected.event.kind == "dialogue_end"
     assert selected.dialogue[0].choice_label == "La chiave"
+
+
+@pytest.mark.parametrize(
+    "answer", ["chiave", "scegli chiave", "orologio", "scegli Chiedi dell'orologio!"]
+)
+def test_dialogue_choices_accept_punctuation_and_apostrophe_variants(answer: str) -> None:
+    current = start(
+        instantiate(
+            compile_story(
+                "La Sala è una stanza. La guida è una persona nella Sala. "
+                'Dialogo "domande" con "guida": Nodo "inizio" dice "Dimmi.": '
+                'Scelta "Dov’è la chiave?" termina. '
+                'Scelta "Chiedi dell’orologio!" termina. Fine nodo. Fine dialogo.'
+            )
+        )
+    )
+    current = step(current, parse_session_command(current, "parla con guida")).session
+    selected = step(current, parse_session_command(current, answer))
+    assert selected.event.kind == "dialogue_end"
+    expected = "Dov’è la chiave?" if "chiave" in answer else "Chiedi dell’orologio!"
+    assert selected.dialogue[0].choice_label == expected
+
+
+@pytest.mark.parametrize("answer", ["chiave", "scegli chiave", "???"])
+def test_dialogue_punctuation_does_not_choose_between_ambiguous_labels(answer: str) -> None:
+    current = start(
+        instantiate(
+            compile_story(
+                "La Sala è una stanza. La guida è una persona nella Sala. "
+                'Dialogo "domande" con "guida": Nodo "inizio" dice "Dimmi.": '
+                'Scelta "Chiave?" termina. Scelta "Chiave!" termina. Fine nodo. Fine dialogo.'
+            )
+        )
+    )
+    current = step(current, parse_session_command(current, "parla con guida")).session
+    invalid = step(current, parse_session_command(current, answer))
+    assert invalid.event.kind == "invalid_choice"
+    assert invalid.session is current
+    exact = step(current, parse_session_command(current, "scegli Chiave?"))
+    assert exact.dialogue[0].choice_label == "Chiave?"

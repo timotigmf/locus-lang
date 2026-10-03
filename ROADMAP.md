@@ -196,3 +196,6 @@ che coincidono con comandi; articoli conservati e virgolette incomplete gestite.
 
 Dialoghi: corretta la precedenza delle etichette con articolo dopo `scegli`,
 senza perdere la compatibilità con risposte parziali come `la tempesta`.
+
+Dialoghi: selezione parziale tollerante alla punteggiatura e agli apostrofi,
+con precedenza delle etichette esatte e rifiuto delle risposte ambigue.

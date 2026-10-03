@@ -298,3 +298,8 @@ I comandi riconosciuti senza virgolette mantengono la precedenza.
 Le risposte di dialogo con prefisso `scegli` conservano gli articoli per
 il confronto esatto. La rimozione dell'articolo è soltanto un ripiego quando
 non esistono corrispondenze esatte o parziali con il testo originale.
+
+La risoluzione testuale dei dialoghi confronta prima l'etichetta esatta,
+unificando i due apostrofi, poi le parole Unicode separate dalla punteggiatura.
+Le corrispondenze multiple restano `invalid_choice`; il testo visualizzato
+e il trace conservano l'etichetta originale.

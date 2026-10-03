@@ -98,3 +98,13 @@ esattamente «La chiave»; `scegli chiave` seleziona «Chiave». Il parser non
 scarta un articolo prima di cercare l'etichetta completa.
 Nell'esempio della guardiana, `scegli la tempesta` continua invece a trovare
 «Chiedi della tempesta», perché non esiste un'etichetta più precisa.
+
+## Domande con punteggiatura
+
+Puoi rinominare una scelta in «Dov’è la chiave?»: il giocatore può rispondere
+`chiave` senza digitare il punto interrogativo. Un'etichetta come
+«Chiedi dell’orologio!» accetta `orologio`, anche dopo l'apostrofo.
+Il testo mostrato al giocatore mantiene sempre la punteggiatura originale.
+
+**Prova negativa:** crea due scelte «Chiave?» e «Chiave!». `chiave` deve
+chiedere una correzione; `scegli Chiave?` deve selezionare esattamente la prima.

@@ -121,3 +121,13 @@ completo o alle sue parole, si prova la forma senza articolo iniziale per
 conservare risposte come `scegli la tempesta` per «Chiedi della tempesta».
 Un insieme di più corrispondenze resta ambiguo e non viene ristretto
 arbitrariamente eliminando l'articolo.
+
+## Punteggiatura nelle scelte
+
+Il confronto esatto conserva la punteggiatura e considera equivalenti gli
+apostrofi diritto e tipografico. Il confronto parziale usa le parole Unicode,
+separando punteggiatura e apostrofi: `chiave` può scegliere «Dov’è la chiave?»
+e `orologio` può scegliere «Chiedi dell’orologio!».
+Se più etichette contengono le stesse parole, la risposta resta ambigua.
+Con «Chiave?» e «Chiave!», usa il testo esatto o il numero; la sola
+punteggiatura non seleziona alcuna opzione. Gli accenti restano significativi.
