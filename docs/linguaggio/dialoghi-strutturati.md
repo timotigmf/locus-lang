@@ -101,3 +101,13 @@ I comandi riconosciuti mantengono la precedenza: `aiuto` mostra l'aiuto e
 `basta` termina il dialogo. Per scegliere un'etichetta che coincide con un
 comando, usa il suo numero o il prefisso `scegli`. Fuori dalla conversazione
 non viene interpretata alcuna risposta testuale contestuale.
+
+## Etichette fra virgolette
+
+Durante una conversazione puoi rispondere con `"Chiedi della chiave"`.
+Le virgolette vengono rimosse e gli articoli interni all'etichetta restano
+parte del testo da confrontare. Anche `"Aiuto"` seleziona una scelta chiamata
+Aiuto, mentre `aiuto` senza virgolette conserva il significato di comando.
+Virgolette non chiuse o etichette assenti producono una scelta non valida
+e lasciano aperta la conversazione. Fuori dal dialogo non avviene questa
+interpretazione contestuale.

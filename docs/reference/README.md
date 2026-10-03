@@ -289,3 +289,8 @@ sinonimo. I nomi composti evitano che un nome esatto impedisca l'ambiguità.
 relazioni, proprietà e output su fallimento, confrontato con la stessa
 chiusura riuscita. Il copione incluso attraversa entrambe le direzioni prima
 della chiusura definitiva.
+
+`player.parse_choice_text(text)` legge il testo di una scelta senza rimuovere
+gli articoli. Il parser di sessione lo usa per risposte dirette durante
+un dialogo; le virgolette sono sintattiche e quelle non chiuse danno `None`.
+I comandi riconosciuti senza virgolette mantengono la precedenza.

@@ -79,3 +79,14 @@ le scelte disponibili.
 Questa comodità vale per il testo che non è già un comando: per esempio
 `aiuto` continua a mostrare l'aiuto. Se una tua scelta si chiama proprio
 «Aiuto», selezionala con il numero oppure con `scegli Aiuto`.
+
+## Copiare il testo di una scelta
+
+Dopo `parla con guardiana`, prova `"Chiedi della chiave"`, comprese le
+virgolette: viene selezionata quella battuta. Puoi usare le virgolette anche
+per distinguere una scelta chiamata «Aiuto» dal comando `aiuto`.
+Gli articoli di un'etichetta come «La chiave» vengono conservati.
+
+**Prova negativa:** dimentica la virgoletta finale. LOCUS ripresenta le
+opzioni senza terminare il dialogo; correggi digitando l'etichetta completa
+con entrambe le virgolette oppure il suo numero.

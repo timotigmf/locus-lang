@@ -775,3 +775,24 @@ def test_natural_examination_clitics_reuse_the_last_object(command: str) -> None
     assert repeated.event.kind == "examined"
     assert repeated.event.entities == examined.event.entities
     assert parse_command(command + " chiave").verb == "unknown"
+
+
+@pytest.mark.parametrize("answer", ['"Aiuto"', '"La chiave"'])
+def test_quoted_dialogue_answers_preserve_literal_choice_labels(answer: str) -> None:
+    current = start(
+        instantiate(
+            compile_story(
+                "La Sala è una stanza. La guida è una persona nella Sala. "
+                'Dialogo "scelte" con "guida": Nodo "inizio" dice "Decidi.": '
+                'Scelta "Aiuto" termina. Scelta "La chiave" termina. Fine nodo. Fine dialogo.'
+            )
+        )
+    )
+    current = step(current, parse_session_command(current, "parla con guida")).session
+    for invalid in ('"Aiuto', '"assente"'):
+        result = step(current, parse_session_command(current, invalid))
+        assert result.event.kind == "invalid_choice"
+        assert result.session is current
+    selected = step(current, parse_session_command(current, answer))
+    assert selected.event.kind == "dialogue_end"
+    assert selected.dialogue[0].choice_label == answer.strip('"')

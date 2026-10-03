@@ -235,6 +235,12 @@ def parse_noun_phrase(text: str) -> str | None:
     return _noun(tokens) if tokens else None
 
 
+def parse_choice_text(text: str) -> str | None:
+    """Read a dialogue label, preserving articles and removing syntactic quotes."""
+    tokens = _tokens(canonical(text).replace("’", "'"))
+    return " ".join(token for token, _ in tokens) or None if tokens else None
+
+
 def standard_commands(
     *,
     include_dialogue: bool = False,
