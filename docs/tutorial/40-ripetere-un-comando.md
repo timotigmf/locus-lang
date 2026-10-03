@@ -26,11 +26,45 @@ Fine regola.
 Dopo `esamina campana`, scrivi un comando inesistente come `vola`, poi `g`.
 L'errore non cancella il ricordo: LOCUS esamina di nuovo la campana.
 
-## Esercizio
+## Esercizio risolto: due campane
 
-Aggiungi una seconda campana, provoca un chiarimento con `esamina campana` e
-scegli l'alternativa `2`. Verifica che `g` ripeta l'esame dell'oggetto scelto,
-senza chiedere nuovamente quale campana intendi.
+Per provocare un chiarimento, rinomina la prima campana `campana di bronzo`
+e aggiungi `campana d'argento`. Non lasciare un oggetto chiamato soltanto
+`campana`: il nome esatto ha precedenza sui nomi parziali e selezionerebbe
+quell'oggetto senza domanda.
+
+Apri `examples/tutorial/40b_due_campane.locus` oppure copia questo progetto:
+
+```locus
+Titolo: "Le due campane".
+Autore: "Esempio LOCUS".
+
+La Torre è una stanza.
+Inizia nella "Torre".
+La campana di bronzo è una cosa nella Torre.
+La campana di bronzo ha descrizione "Il bronzo reca una rosa dei venti.".
+La "campana d'argento" è una cosa nella Torre.
+La "campana d'argento" ha descrizione "L'argento reca una luna crescente.".
+Comprendi "lunare" come "campana d'argento".
+```
+
+Prova il copione `examples/tutorial/40b_due_campane.comandi`:
+
+| Comando | Risultato atteso |
+| --- | --- |
+| `x campana` | Domanda con due alternative |
+| `scegli 99` | Errore con le stesse alternative, senza scelta automatica |
+| `scegli lunare` | Esame della campana d'argento tramite il sinonimo |
+| `g` | Stesso esame, senza nuova domanda |
+| `vola` | Comando sconosciuto |
+| `g` | Ancora la campana d'argento: l'errore non cancella il ricordo |
+
+In una nuova partita ripeti la prova scegliendo `1`: ora `g` deve mostrare
+la rosa dei venti della campana di bronzo. Il ricordo segue l'oggetto scelto,
+non il testo generico `campana` e non una preferenza fissa per il secondo.
+
+**Variante:** aggiungi una terza campana con descrizione distinta. Verifica che
+la domanda offra tre alternative e che la ripetizione conservi quella scelta.
 
 Il [riferimento sulla ripetizione](../linguaggio/ripetere-comando.md) spiega
 quali intenti vengono ricordati e come interagiscono con turni e regole.

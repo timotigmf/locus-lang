@@ -36,3 +36,9 @@ da ripetere» senza consumare un turno. Durante una domanda di chiarimento,
 Le scelte e i comandi di dialogo non vengono memorizzati per la ripetizione.
 La sessione conserva un solo intento. Non sono ancora disponibili una cronologia
 navigabile, macro o ripetizioni numeriche come `ripeti 3 volte`.
+
+Per provare la conservazione della scelta, usa due nomi composti con una
+parola comune, come `campana di bronzo` e `campana d'argento`. Un nome esatto
+`campana` avrebbe precedenza sul confronto parziale e non aprirebbe la domanda.
+La [soluzione della lezione 40](../tutorial/40-ripetere-un-comando.md) verifica
+entrambi gli oggetti e la ripetizione dopo un errore.

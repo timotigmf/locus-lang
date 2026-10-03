@@ -184,3 +184,6 @@ con conservazione della domanda per articoli isolati o nomi ancora ambigui.
 
 Esame naturale: aggiunti i clitici di guarda, osserva, ispeziona e controlla,
 con referente diretto condiviso e collisioni autore diagnosticate.
+
+Didattica: esercizio delle due campane completato con sorgente copiabile,
+copione e verifica di entrambe le scelte; chiarita la precedenza dei nomi esatti.

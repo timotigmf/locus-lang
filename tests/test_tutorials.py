@@ -780,3 +780,27 @@ def test_dialogue_accepts_unprefixed_choice_text(answer: str) -> None:
     selected = step(current, parse_session_command(current, answer))
     assert "sotto la campana" in render(selected)
     assert selected.session.dialogue_id is None
+
+
+@pytest.mark.parametrize(
+    ("choice", "description"), [("1", "rosa dei venti"), ("scegli lunare", "luna crescente")]
+)
+def test_two_bells_solution_repeats_the_selected_identity(choice: str, description: str) -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "40b_due_campane.locus")))
+    asked = step(current, parse_session_command(current, "x campana"))
+    assert asked.event.kind == "ambiguous"
+    assert len(asked.event.entities) == 2
+    invalid = step(asked.session, parse_session_command(asked.session, "scegli 99"))
+    assert invalid.session is asked.session
+    selected = step(invalid.session, parse_session_command(invalid.session, choice))
+    assert description in render(selected)
+    current = selected.session
+    for command in ("g", "vola", "g"):
+        result = step(current, parse_session_command(current, command))
+        if command == "vola":
+            assert result.event.kind == "unknown"
+        else:
+            assert result.event.kind == "examined"
+            assert result.event.entities == selected.event.entities
+            assert description in render(result)
+        current = result.session

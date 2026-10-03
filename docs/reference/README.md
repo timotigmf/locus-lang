@@ -280,3 +280,7 @@ I clitici `guardalo/guardala`, `osservalo/osservala`,
 `ispezionalo/ispezionala` e `controllalo/controllala` producono l'intento
 `examine` con pronome diretto. Riutilizzano referente, controlli e regole
 di `esaminare`; sono forme standard riservate (`E311` in caso di collisione).
+
+L'esempio `40b_due_campane.locus` verifica che `Session.last_intent` conservi
+l'ID selezionato da un chiarimento, sia scegliendo per numero sia tramite
+sinonimo. I nomi composti evitano che un nome esatto impedisca l'ambiguità.
