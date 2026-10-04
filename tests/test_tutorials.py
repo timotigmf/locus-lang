@@ -1037,3 +1037,27 @@ def test_overlapping_scene_lesson_preserves_independent_lifecycles() -> None:
     assert later.session.score_log == current.score_log
     assert later.session.completed_scene_ids == current.completed_scene_ids
     assert later.session.score == 10
+
+
+@pytest.mark.parametrize(
+    "noun,first,repeated",
+    [
+        ("impronta", "Annoti l'orma nel taccuino.", "L'orma è già annotata."),
+        ("lettera", "Annoti la fibra rossa nel taccuino.", "La fibra rossa è già annotata."),
+    ],
+)
+def test_notebook_first_annotation_does_not_claim_it_was_already_recorded(
+    noun: str, first: str, repeated: str
+) -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "14_taccuino_indizi.locus")))
+    annotated = step(current, parse_session_command(current, f"x {noun}"))
+    assert first in render(annotated)
+    assert repeated not in render(annotated)
+    again = step(annotated.session, parse_session_command(annotated.session, f"x {noun}"))
+    assert repeated in render(again)
+    assert first not in render(again)
+    notebook = next(e.id for e in again.session.world.entities if e.label == "taccuino")
+    clues = next(p.id for p in again.session.world.property_specs if p.id.endswith("indizi"))
+    assert property_value(again.session.world, notebook, clues) == property_value(
+        annotated.session.world, notebook, clues
+    )

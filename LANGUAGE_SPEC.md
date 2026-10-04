@@ -381,3 +381,6 @@ ricomprarla è rifiutato anche con fondi insufficienti; riprenderla non addebita
 
 La lezione 17 verifica scene sovrapposte con cicli di vita indipendenti:
 una scena a premio zero termina senza aggiungere voci al registro dei premi.
+
+La lezione 14 applica la valutazione sequenziale delle condizioni M3:
+controlla la ripetizione prima di aggiungere un indizio, tramite priorità esplicita.

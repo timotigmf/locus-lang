@@ -23,7 +23,7 @@ quando non "indizi" di "taccuino" contiene "orma":
     dì "Annoti l'orma nel taccuino.";
 Fine regola.
 
-Regola "orma già annotata" per esaminare "impronta" nella fase dopo
+Regola "orma già annotata" per esaminare "impronta" nella fase dopo priorità 10
 quando "indizi" di "taccuino" contiene "orma":
     dì "L'orma è già annotata.";
 Fine regola.
@@ -34,7 +34,7 @@ quando non "indizi" di "taccuino" contiene "fibra rossa":
     dì "Annoti la fibra rossa nel taccuino.";
 Fine regola.
 
-Regola "fibra già annotata" per esaminare "lettera strappata" nella fase dopo
+Regola "fibra già annotata" per esaminare "lettera strappata" nella fase dopo priorità 10
 quando "indizi" di "taccuino" contiene "fibra rossa":
     dì "La fibra rossa è già annotata.";
 Fine regola.

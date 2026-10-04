@@ -340,3 +340,7 @@ dopo acquisto, abbandono e recupero della merce.
 Il laboratorio `17b_scene_sovrapposte.locus` della [lezione 17](../tutorial/17-tempesta-e-punteggio.md)
 verifica scene attive e concluse a ogni turno, consultazioni senza avanzamento,
 comandi sconosciuti e assenza di premi duplicati.
+
+Nel taccuino della lezione 14, le regole di ripetizione precedono la raccolta
+con priorità 10. Le regressioni verificano messaggi esclusivi e lista invariata
+alla seconda osservazione per entrambi gli indizi.

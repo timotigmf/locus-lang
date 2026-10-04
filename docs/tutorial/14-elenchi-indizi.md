@@ -47,3 +47,17 @@ ripetizione. Aggiungi poi la terza condizione alla regola `deduzione completa`.
 
 Consulta la [specifica degli elenchi tipati](../linguaggio/liste-tipate.md) per
 duplicati, rimozione, rollback e limiti correnti.
+
+## Prima annotazione e visite successive
+
+Nell'esempio completo, le regole «orma già annotata» e «fibra già annotata»
+hanno `priorità 10`; quelle che aggiungono l'indizio mantengono la priorità zero.
+Il motore valuta le condizioni sullo stato corrente quando raggiunge ciascuna
+regola. Il caso «già annotato» deve quindi essere controllato prima della raccolta:
+altrimenti, subito dopo aver scritto l'indizio, anche quel messaggio diventerebbe
+vero e comparirebbe durante la prima osservazione.
+
+Alla prima visita devi leggere soltanto «Annoti…»; alla seconda soltanto
+«…è già annotata». L'elenco non cambia alla seconda visita. Usa lo stesso ordine
+per la soluzione della finestra rotta: assegna priorità 10 alla regola della
+ripetizione, lasciando a zero quella che aggiunge `"vetro"`.

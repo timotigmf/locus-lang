@@ -226,3 +226,6 @@ con saldo progressivo, recupero senza addebito e rifiuti atomici verificati.
 
 Didattica: laboratorio di due scene sovrapposte con tabella dei turni,
 premio zero e regressioni su stato indipendente e conclusioni non ripetute.
+
+Correzione didattica: il taccuino non dichiara più un indizio già annotato
+durante la prima raccolta; priorità e regressioni coprono orma e fibra.
