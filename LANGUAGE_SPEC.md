@@ -396,3 +396,6 @@ precede il rulebook, mentre un oggetto compatibile può essere rifiutato dalle r
 
 La lezione 9 verifica il prodotto delle forme dichiarate: ogni sinonimo
 accetta entrambi i separatori mantenendo i tipi degli argomenti e la stessa regola.
+
+La lezione 10 verifica locuzione completa prima del nome: articolo facoltativo,
+nome parziale e rifiuti per locuzione incompleta, argomento assente o tipo errato.

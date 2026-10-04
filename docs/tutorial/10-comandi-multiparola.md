@@ -59,3 +59,37 @@ senza prefissi, per esempio `agisci` e `fai silenzio`.
 Definisci un'azione `prestare attenzione` su una persona con le forme `ascolta
 con cura` e `presta attenzione`. Aggiungi una regola per il custode e verifica
 che la parola immediatamente successiva alla forma completa diventi l'oggetto.
+
+## Soluzione: ascoltare il custode
+
+Apri `examples/tutorial/10b_ascoltare_custode.locus` oppure copia:
+
+```locus
+Titolo: "Le parole del custode".
+Autore: "Esempio LOCUS".
+La Sala è una stanza.
+Inizia nella Sala.
+Il custode anziano è una persona nella Sala.
+La campana è una cosa nella Sala.
+
+Azione "prestare attenzione" su una persona con comando "ascolta con cura"
+    e sinonimo "presta attenzione".
+
+Regola "consiglio del custode" per prestare attenzione "custode anziano" nella fase invece:
+    dì "Il custode consiglia di osservare la parete a nord.";
+Fine regola.
+```
+
+Prova `ascolta con cura il custode anziano` e `presta attenzione custode`:
+entrambi attivano il consiglio. Il parser consuma prima la forma completa e
+risolve poi il nome, anche parziale, della persona. L'articolo `il` è facoltativo.
+
+**Controlli negativi.** `ascolta con custode` omette una parola fissa e non
+attiva il consiglio. `presta attenzione` omette l'oggetto. Infine,
+`ascolta con cura campana` ha una forma valida ma un argomento del tipo sbagliato:
+nessuna regola del consiglio viene eseguita. Questi tre errori richiedono
+correzioni diverse: completare la locuzione, indicare l'oggetto, scegliere una persona.
+
+Il consiglio è solo testo: non crea un passaggio a nord né rivela una parete.
+Per una scoperta che cambia il mondo combina l'azione con gli effetti delle
+lezioni 12 e 13.

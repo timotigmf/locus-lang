@@ -1,0 +1,13 @@
+Titolo: "Le parole del custode".
+Autore: "Esempio LOCUS".
+La Sala è una stanza.
+Inizia nella Sala.
+Il custode anziano è una persona nella Sala.
+La campana è una cosa nella Sala.
+
+Azione "prestare attenzione" su una persona con comando "ascolta con cura"
+    e sinonimo "presta attenzione".
+
+Regola "consiglio del custode" per prestare attenzione "custode anziano" nella fase invece:
+    dì "Il custode consiglia di osservare la parete a nord.";
+Fine regola.

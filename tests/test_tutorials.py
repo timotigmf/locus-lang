@@ -1130,3 +1130,25 @@ def test_letter_lesson_aliases_share_rule_and_argument_types(verb: str, separato
     assert not rejected.succeeded
     assert not rejected.trace
     assert rejected.session == current
+
+
+@pytest.mark.parametrize(
+    "text", ["ascolta con cura il custode anziano", "presta attenzione custode"]
+)
+def test_listening_lesson_consumes_complete_command_before_noun(text: str) -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "10b_ascoltare_custode.locus")))
+    result = step(current, parse_session_command(current, text))
+    assert result.succeeded
+    assert render(result) == "Il custode consiglia di osservare la parete a nord."
+
+
+@pytest.mark.parametrize(
+    "text", ["ascolta con custode", "presta attenzione", "ascolta con cura campana"]
+)
+def test_listening_lesson_rejects_incomplete_or_wrong_arguments(text: str) -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "10b_ascoltare_custode.locus")))
+    result = step(current, parse_session_command(current, text))
+    assert not result.succeeded
+    assert not result.trace
+    assert result.session == current
+    assert "consiglia" not in render(result)

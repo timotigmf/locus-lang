@@ -241,3 +241,6 @@ rifiuto autore e rifiuto di tipo verificati separatamente.
 
 Didattica: soluzione della lettera alla messaggera, con quattro forme
 equivalenti e rifiuto tipato del destinatario verificati.
+
+Didattica: soluzione completa dell’ascolto del custode con locuzioni,
+nomi parziali e controlli negativi su forma e argomenti.

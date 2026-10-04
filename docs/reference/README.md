@@ -360,3 +360,7 @@ trace e conservazione dello stato.
 Il laboratorio `09b_lettera_messaggera.locus` copre quattro combinazioni
 di verbo e separatore, rifiuto del destinatario di tipo errato e assenza
 di trasferimenti impliciti dovuti al nome dell’azione.
+
+Il laboratorio `10b_ascoltare_custode.locus` verifica due forme multiparola
+e tre classi di errore prima delle regole. Il consiglio narrato non modifica
+automaticamente la mappa.
