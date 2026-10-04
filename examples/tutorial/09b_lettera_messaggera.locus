@@ -1,0 +1,13 @@
+Titolo: "La lettera alla messaggera".
+Autore: "Esempio LOCUS".
+La Sala è una stanza.
+Inizia nella Sala.
+La messaggera è una persona nella Sala.
+La lettera è una cosa nella Sala.
+
+Azione "consegnare" su una cosa con una persona con comando "consegna"
+    e sinonimo "dai" e separatore "a" e separatore "verso".
+
+Regola "leggere la lettera" per consegnare "lettera" con "messaggera" nella fase invece:
+    dì "La messaggera legge la lettera e te la restituisce.";
+Fine regola.

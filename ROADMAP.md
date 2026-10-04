@@ -238,3 +238,6 @@ aggiunta soluzione completa a due amuleti con entrambe le scelte verificate.
 
 Didattica: soluzione completa dell’azione suonare, con sottotipo a fiato,
 rifiuto autore e rifiuto di tipo verificati separatamente.
+
+Didattica: soluzione della lettera alla messaggera, con quattro forme
+equivalenti e rifiuto tipato del destinatario verificati.

@@ -356,3 +356,7 @@ un sinonimo esatto `gemma` avrebbe precedenza sulle due corrispondenze parziali.
 Il laboratorio `08b_suonare_strumenti.locus` distingue successo su un sottotipo,
 fallimento della verifica autore e rifiuto del tipo prima delle regole, controllando
 trace e conservazione dello stato.
+
+Il laboratorio `09b_lettera_messaggera.locus` copre quattro combinazioni
+di verbo e separatore, rifiuto del destinatario di tipo errato e assenza
+di trasferimenti impliciti dovuti al nome dell’azione.

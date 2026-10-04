@@ -60,3 +60,42 @@ Definisci un'azione `consegnare` fra una cosa e una persona. Accetta `consegna`
 e `dai` come forme, più `a` e `verso` come separatori. Scrivi una regola per una
 lettera e verifica sia `consegna lettera alla messaggera` sia `dai lettera verso
 la messaggera`.
+
+## Soluzione: la lettera alla messaggera
+
+Apri `examples/tutorial/09b_lettera_messaggera.locus` o copia questo sorgente:
+
+```locus
+Titolo: "La lettera alla messaggera".
+Autore: "Esempio LOCUS".
+La Sala è una stanza.
+Inizia nella Sala.
+La messaggera è una persona nella Sala.
+La lettera è una cosa nella Sala.
+
+Azione "consegnare" su una cosa con una persona con comando "consegna"
+    e sinonimo "dai" e separatore "a" e separatore "verso".
+
+Regola "leggere la lettera" per consegnare "lettera" con "messaggera" nella fase invece:
+    dì "La messaggera legge la lettera e te la restituisce.";
+Fine regola.
+```
+
+Prova tutte e quattro le combinazioni:
+
+```text
+consegna lettera alla messaggera
+dai lettera alla messaggera
+consegna lettera verso la messaggera
+dai lettera verso la messaggera
+```
+
+Ciascuna produce lo stesso messaggio e attiva la stessa regola. `alla` è la
+forma articolata di `a`; con `verso` l'articolo appartiene invece al nome del
+destinatario. Sinonimi e separatori non richiedono copie della regola.
+
+**Prova negativa.** Scrivi `dai lettera alla lettera`: il secondo oggetto non
+è una persona e il comando viene rifiutato prima delle regole. Il nome dell'azione
+non impone da solo uno scambio: questo esempio narra la lettura e la restituzione,
+senza modificare posizione o inventario. Per modellare una consegna permanente
+occorrono effetti espliciti e un contratto di possesso adatto alla storia.

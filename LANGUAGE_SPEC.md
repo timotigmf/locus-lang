@@ -393,3 +393,6 @@ la disambiguazione fra oggetti raggiungibili; nomi esatti precedono nomi parzial
 
 La lezione 8 verifica azioni tipate con sottotipi: il rifiuto di categoria
 precede il rulebook, mentre un oggetto compatibile può essere rifiutato dalle regole.
+
+La lezione 9 verifica il prodotto delle forme dichiarate: ogni sinonimo
+accetta entrambi i separatori mantenendo i tipi degli argomenti e la stessa regola.

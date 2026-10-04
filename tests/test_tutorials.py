@@ -1115,3 +1115,18 @@ def test_instrument_lesson_distinguishes_type_and_author_rejections() -> None:
     assert not wrong_type.trace
     assert wrong_type.session == current
     assert "melodia" not in render(wrong_type)
+
+
+@pytest.mark.parametrize("verb", ["consegna", "dai"])
+@pytest.mark.parametrize("separator", ["alla", "verso la"])
+def test_letter_lesson_aliases_share_rule_and_argument_types(verb: str, separator: str) -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "09b_lettera_messaggera.locus")))
+    result = step(current, parse_session_command(current, f"{verb} lettera {separator} messaggera"))
+    assert result.succeeded
+    assert render(result) == "La messaggera legge la lettera e te la restituisce."
+    assert result.session.world == current.world
+    assert result.session.inventory == current.inventory
+    rejected = step(current, parse_session_command(current, f"{verb} lettera {separator} lettera"))
+    assert not rejected.succeeded
+    assert not rejected.trace
+    assert rejected.session == current
