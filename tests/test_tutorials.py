@@ -1061,3 +1061,19 @@ def test_notebook_first_annotation_does_not_claim_it_was_already_recorded(
     assert property_value(again.session.world, notebook, clues) == property_value(
         annotated.session.world, notebook, clues
     )
+
+
+@pytest.mark.parametrize("order", [("maschera", "astrolabio"), ("astrolabio", "maschera")])
+def test_table_lesson_transfers_both_rows_in_either_order(order: tuple[str, str]) -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "15_tabelle_reperti.locus")))
+    rows = {"maschera": ("maschera", 25, False), "astrolabio": ("astrolabio", 40, True)}
+    for index, name in enumerate(order):
+        result = step(current, parse_session_command(current, f"trasferisci {name}"))
+        assert "nella mostra" in render(result)
+        current = result.session
+        assert current.world.tables[1].rows == tuple(rows[n] for n in order[: index + 1])
+        assert rows[name] not in current.world.tables[0].rows
+        rejected = step(current, parse_session_command(current, f"trasferisci {name}"))
+        assert "non è disponibile" in render(rejected)
+        assert rejected.session == current
+    assert current.world.tables[0].rows == ()

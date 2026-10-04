@@ -384,3 +384,6 @@ una scena a premio zero termina senza aggiungere voci al registro dei premi.
 
 La lezione 14 applica la valutazione sequenziale delle condizioni M3:
 controlla la ripetizione prima di aggiungere un indizio, tramite priorità esplicita.
+
+La lezione 15 verifica il trasferimento indipendente di due righe complete:
+l’ordine di inserimento è conservato e i trasferimenti ripetuti non mutano le tabelle.

@@ -344,3 +344,7 @@ comandi sconosciuti e assenza di premi duplicati.
 Nel taccuino della lezione 14, le regole di ripetizione precedono la raccolta
 con priorità 10. Le regressioni verificano messaggi esclusivi e lista invariata
 alla seconda osservazione per entrambi gli indizi.
+
+La lezione 15 include il trasferimento della maschera oltre all’astrolabio.
+Le regressioni percorrono entrambi gli ordini e verificano righe, deposito vuoto
+e rifiuti senza mutazioni. Le righe non generano entità narrative.

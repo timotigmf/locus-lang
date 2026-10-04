@@ -229,3 +229,6 @@ premio zero e regressioni su stato indipendente e conclusioni non ripetute.
 
 Correzione didattica: il taccuino non dichiara più un indizio già annotato
 durante la prima raccolta; priorità e regressioni coprono orma e fibra.
+
+Didattica: completata la soluzione della maschera nella lezione 15, con
+trasferimenti indipendenti, ordine delle righe e rifiuti ripetuti verificati.

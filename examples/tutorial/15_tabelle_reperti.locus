@@ -53,3 +53,16 @@ Fine regola.
 Regola "trasferimento impossibile" per trasferire astrolabio nella fase verifica:
     fallisci "L'astrolabio non è disponibile nel deposito.";
 Fine regola.
+
+Azione "trasferire maschera" senza oggetti con comando "trasferisci maschera".
+
+Regola "trasferimento maschera" per trasferire maschera nella fase invece priorità 10
+quando tabella "deposito" contiene riga "maschera" 25 falso:
+    rimuovi riga "maschera" 25 falso da tabella "deposito";
+    aggiungi riga "maschera" 25 falso a tabella "mostra";
+    dì "La maschera è stata trasferita nella mostra.";
+Fine regola.
+
+Regola "maschera non disponibile" per trasferire maschera nella fase verifica:
+    fallisci "La maschera non è disponibile nel deposito.";
+Fine regola.
