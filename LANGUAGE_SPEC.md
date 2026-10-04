@@ -399,3 +399,6 @@ accetta entrambi i separatori mantenendo i tipi degli argomenti e la stessa rego
 
 La lezione 10 verifica locuzione completa prima del nome: articolo facoltativo,
 nome parziale e rifiuti per locuzione incompleta, argomento assente o tipo errato.
+
+La lezione 11 verifica separatori multiparola con preposizione finale articolata,
+oltre al rifiuto di locuzioni incomplete e secondo oggetto mancante.

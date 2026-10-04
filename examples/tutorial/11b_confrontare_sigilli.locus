@@ -1,0 +1,14 @@
+Titolo: "Il confronto dei sigilli".
+Autore: "Esempio LOCUS".
+Il Banco è una stanza.
+Inizia nel Banco.
+Una merce è un tipo di cosa.
+L'amuleto è una merce nel Banco.
+La chiave di vetro è una merce nel Banco.
+
+Azione "confrontare" su una merce con una merce con comando "confronta"
+    e separatore "rispetto a" e separatore "a paragone con".
+
+Regola "sigilli uguali" per confrontare "amuleto" con "chiave di vetro" nella fase invece:
+    dì "Lo stesso sigillo compare sull'amuleto e sulla chiave.";
+Fine regola.

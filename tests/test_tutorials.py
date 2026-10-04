@@ -1152,3 +1152,24 @@ def test_listening_lesson_rejects_incomplete_or_wrong_arguments(text: str) -> No
     assert not result.trace
     assert result.session == current
     assert "consiglia" not in render(result)
+
+
+@pytest.mark.parametrize("separator", ["rispetto a la", "rispetto alla", "a paragone con la"])
+def test_comparison_lesson_accepts_complete_articulated_separators(separator: str) -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "11b_confrontare_sigilli.locus")))
+    text = f"confronta amuleto {separator} chiave di vetro"
+    result = step(current, parse_session_command(current, text))
+    assert result.succeeded
+    assert render(result) == "Lo stesso sigillo compare sull'amuleto e sulla chiave."
+    assert result.session.world == current.world
+
+
+@pytest.mark.parametrize(
+    "ending", ["rispetto chiave", "a paragone chiave", "rispetto alla", "a paragone colla chiave"]
+)
+def test_comparison_lesson_rejects_incomplete_separator_or_object(ending: str) -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "11b_confrontare_sigilli.locus")))
+    result = step(current, parse_session_command(current, f"confronta amuleto {ending}"))
+    assert not result.succeeded
+    assert not result.trace
+    assert result.session == current

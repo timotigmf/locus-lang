@@ -364,3 +364,7 @@ di trasferimenti impliciti dovuti al nome dell’azione.
 Il laboratorio `10b_ascoltare_custode.locus` verifica due forme multiparola
 e tre classi di errore prima delle regole. Il consiglio narrato non modifica
 automaticamente la mappa.
+
+Il laboratorio `11b_confrontare_sigilli.locus` copre forme separate e articolate
+di `rispetto a` e `a paragone con`. Il tutorial distingue inoltre narrazione
+di scambio ed effetti effettivi sulle posizioni.

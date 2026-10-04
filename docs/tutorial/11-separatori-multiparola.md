@@ -58,3 +58,46 @@ Definisci un'azione `confrontare` su due merci con comando `confronta` e
 separatori `rispetto a` e `a paragone con`. Scrivi una regola per confrontare
 l'amuleto con la chiave di vetro e prova anche le forme articolate dell'ultima
 preposizione.
+
+## Soluzione: confrontare i sigilli
+
+Apri `examples/tutorial/11b_confrontare_sigilli.locus` oppure copia:
+
+```locus
+Titolo: "Il confronto dei sigilli".
+Autore: "Esempio LOCUS".
+Il Banco è una stanza.
+Inizia nel Banco.
+Una merce è un tipo di cosa.
+L'amuleto è una merce nel Banco.
+La chiave di vetro è una merce nel Banco.
+
+Azione "confrontare" su una merce con una merce con comando "confronta"
+    e separatore "rispetto a" e separatore "a paragone con".
+
+Regola "sigilli uguali" per confrontare "amuleto" con "chiave di vetro" nella fase invece:
+    dì "Lo stesso sigillo compare sull'amuleto e sulla chiave.";
+Fine regola.
+```
+
+Queste tre forme attivano la stessa regola:
+
+```text
+confronta amuleto rispetto a la chiave di vetro
+confronta amuleto rispetto alla chiave di vetro
+confronta amuleto a paragone con la chiave di vetro
+```
+
+La prima forma rende visibile il confine fra separatore e articolo, anche se
+in italiano corrente preferirai `rispetto alla`. Con `a paragone con` usa la forma `con la`: in questo
+incremento la variante `colla` non è riconosciuta.
+
+**Controlli negativi.** `confronta amuleto rispetto chiave` omette la preposizione;
+`confronta amuleto a paragone chiave` omette `con`. Nessuna delle due frasi
+attiva il confronto. Anche il secondo oggetto deve essere presente: fermarsi a
+`rispetto alla` non basta.
+
+Questo esempio confronta soltanto due oggetti, senza trasferirli. Nel precedente
+banco degli scambi il messaggio di baratto è narrativo: la regola aumenta la
+fiducia, ma non sposta la moneta né la chiave. Un trasferimento effettivo richiede
+effetti espliciti; il nome del comando non li aggiunge automaticamente.

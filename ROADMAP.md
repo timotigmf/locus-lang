@@ -244,3 +244,6 @@ equivalenti e rifiuto tipato del destinatario verificati.
 
 Didattica: soluzione completa dell’ascolto del custode con locuzioni,
 nomi parziali e controlli negativi su forma e argomenti.
+
+Didattica: soluzione del confronto dei sigilli, con tre forme dei separatori
+e quattro errori verificati; chiariti i limiti del baratto narrato.
