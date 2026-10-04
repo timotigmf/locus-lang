@@ -1,0 +1,20 @@
+Titolo: "Il flauto della sala".
+Autore: "Esempio LOCUS".
+
+La Sala è una stanza.
+Inizia nella Sala.
+Uno strumento è un tipo di cosa.
+Uno strumento a fiato è un tipo di strumento.
+Il flauto è uno strumento a fiato nella Sala.
+Il tamburo è uno strumento nella Sala.
+Il sigillo è una cosa nella Sala.
+
+Azione "suonare" su uno strumento con comando "suona".
+
+Regola "melodia del flauto" per suonare "flauto" nella fase invece priorità 10:
+    dì "Una melodia limpida riempie la sala.";
+Fine regola.
+
+Regola "strumento senza partitura" per suonare nella fase verifica:
+    fallisci "Non conosci una melodia per questo strumento.";
+Fine regola.

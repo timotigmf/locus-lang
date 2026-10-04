@@ -235,3 +235,6 @@ trasferimenti indipendenti, ordine delle righe e rifiuti ripetuti verificati.
 
 Didattica: corretto l’esercizio dei tipi con sinonimo che impediva l’ambiguità;
 aggiunta soluzione completa a due amuleti con entrambe le scelte verificate.
+
+Didattica: soluzione completa dell’azione suonare, con sottotipo a fiato,
+rifiuto autore e rifiuto di tipo verificati separatamente.

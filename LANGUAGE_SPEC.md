@@ -390,3 +390,6 @@ l’ordine di inserimento è conservato e i trasferimenti ripetuti non mutano le
 
 La lezione 7 verifica la trasportabilità ereditata lungo tre tipi autore e
 la disambiguazione fra oggetti raggiungibili; nomi esatti precedono nomi parziali.
+
+La lezione 8 verifica azioni tipate con sottotipi: il rifiuto di categoria
+precede il rulebook, mentre un oggetto compatibile può essere rifiutato dalle regole.

@@ -64,3 +64,46 @@ Definisci un tipo `strumento`, aggiungi un flauto e dichiara un'azione `suonare`
 che accetti soltanto strumenti. Scrivi due regole: una per il flauto e una regola
 generale che fallisca con un messaggio italiano. Verifica poi che un oggetto di
 un altro tipo venga respinto prima delle regole.
+
+## Soluzione: un comando riservato agli strumenti
+
+Apri `examples/tutorial/08b_suonare_strumenti.locus` oppure copia:
+
+```locus
+Titolo: "Il flauto della sala".
+Autore: "Esempio LOCUS".
+
+La Sala è una stanza.
+Inizia nella Sala.
+Uno strumento è un tipo di cosa.
+Uno strumento a fiato è un tipo di strumento.
+Il flauto è uno strumento a fiato nella Sala.
+Il tamburo è uno strumento nella Sala.
+Il sigillo è una cosa nella Sala.
+
+Azione "suonare" su uno strumento con comando "suona".
+
+Regola "melodia del flauto" per suonare "flauto" nella fase invece priorità 10:
+    dì "Una melodia limpida riempie la sala.";
+Fine regola.
+
+Regola "strumento senza partitura" per suonare nella fase verifica:
+    fallisci "Non conosci una melodia per questo strumento.";
+Fine regola.
+```
+
+| Comando | Risultato |
+| --- | --- |
+| `suona flauto` | La melodia riempie la sala |
+| `suona tamburo` | Rifiuto dell'autore: manca una melodia |
+| `suona sigillo` | Rifiuto di tipo prima di eseguire le regole |
+
+Il flauto è accettato perché il suo tipo discende da `strumento`. La regola
+`invece` sostituisce l'azione e termina normalmente prima della verifica generale.
+Il tamburo ha il tipo corretto ma non una regola specifica: raggiunge quindi
+`fallisci`. Il sigillo, invece, non supera il controllo del tipo dell'argomento.
+
+In **Regole e trace** confronta i due rifiuti: per il tamburo compare la regola
+di verifica; per il sigillo non viene eseguita nessuna regola di `suonare`.
+Entrambi conservano lo stato della storia. Il testo narrato non riproduce un
+file audio: per suoni e immagini consulta la lezione 21.

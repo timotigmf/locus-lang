@@ -352,3 +352,7 @@ e rifiuti senza mutazioni. Le righe non generano entità narrative.
 Il laboratorio `07b_due_amuleti.locus` verifica contenitore specializzato,
 accessibilità e selezione di entrambi gli amuleti. Il tutorial chiarisce che
 un sinonimo esatto `gemma` avrebbe precedenza sulle due corrispondenze parziali.
+
+Il laboratorio `08b_suonare_strumenti.locus` distingue successo su un sottotipo,
+fallimento della verifica autore e rifiuto del tipo prima delle regole, controllando
+trace e conservazione dello stato.

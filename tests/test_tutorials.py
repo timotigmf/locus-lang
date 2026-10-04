@@ -1098,3 +1098,20 @@ def test_amulet_lesson_resolves_reachable_inherited_objects(color: str) -> None:
     )
     assert remaining.event.kind == "taken"
     assert {names[i] for i in remaining.session.inventory} == {"gemma rossa", "gemma verde"}
+
+
+def test_instrument_lesson_distinguishes_type_and_author_rejections() -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "08b_suonare_strumenti.locus")))
+    played = step(current, parse_session_command(current, "suona flauto"))
+    assert render(played) == "Una melodia limpida riempie la sala."
+    assert played.succeeded
+    rejected = step(current, parse_session_command(current, "suona tamburo"))
+    assert render(rejected) == "Non conosci una melodia per questo strumento."
+    assert not rejected.succeeded
+    assert rejected.trace
+    assert rejected.session == current
+    wrong_type = step(current, parse_session_command(current, "suona sigillo"))
+    assert not wrong_type.succeeded
+    assert not wrong_type.trace
+    assert wrong_type.session == current
+    assert "melodia" not in render(wrong_type)
