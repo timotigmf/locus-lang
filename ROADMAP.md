@@ -223,3 +223,6 @@ parcheggio persistente e percorso negativo senza uscite.
 
 Didattica: soluzione completa della mappa già pagata nella lezione 19,
 con saldo progressivo, recupero senza addebito e rifiuti atomici verificati.
+
+Didattica: laboratorio di due scene sovrapposte con tabella dei turni,
+premio zero e regressioni su stato indipendente e conclusioni non ripetute.

@@ -1,0 +1,17 @@
+Titolo: "Tempesta e segnale".
+Autore: "Esempio LOCUS".
+
+La Torre è una stanza.
+Inizia nella Torre.
+
+Scena "la tempesta" dal turno 1 al turno 3:
+    Inizio "Il tuono scuote la torre.".
+    Fine "Le nuvole si aprono.".
+    Punti 10.
+Fine scena.
+
+Scena "il segnale" dal turno 2 al turno 4:
+    Inizio "Una luce pulsa sul mare.".
+    Fine "La luce si spegne all'orizzonte.".
+    Punti 0.
+Fine scena.

@@ -336,3 +336,7 @@ Non introduce carico o passeggeri.
 Il laboratorio `19b_mappa_pagata.locus` della [lezione 19](../tutorial/19-il-mercato-del-faro.md)
 distingue inventario e `owned_ids`, verificando saldo, posizione e rifiuti atomici
 dopo acquisto, abbandono e recupero della merce.
+
+Il laboratorio `17b_scene_sovrapposte.locus` della [lezione 17](../tutorial/17-tempesta-e-punteggio.md)
+verifica scene attive e concluse a ogni turno, consultazioni senza avanzamento,
+comandi sconosciuti e assenza di premi duplicati.

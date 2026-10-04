@@ -1009,3 +1009,31 @@ def test_paid_map_lesson_preserves_ownership_after_dropping() -> None:
         and edge.target_id == ids["Bottega"]
         for edge in current.world.relations
     )
+
+
+def test_overlapping_scene_lesson_preserves_independent_lifecycles() -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "17b_scene_sovrapposte.locus")))
+    ids = {scene.label: scene.id for scene in current.world.scenes}
+    storm, signal = ids["la tempesta"], ids["il segnale"]
+    assert current.turn == current.score == 0
+    for turn, active, completed, score in (
+        (1, (storm,), (), 0),
+        (2, (storm, signal), (), 0),
+        (3, (signal,), (storm,), 10),
+        (4, (), (storm, signal), 10),
+    ):
+        transition = step(current, parse_session_command(current, "aspetta"))
+        current = transition.session
+        assert current.turn == turn
+        assert current.active_scene_ids == active
+        assert current.completed_scene_ids == completed
+        assert current.score == score
+        for text in ("turno", "punteggio", "xyzzy"):
+            observed = step(current, parse_session_command(current, text))
+            assert observed.session == current
+    assert len(current.score_log) == 1
+    later = step(current, parse_session_command(current, "aspetta"))
+    assert not later.scenes
+    assert later.session.score_log == current.score_log
+    assert later.session.completed_scene_ids == current.completed_scene_ids
+    assert later.session.score == 10
