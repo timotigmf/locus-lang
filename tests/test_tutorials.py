@@ -1077,3 +1077,24 @@ def test_table_lesson_transfers_both_rows_in_either_order(order: tuple[str, str]
         assert "non è disponibile" in render(rejected)
         assert rejected.session == current
     assert current.world.tables[0].rows == ()
+
+
+@pytest.mark.parametrize("color", ["rossa", "verde"])
+def test_amulet_lesson_resolves_reachable_inherited_objects(color: str) -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "07b_due_amuleti.locus")))
+    blocked = step(current, parse_session_command(current, "prendi gemma rossa"))
+    assert blocked.session == current
+    assert not blocked.session.inventory
+    opened = step(current, parse_session_command(current, "apri cofano"))
+    asked = step(opened.session, parse_session_command(opened.session, "prendi gemma"))
+    assert asked.event.kind == "ambiguous"
+    chosen = step(asked.session, parse_session_command(asked.session, color))
+    assert chosen.event.kind == "taken"
+    names = {e.id: e.label for e in chosen.session.world.entities}
+    assert tuple(names[i] for i in chosen.session.inventory) == (f"gemma {color}",)
+    remaining_color = "verde" if color == "rossa" else "rossa"
+    remaining = step(
+        chosen.session, parse_session_command(chosen.session, f"prendi gemma {remaining_color}")
+    )
+    assert remaining.event.kind == "taken"
+    assert {names[i] for i in remaining.session.inventory} == {"gemma rossa", "gemma verde"}

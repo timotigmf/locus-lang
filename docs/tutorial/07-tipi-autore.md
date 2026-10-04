@@ -60,6 +60,44 @@ dichiarato è un errore; dichiararlo più avanti, invece, è valido.
 
 ## Esercizio
 
-Definisci `Un amuleto è un tipo di reliquia.`, aggiungi un amuleto nel cofano e
-prova a prenderlo. Poi crea una seconda gemma: il comando abbreviato `prendi
-gemma` dovrà chiedere quale intendi finché i nomi restano ambigui.
+Definisci `Un amuleto è un tipo di reliquia.` e aggiungi due amuleti chiamati
+`gemma rossa` e `gemma verde`. Non conservare il sinonimo esatto `gemma` del
+rubino: un nome o sinonimo esatto ha precedenza sui nomi parziali e impedirebbe
+la domanda che questo esercizio vuole mostrare.
+
+## Soluzione: due amuleti da distinguere
+
+Apri `examples/tutorial/07b_due_amuleti.locus` oppure copia:
+
+```locus
+Titolo: "Due amuleti nel cofano".
+Autore: "Esempio LOCUS".
+
+La Cripta è una stanza.
+Inizia nella Cripta.
+Un tesoro è un tipo di cosa.
+Una reliquia è un tipo di tesoro.
+Un amuleto è un tipo di reliquia.
+Un reliquiario è un tipo di contenitore.
+Il cofano è un reliquiario nella Cripta.
+La gemma rossa è un amuleto nel cofano.
+La gemma verde è un amuleto nel cofano.
+```
+
+| Comando | Risultato da verificare |
+| --- | --- |
+| `prendi gemma rossa` | Il cofano chiuso impedisce di raggiungerla |
+| `apri cofano` | Il sottotipo reliquiario si apre come un contenitore |
+| `prendi gemma` | LOCUS chiede quale delle due intendi |
+| `rossa` | Prendi soltanto la gemma rossa |
+| `prendi gemma verde` | Prendi la seconda gemma indicando il colore |
+| `inventario` | Entrambe le gemme sono trasportate |
+
+Puoi scegliere prima `verde` e ripetere il percorso al contrario. Il tipo
+`amuleto` eredita la trasportabilità lungo la catena
+`cosa › tesoro › reliquia › amuleto`; la scelta del nome avviene invece fra
+le entità raggiungibili per l'azione. Il nome del tipo non diventa automaticamente
+un sinonimo di ciascun oggetto: usa i nomi delle gemme o dichiara sinonimi espliciti.
+
+Anche la gemma in inventario resta riconoscibile: ripetere `prendi gemma`
+può quindi chiedere ancora quale intendi. Specifica il colore rimasto.

@@ -387,3 +387,6 @@ controlla la ripetizione prima di aggiungere un indizio, tramite priorità espli
 
 La lezione 15 verifica il trasferimento indipendente di due righe complete:
 l’ordine di inserimento è conservato e i trasferimenti ripetuti non mutano le tabelle.
+
+La lezione 7 verifica la trasportabilità ereditata lungo tre tipi autore e
+la disambiguazione fra oggetti raggiungibili; nomi esatti precedono nomi parziali.

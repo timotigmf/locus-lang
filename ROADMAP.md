@@ -232,3 +232,6 @@ durante la prima raccolta; priorità e regressioni coprono orma e fibra.
 
 Didattica: completata la soluzione della maschera nella lezione 15, con
 trasferimenti indipendenti, ordine delle righe e rifiuti ripetuti verificati.
+
+Didattica: corretto l’esercizio dei tipi con sinonimo che impediva l’ambiguità;
+aggiunta soluzione completa a due amuleti con entrambe le scelte verificate.

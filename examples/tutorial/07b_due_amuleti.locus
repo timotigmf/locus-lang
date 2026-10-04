@@ -1,0 +1,12 @@
+Titolo: "Due amuleti nel cofano".
+Autore: "Esempio LOCUS".
+
+La Cripta è una stanza.
+Inizia nella Cripta.
+Un tesoro è un tipo di cosa.
+Una reliquia è un tipo di tesoro.
+Un amuleto è un tipo di reliquia.
+Un reliquiario è un tipo di contenitore.
+Il cofano è un reliquiario nella Cripta.
+La gemma rossa è un amuleto nel cofano.
+La gemma verde è un amuleto nel cofano.

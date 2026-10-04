@@ -348,3 +348,7 @@ alla seconda osservazione per entrambi gli indizi.
 La lezione 15 include il trasferimento della maschera oltre all’astrolabio.
 Le regressioni percorrono entrambi gli ordini e verificano righe, deposito vuoto
 e rifiuti senza mutazioni. Le righe non generano entità narrative.
+
+Il laboratorio `07b_due_amuleti.locus` verifica contenitore specializzato,
+accessibilità e selezione di entrambi gli amuleti. Il tutorial chiarisce che
+un sinonimo esatto `gemma` avrebbe precedenza sulle due corrispondenze parziali.
