@@ -1220,3 +1220,33 @@ def test_standard_open_accepts_articulated_tool_prepositions(preposition: str, v
 )
 def test_articulated_tool_rejects_incomplete_or_repeated_complement(text: str) -> None:
     assert parse_command(text).verb == "unknown"
+
+
+@pytest.mark.parametrize(
+    "preposition,name", [("nei", "cassetti"), ("negli", "scrigni"), ("nelle", "tasche")]
+)
+@pytest.mark.parametrize("command", ["metti gettone", "mettilo"])
+def test_put_accepts_plural_prepositions_for_named_container(
+    preposition: str, name: str, command: str
+) -> None:
+    source = (
+        f'La Sala è una stanza. Il "{name}" è un contenitore nella Sala. '
+        f'Il "{name}" ha stato "aperto". Il gettone è una cosa nella Sala.'
+    )
+    current = start(instantiate(compile_story(source)))
+    current = step(current, parse_session_command(current, "prendi gettone")).session
+    result = step(current, parse_session_command(current, f"{command} {preposition} {name}"))
+    assert not result.session.inventory
+    assert "Hai messo" in render(result)
+    assert name in render(result)
+
+
+@pytest.mark.parametrize("preposition", ["nei", "negli", "nelle"])
+def test_put_plural_prepositions_preserve_destination_validation(preposition: str) -> None:
+    for text in (
+        f"metti gettone {preposition}",
+        f"mettici gettone {preposition} cassetti",
+        f"metti gettone {preposition} cassetti lì",
+        f"metti gettone {preposition} cassetti nella cassetta",
+    ):
+        assert parse_command(text).verb == "unknown"

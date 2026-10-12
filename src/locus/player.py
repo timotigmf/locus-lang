@@ -9,6 +9,8 @@ from locus.schema import separator_variants
 
 Verb = str
 
+_PUT_PREPOSITIONS = frozenset({"into", *(variant[0] for variant in separator_variants("in"))})
+
 _SIMPLE_COMMANDS: dict[str, Verb] = {
     "aiuto": "help",
     "comandi": "help",
@@ -540,10 +542,7 @@ def parse_command(
         return _author_intent(authored[0], tokens, authored[1])
     if verb in _LOCATIVE_CLITIC_COMMANDS:
         rest = tokens[1:]
-        if any(
-            not quoted and word in {"in", "into", "nel", "nella", "nello", "nell'"}
-            for word, quoted in rest
-        ):
+        if any(not quoted and word in _PUT_PREPOSITIONS for word, quoted in rest):
             return Intent("unknown")
         direct = _noun(rest)
         return Intent("put", direct, "ci") if direct else Intent("missing_noun")
@@ -563,7 +562,7 @@ def parse_command(
         if action == "examine" and verb == "look":
             rest = _without_initial_preposition(rest, frozenset({"at"}))
     delimiters = (
-        {"in", "into", "nel", "nella", "nello", "nell'"}
+        _PUT_PREPOSITIONS
         if action == "put"
         else {"with", *(variant[0] for variant in separator_variants("con"))}
     )

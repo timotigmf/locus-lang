@@ -408,3 +408,6 @@ I separatori autore terminanti in `con` accettano anche `colla`, `collo`,
 
 Aprire e bloccare riconoscono le preposizioni articolate dello strumento,
 anche nei clitici, usando lo stesso catalogo dei separatori autore.
+
+`metti` e `mettilo/a` accettano anche nei, negli e nelle come separatori
+di destinazione. Il nome plurale identifica una singola entità dichiarata.

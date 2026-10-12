@@ -40,3 +40,19 @@ dell'oggetto.
 Dichiara `Comprendi "disco" come "gettone blu".`. Ripeti la sequenza con
 `mettici disco`, poi aggiungi una seconda cassetta per osservare quale
 destinazione viene aggiornata dall'ultima azione riuscita.
+
+## Una destinazione chiamata tasche
+
+Copia questo esempio completo:
+
+```locus
+La Sala è una stanza.
+La "tasche" è un contenitore nella Sala.
+La "tasche" ha stato "aperto".
+Il gettone è una cosa nella Sala.
+```
+
+Prova `prendi gettone` e `mettilo nelle tasche`. Le tasche sono una sola
+entità contenitore: la preposizione plurale non crea né seleziona un gruppo.
+LOCUS non controlla l’accordo grammaticale dell’articolo nella dichiarazione.
+`mettici gettone nelle tasche` resta rifiutato perché specifica due destinazioni.

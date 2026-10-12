@@ -376,3 +376,7 @@ Esempio eseguibile nella lezione 11, senza modifiche all’IR.
 Il parser standard di apertura e blocco usa `separator_variants("con")`
 per il complemento strumentale; restano invariati risoluzione, tipi e IR.
 La lezione 28 verifica apertura e blocco con tutte le varianti e input incompleti.
+
+Il parser di metti condivide le varianti di `in` con i separatori autore.
+La stessa raccolta serve al controllo dei complementi duplicati con `mettici`.
+I nomi plurali non introducono gruppi o distribuzione automatica degli oggetti.

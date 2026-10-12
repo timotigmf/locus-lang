@@ -31,3 +31,10 @@ un significato generale di `ci` per altri verbi.
 
 La costruzione equivalente `metti la moneta lì` è definita nella specifica
 degli [avverbi locativi](avverbi-locativi.md).
+
+## Preposizioni plurali
+
+Il complemento esplicito di `metti` accetta anche `nei`, `negli` e `nelle`.
+Queste forme contano come destinazioni anche nei controlli negativi:
+`mettici gettone nei cassetti` e `metti gettone nei cassetti lì` sono rifiutati
+perché aggiungono una destinazione a quella già indicata dal pronome.

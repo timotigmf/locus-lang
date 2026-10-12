@@ -253,3 +253,6 @@ con regressioni positive e collisioni E311 verificate.
 
 Comandi standard: apertura e blocco accettano colla e le altre forme
 articolate di con, anche con pronomi uniti, con controlli negativi.
+
+Parser giocatore: aggiunti nei, negli e nelle a metti e ai clitici,
+con regressioni su destinazioni incomplete, duplicate e locative.
