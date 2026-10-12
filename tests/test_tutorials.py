@@ -1194,3 +1194,29 @@ def test_author_separator_con_rejects_new_articulated_collisions(separator: str)
     with pytest.raises(CompileError) as error:
         compile_story(source)
     assert error.value.code == "E311"
+
+
+@pytest.mark.parametrize(
+    "preposition", ["con la", "col", "coi", "colla", "collo", "colle", "cogli", "coll'", "coll’"]
+)
+@pytest.mark.parametrize("verb", ["apri cofano", "aprilo"])
+def test_standard_open_accepts_articulated_tool_prepositions(preposition: str, verb: str) -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "28_clitici_con_complemento.locus")))
+    current = step(current, parse_session_command(current, "prendi chiave")).session
+    current = step(current, parse_session_command(current, "esamina cofano")).session
+    opened = step(current, parse_session_command(current, f"{verb} {preposition} chiave di bronzo"))
+    assert opened.event.kind == "opened"
+    assert property_of(opened.session, "cofano", "stato") == "aperto"
+    closed = step(opened.session, parse_session_command(opened.session, "chiudi cofano"))
+    locked = step(
+        closed.session, parse_session_command(closed.session, f"bloccalo {preposition} chiave")
+    )
+    assert locked.event.kind == "lock_success"
+    assert property_of(locked.session, "cofano", "stato") == "bloccato"
+
+
+@pytest.mark.parametrize(
+    "text", ["apri cofano colla", "aprilo coll'", "apri cofano colla chiave con chiave"]
+)
+def test_articulated_tool_rejects_incomplete_or_repeated_complement(text: str) -> None:
+    assert parse_command(text).verb == "unknown"

@@ -563,7 +563,9 @@ def parse_command(
         if action == "examine" and verb == "look":
             rest = _without_initial_preposition(rest, frozenset({"at"}))
     delimiters = (
-        {"in", "into", "nel", "nella", "nello", "nell'"} if action == "put" else {"con", "with"}
+        {"in", "into", "nel", "nella", "nello", "nell'"}
+        if action == "put"
+        else {"with", *(variant[0] for variant in separator_variants("con"))}
     )
     splits = [i for i, (word, quoted) in enumerate(rest) if not quoted and word in delimiters]
     locatives = [

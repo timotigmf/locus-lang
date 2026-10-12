@@ -250,3 +250,6 @@ e quattro errori verificati; chiariti i limiti del baratto narrato.
 
 Parser giocatore: completate le forme articolate di con nei separatori autore,
 con regressioni positive e collisioni E311 verificate.
+
+Comandi standard: apertura e blocco accettano colla e le altre forme
+articolate di con, anche con pronomi uniti, con controlli negativi.

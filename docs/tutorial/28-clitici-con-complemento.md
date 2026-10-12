@@ -44,3 +44,10 @@ Chiudi il cofano e usa `bloccala con chiave di bronzo`. Poi prova la chiave
 sbagliata aggiungendone una seconda: il chiarimento e il controllo della chiave
 continuano a funzionare anche con la forma breve.
 
+
+## La chiave con una preposizione articolata
+
+Nel progetto della lezione prova `prendi chiave`, `esamina cofano`,
+`aprilo colla chiave di bronzo`, `chiudi cofano`, `bloccalo colla chiave`.
+La forma `con la` resta equivalente. Anche `apri cofano colla chiave` è valida.
+`aprilo colla` è incompleto; due complementi con chiave sono rifiutati.

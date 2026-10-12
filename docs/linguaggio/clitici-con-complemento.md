@@ -38,3 +38,10 @@ Le forme doppie `metticelo` e `metticela` sono definite dalla specifica dei
 [clitici doppi](clitici-doppi.md), che aggiunge un referente separato per la
 destinazione. I clitici delle azioni definite dall'autore richiedono forme
 dichiarative future.
+
+## Preposizioni dello strumento
+
+Aprire e bloccare, anche con clitico, accettano le varianti di `con` del
+catalogo condiviso: col, coi, colla, collo, colle, cogli e coll’ (apostrofo
+diritto o tipografico). Non viene verificato l’accordo con il nome.
+Complementi assenti o separatori ripetuti restano rifiutati.

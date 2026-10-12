@@ -405,3 +405,6 @@ oltre al rifiuto di locuzioni incomplete e secondo oggetto mancante.
 
 I separatori autore terminanti in `con` accettano anche `colla`, `collo`,
 `colle`, `cogli` e `coll’`, con identici controlli di collisione E311.
+
+Aprire e bloccare riconoscono le preposizioni articolate dello strumento,
+anche nei clitici, usando lo stesso catalogo dei separatori autore.

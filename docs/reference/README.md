@@ -372,3 +372,7 @@ di scambio ed effetti effettivi sulle posizioni.
 Le forme articolate ulteriori di `con` usano il catalogo condiviso degli
 schemi: parser giocatore e validazione delle collisioni leggono le stesse varianti.
 Esempio eseguibile nella lezione 11, senza modifiche all’IR.
+
+Il parser standard di apertura e blocco usa `separator_variants("con")`
+per il complemento strumentale; restano invariati risoluzione, tipi e IR.
+La lezione 28 verifica apertura e blocco con tutte le varianti e input incompleti.
