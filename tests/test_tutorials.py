@@ -1154,7 +1154,9 @@ def test_listening_lesson_rejects_incomplete_or_wrong_arguments(text: str) -> No
     assert "consiglia" not in render(result)
 
 
-@pytest.mark.parametrize("separator", ["rispetto a la", "rispetto alla", "a paragone con la"])
+@pytest.mark.parametrize(
+    "separator", ["rispetto a la", "rispetto alla", "a paragone con la", "a paragone colla"]
+)
 def test_comparison_lesson_accepts_complete_articulated_separators(separator: str) -> None:
     current = start(instantiate(compile_story_file(TUTORIAL / "11b_confrontare_sigilli.locus")))
     text = f"confronta amuleto {separator} chiave di vetro"
@@ -1164,12 +1166,31 @@ def test_comparison_lesson_accepts_complete_articulated_separators(separator: st
     assert result.session.world == current.world
 
 
-@pytest.mark.parametrize(
-    "ending", ["rispetto chiave", "a paragone chiave", "rispetto alla", "a paragone colla chiave"]
-)
+@pytest.mark.parametrize("ending", ["rispetto chiave", "a paragone chiave", "rispetto alla"])
 def test_comparison_lesson_rejects_incomplete_separator_or_object(ending: str) -> None:
     current = start(instantiate(compile_story_file(TUTORIAL / "11b_confrontare_sigilli.locus")))
     result = step(current, parse_session_command(current, f"confronta amuleto {ending}"))
     assert not result.succeeded
     assert not result.trace
     assert result.session == current
+
+
+@pytest.mark.parametrize("form", ["colla", "collo", "colle", "cogli", "coll'", "coll’"])
+def test_author_separator_con_accepts_articulated_forms(form: str) -> None:
+    source = (TUTORIAL / "11b_confrontare_sigilli.locus").read_text(encoding="utf-8")
+    current = start(instantiate(compile_story(source)))
+    text = f"confronta amuleto a paragone {form} chiave di vetro"
+    result = step(current, parse_session_command(current, text))
+    assert result.succeeded
+    assert "stesso sigillo" in render(result)
+
+
+@pytest.mark.parametrize("separator", ["colla", "collo", "colle", "cogli"])
+def test_author_separator_con_rejects_new_articulated_collisions(separator: str) -> None:
+    source = (
+        'Azione "confrontare" su una cosa con una cosa con comando "confronta" '
+        f'e separatore "con" e separatore "{separator}".'
+    )
+    with pytest.raises(CompileError) as error:
+        compile_story(source)
+    assert error.value.code == "E311"

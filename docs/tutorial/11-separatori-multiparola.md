@@ -80,17 +80,17 @@ Regola "sigilli uguali" per confrontare "amuleto" con "chiave di vetro" nella fa
 Fine regola.
 ```
 
-Queste tre forme attivano la stessa regola:
+Queste quattro forme attivano la stessa regola:
 
 ```text
 confronta amuleto rispetto a la chiave di vetro
 confronta amuleto rispetto alla chiave di vetro
 confronta amuleto a paragone con la chiave di vetro
+confronta amuleto a paragone colla chiave di vetro
 ```
 
 La prima forma rende visibile il confine fra separatore e articolo, anche se
-in italiano corrente preferirai `rispetto alla`. Con `a paragone con` usa la forma `con la`: in questo
-incremento la variante `colla` non è riconosciuta.
+in italiano corrente preferirai `rispetto alla`. Con `a paragone con` puoi usare sia `con la` sia `colla`.
 
 **Controlli negativi.** `confronta amuleto rispetto chiave` omette la preposizione;
 `confronta amuleto a paragone chiave` omette `con`. Nessuna delle due frasi

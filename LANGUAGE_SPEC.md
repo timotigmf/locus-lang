@@ -402,3 +402,6 @@ nome parziale e rifiuti per locuzione incompleta, argomento assente o tipo errat
 
 La lezione 11 verifica separatori multiparola con preposizione finale articolata,
 oltre al rifiuto di locuzioni incomplete e secondo oggetto mancante.
+
+I separatori autore terminanti in `con` accettano anche `colla`, `collo`,
+`colle`, `cogli` e `coll’`, con identici controlli di collisione E311.

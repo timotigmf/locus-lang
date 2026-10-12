@@ -33,3 +33,9 @@ I comandi a due oggetti esprimono locuzioni italiane comuni senza euristiche e
 mantengono una sola interpretazione. Restano esclusi i pattern con parole fisse
 dopo il secondo oggetto, gli argomenti facoltativi e le azioni con più di due
 oggetti.
+
+## Estensione del 12 ottobre 2026
+
+Il catalogo condiviso include anche colla, collo, colle, cogli e coll’ per con.
+Nessuna nuova produzione o modifica IR: tutte le varianti partecipano agli
+stessi controlli di collisione del contratto esistente.

@@ -247,3 +247,6 @@ nomi parziali e controlli negativi su forma e argomenti.
 
 Didattica: soluzione del confronto dei sigilli, con tre forme dei separatori
 e quattro errori verificati; chiariti i limiti del baratto narrato.
+
+Parser giocatore: completate le forme articolate di con nei separatori autore,
+con regressioni positive e collisioni E311 verificate.

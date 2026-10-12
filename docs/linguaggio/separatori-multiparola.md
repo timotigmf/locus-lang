@@ -61,3 +61,10 @@ stringa contiene da uno a quattro token fissi; compilatore e runtime verificano
 forma, duplicati, prefissi e varianti articolate. Non sono ancora disponibili
 ruoli nominati, oggetti facoltativi, più di due oggetti o parole fisse dopo il
 secondo oggetto.
+
+## Forme ulteriori di con
+
+Oltre a `col` e `coi`, la preposizione finale `con` riconosce `colla`, `collo`,
+`colle`, `cogli` e `coll'` (anche apostrofo tipografico). Non viene verificato
+l’accordo grammaticale con il nome. Le varianti partecipano alle collisioni:
+dichiarare sia `con` sia `colla` produce E311.

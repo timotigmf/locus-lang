@@ -25,7 +25,7 @@ _ARTICULATED_PREPOSITIONS: dict[str, tuple[str, ...]] = {
     "di": ("di", "del", "della", "dello", "dei", "degli", "delle", "dell'"),
     "da": ("da", "dal", "dalla", "dallo", "dai", "dagli", "dalle", "dall'"),
     "su": ("su", "sul", "sulla", "sullo", "sui", "sugli", "sulle", "sull'"),
-    "con": ("con", "col", "coi"),
+    "con": ("con", "col", "coi", "colla", "collo", "colle", "cogli", "coll'"),
 }
 
 

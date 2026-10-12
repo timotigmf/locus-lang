@@ -368,3 +368,7 @@ automaticamente la mappa.
 Il laboratorio `11b_confrontare_sigilli.locus` copre forme separate e articolate
 di `rispetto a` e `a paragone con`. Il tutorial distingue inoltre narrazione
 di scambio ed effetti effettivi sulle posizioni.
+
+Le forme articolate ulteriori di `con` usano il catalogo condiviso degli
+schemi: parser giocatore e validazione delle collisioni leggono le stesse varianti.
+Esempio eseguibile nella lezione 11, senza modifiche all’IR.
