@@ -119,3 +119,9 @@ sblocca e apre in un'unica transizione. Bloccare richiede oggetto già chiuso.
 Apostrofi ASCII e tipografici sono equivalenti nel confronto dei nomi; la grafia
 originale resta nella presentazione. Il parser giocatore accetta escape di virgolette
 e backslash nei nomi quotati, ma non sequenze di escape arbitrarie.
+
+## Suggerimento per una serratura bloccata
+
+`apri OGGETTO` su una serratura bloccata indica il nome dell’oggetto e suggerisce
+`apri OGGETTO con CHIAVE`. La chiave va specificata anche se è già trasportata.
+Il messaggio non cerca né rivela il nome della chiave adatta.

@@ -268,3 +268,6 @@ il comando, senza mutazioni o consumo di turno.
 
 Correzione dal gioco reale: porta riconosciuta come portello negli esempi del
 faro; messaggi di navigazione con nome effettivo e distinzione chiuso/bloccato.
+
+Diagnostica dal caso del faro: apertura bloccata con istruzione esplicita
+sulla chiave da indicare, verificata con e senza chiave già in inventario.

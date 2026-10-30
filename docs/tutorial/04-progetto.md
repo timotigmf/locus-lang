@@ -109,3 +109,7 @@ distingue la serratura bloccata dalla semplice chiusura.
 
 Nei progetti già salvati aggiungi `Comprendi "porta" come "portello".` al
 sorgente e ricompila; gli aggiornamenti degli esempi non riscrivono il tuo progetto.
+
+Se hai già la chiave in inventario ma scrivi soltanto `apri porta`, il nuovo
+suggerimento ricorda di indicarla nel comando. Usa `apri porta con chiave`.
+Non serve prendere nuovamente la chiave: manca il complemento, non l’oggetto.

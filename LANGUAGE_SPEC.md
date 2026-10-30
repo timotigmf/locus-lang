@@ -423,3 +423,6 @@ Un comando `metti OGGETTO` senza destinazione produce l’evento
 
 Il messaggio di passaggio impedito indica il nome della porta effettiva e
 distingue chiuso da bloccato, suggerendo la chiave soltanto nel secondo caso.
+
+Il rifiuto di apertura per serratura bloccata mostra il nome dell’oggetto e
+ricorda di specificare la chiave nel comando, senza rivelare la chiave corretta.

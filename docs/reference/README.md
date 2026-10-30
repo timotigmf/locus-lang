@@ -396,3 +396,7 @@ appartiene ai casi senza avanzamento del tempo e non crea chiarimenti pendenti.
 L’evento door_closed conserva la stessa struttura; il renderer legge lo stato
 e il nome della porta coinvolta. Gli esempi del faro dichiarano porta come
 sinonimo di portello, senza introdurre sinonimi automatici per ogni tipo.
+
+Il renderer dell’evento locked mostra l’oggetto e la sintassi di apertura
+con strumento esplicito. La transizione non cambia e il messaggio non consulta
+le relazioni delle chiavi, evitando di rivelare soluzioni ancora nascoste.

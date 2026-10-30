@@ -1329,3 +1329,22 @@ def test_lighthouse_door_alias_and_blocked_passage_guidance(filename: str) -> No
     reopened = step(closed.session, parse_session_command(closed.session, "apri porta"))
     moved = step(reopened.session, parse_session_command(reopened.session, "n"))
     assert moved.session.room_id != current.room_id
+
+
+@pytest.mark.parametrize("carry_key", [False, True])
+def test_lighthouse_locked_message_explains_explicit_key_without_revealing_it(
+    carry_key: bool,
+) -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "studio_faro.locus")))
+    if carry_key:
+        for text in ("apri custodia", "prendi chiave"):
+            current = step(current, parse_session_command(current, text)).session
+    failed = step(current, parse_session_command(current, "apri porta"))
+    assert failed.event.kind == "locked"
+    assert failed.session == current
+    assert "portello" in render(failed)
+    assert "apri OGGETTO con CHIAVE" in render(failed)
+    assert "rame" not in render(failed)
+    if carry_key:
+        opened = step(current, parse_session_command(current, "apri porta con chiave"))
+        assert opened.event.kind == "opened"

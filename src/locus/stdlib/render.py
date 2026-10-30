@@ -100,6 +100,11 @@ def render(transition: Transition) -> str:
     if kind == "money":
         balance = property_value(world, transition.event.entities[0], BALANCE, 0)
         return f"Saldo: {balance} unità di {names[0]}."
+    if kind == "locked":
+        return (
+            f"È bloccato: {names[0]}. Indica anche la chiave nel comando: "
+            "«apri OGGETTO con CHIAVE»."
+        )
     if kind == "door_closed":
         state = property_value(world, transition.event.entities[0], STATE, "chiuso")
         if state == "bloccato":
@@ -262,7 +267,6 @@ def render(transition: Transition) -> str:
         "no_previous_room": "Non hai ancora lasciato un luogo a cui tornare.",
         "cannot_return": "Non puoi tornare indietro da qui.",
         "quit": "A presto.",
-        "locked": "È bloccato: serve una chiave adatta.",
         "already_open": "È già aperto.",
         "already_closed": "È già chiuso.",
         "already_locked": "È già bloccato.",
