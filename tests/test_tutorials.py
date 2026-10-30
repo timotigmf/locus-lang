@@ -1306,3 +1306,26 @@ def test_missing_put_destination_explains_syntax_without_spending_turn(command: 
     corrected = step(current, parse_session_command(current, "metti gettone rosso nella cassetta"))
     assert not corrected.session.inventory
     assert corrected.session.turn == current.turn + 1
+
+
+@pytest.mark.parametrize("filename", ["studio_faro.locus", "04_faro.locus"])
+def test_lighthouse_door_alias_and_blocked_passage_guidance(filename: str) -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / filename)))
+    blocked = step(current, parse_session_command(current, "n"))
+    assert "portello" in render(blocked)
+    assert "chiave adatta" in render(blocked)
+    assert blocked.session == current
+    for text in ("apri custodia", "prendi chiave"):
+        current = step(current, parse_session_command(current, text)).session
+    no_key = step(current, parse_session_command(current, "apri la porta"))
+    assert no_key.event.kind != "not_here"
+    assert no_key.session == current
+    opened = step(current, parse_session_command(current, "apri la porta con chiave"))
+    assert opened.event.kind == "opened"
+    closed = step(opened.session, parse_session_command(opened.session, "chiudi porta"))
+    obstruction = step(closed.session, parse_session_command(closed.session, "n"))
+    assert "portello" in render(obstruction)
+    assert "chiave adatta" not in render(obstruction)
+    reopened = step(closed.session, parse_session_command(closed.session, "apri porta"))
+    moved = step(reopened.session, parse_session_command(reopened.session, "n"))
+    assert moved.session.room_id != current.room_id

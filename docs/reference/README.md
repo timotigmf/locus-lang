@@ -392,3 +392,7 @@ per tre forme di ritorno, prima e dopo un movimento fallito.
 L’intento e l’evento `missing_destination` distinguono metti con oggetto ma
 senza destinazione. Il renderer suggerisce la sintassi completa; l’evento
 appartiene ai casi senza avanzamento del tempo e non crea chiarimenti pendenti.
+
+L’evento door_closed conserva la stessa struttura; il renderer legge lo stato
+e il nome della porta coinvolta. Gli esempi del faro dichiarano porta come
+sinonimo di portello, senza introdurre sinonimi automatici per ogni tipo.

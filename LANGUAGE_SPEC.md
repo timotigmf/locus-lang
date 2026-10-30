@@ -420,3 +420,6 @@ conservazione della memoria dopo una direzione senza uscita.
 
 Un comando `metti OGGETTO` senza destinazione produce l’evento
 `missing_destination`, con istruzioni di correzione e senza avanzare il turno.
+
+Il messaggio di passaggio impedito indica il nome della porta effettiva e
+distingue chiuso da bloccato, suggerendo la chiave soltanto nel secondo caso.

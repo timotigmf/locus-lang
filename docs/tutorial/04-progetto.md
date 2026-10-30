@@ -98,3 +98,14 @@ non dichiarato produce `E103` nel file dei testi.
 **Esercizio ulteriore.** Sposta anche la descrizione della lanterna nel modulo
 dei testi, rimuovendo l'assegnazione dal mondo. Ripeti il copione per verificare
 che la riorganizzazione conservi il comportamento.
+
+## Porta e portello
+
+Nel faro `porta` è un sinonimo esplicito di `portello`. Dopo `apri custodia`
+e `prendi chiave`, usa `apri porta con chiave`, poi `nord`. La chiave va
+indicata per aprire il portello bloccato: possederla non basta ad aprirlo con
+il solo movimento. Il messaggio del passaggio mostra il nome portello e
+distingue la serratura bloccata dalla semplice chiusura.
+
+Nei progetti già salvati aggiungi `Comprendi "porta" come "portello".` al
+sorgente e ricompila; gli aggiornamenti degli esempi non riscrivono il tuo progetto.

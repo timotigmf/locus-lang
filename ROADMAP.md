@@ -265,3 +265,6 @@ ritorni alternati e memoria preservata dopo movimenti impossibili.
 
 Diagnostica giocatore: metti senza destinazione mostra come completare
 il comando, senza mutazioni o consumo di turno.
+
+Correzione dal gioco reale: porta riconosciuta come portello negli esempi del
+faro; messaggi di navigazione con nome effettivo e distinzione chiuso/bloccato.

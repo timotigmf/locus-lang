@@ -100,6 +100,11 @@ def render(transition: Transition) -> str:
     if kind == "money":
         balance = property_value(world, transition.event.entities[0], BALANCE, 0)
         return f"Saldo: {balance} unità di {names[0]}."
+    if kind == "door_closed":
+        state = property_value(world, transition.event.entities[0], STATE, "chiuso")
+        if state == "bloccato":
+            return f"Il passaggio è bloccato da: {names[0]}. Aprilo con la chiave adatta."
+        return f"Il passaggio è chiuso da: {names[0]}. Devi aprirlo prima di passare."
     if kind == "taken":
         return f"Hai preso: {names[0]}."
     if kind == "put":
@@ -265,7 +270,6 @@ def render(transition: Transition) -> str:
         "wrong_key": "Questa chiave non è adatta.",
         "not_carried": "Devi avere con te l'oggetto da usare.",
         "container_closed": "Il contenitore è chiuso.",
-        "door_closed": "La porta è chiusa: devi aprirla prima di passare.",
         "not_container": "La destinazione non è un contenitore.",
         "cycle": "Un contenitore non può contenere sé stesso, nemmeno indirettamente.",
         "must_close": "Devi chiuderlo prima di bloccarlo.",
