@@ -1291,3 +1291,18 @@ def test_stair_lesson_returns_both_ways_without_losing_memory_on_failure(back: s
         current = step(current, parse_session_command(current, back)).session
         assert current.room_id == ids[room]
         assert current.previous_room_id == ids[previous]
+
+
+@pytest.mark.parametrize("command", ["metti gettone rosso", "put gettone rosso"])
+def test_missing_put_destination_explains_syntax_without_spending_turn(command: str) -> None:
+    source = (TUTORIAL / "30_clitico_locativo.locus").read_text(encoding="utf-8")
+    source += '\nScena "attesa" dal turno 1 al turno 3: Inizio "Inizio". Fine "Fine". Fine scena.'
+    current = start(instantiate(compile_story(source)))
+    current = step(current, parse_session_command(current, "prendi gettone rosso")).session
+    failed = step(current, parse_session_command(current, command))
+    assert failed.event.kind == "missing_destination"
+    assert "metti OGGETTO in CONTENITORE" in render(failed)
+    assert failed.session == current
+    corrected = step(current, parse_session_command(current, "metti gettone rosso nella cassetta"))
+    assert not corrected.session.inventory
+    assert corrected.session.turn == current.turn + 1

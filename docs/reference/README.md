@@ -388,3 +388,7 @@ di dialogo nelle storie prive di conversazioni.
 Il laboratorio `36b_scala_della_cripta.locus` confronta la scala bidirezionale
 con la caduta originale. Le regressioni verificano luogo corrente e precedente
 per tre forme di ritorno, prima e dopo un movimento fallito.
+
+L’intento e l’evento `missing_destination` distinguono metti con oggetto ma
+senza destinazione. Il renderer suggerisce la sintassi completa; l’evento
+appartiene ai casi senza avanzamento del tempo e non crea chiarimenti pendenti.

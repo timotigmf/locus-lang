@@ -397,7 +397,7 @@ def test_door_can_guard_directional_passages(relation: str, movement: str) -> No
         ("blocca porta con chiave", Intent("lock", "porta", "chiave")),
         ("esamina lo scrigno", Intent("examine", "scrigno")),
         ("lascia la gemma", Intent("drop", "gemma")),
-        ("metti gemma", Intent("unknown")),
+        ("metti gemma", Intent("missing_destination")),
         ("apri porta con", Intent("unknown")),
         ('prendi "incompleta', Intent("unknown")),
         ("blocca porta", Intent("unknown")),

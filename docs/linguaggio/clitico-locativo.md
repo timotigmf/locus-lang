@@ -38,3 +38,9 @@ Il complemento esplicito di `metti` accetta anche `nei`, `negli` e `nelle`.
 Queste forme contano come destinazioni anche nei controlli negativi:
 `mettici gettone nei cassetti` e `metti gettone nei cassetti lì` sono rifiutati
 perché aggiungono una destinazione a quella già indicata dal pronome.
+
+## Destinazione omessa
+
+`metti gettone` (anche `put gettone`) senza destinazione indica la sintassi
+`metti OGGETTO in CONTENITORE`. Non sposta oggetti né avanza il turno.
+Non apre una domanda persistente: ripeti il comando completo con la destinazione.

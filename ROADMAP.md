@@ -262,3 +262,6 @@ alias, con verifiche di nome mancante, virgolette e attivazione condizionale.
 
 Didattica: soluzione della scala nella lezione 36, con descrizioni coerenti,
 ritorni alternati e memoria preservata dopo movimenti impossibili.
+
+Diagnostica giocatore: metti senza destinazione mostra come completare
+il comando, senza mutazioni o consumo di turno.

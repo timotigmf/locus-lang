@@ -56,3 +56,10 @@ Prova `prendi gettone` e `mettilo nelle tasche`. Le tasche sono una sola
 entità contenitore: la preposizione plurale non crea né seleziona un gruppo.
 LOCUS non controlla l’accordo grammaticale dell’articolo nella dichiarazione.
 `mettici gettone nelle tasche` resta rifiutato perché specifica due destinazioni.
+
+## Correggere un comando incompleto
+
+Nel progetto della lezione prova `prendi gettone rosso`, poi `metti gettone rosso`.
+LOCUS indica che manca la destinazione e mostra la forma corretta. Ripeti
+`metti gettone rosso nella cassetta` per completare l’azione. L’errore non consuma
+un turno nelle storie con scene temporali.

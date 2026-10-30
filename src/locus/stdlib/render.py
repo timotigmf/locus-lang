@@ -245,6 +245,7 @@ def render(transition: Transition) -> str:
         "not_portable": "Non puoi prendere questo elemento.",
         "no_exit": "Non c'è alcun passaggio in quella direzione.",
         "unknown": unknown,
+        "missing_destination": "Indica dove mettere l’oggetto: metti OGGETTO in CONTENITORE.",
         "missing_noun": "Indica quale oggetto vuoi esaminare o manipolare.",
         "no_referent": "Non c'è ancora un oggetto a cui riferire il pronome.",
         "no_indirect_referent": ("Non c'è ancora una destinazione a cui riferire il clitico «ci»."),

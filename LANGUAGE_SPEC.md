@@ -417,3 +417,6 @@ gli alias p e talk. Le forme restano abilitate soltanto nelle storie con dialogh
 
 La lezione 36 verifica ritorni alternati su una scala bidirezionale e
 conservazione della memoria dopo una direzione senza uscita.
+
+Un comando `metti OGGETTO` senza destinazione produce l’evento
+`missing_destination`, con istruzioni di correzione e senza avanzare il turno.
