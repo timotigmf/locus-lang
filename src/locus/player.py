@@ -9,6 +9,8 @@ from locus.schema import separator_variants
 
 Verb = str
 
+_WITH_PREPOSITIONS = frozenset(variant[0] for variant in separator_variants("con"))
+
 _PUT_PREPOSITIONS = frozenset({"into", *(variant[0] for variant in separator_variants("in"))})
 
 _SIMPLE_COMMANDS: dict[str, Verb] = {
@@ -514,7 +516,7 @@ def parse_command(
             return Intent("end_dialogue")
         if verb in {"parla", "p", "talk"}:
             rest = tokens[1:]
-            if rest and not rest[0][1] and rest[0][0] in {"con", "to"}:
+            if rest and not rest[0][1] and rest[0][0] in _WITH_PREPOSITIONS | {"to"}:
                 rest = rest[1:]
             direct = _noun(rest)
             return Intent("talk", direct) if direct else Intent("missing_noun")
@@ -561,11 +563,7 @@ def parse_command(
         rest = tokens[1:]
         if action == "examine" and verb == "look":
             rest = _without_initial_preposition(rest, frozenset({"at"}))
-    delimiters = (
-        _PUT_PREPOSITIONS
-        if action == "put"
-        else {"with", *(variant[0] for variant in separator_variants("con"))}
-    )
+    delimiters = _PUT_PREPOSITIONS if action == "put" else _WITH_PREPOSITIONS | {"with"}
     splits = [i for i, (word, quoted) in enumerate(rest) if not quoted and word in delimiters]
     locatives = [
         i for i, (word, quoted) in enumerate(rest) if not quoted and word in _LOCATIVE_PRONOUNS

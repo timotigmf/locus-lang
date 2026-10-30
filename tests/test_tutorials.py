@@ -1250,3 +1250,25 @@ def test_put_plural_prepositions_preserve_destination_validation(preposition: st
         f"metti gettone {preposition} cassetti nella cassetta",
     ):
         assert parse_command(text).verb == "unknown"
+
+
+@pytest.mark.parametrize(
+    "prefix", ["parla colla", "p colla", "talk colla", "parla con la", "parla coll'", "parla coll’"]
+)
+def test_dialogue_accepts_articulated_con(prefix: str) -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "16_dialogo_guardiana.locus")))
+    result = step(current, parse_session_command(current, f"{prefix} guardiana"))
+    assert result.session.dialogue_id is not None
+    assert "posa il registro" in render(result)
+
+
+@pytest.mark.parametrize("text", ["parla colla", "parla coll'", "p col", "talk coi"])
+def test_dialogue_articulated_con_requires_person(text: str) -> None:
+    assert parse_command(text, dialogue_enabled=True).verb == "missing_noun"
+
+
+def test_dialogue_articulated_con_preserves_quoted_names_and_opt_in() -> None:
+    intent = parse_command('parla "colla"', dialogue_enabled=True)
+    assert intent.verb == "talk"
+    assert intent.noun == "colla"
+    assert parse_command("parla colla guardiana").verb == "unknown"

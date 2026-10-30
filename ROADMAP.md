@@ -256,3 +256,6 @@ articolate di con, anche con pronomi uniti, con controlli negativi.
 
 Parser giocatore: aggiunti nei, negli e nelle a metti e ai clitici,
 con regressioni su destinazioni incomplete, duplicate e locative.
+
+Parser giocatore: uniformate le preposizioni articolate di parla e dei suoi
+alias, con verifiche di nome mancante, virgolette e attivazione condizionale.

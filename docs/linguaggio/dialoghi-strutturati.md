@@ -147,3 +147,11 @@ abilitati nel mondo, conservano dialogo e chiarimento correnti. Non consumano
 un turno, non eseguono regole e non sostituiscono l'ultimo comando ripetibile.
 Le azioni ordinarie conservano il comportamento previsto: bloccate durante
 un dialogo, oppure sostitutive di un chiarimento.
+
+## Preposizioni articolate nella conversazione
+
+`parla colla guardiana` equivale a `parla con la guardiana`. Sono accettate
+le varianti col, coi, colla, collo, colle, cogli e coll’ (anche apostrofo diritto),
+senza controllo dell’accordo grammaticale. Valgono anche per p e talk.
+Una preposizione senza nome richiede la persona; un nome quotato come
+`parla "colla"` resta invece un nome, non viene consumato come preposizione.

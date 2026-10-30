@@ -380,3 +380,7 @@ La lezione 28 verifica apertura e blocco con tutte le varianti e input incomplet
 Il parser di metti condivide le varianti di `in` con i separatori autore.
 La stessa raccolta serve al controllo dei complementi duplicati con `mettici`.
 I nomi plurali non introducono gruppi o distribuzione automatica degli oggetti.
+
+Parla, p e talk condividono le varianti di con con apertura e blocco.
+Il consumo della preposizione rispetta le virgolette e non attiva i comandi
+di dialogo nelle storie prive di conversazioni.

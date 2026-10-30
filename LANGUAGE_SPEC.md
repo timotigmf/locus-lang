@@ -411,3 +411,6 @@ anche nei clitici, usando lo stesso catalogo dei separatori autore.
 
 `metti` e `mettilo/a` accettano anche nei, negli e nelle come separatori
 di destinazione. Il nome plurale identifica una singola entità dichiarata.
+
+Il comando di dialogo `parla` accetta le forme articolate di con, anche con
+gli alias p e talk. Le forme restano abilitate soltanto nelle storie con dialoghi.

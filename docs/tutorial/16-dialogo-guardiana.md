@@ -172,3 +172,10 @@ rispondere `tempesta`. Nei mondi con valuta, anche `denaro` mostra il saldo
 senza cambiare nodo o far passare il tempo.
 Queste consultazioni conservano anche un chiarimento sugli oggetti ancora
 aperto: puoi controllare il saldo e poi rispondere al numero richiesto.
+
+## Parlare colla guardiana
+
+Nel progetto della lezione prova `parla colla guardiana`: compare lo stesso
+nodo iniziale di `parla con la guardiana`. Usa `basta` per uscire e riprova
+con `p colla guardiana`. `parla colla` è incompleto: aggiungi il nome della
+persona per iniziare la conversazione.
