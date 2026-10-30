@@ -259,3 +259,6 @@ con regressioni su destinazioni incomplete, duplicate e locative.
 
 Parser giocatore: uniformate le preposizioni articolate di parla e dei suoi
 alias, con verifiche di nome mancante, virgolette e attivazione condizionale.
+
+Didattica: soluzione della scala nella lezione 36, con descrizioni coerenti,
+ritorni alternati e memoria preservata dopo movimenti impossibili.

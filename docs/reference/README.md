@@ -384,3 +384,7 @@ I nomi plurali non introducono gruppi o distribuzione automatica degli oggetti.
 Parla, p e talk condividono le varianti di con con apertura e blocco.
 Il consumo della preposizione rispetta le virgolette e non attiva i comandi
 di dialogo nelle storie prive di conversazioni.
+
+Il laboratorio `36b_scala_della_cripta.locus` confronta la scala bidirezionale
+con la caduta originale. Le regressioni verificano luogo corrente e precedente
+per tre forme di ritorno, prima e dopo un movimento fallito.

@@ -414,3 +414,6 @@ di destinazione. Il nome plurale identifica una singola entità dichiarata.
 
 Il comando di dialogo `parla` accetta le forme articolate di con, anche con
 gli alias p e talk. Le forme restano abilitate soltanto nelle storie con dialoghi.
+
+La lezione 36 verifica ritorni alternati su una scala bidirezionale e
+conservazione della memoria dopo una direzione senza uscita.

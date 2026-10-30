@@ -1272,3 +1272,22 @@ def test_dialogue_articulated_con_preserves_quoted_names_and_opt_in() -> None:
     assert intent.verb == "talk"
     assert intent.noun == "colla"
     assert parse_command("parla colla guardiana").verb == "unknown"
+
+
+@pytest.mark.parametrize("back", ["indietro", "back", "torna indietro"])
+def test_stair_lesson_returns_both_ways_without_losing_memory_on_failure(back: str) -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "36b_scala_della_cripta.locus")))
+    ids = {entity.label: entity.id for entity in current.world.entities}
+    initial = step(current, parse_session_command(current, back))
+    assert initial.event.kind == "no_previous_room"
+    assert initial.session == current
+    current = step(current, parse_session_command(current, "giù")).session
+    assert current.room_id == ids["Cripta"]
+    assert current.previous_room_id == ids["Lanterna"]
+    failed = step(current, parse_session_command(current, "nord"))
+    assert failed.event.kind == "no_exit"
+    assert failed.session == current
+    for room, previous in (("Lanterna", "Cripta"), ("Cripta", "Lanterna"), ("Lanterna", "Cripta")):
+        current = step(current, parse_session_command(current, back)).session
+        assert current.room_id == ids[room]
+        assert current.previous_room_id == ids[previous]

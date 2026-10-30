@@ -39,3 +39,37 @@ alla Cripta.
 
 Il [riferimento sul ritorno](../linguaggio/ritorno-indietro.md) descrive memoria,
 porte, veicoli e passaggi a senso unico.
+
+## Soluzione: una scala percorribile in entrambe le direzioni
+
+Apri `examples/tutorial/36b_scala_della_cripta.locus` oppure copia:
+
+```locus
+Titolo: "La scala della cripta".
+Autore: "Esempio LOCUS".
+
+La Lanterna è una stanza.
+La Cripta è una stanza.
+La Lanterna sovrasta la Cripta.
+Inizia nella Lanterna.
+La Lanterna ha descrizione "Una scala permette di scendere nella cripta.".
+La Cripta ha descrizione "La scala risale verso la lanterna.".
+```
+
+| Comando | Posizione e memoria |
+| --- | --- |
+| `indietro` | Resti nella Lanterna: nessun luogo precedente |
+| `giù` | Cripta; luogo precedente Lanterna |
+| `nord` | Nessuna uscita; posizione e memoria restano invariate |
+| `indietro` | Lanterna; luogo precedente Cripta |
+| `back` | Cripta; luogo precedente Lanterna |
+| `torna indietro` | Lanterna; luogo precedente Cripta |
+
+`sovrasta` genera il collegamento verticale e il suo inverso. Il comando di
+ritorno può quindi usare la scala, mentre nell'esempio originale la caduta non
+aveva un arco inverso. Anche le descrizioni sono cambiate: una scala percorribile
+non deve essere narrata come una botola irraggiungibile.
+
+La memoria resta di un solo luogo: ripetere il ritorno alterna i due ambienti,
+non riavvolge tutta la partita. La prova con `nord` conferma che un movimento
+fallito non cancella il percorso riuscito precedente.
