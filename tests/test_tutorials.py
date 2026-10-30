@@ -1348,3 +1348,24 @@ def test_lighthouse_locked_message_explains_explicit_key_without_revealing_it(
     if carry_key:
         opened = step(current, parse_session_command(current, "apri porta con chiave"))
         assert opened.event.kind == "opened"
+
+
+def test_two_keys_lesson_distinguishes_carrying_compatibility_and_clarification() -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "04b_due_chiavi.locus")))
+    absent = step(current, parse_session_command(current, "apri porta con chiave di rame"))
+    assert render(absent) == "Devi prima prendere: chiave di rame."
+    assert absent.session == current
+    current = step(current, parse_session_command(current, "prendi chiave di ferro")).session
+    wrong = step(current, parse_session_command(current, "apri porta con chiave di ferro"))
+    assert render(wrong) == "La chiave indicata non è adatta: chiave di ferro."
+    assert "rame" not in render(wrong)
+    assert wrong.session == current
+    current = step(current, parse_session_command(current, "prendi chiave di rame")).session
+    asked = step(current, parse_session_command(current, "apri porta con chiave"))
+    assert asked.event.kind == "ambiguous"
+    selected = step(asked.session, parse_session_command(asked.session, "rame"))
+    assert selected.event.kind == "opened"
+    assert (
+        step(selected.session, parse_session_command(selected.session, "nord")).session.room_id
+        != current.room_id
+    )

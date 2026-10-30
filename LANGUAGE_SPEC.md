@@ -426,3 +426,6 @@ distingue chiuso da bloccato, suggerendo la chiave soltanto nel secondo caso.
 
 Il rifiuto di apertura per serratura bloccata mostra il nome dell’oggetto e
 ricorda di specificare la chiave nel comando, senza rivelare la chiave corretta.
+
+I messaggi not_carried e wrong_key indicano il nome dell’oggetto selezionato;
+non rivelano la chiave corretta né cambiano i controlli di accessibilità.

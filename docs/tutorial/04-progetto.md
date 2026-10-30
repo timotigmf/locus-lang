@@ -113,3 +113,33 @@ sorgente e ricompila; gli aggiornamenti degli esempi non riscrivono il tuo proge
 Se hai già la chiave in inventario ma scrivi soltanto `apri porta`, il nuovo
 suggerimento ricorda di indicarla nel comando. Usa `apri porta con chiave`.
 Non serve prendere nuovamente la chiave: manca il complemento, non l’oggetto.
+
+## Laboratorio: scegliere la chiave adatta
+
+Apri `examples/tutorial/04b_due_chiavi.locus` oppure copia:
+
+```locus
+Titolo: "Le due chiavi del portello".
+Autore: "Esempio LOCUS".
+Il Molo è una stanza.
+La Terrazza è una stanza.
+La Terrazza è a nord del Molo.
+Inizia nel Molo.
+Il portello è una porta.
+Il portello collega il Molo alla Terrazza.
+Il portello ha stato "bloccato".
+Comprendi "porta" come "portello".
+La chiave di rame è una chiave nel Molo.
+La chiave di ferro è una chiave nel Molo.
+La chiave di rame apre il portello.
+```
+
+1. `apri porta con chiave di rame`: devi prima prendere la chiave indicata.
+2. `prendi chiave di ferro`, poi `apri porta con chiave di ferro`: la chiave
+   trasportata non è adatta; il portello resta bloccato.
+3. `prendi chiave di rame`, poi `apri porta con chiave`: il nome è ambiguo.
+4. Rispondi `rame`: l'apertura riprende con la chiave scelta. Ora `nord` funziona.
+
+I messaggi distinguono oggetto non trasportato e chiave incompatibile, indicando
+il nome usato. Non rivelano quale altra chiave apra la serratura. Se le chiavi
+sono entrambe raggiungibili, scrivere solo `chiave` può richiedere un chiarimento.

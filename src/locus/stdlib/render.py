@@ -100,6 +100,10 @@ def render(transition: Transition) -> str:
     if kind == "money":
         balance = property_value(world, transition.event.entities[0], BALANCE, 0)
         return f"Saldo: {balance} unità di {names[0]}."
+    if kind == "not_carried":
+        return f"Devi prima prendere: {names[0]}."
+    if kind == "wrong_key":
+        return f"La chiave indicata non è adatta: {names[0]}."
     if kind == "locked":
         return (
             f"È bloccato: {names[0]}. Indica anche la chiave nel comando: "
@@ -271,8 +275,6 @@ def render(transition: Transition) -> str:
         "already_closed": "È già chiuso.",
         "already_locked": "È già bloccato.",
         "not_openable": "Questo elemento non si apre e non si chiude.",
-        "wrong_key": "Questa chiave non è adatta.",
-        "not_carried": "Devi avere con te l'oggetto da usare.",
         "container_closed": "Il contenitore è chiuso.",
         "not_container": "La destinazione non è un contenitore.",
         "cycle": "Un contenitore non può contenere sé stesso, nemmeno indirettamente.",

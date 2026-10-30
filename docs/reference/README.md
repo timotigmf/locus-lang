@@ -400,3 +400,7 @@ sinonimo di portello, senza introdurre sinonimi automatici per ogni tipo.
 Il renderer dell’evento locked mostra l’oggetto e la sintassi di apertura
 con strumento esplicito. La transizione non cambia e il messaggio non consulta
 le relazioni delle chiavi, evitando di rivelare soluzioni ancora nascoste.
+
+Il laboratorio 04b distingue chiave raggiungibile ma non trasportata, chiave
+incompatibile e chiarimento del secondo argomento; la ripresa con rame apre
+il portello. I messaggi usano soltanto gli ID già presenti negli eventi.

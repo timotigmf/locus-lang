@@ -271,3 +271,6 @@ faro; messaggi di navigazione con nome effettivo e distinzione chiuso/bloccato.
 
 Diagnostica dal caso del faro: apertura bloccata con istruzione esplicita
 sulla chiave da indicare, verificata con e senza chiave già in inventario.
+
+Diagnostica e tutorial: nomi espliciti per oggetti da prendere e chiavi non
+adatte, con laboratorio completo a due chiavi e chiarimento dello strumento.
