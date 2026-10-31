@@ -468,3 +468,7 @@ attesa valida conserva gli effetti.
 Il laboratorio 35b verifica l’equivalenza di movimento naturale e abbreviato
 su collegamenti cardinali e verticali, distinguendo direzione mancante,
 complemento non direzionale e direzione valida priva di uscita.
+
+Il laboratorio 32b verifica che una chiave incompatibile non aggiorni il
+referente indiretto, né inizialmente né dopo un successo. Un referente
+ricordato resta soggetto ai controlli di possesso durante il riuso.

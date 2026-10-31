@@ -1648,3 +1648,37 @@ def test_terrace_lesson_distinguishes_invalid_direction_and_absent_exit(
     assert "Comando non riconosciuto" not in render(failed)
     returned = step(failed.session, parse_session_command(failed.session, "procedi giù"))
     assert returned.session.room_id == current.previous_room_id
+
+
+def test_two_keys_pronoun_lesson_remembers_only_successful_tools() -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "32b_due_chiavi_e_pronomi.locus")))
+    ids = {entity.label: entity.id for entity in current.world.entities}
+    for command in ("prendi chiave di ferro", "prendi chiave di bronzo"):
+        current = step(current, parse_session_command(current, command)).session
+    failed = step(current, parse_session_command(current, "apri cofano con chiave di ferro"))
+    assert failed.event.kind == "wrong_key"
+    assert failed.session == current
+    assert failed.session.indirect_pronoun_id is None
+    current = step(
+        current, parse_session_command(current, "apri cofano con chiave di bronzo")
+    ).session
+    current = step(current, parse_session_command(current, "chiudilo")).session
+    failed = step(current, parse_session_command(current, "bloccalo con chiave di ferro"))
+    assert failed.event.kind == "wrong_key"
+    assert failed.session == current
+    assert current.pronoun_id == ids["cofano"]
+    assert current.indirect_pronoun_id == ids["chiave di bronzo"]
+    locked = step(current, parse_session_command(current, "bloccalo con essa"))
+    assert locked.event.kind == "lock_success"
+    opened = step(locked.session, parse_session_command(locked.session, "aprilo con essa"))
+    assert opened.event.kind == "opened"
+    current = opened.session
+    for command in ("lascia chiave di bronzo", "esamina cofano", "chiudilo"):
+        current = step(current, parse_session_command(current, command)).session
+    failed = step(current, parse_session_command(current, "aprilo con essa"))
+    assert failed.event.kind == "not_carried"
+    assert failed.session == current
+    assert "chiave di bronzo" in render(failed)
+    for command in ("prendi chiave di bronzo", "esamina cofano"):
+        current = step(current, parse_session_command(current, command)).session
+    assert step(current, parse_session_command(current, "aprilo con essa")).event.kind == "opened"

@@ -438,3 +438,6 @@ controllo tardivo e rollback completo, più una scena premiata una sola volta.
 
 La lezione 35 include il progetto completo della terrazza: confronto tra
 frasi naturali e n/u/d/s, e prove negative per est, ovest e fuori senza uscita.
+
+La lezione 32 include un copione completo con due chiavi: memoria per ruolo
+dopo successi e fallimenti, e rifiuto di una chiave ricordata ma lasciata.

@@ -301,3 +301,6 @@ rollback tardivo di stato e output, scene e premio non ripetuto.
 
 Didattica: completato il laboratorio della terrazza con movimenti naturali
 e abbreviati, diagnosi distinte e conservazione della posizione dopo errori.
+
+Didattica: soluzione delle due chiavi e dei pronomi per ruolo, con memoria
+preservata dopo chiave errata e controllo di possesso al riuso.
