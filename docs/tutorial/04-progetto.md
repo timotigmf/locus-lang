@@ -156,3 +156,14 @@ il blocco riesce e `nord` viene impedito. Per passare usa di nuovo
 Scrivere soltanto `con` dopo il nome non basta: `blocca porta con` rimane
 un comando non riconosciuto. Il suggerimento non seleziona una chiave e
 non aspetta una risposta abbreviata: ripeti il comando completo.
+
+## Scoprire il contenuto all’apertura
+
+Nel faro, `apri custodia` mostra subito `Contiene: chiave di rame.`.
+Non occorre esaminare nuovamente la custodia per leggere il nome della chiave.
+Usa poi `prendi chiave`: l’apertura non la aggiunge all’inventario.
+Prima di aprire, lo stesso comando di presa resta impossibile.
+
+Sono elencati soltanto i figli diretti visibili: aprire un baule che contiene
+una scatola chiusa mostra la scatola, non gli oggetti al suo interno.
+Un contenitore vuoto mantiene la semplice conferma di apertura.

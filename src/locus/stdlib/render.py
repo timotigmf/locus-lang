@@ -133,6 +133,8 @@ def render(transition: Transition) -> str:
                 "Contiene: " + (", ".join(names[1:]) if len(names) > 1 else "nessun oggetto") + "."
             )
         return "\n".join(lines)
+    if kind == "opened" and len(names) > 1:
+        return f"Hai aperto: {names[0]}.\nContiene: " + ", ".join(names[1:]) + "."
     named = {
         "opened": "Hai aperto",
         "closed": "Hai chiuso",

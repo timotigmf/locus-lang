@@ -439,3 +439,34 @@ def test_lockable_container() -> None:
     state = command(state, "apri scatola con chiave", "opened")
     state = command(state, "chiudi scatola", "closed")
     command(state, "blocca scatola con chiave", "lock_success")
+
+
+def test_opening_announces_only_reachable_direct_contents() -> None:
+    state = session(
+        "La Sala è una stanza. Il baule è un contenitore nella Sala. "
+        "La scatola è un contenitore nel baule. La gemma è una cosa nella scatola. "
+        "La moneta è una cosa nel baule. Il sigillo è una cosa nel baule. "
+        "Il sigillo ha visibile falso."
+    )
+    assert step(state, parse_command("prendi moneta")).event.kind == "not_here"
+    opened = step(state, parse_session_command(state, "apri baule"))
+    assert render(opened) == "Hai aperto: baule.\nContiene: scatola, moneta."
+    assert not opened.session.inventory
+    assert opened.session.pronoun_id == ident(state, "baule")
+    examined = step(opened.session, parse_command("esamina baule"))
+    assert examined.event.entities == opened.event.entities
+    assert step(opened.session, parse_command("prendi gemma")).event.kind == "not_here"
+    assert step(opened.session, parse_command("prendi sigillo")).event.kind == "not_here"
+    nested = step(opened.session, parse_command("apri scatola"))
+    assert render(nested) == "Hai aperto: scatola.\nContiene: gemma."
+    assert step(nested.session, parse_command("prendi gemma")).event.kind == "taken"
+
+
+def test_opening_container_with_only_hidden_contents_keeps_short_confirmation() -> None:
+    state = session(
+        "La Sala è una stanza. Il baule è un contenitore nella Sala. "
+        "La gemma è una cosa nel baule. La gemma ha visibile falso."
+    )
+    opened = step(state, parse_command("apri baule"))
+    assert render(opened) == "Hai aperto: baule."
+    assert opened.event.entities == (ident(state, "baule"),)

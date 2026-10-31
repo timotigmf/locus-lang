@@ -442,3 +442,8 @@ Non consumano turni né cambiano referenti; non avviano un chiarimento.
 L’aiuto standard mostra gli argomenti di presa/rilascio, la destinazione
 di metti e lo strumento di apri/blocca come segnaposto, senza dedurre
 o rivelare le relazioni fra chiavi e serrature.
+
+L’evento opened di un contenitore include, dopo il suo ID, i figli diretti
+raggiungibili nello stato aperto. La resa li elenca come Contiene. Oggetti
+invisibili e contenuti annidati non vengono elencati; porte e contenitori
+senza figli visibili conservano la conferma breve. Nessuna presa automatica.

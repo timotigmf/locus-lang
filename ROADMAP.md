@@ -283,3 +283,6 @@ clitici isolati, con memoria pronominale preservata e tutorial di recupero.
 
 Aiuto giocatore: sintassi completa dei comandi standard con destinazione
 e chiave, verificata su serrature e oggetti nascosti senza rivelare soluzioni.
+
+Interazione con contenitori: l’apertura annuncia il contenuto diretto
+visibile, condividendo i controlli di accessibilità con esamina.

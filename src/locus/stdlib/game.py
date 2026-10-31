@@ -408,6 +408,16 @@ def _key_error(
     return None
 
 
+def _contents(session: Session, entity_id: str) -> tuple[str, ...]:
+    return tuple(
+        edge.source_id
+        for edge in session.world.relations
+        if edge.predicate_id == INSIDE
+        and edge.target_id == entity_id
+        and reachable(session, edge.source_id)
+    )
+
+
 def _opening(session: Session, intent: Intent, entity: Entity) -> Transition:
     if not any(has_type(session.world, entity.type_id, expected) for expected in OPENABLE):
         return Transition(session, Event("not_openable", (entity.id,)))
@@ -431,7 +441,13 @@ def _opening(session: Session, intent: Intent, entity: Entity) -> Transition:
         return Transition(session, Event("locked", (entity.id,)))
     value = "bloccato" if intent.verb == "lock" else "aperto"
     kind: EventKind = "lock_success" if intent.verb == "lock" else "opened"
-    return _changed(_set_state(session, entity.id, value), kind, entity.id)
+    changed = _set_state(session, entity.id, value)
+    children = (
+        _contents(changed, entity.id)
+        if kind == "opened" and has_type(changed.world, entity.type_id, CONTAINER)
+        else ()
+    )
+    return _changed(changed, kind, entity.id, *children)
 
 
 def _board(session: Session, name: str | None, selected_id: str | None = None) -> Transition:
@@ -914,13 +930,7 @@ def _perform(session: Session, intent: Intent) -> Transition:
     if isinstance(entity, Event):
         return Transition(session, entity)
     if intent.verb == "examine":
-        children = tuple(
-            edge.source_id
-            for edge in session.world.relations
-            if edge.predicate_id == INSIDE
-            and edge.target_id == entity.id
-            and reachable(session, edge.source_id)
-        )
+        children = _contents(session, entity.id)
         return Transition(session, Event("examined", (entity.id, *children)))
     if intent.verb in {"open", "close", "lock"}:
         return _opening(session, intent, entity)

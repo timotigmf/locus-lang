@@ -416,3 +416,7 @@ mettila nel cofano oppure bloccalo con chiave.
 L’aiuto in partita espone anche la sintassi completa per contenitori e
 serrature, con segnaposto al posto dei nomi reali: consulta
 [aiuto in partita](../linguaggio/aiuto-in-partita.md).
+
+Aprire un contenitore mostra subito i figli diretti visibili. Per esplorare
+un contenitore annidato occorre esaminarlo o aprirlo; gli oggetti nascosti
+non vengono rivelati e nessun oggetto viene preso automaticamente.
