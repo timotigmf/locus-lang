@@ -432,3 +432,6 @@ dalla semplice chiusura. L’oggetto resta nella posizione iniziale.
 Il laboratorio 38b collega alias di esamina, priorità delle regole, scoperta
 unica e accessibilità di una nota dentro un contenitore chiuso, con sorgente
 copiabile nella lezione 38.
+
+La lezione 37 contiene una soluzione copiabile con attesa personalizzata,
+controllo tardivo e rollback completo, più una scena premiata una sola volta.

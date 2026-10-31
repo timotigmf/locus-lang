@@ -1,0 +1,29 @@
+Titolo: "Aspettare al riparo".
+Autore: "Esempio LOCUS".
+
+La Torre è una stanza.
+Inizia nella Torre.
+La riparo pronto è una proprietà logica.
+La attese è una proprietà numerica.
+
+Azione "preparare" senza oggetti con comando "prepara".
+Regola "preparare il riparo" per preparare nella fase invece:
+    imposta "riparo pronto" di "Torre" a vero;
+    dì "Ti sistemi sotto la tettoia.";
+Fine regola.
+
+Regola "attesa protetta" per attendere nella fase invece:
+    aumenta "attese" di "Torre" di 1;
+    dì "Ascolti la pioggia dal riparo.";
+Fine regola.
+
+Regola "controllare il riparo" per attendere nella fase dopo
+quando "riparo pronto" di "Torre" è falso:
+    fallisci "Prima prepara il riparo.";
+Fine regola.
+
+Scena "pioggia" dal turno 3 al turno 4:
+    Inizio "La pioggia batte sul tetto.".
+    Fine "Il cielo si schiarisce.".
+    Punti 2.
+Fine scena.

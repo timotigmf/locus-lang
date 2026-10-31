@@ -1569,3 +1569,35 @@ def test_seam_lesson_opening_alone_does_not_reveal_hidden_note() -> None:
     failed = step(opened.session, parse_session_command(opened.session, "prendi nota"))
     assert failed.event.kind == "not_here"
     assert failed.session == opened.session
+
+
+@pytest.mark.parametrize("command", ["attendi", "aspetta", "wait", "z"])
+def test_sheltered_wait_lesson_rolls_back_late_failure_and_advances_after_preparation(
+    command: str,
+) -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "37b_attesa_al_riparo.locus")))
+    failed = step(current, parse_session_command(current, command))
+    assert failed.succeeded is False
+    assert failed.session.world == current.world
+    assert failed.session.turn == 1
+    assert render(failed) == "Prima prepara il riparo."
+    current = step(failed.session, parse_session_command(failed.session, "prepara")).session
+    assert current.turn == 2
+    first = step(current, parse_session_command(current, command))
+    assert first.succeeded is True
+    assert "Ascolti la pioggia" in render(first)
+    assert "Il tempo passa." not in render(first)
+    assert first.session.turn == 3
+    assert first.session.active_scene_ids
+    second = step(first.session, parse_session_command(first.session, command))
+    assert second.session.turn == 4
+    assert second.session.score == 2
+    assert not second.session.active_scene_ids
+    third = step(second.session, parse_session_command(second.session, command))
+    assert third.session.score == 2
+    assert third.session.score_log == second.session.score_log
+    tower = next(entity.id for entity in third.session.world.entities if entity.label == "Torre")
+    count = next(
+        prop.id for prop in third.session.world.property_specs if prop.id.endswith("attese")
+    )
+    assert property_value(third.session.world, tower, count) == 3

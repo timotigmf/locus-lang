@@ -459,3 +459,8 @@ contenuto nascosto o nome di chiave viene rivelato da questi messaggi.
 La lezione 38 verifica che gli alias di esamina attivino la stessa regola
 di scoperta una sola volta; la visibilità acquisita non supera il vincolo
 di un contenitore chiuso e guarda senza oggetto non esamina la custodia.
+
+Il laboratorio 37b verifica il rollback dell’attesa sostituita: un fallimento
+nella fase dopo annulla proprietà e output precedenti. Il ciclo temporale
+resta separato: l’azione riconosciuta fallita consuma un turno. Una successiva
+attesa valida conserva gli effetti.

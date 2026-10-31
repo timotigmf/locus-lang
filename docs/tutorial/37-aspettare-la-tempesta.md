@@ -38,3 +38,61 @@ intatto lo stato, secondo il contratto generale delle regole.
 
 Il [riferimento sull'attesa](../linguaggio/attendere.md) descrive alias, rulebook
 e avanzamento delle scene.
+
+## Esercizio risolto: attesa e rollback
+
+Apri `examples/tutorial/37b_attesa_al_riparo.locus` oppure copia:
+
+```locus
+Titolo: "Aspettare al riparo".
+Autore: "Esempio LOCUS".
+
+La Torre è una stanza.
+Inizia nella Torre.
+La riparo pronto è una proprietà logica.
+La attese è una proprietà numerica.
+
+Azione "preparare" senza oggetti con comando "prepara".
+Regola "preparare il riparo" per preparare nella fase invece:
+    imposta "riparo pronto" di "Torre" a vero;
+    dì "Ti sistemi sotto la tettoia.";
+Fine regola.
+
+Regola "attesa protetta" per attendere nella fase invece:
+    aumenta "attese" di "Torre" di 1;
+    dì "Ascolti la pioggia dal riparo.";
+Fine regola.
+
+Regola "controllare il riparo" per attendere nella fase dopo
+quando "riparo pronto" di "Torre" è falso:
+    fallisci "Prima prepara il riparo.";
+Fine regola.
+
+Scena "pioggia" dal turno 3 al turno 4:
+    Inizio "La pioggia batte sul tetto.".
+    Fine "Il cielo si schiarisce.".
+    Punti 2.
+Fine scena.
+```
+
+| Comando | Risultato |
+| --- | --- |
+| `attendi` | «Prima prepara il riparo.»; turno 1; il contatore resta zero |
+| `prepara` | Riparo pronto, turno 2 |
+| `z` | Risposta personalizzata, turno 3, inizio della pioggia |
+| `wait` | Seconda attesa riuscita, turno 4, fine della pioggia e 2 punti |
+| `punteggio` | 2 punti, senza avanzare il tempo |
+
+La fase `invece` sostituisce «Il tempo passa.» con una risposta propria.
+La regola successiva può ancora far fallire l’intera azione: il primo tentativo
+annulla sia l’incremento di attese sia il testo «Ascolti la pioggia dal riparo.».
+Resta visibile soltanto il motivo del fallimento.
+
+Dopo `prepara`, il controllo non fallisce più: ogni attesa incrementa il
+contatore una sola volta. Prova altri `aspetta`: il punteggio resta 2 perché
+la scena conclusa non assegna nuovamente il premio. Il contatore attese è una
+proprietà del mondo; non è un nuovo comando del giocatore.
+
+Il rollback riguarda gli effetti delle regole. Un’azione riconosciuta che
+fallisce può comunque consumare un turno: qui la prima attesa porta il tempo
+a 1. Il ciclo delle scene avviene dopo la transazione delle regole.
