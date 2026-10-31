@@ -44,3 +44,10 @@ Durante un chiarimento l'aiuto aggiunge le candidate numerate e ricorda
 `annulla`. Durante un dialogo aggiunge le scelte del nodo corrente e ricorda
 `basta`. Non ripete la battuta né effettua una scelta; l'ordine delle opzioni
 resta identico. Senza domande aperte queste sezioni non vengono mostrate.
+
+## Sintassi di contenitori e serrature
+
+L’aiuto mostra `prendi NOME`, `lascia NOME`, `metti OGGETTO in CONTENITORE`,
+`apri NOME`, `chiudi NOME`, `apri OGGETTO con CHIAVE` e
+`blocca OGGETTO con CHIAVE`. I segnaposto non indicano oggetti reali:
+il catalogo non rivela una chiave nascosta o la soluzione di una serratura.

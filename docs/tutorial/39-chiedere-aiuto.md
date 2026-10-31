@@ -59,3 +59,19 @@ Nell'esempio della lezione 16, scrivi `parla con guardiana`, `1`, `?`: l'aiuto
 mostra `1. Torna alle domande`, la scelta del nodo attuale. Non mostra le tre
 opzioni iniziali e non ripete la battuta della tempesta. Usa `basta` per
 terminare la conversazione: il successivo aiuto non mostra più scelte attive.
+
+## Trovare la sintassi per una serratura
+
+Apri l’esempio `examples/tutorial/04b_due_chiavi.locus` della lezione 4.
+Scrivi `aiuto` prima di interagire con il portello: la sezione
+«apertura e serrature» mostra `apri OGGETTO con CHIAVE` e
+`blocca OGGETTO con CHIAVE`. Sono modelli di comando, non la soluzione.
+
+Prova `prendi chiave di ferro`, poi `apri porta con chiave di ferro`:
+la sintassi è corretta ma la chiave non è adatta. Scrivi di nuovo `aiuto`;
+non compare il nome della chiave corretta. Completa la prova con
+`prendi chiave di rame` e `apri porta con chiave di rame`.
+
+Per riporre una chiave, l’altra sezione mostra
+`metti OGGETTO in CONTENITORE`: serve un contenitore presente nella storia.
+L’aiuto non crea oggetti né rende raggiungibili quelli nascosti.

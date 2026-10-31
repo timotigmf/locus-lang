@@ -21,8 +21,11 @@ def _help(transition: Transition) -> str:
     world = transition.session.world
     lines = [
         "Comandi principali:",
-        "- luogo e oggetti: guarda, guarda NOME, esamina NOME (x), prendi, lascia, "
-        "metti, apri, chiudi, blocca, inventario (i);",
+        "- luogo e oggetti: guarda (l), guarda NOME, esamina NOME (x), "
+        "prendi NOME, lascia NOME, inventario (i);",
+        "- contenitori: metti OGGETTO in CONTENITORE;",
+        "- apertura e serrature: apri NOME, chiudi NOME, "
+        "apri OGGETTO con CHIAVE, blocca OGGETTO con CHIAVE;",
         "- movimento: nord/sud/est/ovest (n/s/e/o), diagonali, su/giù, dentro/fuori, indietro;",
         "- sessione: attendi (z), ripeti (g), aiuto (?), esci (q).",
     ]

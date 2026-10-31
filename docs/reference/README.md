@@ -412,3 +412,7 @@ La chiave deve essere trasportata e compatibile; non viene scelta automaticament
 Anche mettilo/mettila e bloccalo/bloccala senza complemento mostrano
 il suggerimento specifico. Completa il comando mantenendo il pronome:
 mettila nel cofano oppure bloccalo con chiave.
+
+L’aiuto in partita espone anche la sintassi completa per contenitori e
+serrature, con segnaposto al posto dei nomi reali: consulta
+[aiuto in partita](../linguaggio/aiuto-in-partita.md).

@@ -1425,3 +1425,42 @@ def test_incomplete_clitics_preserve_referents_for_correction(put: str, lock: st
     locked = step(failed.session, parse_session_command(failed.session, lock + " con chiave"))
     assert locked.event.kind == "lock_success"
     assert locked.session.turn == current.turn + 1
+
+
+@pytest.mark.parametrize("command", ["aiuto", "comandi", "help", "?"])
+def test_help_explains_key_syntax_without_revealing_the_solution(command: str) -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "04b_due_chiavi.locus")))
+    helped = step(current, parse_session_command(current, command))
+    assert helped.session is current
+    text = render(helped)
+    for form in (
+        "prendi NOME",
+        "lascia NOME",
+        "metti OGGETTO in CONTENITORE",
+        "apri OGGETTO con CHIAVE",
+        "blocca OGGETTO con CHIAVE",
+        "guarda (l)",
+    ):
+        assert form in text
+    for secret in ("rame", "ferro", "portello"):
+        assert secret not in text
+    current = step(current, parse_session_command(current, "prendi chiave di ferro")).session
+    failed = step(current, parse_session_command(current, "apri porta con chiave di ferro"))
+    assert failed.event.kind == "wrong_key"
+    assert failed.session == current
+    helped = step(current, parse_session_command(current, command))
+    assert helped.session is current
+    assert render(helped) == text
+    current = step(current, parse_session_command(current, "prendi chiave di rame")).session
+    assert (
+        step(current, parse_session_command(current, "apri porta con chiave di rame")).event.kind
+        == "opened"
+    )
+
+
+def test_help_does_not_list_key_hidden_in_closed_container() -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "studio_faro.locus")))
+    helped = step(current, parse_session_command(current, "aiuto"))
+    assert helped.session is current
+    assert "rame" not in render(helped)
+    assert step(current, parse_session_command(current, "prendi chiave")).event.kind == "not_here"

@@ -438,3 +438,7 @@ I complementi incompleti dopo con restano comandi non riconosciuti.
 I clitici isolati mettilo/mettila e bloccalo/bloccala producono rispettivamente
 missing_destination e missing_key prima della risoluzione pronominale.
 Non consumano turni né cambiano referenti; non avviano un chiarimento.
+
+L’aiuto standard mostra gli argomenti di presa/rilascio, la destinazione
+di metti e lo strumento di apri/blocca come segnaposto, senza dedurre
+o rivelare le relazioni fra chiavi e serrature.
