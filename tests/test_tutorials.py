@@ -1825,3 +1825,35 @@ def test_lantern_boxes_lesson_does_not_infer_a_container(pronoun: str) -> None:
     assert failed.event.kind == "not_container"
     assert "lanterna di vetro" in render(failed)
     assert failed.session == current
+
+
+@pytest.mark.parametrize("clarify", [False, True])
+def test_unique_alias_lesson_selects_same_key_directly_or_after_question(clarify: bool) -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "26b_sinonimo_univoco.locus")))
+    if clarify:
+        asked = step(current, parse_session_command(current, "prendi chiave"))
+        assert asked.event.kind == "ambiguous"
+        current = asked.session
+    taken = step(
+        current, parse_session_command(current, "vecchia" if clarify else "prendi vecchia")
+    )
+    assert taken.event.kind == "taken"
+    assert render(taken) == "Hai preso: chiave di rame."
+
+
+def test_unique_alias_lesson_reports_conflicting_declaration_and_accepts_correction() -> None:
+    source = (TUTORIAL / "26b_sinonimo_univoco.locus").read_text(encoding="utf-8")
+    with pytest.raises(CompileError) as error:
+        compile_story(source + 'Comprendi "vecchia" come "chiave di ferro".')
+    assert error.value.code == "E409"
+    assert error.value.span.line == len(source.splitlines()) + 1
+    assert error.value.span.column == 1
+    corrected = compile_story(source + 'Comprendi "nuova" come "chiave di ferro".')
+    current = start(instantiate(corrected))
+    asked = step(current, parse_session_command(current, "prendi chiave"))
+    assert asked.event.kind == "ambiguous"
+    taken = step(asked.session, parse_session_command(asked.session, "nuova"))
+    assert render(taken) == "Hai preso: chiave di ferro."
+    old = step(taken.session, parse_session_command(taken.session, "prendi vecchia"))
+    assert render(old) == "Hai preso: chiave di rame."
+    assert len(old.session.inventory) == 2

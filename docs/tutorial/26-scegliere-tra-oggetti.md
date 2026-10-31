@@ -72,3 +72,43 @@ oppure `scegli "chiave di ferro"`. L'articolo non cambia l'oggetto scelto.
 `la chiave` resta ambiguo e `la` da solo non identifica nulla: in entrambi
 i casi puoi correggere la risposta senza ricominciare il comando.
 Se un articolo appartiene al nome stesso, racchiudi il nome fra virgolette.
+
+## Esercizio risolto: sinonimo univoco e conflitto autore
+
+Apri `examples/tutorial/26b_sinonimo_univoco.locus` oppure copia:
+
+```locus
+Titolo: "La chiave vecchia".
+Autore: "Esempio LOCUS".
+
+La Sala è una stanza.
+Inizia nella Sala.
+La chiave di rame è una chiave nella Sala.
+La chiave di ferro è una chiave nella Sala.
+Comprendi "vecchia" come "chiave di rame".
+```
+
+Scrivi `prendi chiave`, poi `vecchia`: viene presa la chiave di rame.
+In una partita nuova, `prendi vecchia` la seleziona direttamente, senza
+domanda. Il sinonimo esatto identifica una sola entità, mentre il frammento
+`chiave` corrisponde a entrambe.
+
+**Prova negativa di compilazione.** Aggiungi in fondo al sorgente questa riga:
+
+```text
+Comprendi "vecchia" come "chiave di ferro".
+```
+
+La compilazione produce **E409** sulla nuova dichiarazione: lo stesso sinonimo
+è già assegnato alla chiave di rame. È un errore dell’autore, distinto dalla
+domanda lecita posta al giocatore quando usa un nome parziale.
+
+**Correzione.** Cambia soltanto il secondo sinonimo in `nuova`:
+
+```text
+Comprendi "nuova" come "chiave di ferro".
+```
+
+Ricompila e riavvia. `prendi chiave`, `nuova` seleziona ora il ferro;
+`prendi vecchia` continua a selezionare il rame. Non rinominare gli oggetti:
+i sinonimi ampliano il vocabolario senza alterarne l’identità.

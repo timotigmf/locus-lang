@@ -488,3 +488,7 @@ soltanto l’oggetto diretto. Il riuso non elimina il controllo di possesso.
 Il laboratorio 27b verifica il ripiego del pronome indiretto sul diretto
 soltanto in assenza di un secondo referente; dopo un deposito, l’esame di
 un altro contenitore non sostituisce la destinazione ricordata.
+
+La lezione 26 verifica la distinzione fra nome parziale ambiguo a runtime
+e sinonimo autore in conflitto (E409 sulla seconda dichiarazione).
+La correzione del sinonimo conserva identità e risoluzione delle due entità.

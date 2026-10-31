@@ -316,3 +316,6 @@ cambio dei ruoli e recupero dopo esame di un oggetto non trasportato.
 
 Correzione didattica: precisata la precedenza del secondo referente nella
 lezione 27 e aggiunto laboratorio verificato del primo deposito e dei successivi.
+
+Didattica: soluzione del sinonimo vecchia nella lezione 26, con diagnostica
+autore E409 verificata sulla riga del conflitto e ripresa dopo correzione.

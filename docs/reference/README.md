@@ -453,3 +453,6 @@ dall’esame, oltre agli errori distinti di oggetto e destinazione mancanti.
 
 La lezione 27 chiarisce con due scatole quando essa/it usa il referente
 diretto e quando prevale la destinazione ricordata da un deposito precedente.
+
+Il laboratorio 26b mostra un sinonimo univoco, il conflitto E409 localizzato
+e la correzione con due alias distinti, con prove dirette e tramite chiarimento.
