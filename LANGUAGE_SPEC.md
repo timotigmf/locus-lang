@@ -464,3 +464,7 @@ Il laboratorio 37b verifica il rollback dell’attesa sostituita: un fallimento
 nella fase dopo annulla proprietà e output precedenti. Il ciclo temporale
 resta separato: l’azione riconosciuta fallita consuma un turno. Una successiva
 attesa valida conserva gli effetti.
+
+Il laboratorio 35b verifica l’equivalenza di movimento naturale e abbreviato
+su collegamenti cardinali e verticali, distinguendo direzione mancante,
+complemento non direzionale e direzione valida priva di uscita.

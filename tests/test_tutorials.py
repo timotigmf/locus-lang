@@ -1601,3 +1601,50 @@ def test_sheltered_wait_lesson_rolls_back_late_failure_and_advances_after_prepar
         prop.id for prop in third.session.world.property_specs if prop.id.endswith("attese")
     )
     assert property_value(third.session.world, tower, count) == 3
+
+
+@pytest.mark.parametrize(
+    "commands",
+    [
+        ("vai a nord", "muoviti in alto", "procedi giù", "cammina verso sud"),
+        ("n", "u", "d", "s"),
+    ],
+)
+def test_terrace_lesson_natural_and_short_commands_follow_identical_route(
+    commands: tuple[str, ...],
+) -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "35b_terrazza_della_lanterna.locus")))
+    ids = {entity.label: entity.id for entity in current.world.entities}
+    for command, room in zip(
+        commands, ("Lanterna", "Terrazza", "Lanterna", "Banchina"), strict=True
+    ):
+        moved = step(current, parse_session_command(current, command))
+        assert moved.session.room_id == ids[room]
+        assert moved.session.previous_room_id == current.room_id
+        current = moved.session
+
+
+@pytest.mark.parametrize(
+    "command,event",
+    [
+        ("vai", "missing_direction"),
+        ("vai alla terrazza", "invalid_direction"),
+        ("e", "no_exit"),
+        ("o", "no_exit"),
+        ("w", "no_exit"),
+        ("vai a est", "no_exit"),
+        ("dirigiti all'esterno", "no_exit"),
+    ],
+)
+def test_terrace_lesson_distinguishes_invalid_direction_and_absent_exit(
+    command: str, event: str
+) -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "35b_terrazza_della_lanterna.locus")))
+    for movement in ("n", "u"):
+        current = step(current, parse_session_command(current, movement)).session
+    failed = step(current, parse_session_command(current, command))
+    assert failed.event.kind == event
+    assert failed.session == current
+    assert "Comando non riconosciuto" not in render(failed)
+    returned = step(failed.session, parse_session_command(failed.session, "procedi giù"))
+    assert returned.session.room_id == current.previous_room_id

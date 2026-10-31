@@ -39,3 +39,48 @@ c'è alcun passaggio.
 
 Il [riferimento sui comandi di movimento](../linguaggio/comandi-movimento.md)
 elenca verbi, preposizioni, correzioni e limiti.
+
+## Esercizio risolto: la terrazza sopra la lanterna
+
+Apri `examples/tutorial/35b_terrazza_della_lanterna.locus` oppure copia:
+
+```locus
+Titolo: "La terrazza sopra la lanterna".
+Autore: "Esempio LOCUS".
+
+La Banchina è una stanza.
+La Lanterna è una stanza.
+La Terrazza è una stanza.
+La Lanterna è a nord della Banchina.
+La Terrazza sovrasta la Lanterna.
+Inizia nella Banchina.
+
+La Banchina ha descrizione "A nord si trova la lanterna.".
+La Lanterna ha descrizione "La banchina è a sud; una scala sale alla terrazza.".
+La Terrazza ha descrizione "La scala scende alla lanterna. Il parapetto impedisce altre uscite.".
+```
+
+| Comando | Luogo o risposta |
+| --- | --- |
+| `vai a nord` | Lanterna |
+| `muoviti in alto` | Terrazza |
+| `e` | Nessun passaggio; resti sulla Terrazza |
+| `o` | Nessun passaggio; resti sulla Terrazza |
+| `dirigiti all'esterno` | Direzione riconosciuta, uscita assente |
+| `procedi giù` | Lanterna |
+| `cammina verso sud` | Banchina |
+
+`sovrasta` crea un collegamento verticale percorribile in entrambi i sensi.
+Il testo delle descrizioni spiega il percorso, ma sono le dichiarazioni di
+relazione a renderlo utilizzabile. La frase sul parapetto non crea da sola
+un vincolo: le altre uscite mancano perché non sono state dichiarate.
+
+**Tre errori diversi.** `vai` richiede una direzione; `vai alla terrazza`
+non è una direzione ammessa; `vai a est` è una frase valida, ma qui non esiste
+un passaggio a est. Nessuno dei tre errori sposta il giocatore. I nomi di stanze
+non attivano una ricerca automatica del percorso.
+
+**Confronto con le abbreviazioni.** Riparti e usa `n`, `u`, `d`, `s`:
+devi attraversare gli stessi luoghi. La forma inglese `w` e quella italiana
+`o` indicano entrambe ovest. Non vengono create stanze per completare una
+direzione senza uscita.

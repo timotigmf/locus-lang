@@ -298,3 +298,6 @@ con alias equivalenti, priorità e accessibilità verificati.
 
 Didattica: laboratorio dell’attesa al riparo, con sostituzione della risposta,
 rollback tardivo di stato e output, scene e premio non ripetuto.
+
+Didattica: completato il laboratorio della terrazza con movimenti naturali
+e abbreviati, diagnosi distinte e conservazione della posizione dopo errori.

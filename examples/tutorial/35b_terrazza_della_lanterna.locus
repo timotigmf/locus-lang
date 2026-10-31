@@ -1,0 +1,13 @@
+Titolo: "La terrazza sopra la lanterna".
+Autore: "Esempio LOCUS".
+
+La Banchina è una stanza.
+La Lanterna è una stanza.
+La Terrazza è una stanza.
+La Lanterna è a nord della Banchina.
+La Terrazza sovrasta la Lanterna.
+Inizia nella Banchina.
+
+La Banchina ha descrizione "A nord si trova la lanterna.".
+La Lanterna ha descrizione "La banchina è a sud; una scala sale alla terrazza.".
+La Terrazza ha descrizione "La scala scende alla lanterna. Il parapetto impedisce altre uscite.".
