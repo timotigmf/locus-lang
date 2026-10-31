@@ -319,3 +319,6 @@ lezione 27 e aggiunto laboratorio verificato del primo deposito e dei successivi
 
 Didattica: soluzione del sinonimo vecchia nella lezione 26, con diagnostica
 autore E409 verificata sulla riga del conflitto e ripresa dopo correzione.
+
+Didattica: soluzione della porta interna nella lezione 25 e precisazione
+dell’invariante che impedisce di lasciare una porta senza collegamento.

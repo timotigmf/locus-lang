@@ -456,3 +456,6 @@ diretto e quando prevale la destinazione ricordata da un deposito precedente.
 
 Il laboratorio 26b mostra un sinonimo univoco, il conflitto E409 localizzato
 e la correzione con due alias distinti, con prove dirette e tramite chiarimento.
+
+Il laboratorio 25b combina dentro/fuori, una porta condivisa e il sinonimo
+porta; distingue inoltre un passaggio aperto dalla raggiungibilità a distanza.

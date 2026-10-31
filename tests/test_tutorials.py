@@ -1857,3 +1857,37 @@ def test_unique_alias_lesson_reports_conflicting_declaration_and_accepts_correct
     old = step(taken.session, parse_session_command(taken.session, "prendi vecchia"))
     assert render(old) == "Hai preso: chiave di rame."
     assert len(old.session.inventory) == 2
+
+
+@pytest.mark.parametrize(
+    "inside,outside", [("dentro", "fuori"), ("in", "out"), ("inside", "outside")]
+)
+def test_internal_door_lesson_shares_state_without_remote_object_access(
+    inside: str, outside: str
+) -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "25b_porta_interna.locus")))
+    initial_room = current.room_id
+    blocked = step(current, parse_session_command(current, inside))
+    assert blocked.event.kind == "door_closed"
+    assert blocked.session == current
+    assert "portello" in render(blocked)
+    current = step(current, parse_session_command(current, "apri porta")).session
+    remote = step(current, parse_session_command(current, "x lente"))
+    assert remote.event.kind == "not_here"
+    assert remote.session == current
+    current = step(current, parse_session_command(current, inside)).session
+    assert current.room_id != initial_room
+    examined = step(current, parse_session_command(current, "x lente"))
+    assert "Gli anelli di vetro" in render(examined)
+    current = step(
+        examined.session, parse_session_command(examined.session, "chiudi porta")
+    ).session
+    blocked = step(current, parse_session_command(current, outside))
+    assert blocked.event.kind == "door_closed"
+    assert blocked.session == current
+    current = step(current, parse_session_command(current, "apri portello")).session
+    current = step(current, parse_session_command(current, outside)).session
+    assert current.room_id == initial_room
+    failed = step(current, parse_session_command(current, outside))
+    assert failed.event.kind == "no_exit"
+    assert failed.session == current

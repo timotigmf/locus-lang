@@ -492,3 +492,7 @@ un altro contenitore non sostituisce la destinazione ricordata.
 La lezione 26 verifica la distinzione fra nome parziale ambiguo a runtime
 e sinonimo autore in conflitto (E409 sulla seconda dichiarazione).
 La correzione del sinonimo conserva identità e risoluzione delle due entità.
+
+La lezione 25 verifica che una porta sul collegamento dentro/fuori condivida
+lo stato da entrambi i lati, senza rendere raggiungibili oggetti nell’altra
+stanza. Il collegamento richiesto dagli estremi della porta resta un invariante.
