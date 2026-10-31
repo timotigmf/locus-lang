@@ -428,3 +428,7 @@ ricorsiva del contenuto. Esempio: `examples/tutorial/04c_baule_annidato.locus`.
 Se metti fallisce, il messaggio indica quale destinazione non è un
 contenitore oppure richiede apertura; una serratura bloccata viene distinta
 dalla semplice chiusura. L’oggetto resta nella posizione iniziale.
+
+Il laboratorio 38b collega alias di esamina, priorità delle regole, scoperta
+unica e accessibilità di una nota dentro un contenitore chiuso, con sorgente
+copiabile nella lezione 38.

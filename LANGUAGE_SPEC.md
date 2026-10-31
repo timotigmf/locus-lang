@@ -455,3 +455,7 @@ aperti e visibili. L’annuncio di apertura resta limitato ai figli diretti.
 Il rifiuto container_closed nomina la destinazione e distingue stato chiuso
 da bloccato. not_container nomina la destinazione incompatibile. Nessun
 contenuto nascosto o nome di chiave viene rivelato da questi messaggi.
+
+La lezione 38 verifica che gli alias di esamina attivino la stessa regola
+di scoperta una sola volta; la visibilità acquisita non supera il vincolo
+di un contenitore chiuso e guarda senza oggetto non esamina la custodia.

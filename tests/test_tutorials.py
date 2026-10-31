@@ -1534,3 +1534,38 @@ def test_deposit_lesson_distinguishes_locked_closed_and_invalid_destinations() -
     assert "Contiene: gemma." in render(
         step(deposited.session, parse_session_command(deposited.session, "esamina cofano"))
     )
+
+
+@pytest.mark.parametrize(
+    "command",
+    ["x custodia", "guarda custodia", "osserva custodia", "ispeziona custodia", "look at custodia"],
+)
+def test_seam_lesson_aliases_reveal_once_without_bypassing_closed_container(command: str) -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "38b_cucitura_custodia.locus")))
+    looked = step(current, parse_session_command(current, "guarda"))
+    assert "La cucitura indica" not in render(looked)
+    assert "nota piegata" not in render(looked)
+    first = step(looked.session, parse_session_command(looked.session, command))
+    assert "La cucitura indica" in render(first)
+    assert "Hai già individuato" not in render(first)
+    blocked = step(first.session, parse_session_command(first.session, "prendi nota"))
+    assert blocked.session == first.session
+    assert blocked.event.kind == "not_here"
+    repeated = step(first.session, parse_session_command(first.session, "guarda custodia"))
+    assert "Hai già individuato" in render(repeated)
+    assert "La cucitura indica" not in render(repeated)
+    opened = step(repeated.session, parse_session_command(repeated.session, "apri custodia"))
+    assert "Contiene: nota piegata." in render(opened)
+    taken = step(opened.session, parse_session_command(opened.session, "prendi nota"))
+    assert taken.event.kind == "taken"
+    read = step(taken.session, parse_session_command(taken.session, "x nota"))
+    assert "scaffale numero tre" in render(read)
+
+
+def test_seam_lesson_opening_alone_does_not_reveal_hidden_note() -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "38b_cucitura_custodia.locus")))
+    opened = step(current, parse_session_command(current, "apri custodia"))
+    assert "nota" not in render(opened)
+    failed = step(opened.session, parse_session_command(opened.session, "prendi nota"))
+    assert failed.event.kind == "not_here"
+    assert failed.session == opened.session

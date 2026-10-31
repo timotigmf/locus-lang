@@ -1,0 +1,23 @@
+Titolo: "La cucitura della custodia".
+Autore: "Esempio LOCUS".
+
+La Archivio è una stanza.
+Inizia nella Archivio.
+La custodia è un contenitore nella Archivio.
+La custodia ha descrizione "Cuoio scuro, cucito con filo rosso.".
+La nota piegata è una cosa nella custodia.
+La nota piegata ha descrizione "Il passaggio si trova dietro lo scaffale numero tre.".
+La nota piegata ha visibile falso.
+La scoperta è una proprietà logica.
+
+Regola "cucitura già notata" per esaminare "custodia" nella fase dopo priorità 10
+quando "scoperta" di "custodia" è vero:
+    dì "Hai già individuato la tasca interna.";
+Fine regola.
+
+Regola "scoprire la tasca" per esaminare "custodia" nella fase dopo
+quando "scoperta" di "custodia" è falso:
+    imposta "visibile" di "nota piegata" a vero;
+    imposta "scoperta" di "custodia" a vero;
+    dì "La cucitura indica una tasca interna: apri la custodia per esplorarla.";
+Fine regola.
