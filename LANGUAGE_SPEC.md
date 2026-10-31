@@ -484,3 +484,7 @@ cassetta ricordata, senza preferenza automatica per gli oggetti trasportati.
 La lezione 29 verifica due referenti indipendenti in metticelo/metticela:
 il cambio di destinazione segue il deposito riuscito e l’esame aggiorna
 soltanto l’oggetto diretto. Il riuso non elimina il controllo di possesso.
+
+Il laboratorio 27b verifica il ripiego del pronome indiretto sul diretto
+soltanto in assenza di un secondo referente; dopo un deposito, l’esame di
+un altro contenitore non sostituisce la destinazione ricordata.

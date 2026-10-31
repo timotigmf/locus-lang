@@ -313,3 +313,6 @@ chiarimento del gettone e rifiuti di destinazione assente o duplicata.
 
 Didattica: completata la soluzione dei clitici doppi con due scatole,
 cambio dei ruoli e recupero dopo esame di un oggetto non trasportato.
+
+Correzione didattica: precisata la precedenza del secondo referente nella
+lezione 27 e aggiunto laboratorio verificato del primo deposito e dei successivi.

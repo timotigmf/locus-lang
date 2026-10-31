@@ -450,3 +450,6 @@ cambio di destinazione e chiarimento del nome parziale in mettici.
 
 La lezione 29 include due scatole e una prova sul referente cambiato
 dall’esame, oltre agli errori distinti di oggetto e destinazione mancanti.
+
+La lezione 27 chiarisce con due scatole quando essa/it usa il referente
+diretto e quando prevale la destinazione ricordata da un deposito precedente.

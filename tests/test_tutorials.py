@@ -1795,3 +1795,33 @@ def test_double_clitic_lesson_distinguishes_missing_roles(command: str) -> None:
     failed = step(current, parse_session_command(current, command))
     assert failed.event.kind == "no_indirect_referent"
     assert failed.session == current
+
+
+@pytest.mark.parametrize("pronoun", ["essa", "it"])
+def test_lantern_boxes_lesson_distinguishes_fallback_and_remembered_destination(
+    pronoun: str,
+) -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "27b_lanterna_e_scatole.locus")))
+    ids = {entity.label: entity.id for entity in current.world.entities}
+    for examined in ("scatola rossa", "scatola blu"):
+        for command in ("prendi lanterna", f"esamina {examined}", "guarda", "inventario", "aiuto"):
+            current = step(current, parse_session_command(current, command)).session
+        assert current.pronoun_id == ids[examined]
+        placed = step(current, parse_session_command(current, f"metti lanterna in {pronoun}"))
+        assert placed.event.kind == "put"
+        assert placed.event.entities[1] == ids["scatola rossa"]
+        current = placed.session
+    current = step(current, parse_session_command(current, "prendi lanterna")).session
+    placed = step(current, parse_session_command(current, "metti lanterna nella scatola blu"))
+    assert placed.event.kind == "put"
+    assert placed.session.indirect_pronoun_id == ids["scatola blu"]
+
+
+@pytest.mark.parametrize("pronoun", ["essa", "it"])
+def test_lantern_boxes_lesson_does_not_infer_a_container(pronoun: str) -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "27b_lanterna_e_scatole.locus")))
+    current = step(current, parse_session_command(current, "prendi lanterna")).session
+    failed = step(current, parse_session_command(current, f"metti lanterna in {pronoun}"))
+    assert failed.event.kind == "not_container"
+    assert "lanterna di vetro" in render(failed)
+    assert failed.session == current
