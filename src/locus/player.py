@@ -588,6 +588,8 @@ def parse_command(
         direct = _noun(rest)
     if action == "put" and direct and not indirect:
         return Intent("missing_destination")
+    if action == "lock" and direct and not indirect:
+        return Intent("missing_key")
     if not direct or (action in {"put", "lock"} and not indirect):
         return Intent("unknown")
     return Intent(action, direct, indirect)

@@ -429,3 +429,8 @@ ricorda di specificare la chiave nel comando, senza rivelare la chiave corretta.
 
 I messaggi not_carried e wrong_key indicano il nome dell’oggetto selezionato;
 non rivelano la chiave corretta né cambiano i controlli di accessibilità.
+
+Il comando standard `blocca OGGETTO` senza strumento produce missing_key,
+con sintassi correttiva e senza consumo di turno o modifica della sessione.
+Non sceglie una chiave automaticamente e non avvia un chiarimento.
+I complementi incompleti dopo con restano comandi non riconosciuti.

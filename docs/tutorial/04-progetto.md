@@ -143,3 +143,16 @@ La chiave di rame apre il portello.
 I messaggi distinguono oggetto non trasportato e chiave incompatibile, indicando
 il nome usato. Non rivelano quale altra chiave apra la serratura. Se le chiavi
 sono entrambe raggiungibili, scrivere solo `chiave` può richiedere un chiarimento.
+
+## Richiudere e bloccare il portello
+
+Nel laboratorio delle due chiavi, dopo l’apertura e prima di andare a nord,
+esegui `chiudi porta`, poi `blocca porta`. LOCUS indica come completare il
+comando: `blocca OGGETTO con CHIAVE`. Il tentativo non consuma un turno e
+non cambia lo stato della serratura. Ripeti con `blocca porta con chiave di rame`:
+il blocco riesce e `nord` viene impedito. Per passare usa di nuovo
+`apri porta con chiave di rame`.
+
+Scrivere soltanto `con` dopo il nome non basta: `blocca porta con` rimane
+un comando non riconosciuto. Il suggerimento non seleziona una chiave e
+non aspetta una risposta abbreviata: ripeti il comando completo.

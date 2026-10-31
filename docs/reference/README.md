@@ -404,3 +404,7 @@ le relazioni delle chiavi, evitando di rivelare soluzioni ancora nascoste.
 Il laboratorio 04b distingue chiave raggiungibile ma non trasportata, chiave
 incompatibile e chiarimento del secondo argomento; la ripresa con rame apre
 il portello. I messaggi usano soltanto gli ID già presenti negli eventi.
+
+Per bloccare una serratura, indica lo strumento: `blocca porta con chiave`.
+`blocca porta` (anche `lock porta`) suggerisce la sintassi senza consumare un turno.
+La chiave deve essere trasportata e compatibile; non viene scelta automaticamente.

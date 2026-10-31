@@ -1369,3 +1369,31 @@ def test_two_keys_lesson_distinguishes_carrying_compatibility_and_clarification(
         step(selected.session, parse_session_command(selected.session, "nord")).session.room_id
         != current.room_id
     )
+
+
+@pytest.mark.parametrize("command", ["blocca porta", "lock la porta"])
+def test_missing_lock_key_explains_syntax_and_preserves_session(command: str) -> None:
+    source = (TUTORIAL / "04b_due_chiavi.locus").read_text(encoding="utf-8")
+    source += '\nScena "attesa" dal turno 4 al turno 5: Inizio "Inizio". Fine "Fine". Fine scena.'
+    current = start(instantiate(compile_story(source)))
+    for text in ("prendi chiave di rame", "apri porta con chiave di rame", "chiudi porta"):
+        current = step(current, parse_session_command(current, text)).session
+    failed = step(current, parse_session_command(current, command))
+    assert failed.event.kind == "missing_key"
+    assert render(failed) == "Indica la chiave per bloccare: blocca OGGETTO con CHIAVE."
+    assert failed.session == current
+    corrected = step(current, parse_session_command(current, "blocca porta con chiave di rame"))
+    assert corrected.event.kind == "lock_success"
+    assert corrected.session.turn == current.turn + 1
+    obstruction = step(corrected.session, parse_session_command(corrected.session, "n"))
+    assert "bloccato" in render(obstruction)
+
+
+@pytest.mark.parametrize(
+    "command", ["blocca porta con", "blocca con chiave", "blocca porta con con chiave"]
+)
+def test_malformed_lock_complements_remain_rejected(command: str) -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "04b_due_chiavi.locus")))
+    intent = parse_session_command(current, command)
+    assert intent.verb == "unknown"
+    assert step(current, intent).session == current

@@ -400,7 +400,7 @@ def test_door_can_guard_directional_passages(relation: str, movement: str) -> No
         ("metti gemma", Intent("missing_destination")),
         ("apri porta con", Intent("unknown")),
         ('prendi "incompleta', Intent("unknown")),
-        ("blocca porta", Intent("unknown")),
+        ("blocca porta", Intent("missing_key")),
     ],
 )
 def test_two_object_parser(text: str, intent: Intent) -> None:

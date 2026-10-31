@@ -77,6 +77,7 @@ EventKind = Literal[
     "unknown",
     "missing_noun",
     "missing_destination",
+    "missing_key",
     "quit",
     "opened",
     "closed",
@@ -811,6 +812,8 @@ def _back_direction(session: Session) -> Intent | Event:
 def _perform(session: Session, intent: Intent) -> Transition:
     if intent.verb == "help":
         return Transition(session, Event("help"))
+    if intent.verb == "missing_key":
+        return Transition(session, Event("missing_key"))
     if intent.verb == "missing_destination":
         return Transition(session, Event("missing_destination"))
     if intent.verb == "missing_direction":
@@ -1391,6 +1394,7 @@ _TURNLESS_EVENTS = {
     "unknown",
     "missing_noun",
     "missing_destination",
+    "missing_key",
     "ambiguous",
     "invalid_clarification",
     "clarification_cancelled",
