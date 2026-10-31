@@ -529,7 +529,11 @@ def parse_command(
             return Intent(*double_clitic)
         clitic = _CLITIC_COMMANDS.get(verb)
         if clitic is not None:
-            return Intent(*clitic) if clitic[0] not in {"put", "lock"} else Intent("unknown")
+            if clitic[0] == "put":
+                return Intent("missing_destination")
+            if clitic[0] == "lock":
+                return Intent("missing_key")
+            return Intent(*clitic)
         standard = _SIMPLE_COMMANDS.get(verb, _ACTION_COMMANDS.get(verb))
         return (
             Intent(standard)

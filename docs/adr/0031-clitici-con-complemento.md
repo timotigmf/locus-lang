@@ -37,3 +37,7 @@ Le nuove forme sono comandi riservati e non possono essere ridefinite da
 un'azione dell'autore. Senza complemento, `mettila` e `bloccala` sono rifiutati.
 Test parser, runtime, CLI, Studio e browser coprono contenitore, porta e chiave.
 
+
+Precisazione successiva: mettilo/mettila e bloccalo/bloccala isolati restano
+incompleti, ma producono missing_destination e missing_key invece di unknown.
+Il suggerimento precede la risoluzione del referente, senza modificare la sessione.

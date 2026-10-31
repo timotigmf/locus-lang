@@ -1397,3 +1397,31 @@ def test_malformed_lock_complements_remain_rejected(command: str) -> None:
     intent = parse_session_command(current, command)
     assert intent.verb == "unknown"
     assert step(current, intent).session == current
+
+
+@pytest.mark.parametrize("put,lock", [("mettilo", "bloccalo"), ("mettila", "bloccala")])
+def test_incomplete_clitics_preserve_referents_for_correction(put: str, lock: str) -> None:
+    source = (TUTORIAL / "28_clitici_con_complemento.locus").read_text(encoding="utf-8")
+    source += '\nScena "attesa" dal turno 1 al turno 20: Inizio "Inizio". Fine "Fine". Fine scena.'
+    current = start(instantiate(compile_story(source)))
+    for command, event in ((put, "missing_destination"), (lock, "missing_key")):
+        failed = step(current, parse_session_command(current, command))
+        assert failed.event.kind == event
+        assert failed.session == current
+    assert parse_session_command(current, put + " nel cofano").verb == "no_referent"
+    assert parse_session_command(current, lock + " con chiave").verb == "no_referent"
+    for command in ("prendi chiave", "esamina cofano", "aprilo con chiave", "prendi gemma"):
+        current = step(current, parse_session_command(current, command)).session
+    failed = step(current, parse_session_command(current, put))
+    assert failed.session == current
+    assert "CONTENITORE" in render(failed)
+    placed = step(failed.session, parse_session_command(failed.session, put + " nel cofano"))
+    assert placed.event.kind == "put"
+    assert placed.session.turn == current.turn + 1
+    current = step(placed.session, parse_session_command(placed.session, "chiudi cofano")).session
+    failed = step(current, parse_session_command(current, lock))
+    assert failed.session == current
+    assert "CHIAVE" in render(failed)
+    locked = step(failed.session, parse_session_command(failed.session, lock + " con chiave"))
+    assert locked.event.kind == "lock_success"
+    assert locked.session.turn == current.turn + 1

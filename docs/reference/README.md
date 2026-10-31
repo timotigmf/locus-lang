@@ -408,3 +408,7 @@ il portello. I messaggi usano soltanto gli ID già presenti negli eventi.
 Per bloccare una serratura, indica lo strumento: `blocca porta con chiave`.
 `blocca porta` (anche `lock porta`) suggerisce la sintassi senza consumare un turno.
 La chiave deve essere trasportata e compatibile; non viene scelta automaticamente.
+
+Anche mettilo/mettila e bloccalo/bloccala senza complemento mostrano
+il suggerimento specifico. Completa il comando mantenendo il pronome:
+mettila nel cofano oppure bloccalo con chiave.

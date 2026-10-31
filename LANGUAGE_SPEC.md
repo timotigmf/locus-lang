@@ -434,3 +434,7 @@ Il comando standard `blocca OGGETTO` senza strumento produce missing_key,
 con sintassi correttiva e senza consumo di turno o modifica della sessione.
 Non sceglie una chiave automaticamente e non avvia un chiarimento.
 I complementi incompleti dopo con restano comandi non riconosciuti.
+
+I clitici isolati mettilo/mettila e bloccalo/bloccala producono rispettivamente
+missing_destination e missing_key prima della risoluzione pronominale.
+Non consumano turni né cambiano referenti; non avviano un chiarimento.

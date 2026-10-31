@@ -277,3 +277,6 @@ adatte, con laboratorio completo a due chiavi e chiarimento dello strumento.
 
 Diagnostica giocatore: blocca senza chiave mostra la sintassi richiesta,
 con sessione invariata e regressioni sui complementi malformati.
+
+Diagnostica giocatore: suggerimenti per complementi mancanti anche nei
+clitici isolati, con memoria pronominale preservata e tutorial di recupero.

@@ -34,7 +34,7 @@ dopo `nel` viene risolto indipendentemente.
 ## Prova negativa
 
 Digita soltanto `mettila` oppure `bloccala`: manca il secondo oggetto e il comando
-viene rifiutato senza modificare la storia. Digita `mettila nella cassa` quando
+mostra un suggerimento sulla destinazione o sulla chiave, senza modificare la storia. Digita `mettila nella cassa` quando
 non esiste una cassa: LOCUS conserva il referente ma segnala che la destinazione
 non è presente.
 
@@ -51,3 +51,29 @@ Nel progetto della lezione prova `prendi chiave`, `esamina cofano`,
 `aprilo colla chiave di bronzo`, `chiudi cofano`, `bloccalo colla chiave`.
 La forma `con la` resta equivalente. Anche `apri cofano colla chiave` è valida.
 `aprilo colla` è incompleto; due complementi con chiave sono rifiutati.
+
+## Correggere un complemento mancante
+
+Nell’esempio della lezione, esegui:
+
+```text
+prendi chiave
+esamina cofano
+aprilo con chiave
+prendi gemma
+mettila
+mettila nel cofano
+chiudi cofano
+bloccalo
+bloccalo con chiave
+```
+
+`mettila` indica la destinazione mancante; `bloccalo` indica la chiave
+mancante. Le forme maschili e femminili funzionano allo stesso modo.
+I due tentativi incompleti non consumano turni e conservano il referente:
+puoi correggerli usando ancora il pronome. Devi ripetere il comando completo,
+non rispondere con il solo nome del complemento.
+
+Anche a inizio partita il comando incompleto mostra prima il suggerimento
+sul complemento. Se aggiungi il complemento senza avere ancora un referente,
+LOCUS segnala invece che manca un oggetto a cui riferire il pronome.
