@@ -107,6 +107,13 @@ def render(transition: Transition) -> str:
         return f"Devi prima prendere: {names[0]}."
     if kind == "wrong_key":
         return f"La chiave indicata non è adatta: {names[0]}."
+    if kind == "not_container":
+        return f"La destinazione non è un contenitore: {names[0]}."
+    if kind == "container_closed":
+        state = property_value(world, transition.event.entities[0], STATE, "chiuso")
+        if state == "bloccato":
+            return f"Il contenitore è bloccato: {names[0]}. Aprilo con la chiave adatta."
+        return f"Il contenitore è chiuso: {names[0]}. Aprilo prima di riporre l’oggetto."
     if kind == "locked":
         return (
             f"È bloccato: {names[0]}. Indica anche la chiave nel comando: "
@@ -281,8 +288,6 @@ def render(transition: Transition) -> str:
         "already_closed": "È già chiuso.",
         "already_locked": "È già bloccato.",
         "not_openable": "Questo elemento non si apre e non si chiude.",
-        "container_closed": "Il contenitore è chiuso.",
-        "not_container": "La destinazione non è un contenitore.",
         "cycle": "Un contenitore non può contenere sé stesso, nemmeno indirettamente.",
         "must_close": "Devi chiuderlo prima di bloccarlo.",
         "wrong_kind": "Questo comando non si applica a quell'elemento.",

@@ -451,3 +451,7 @@ senza figli visibili conservano la conferma breve. Nessuna presa automatica.
 Il laboratorio 4c verifica contenimento annidato e trasportato: la presa
 del contenitore conserva i figli; l’accessibilità richiede tutti gli antenati
 aperti e visibili. L’annuncio di apertura resta limitato ai figli diretti.
+
+Il rifiuto container_closed nomina la destinazione e distingue stato chiuso
+da bloccato. not_container nomina la destinazione incompatibile. Nessun
+contenuto nascosto o nome di chiave viene rivelato da questi messaggi.

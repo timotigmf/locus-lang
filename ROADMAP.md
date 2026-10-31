@@ -289,3 +289,6 @@ visibile, condividendo i controlli di accessibilità con esamina.
 
 Didattica dei contenitori: laboratorio completo del baule annidato e
 trasportato, con regressioni su antenati chiusi, visibilità e contenuto diretto.
+
+Diagnostica di deposito: destinazione nominata, distinzione chiuso/bloccato
+e suggerimento di recupero senza mutazioni o rivelazione della chiave.

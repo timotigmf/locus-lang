@@ -424,3 +424,7 @@ non vengono rivelati e nessun oggetto viene preso automaticamente.
 La lezione 4 include il laboratorio del baule annidato: contenitori trasportati,
 figli nascosti, differenza fra apertura e presa e variante senza espansione
 ricorsiva del contenuto. Esempio: `examples/tutorial/04c_baule_annidato.locus`.
+
+Se metti fallisce, il messaggio indica quale destinazione non è un
+contenitore oppure richiede apertura; una serratura bloccata viene distinta
+dalla semplice chiusura. L’oggetto resta nella posizione iniziale.

@@ -77,3 +77,17 @@ non rispondere con il solo nome del complemento.
 Anche a inizio partita il comando incompleto mostra prima il suggerimento
 sul complemento. Se aggiungi il complemento senza avere ancora un referente,
 LOCUS segnala invece che manca un oggetto a cui riferire il pronome.
+
+## Riporre una gemma in un cofano bloccato
+
+Nell’esempio della lezione, riparti e scrivi `prendi gemma`, poi
+`metti gemma nel cofano`. Il messaggio nomina il cofano bloccato e suggerisce
+di aprirlo con una chiave adatta. La gemma resta nell’inventario.
+
+Esegui `prendi chiave`, `apri cofano con chiave`, `chiudi cofano` e ripeti
+`metti gemma nel cofano`: ora il messaggio segnala soltanto la chiusura.
+Basta `apri cofano`, poi `metti gemma nel cofano` per completare il deposito.
+
+Come prova negativa, prima del deposito usa `metti gemma nella chiave`:
+LOCUS nomina la chiave come destinazione non compatibile. Non basta che
+un oggetto sia raggiungibile per poterlo usare come contenitore.

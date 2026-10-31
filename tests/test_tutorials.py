@@ -1511,3 +1511,26 @@ def test_nested_chest_lesson_does_not_expand_open_children_or_reveal_hidden_obje
     hidden = step(opened.session, parse_session_command(opened.session, "prendi sigillo"))
     assert hidden.event.kind == "not_here"
     assert hidden.session == opened.session
+
+
+def test_deposit_lesson_distinguishes_locked_closed_and_invalid_destinations() -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "28_clitici_con_complemento.locus")))
+    current = step(current, parse_session_command(current, "prendi gemma")).session
+    locked = step(current, parse_session_command(current, "metti gemma nel cofano"))
+    assert render(locked) == "Il contenitore è bloccato: cofano. Aprilo con la chiave adatta."
+    assert "bronzo" not in render(locked)
+    assert locked.session == current
+    for command in ("prendi chiave", "apri cofano con chiave", "chiudi cofano"):
+        current = step(current, parse_session_command(current, command)).session
+    closed = step(current, parse_session_command(current, "metti gemma nel cofano"))
+    assert render(closed) == "Il contenitore è chiuso: cofano. Aprilo prima di riporre l’oggetto."
+    assert closed.session == current
+    invalid = step(current, parse_session_command(current, "metti gemma nella chiave"))
+    assert render(invalid) == "La destinazione non è un contenitore: chiave di bronzo."
+    assert invalid.session == current
+    current = step(current, parse_session_command(current, "apri cofano")).session
+    deposited = step(current, parse_session_command(current, "metti gemma nel cofano"))
+    assert deposited.event.kind == "put"
+    assert "Contiene: gemma." in render(
+        step(deposited.session, parse_session_command(deposited.session, "esamina cofano"))
+    )
