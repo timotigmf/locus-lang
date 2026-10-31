@@ -447,3 +447,6 @@ conservare la destinazione dopo un errore e riaprire quella ricordata.
 
 La lezione 30 contiene il laboratorio disco e cassette: sinonimo esplicito,
 cambio di destinazione e chiarimento del nome parziale in mettici.
+
+La lezione 29 include due scatole e una prova sul referente cambiato
+dall’esame, oltre agli errori distinti di oggetto e destinazione mancanti.

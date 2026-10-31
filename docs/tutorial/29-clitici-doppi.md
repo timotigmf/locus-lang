@@ -39,3 +39,41 @@ indovina un contenitore dalla stanza: spiega che manca una destinazione per
 Aggiungi una seconda scatola aperta. Usa una forma estesa per collocare il primo
 oggetto nella nuova scatola, poi prendi l'altro e verifica che `metticelo` usi
 proprio l'ultima destinazione riuscita.
+
+## Esercizio risolto: due scatole, due ricordi
+
+Apri `examples/tutorial/29b_due_scatole.locus` oppure copia:
+
+```locus
+Titolo: "Due scatole, due ricordi".
+Autore: "Esempio LOCUS".
+
+La Sala è una stanza.
+Inizia nella Sala.
+La scatola rossa è un contenitore nella Sala.
+La scatola rossa ha stato "aperto".
+La scatola blu è un contenitore nella Sala.
+La scatola blu ha stato "aperto".
+La gemma è una cosa nella Sala.
+La moneta è una cosa nella Sala.
+```
+
+1. `prendi gemma`, `metti gemma nella scatola rossa`: ricordi gemma e rossa.
+2. `prendi moneta`, `metticela`: la moneta va nella scatola rossa.
+3. `prendi gemma`, `metti gemma nella scatola blu`: la destinazione cambia.
+4. `prendi moneta`, `metticelo`: la moneta va nella scatola blu.
+
+Le forme maschile e femminile sono equivalenti: LOCUS non deduce il genere
+degli oggetti per scegliere il referente.
+
+**Attenzione all’ultimo oggetto.** Dopo aver preso la moneta al passaggio 4,
+se esamini la gemma, il referente diretto diventa la gemma. `metticela`
+tenta quindi di spostare la gemma, non la moneta. La gemma è nella scatola e
+non è trasportata: il comando viene rifiutato. Usa `esamina moneta`,
+poi `metticela` per riprendere il deposito corretto. La destinazione blu non
+è cambiata.
+
+**Due riferimenti mancanti distinti.** In una nuova partita `metticela`
+segnala che manca un oggetto da richiamare. Dopo `prendi moneta`, manca
+invece soltanto la destinazione. Nessuno dei due casi sceglie una scatola
+automaticamente.

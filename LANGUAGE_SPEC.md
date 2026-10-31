@@ -480,3 +480,7 @@ sostituiscono. Il riuso resta soggetto allo stato del contenitore ricordato.
 Il laboratorio 30b verifica sinonimi e chiarimenti dell’oggetto diretto
 con destinazione locativa già risolta: la scelta riprende il deposito nella
 cassetta ricordata, senza preferenza automatica per gli oggetti trasportati.
+
+La lezione 29 verifica due referenti indipendenti in metticelo/metticela:
+il cambio di destinazione segue il deposito riuscito e l’esame aggiorna
+soltanto l’oggetto diretto. Il riuso non elimina il controllo di possesso.

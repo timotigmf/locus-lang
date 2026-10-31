@@ -1762,3 +1762,36 @@ def test_disc_lesson_rejects_missing_and_duplicate_destination() -> None:
         failed = step(current, parse_session_command(current, command))
         assert failed.event.kind == event
         assert failed.session == current
+
+
+@pytest.mark.parametrize("command", ["metticela", "metticelo"])
+def test_double_clitic_lesson_tracks_two_boxes_and_changed_direct_reference(command: str) -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "29b_due_scatole.locus")))
+    ids = {entity.label: entity.id for entity in current.world.entities}
+    for destination in ("scatola rossa", "scatola blu"):
+        for text in ("prendi gemma", f"metti gemma nella {destination}", "prendi moneta"):
+            current = step(current, parse_session_command(current, text)).session
+        if destination == "scatola blu":
+            current = step(current, parse_session_command(current, "esamina gemma")).session
+            failed = step(current, parse_session_command(current, command))
+            assert failed.event.kind == "not_carried"
+            assert failed.event.entities == (ids["gemma"],)
+            assert failed.session == current
+            assert current.indirect_pronoun_id == ids[destination]
+            current = step(current, parse_session_command(current, "esamina moneta")).session
+        deposited = step(current, parse_session_command(current, command))
+        assert deposited.event.kind == "put"
+        assert deposited.event.entities == (ids["moneta"], ids[destination])
+        current = deposited.session
+
+
+@pytest.mark.parametrize("command", ["metticela", "metticelo"])
+def test_double_clitic_lesson_distinguishes_missing_roles(command: str) -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "29b_due_scatole.locus")))
+    failed = step(current, parse_session_command(current, command))
+    assert failed.event.kind == "no_referent"
+    assert failed.session == current
+    current = step(current, parse_session_command(current, "prendi moneta")).session
+    failed = step(current, parse_session_command(current, command))
+    assert failed.event.kind == "no_indirect_referent"
+    assert failed.session == current

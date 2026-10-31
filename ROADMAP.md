@@ -310,3 +310,6 @@ memoria preservata dopo deposito fallito e recupero con apertura.
 
 Didattica: soluzione di mettici con sinonimi e due cassette, inclusi
 chiarimento del gettone e rifiuti di destinazione assente o duplicata.
+
+Didattica: completata la soluzione dei clitici doppi con due scatole,
+cambio dei ruoli e recupero dopo esame di un oggetto non trasportato.
