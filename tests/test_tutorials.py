@@ -1682,3 +1682,42 @@ def test_two_keys_pronoun_lesson_remembers_only_successful_tools() -> None:
     for command in ("prendi chiave di bronzo", "esamina cofano"):
         current = step(current, parse_session_command(current, command)).session
     assert step(current, parse_session_command(current, "aprilo con essa")).event.kind == "opened"
+
+
+@pytest.mark.parametrize("adverb", ["lì", "là"])
+@pytest.mark.parametrize("closed_target", ["baule", "cassetta"])
+def test_two_destinations_lesson_updates_only_after_success(
+    adverb: str, closed_target: str
+) -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "31b_due_destinazioni.locus")))
+    ids = {entity.label: entity.id for entity in current.world.entities}
+    for command in ("prendi bussola", "metti bussola nel baule"):
+        current = step(current, parse_session_command(current, command)).session
+    assert current.indirect_pronoun_id == ids["baule"]
+    for command in (
+        "prendi bussola",
+        "metti bussola nella cassetta",
+        "esamina baule",
+        f"chiudi {closed_target}",
+        "prendi sestante",
+    ):
+        current = step(current, parse_session_command(current, command)).session
+    assert current.indirect_pronoun_id == ids["cassetta"]
+    failed_command = (
+        "metti sestante nel baule" if closed_target == "baule" else f"metti sestante {adverb}"
+    )
+    failed = step(current, parse_session_command(current, failed_command))
+    assert failed.event.kind == "container_closed"
+    assert failed.session == current
+    assert failed.session.indirect_pronoun_id == ids["cassetta"]
+    if closed_target == "cassetta":
+        current = step(current, parse_session_command(current, "apri cassetta")).session
+        assert current.indirect_pronoun_id == ids["cassetta"]
+    deposited = step(current, parse_session_command(current, f"metti sestante {adverb}"))
+    assert deposited.event.kind == "put"
+    assert deposited.event.entities[1] == ids["cassetta"]
+    assert not deposited.session.inventory
+    contents = render(
+        step(deposited.session, parse_session_command(deposited.session, "esamina cassetta"))
+    )
+    assert "Contiene: bussola, sestante." in contents

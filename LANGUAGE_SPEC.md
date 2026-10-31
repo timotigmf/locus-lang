@@ -472,3 +472,7 @@ complemento non direzionale e direzione valida priva di uscita.
 Il laboratorio 32b verifica che una chiave incompatibile non aggiorni il
 referente indiretto, né inizialmente né dopo un successo. Un referente
 ricordato resta soggetto ai controlli di possesso durante il riuso.
+
+La lezione 31 verifica il cambio di referente locativo solo dopo deposito
+riuscito: esame, apertura e rifiuto di una destinazione chiusa non lo
+sostituiscono. Il riuso resta soggetto allo stato del contenitore ricordato.

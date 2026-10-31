@@ -39,3 +39,40 @@ la destinazione.
 Aggiungi un secondo contenitore aperto. Colloca esplicitamente la bussola al suo
 interno, poi usa `metti sestante là` e verifica che il referente locativo sia
 stato aggiornato.
+
+## Esercizio risolto: cambiare destinazione
+
+Apri `examples/tutorial/31b_due_destinazioni.locus` oppure copia:
+
+```locus
+Titolo: "Cambiare destinazione".
+Autore: "Esempio LOCUS".
+
+La Sala carteggio è una stanza.
+Inizia nella Sala carteggio.
+Il baule è un contenitore nella Sala carteggio.
+Il baule ha stato "aperto".
+La cassetta è un contenitore nella Sala carteggio.
+La cassetta ha stato "aperto".
+La bussola è una cosa nella Sala carteggio.
+Il sestante è una cosa nella Sala carteggio.
+```
+
+1. `prendi bussola`, `metti bussola nel baule`: ora lì indica il baule.
+2. `prendi bussola`, `metti bussola nella cassetta`: la destinazione cambia.
+3. `prendi sestante`, `metti sestante là`: il sestante va nella cassetta.
+4. `esamina baule`: è vuoto. `esamina cassetta`: contiene entrambi gli strumenti.
+
+Esaminare un contenitore cambia il referente diretto, ma non quello locativo.
+Perciò guardare il baule dopo il passaggio 2 non annulla la scelta della cassetta.
+
+**Un tentativo fallito non cambia destinazione.** Dopo il passaggio 2, chiudi
+il baule e prendi il sestante. `metti sestante nel baule` fallisce perché
+il baule è chiuso. `metti sestante lì` usa ancora la cassetta e riesce.
+Un errore non sceglie implicitamente una nuova destinazione.
+
+**Una destinazione ricordata può diventare inaccessibile.** In una nuova
+partita arriva al passaggio 2, chiudi la cassetta e prendi il sestante.
+`metti sestante là` riconosce la cassetta, ma chiede di aprirla. Aprila e
+ripeti lo stesso comando: la memoria locativa è conservata anche dopo
+l’apertura. Non serve riscrivere il nome della destinazione.

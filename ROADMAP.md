@@ -304,3 +304,6 @@ e abbreviati, diagnosi distinte e conservazione della posizione dopo errori.
 
 Didattica: soluzione delle due chiavi e dei pronomi per ruolo, con memoria
 preservata dopo chiave errata e controllo di possesso al riuso.
+
+Didattica: laboratorio delle due destinazioni con lì/là, cambio esplicito,
+memoria preservata dopo deposito fallito e recupero con apertura.

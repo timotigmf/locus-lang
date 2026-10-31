@@ -441,3 +441,6 @@ frasi naturali e n/u/d/s, e prove negative per est, ovest e fuori senza uscita.
 
 La lezione 32 include un copione completo con due chiavi: memoria per ruolo
 dopo successi e fallimenti, e rifiuto di una chiave ricordata ma lasciata.
+
+La lezione 31 include due destinazioni e copioni per aggiornare lì/là,
+conservare la destinazione dopo un errore e riaprire quella ricordata.
