@@ -444,3 +444,6 @@ dopo successi e fallimenti, e rifiuto di una chiave ricordata ma lasciata.
 
 La lezione 31 include due destinazioni e copioni per aggiornare lì/là,
 conservare la destinazione dopo un errore e riaprire quella ricordata.
+
+La lezione 30 contiene il laboratorio disco e cassette: sinonimo esplicito,
+cambio di destinazione e chiarimento del nome parziale in mettici.

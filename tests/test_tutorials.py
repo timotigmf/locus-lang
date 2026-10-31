@@ -1721,3 +1721,44 @@ def test_two_destinations_lesson_updates_only_after_success(
         step(deposited.session, parse_session_command(deposited.session, "esamina cassetta"))
     )
     assert "Contiene: bussola, sestante." in contents
+
+
+@pytest.mark.parametrize("clarify", [False, True])
+def test_disc_lesson_synonym_and_clarification_keep_the_remembered_destination(
+    clarify: bool,
+) -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "30b_disco_e_cassette.locus")))
+    ids = {entity.label: entity.id for entity in current.world.entities}
+    for destination in ("cassetta di legno", "cassetta di ferro"):
+        for command in (
+            "prendi gettone rosso",
+            f"metti gettone rosso nella {destination}",
+            "prendi disco",
+        ):
+            current = step(current, parse_session_command(current, command)).session
+        if clarify:
+            asked = step(current, parse_session_command(current, "mettici gettone"))
+            assert asked.event.kind == "ambiguous"
+            assert asked.session.inventory == current.inventory
+            invalid = step(asked.session, parse_session_command(asked.session, "verde"))
+            assert invalid.event.kind == "invalid_clarification"
+            assert invalid.session.clarification == asked.session.clarification
+            placed = step(invalid.session, parse_session_command(invalid.session, "disco"))
+        else:
+            placed = step(current, parse_session_command(current, "mettici disco"))
+        assert placed.event.kind == "put"
+        assert placed.event.entities == (ids["gettone blu"], ids[destination])
+        assert placed.session.indirect_pronoun_id == ids[destination]
+        current = placed.session
+
+
+def test_disc_lesson_rejects_missing_and_duplicate_destination() -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "30b_disco_e_cassette.locus")))
+    current = step(current, parse_session_command(current, "prendi disco")).session
+    for command, event in (
+        ("mettici disco", "no_indirect_referent"),
+        ("mettici disco nella cassetta di ferro", "unknown"),
+    ):
+        failed = step(current, parse_session_command(current, command))
+        assert failed.event.kind == event
+        assert failed.session == current

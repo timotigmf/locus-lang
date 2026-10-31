@@ -307,3 +307,6 @@ preservata dopo chiave errata e controllo di possesso al riuso.
 
 Didattica: laboratorio delle due destinazioni con lì/là, cambio esplicito,
 memoria preservata dopo deposito fallito e recupero con apertura.
+
+Didattica: soluzione di mettici con sinonimi e due cassette, inclusi
+chiarimento del gettone e rifiuti di destinazione assente o duplicata.

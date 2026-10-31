@@ -63,3 +63,42 @@ Nel progetto della lezione prova `prendi gettone rosso`, poi `metti gettone ross
 LOCUS indica che manca la destinazione e mostra la forma corretta. Ripeti
 `metti gettone rosso nella cassetta` per completare l’azione. L’errore non consuma
 un turno nelle storie con scene temporali.
+
+## Esercizio risolto: disco e due cassette
+
+Apri `examples/tutorial/30b_disco_e_cassette.locus` oppure copia:
+
+```locus
+Titolo: "Il disco e le due cassette".
+Autore: "Esempio LOCUS".
+
+La Sala è una stanza.
+Inizia nella Sala.
+La cassetta di legno è un contenitore nella Sala.
+La cassetta di legno ha stato "aperto".
+La cassetta di ferro è un contenitore nella Sala.
+La cassetta di ferro ha stato "aperto".
+Il gettone rosso è una cosa nella Sala.
+Il gettone blu è una cosa nella Sala.
+Comprendi "disco" come "gettone blu".
+```
+
+1. `prendi gettone rosso`, `metti gettone rosso nella cassetta di legno`.
+2. `prendi disco`, `mettici disco`: il gettone blu va nel legno.
+3. `prendi gettone rosso`, `metti gettone rosso nella cassetta di ferro`.
+4. `prendi disco`, `mettici disco`: questa volta va nel ferro.
+
+Il sinonimo identifica il gettone, mentre `ci` conserva la destinazione.
+Non occorre dichiarare un sinonimo per ogni combinazione di oggetto e contenitore.
+
+**Variante con chiarimento.** Al passaggio 2, dopo `prendi disco`, scrivi
+`mettici gettone`: entrambi i gettoni sono raggiungibili e LOCUS domanda quale
+intendi, anche se soltanto il blu è nell’inventario. Rispondi `disco`: il deposito
+riprende usando il gettone blu e la cassetta di legno già ricordata.
+Una risposta estranea come `verde` conserva la domanda; `annulla` la cancella.
+
+**Prova negativa.** In una nuova partita `prendi disco`, `mettici disco`
+non sceglie una delle due cassette: manca ancora una destinazione ricordata.
+Anche `mettici disco nella cassetta di ferro` è invalido perché esprime due
+volte la destinazione. Usa la forma estesa `metti disco nella cassetta di ferro`
+per stabilire o cambiare il contenitore.

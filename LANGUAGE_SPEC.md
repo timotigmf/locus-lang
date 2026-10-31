@@ -476,3 +476,7 @@ ricordato resta soggetto ai controlli di possesso durante il riuso.
 La lezione 31 verifica il cambio di referente locativo solo dopo deposito
 riuscito: esame, apertura e rifiuto di una destinazione chiusa non lo
 sostituiscono. Il riuso resta soggetto allo stato del contenitore ricordato.
+
+Il laboratorio 30b verifica sinonimi e chiarimenti dell’oggetto diretto
+con destinazione locativa già risolta: la scelta riprende il deposito nella
+cassetta ricordata, senza preferenza automatica per gli oggetti trasportati.
