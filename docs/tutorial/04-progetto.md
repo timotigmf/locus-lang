@@ -167,3 +167,50 @@ Prima di aprire, lo stesso comando di presa resta impossibile.
 Sono elencati soltanto i figli diretti visibili: aprire un baule che contiene
 una scatola chiusa mostra la scatola, non gli oggetti al suo interno.
 Un contenitore vuoto mantiene la semplice conferma di apertura.
+
+## Laboratorio: contenitori dentro altri contenitori
+
+Apri `examples/tutorial/04c_baule_annidato.locus` oppure copia:
+
+```locus
+Titolo: "Il baule del cartografo".
+Autore: "Esempio LOCUS".
+
+La Sala delle Carte è una stanza.
+Inizia nella Sala delle Carte.
+Il baule è un contenitore nella Sala delle Carte.
+Il baule ha descrizione "Una scatola e una moneta occupano il fondo.".
+La scatola è un contenitore nel baule.
+La scatola ha descrizione "Un piccolo astuccio per una gemma.".
+La gemma azzurra è una cosa nella scatola.
+La moneta di ottone è una cosa nel baule.
+Il sigillo segreto è una cosa nel baule.
+Il sigillo segreto ha visibile falso.
+```
+
+| Comando | Cosa verificare |
+| --- | --- |
+| `prendi gemma` | Il baule chiuso impedisce di raggiungerla |
+| `apri baule` | Compaiono scatola e moneta, non la gemma |
+| `prendi scatola` | Trasporti la scatola, ancora chiusa |
+| `chiudi baule` | La scatola trasportata resta fuori dal baule |
+| `prendi gemma` | La scatola chiusa impedisce ancora la presa |
+| `aprila` | Il pronome ora indica il baule, ultimo oggetto manipolato: si riapre il baule |
+| `apri scatola` | Compare la gemma azzurra |
+| `prendi gemma` | La gemma entra direttamente nell’inventario |
+| `esamina scatola` | Il contenitore aperto risulta vuoto |
+
+**Contenuto e inventario.** Prendere la scatola conserva il collegamento con
+la gemma al suo interno. Aprirla non prende anche la gemma: occorre il comando
+di presa. Un contenitore può essere aperto mentre lo trasporti.
+
+**Prova negativa.** `prendi sigillo` non riesce neppure con il baule aperto:
+`visibile falso` è un vincolo del mondo, non una semplice omissione dal testo.
+Questo esempio non contiene un meccanismo per rivelare il sigillo; per renderlo
+disponibile cambia la proprietà nel sorgente e ricompila, oppure aggiungi una
+regola come nella lezione 13.
+
+**Variante da verificare.** Dopo aver aperto la scatola, lascia la gemma al suo
+interno, rimetti la scatola nel baule aperto, chiudi e riapri il baule.
+L’annuncio elenca soltanto scatola e moneta. `esamina scatola` mostra la gemma:
+l’elenco dell’apertura non espande ricorsivamente tutti i contenitori.

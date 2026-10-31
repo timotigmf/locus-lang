@@ -447,3 +447,7 @@ L’evento opened di un contenitore include, dopo il suo ID, i figli diretti
 raggiungibili nello stato aperto. La resa li elenca come Contiene. Oggetti
 invisibili e contenuti annidati non vengono elencati; porte e contenitori
 senza figli visibili conservano la conferma breve. Nessuna presa automatica.
+
+Il laboratorio 4c verifica contenimento annidato e trasportato: la presa
+del contenitore conserva i figli; l’accessibilità richiede tutti gli antenati
+aperti e visibili. L’annuncio di apertura resta limitato ai figli diretti.

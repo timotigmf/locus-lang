@@ -420,3 +420,7 @@ serrature, con segnaposto al posto dei nomi reali: consulta
 Aprire un contenitore mostra subito i figli diretti visibili. Per esplorare
 un contenitore annidato occorre esaminarlo o aprirlo; gli oggetti nascosti
 non vengono rivelati e nessun oggetto viene preso automaticamente.
+
+La lezione 4 include il laboratorio del baule annidato: contenitori trasportati,
+figli nascosti, differenza fra apertura e presa e variante senza espansione
+ricorsiva del contenuto. Esempio: `examples/tutorial/04c_baule_annidato.locus`.

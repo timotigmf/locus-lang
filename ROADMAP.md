@@ -286,3 +286,6 @@ e chiave, verificata su serrature e oggetti nascosti senza rivelare soluzioni.
 
 Interazione con contenitori: l’apertura annuncia il contenuto diretto
 visibile, condividendo i controlli di accessibilità con esamina.
+
+Didattica dei contenitori: laboratorio completo del baule annidato e
+trasportato, con regressioni su antenati chiusi, visibilità e contenuto diretto.

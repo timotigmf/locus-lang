@@ -1464,3 +1464,50 @@ def test_help_does_not_list_key_hidden_in_closed_container() -> None:
     assert helped.session is current
     assert "rame" not in render(helped)
     assert step(current, parse_session_command(current, "prendi chiave")).event.kind == "not_here"
+
+
+def test_nested_chest_lesson_keeps_contents_when_container_is_carried() -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "04c_baule_annidato.locus")))
+    ids = {entity.label: entity.id for entity in current.world.entities}
+    blocked = step(current, parse_session_command(current, "prendi gemma"))
+    assert blocked.event.kind == "not_here"
+    assert blocked.session == current
+    opened = step(current, parse_session_command(current, "apri baule"))
+    assert render(opened) == "Hai aperto: baule.\nContiene: scatola, moneta di ottone."
+    current = step(opened.session, parse_session_command(opened.session, "prendi scatola")).session
+    assert current.inventory == (ids["scatola"],)
+    current = step(current, parse_session_command(current, "chiudi baule")).session
+    blocked = step(current, parse_session_command(current, "prendi gemma"))
+    assert blocked.event.kind == "not_here"
+    assert blocked.session == current
+    reopened = step(current, parse_session_command(current, "aprila"))
+    assert reopened.event.entities[0] == ids["baule"]
+    current = reopened.session
+    opened = step(current, parse_session_command(current, "apri scatola"))
+    assert render(opened) == "Hai aperto: scatola.\nContiene: gemma azzurra."
+    assert opened.session.inventory == (ids["scatola"],)
+    taken = step(opened.session, parse_session_command(opened.session, "prendi gemma"))
+    assert taken.session.inventory == (ids["scatola"], ids["gemma azzurra"])
+    assert "Contiene: nessun oggetto." in render(
+        step(taken.session, parse_session_command(taken.session, "esamina scatola"))
+    )
+
+
+def test_nested_chest_lesson_does_not_expand_open_children_or_reveal_hidden_objects() -> None:
+    current = start(instantiate(compile_story_file(TUTORIAL / "04c_baule_annidato.locus")))
+    for command in (
+        "apri baule",
+        "apri scatola",
+        "prendi scatola",
+        "metti scatola nel baule",
+        "chiudi baule",
+    ):
+        current = step(current, parse_session_command(current, command)).session
+    opened = step(current, parse_session_command(current, "apri baule"))
+    assert "gemma" not in render(opened)
+    assert "sigillo" not in render(opened)
+    examined = step(opened.session, parse_session_command(opened.session, "esamina scatola"))
+    assert "Contiene: gemma azzurra." in render(examined)
+    hidden = step(opened.session, parse_session_command(opened.session, "prendi sigillo"))
+    assert hidden.event.kind == "not_here"
+    assert hidden.session == opened.session

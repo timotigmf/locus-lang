@@ -1,0 +1,13 @@
+Titolo: "Il baule del cartografo".
+Autore: "Esempio LOCUS".
+
+La Sala delle Carte è una stanza.
+Inizia nella Sala delle Carte.
+Il baule è un contenitore nella Sala delle Carte.
+Il baule ha descrizione "Una scatola e una moneta occupano il fondo.".
+La scatola è un contenitore nel baule.
+La scatola ha descrizione "Un piccolo astuccio per una gemma.".
+La gemma azzurra è una cosa nella scatola.
+La moneta di ottone è una cosa nel baule.
+Il sigillo segreto è una cosa nel baule.
+Il sigillo segreto ha visibile falso.
