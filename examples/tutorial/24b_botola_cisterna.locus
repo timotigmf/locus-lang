@@ -1,0 +1,14 @@
+Titolo: "La botola della cisterna".
+Autore: "Esempio LOCUS".
+
+La Sala Macchine è una stanza.
+La Terrazza è una stanza.
+La Cisterna è una stanza.
+La Terrazza sovrasta la Sala Macchine.
+La Sala Macchine sovrasta la Cisterna.
+Inizia nella Sala Macchine.
+La botola è una porta.
+La botola collega la Sala Macchine alla Cisterna.
+La botola ha stato "chiuso".
+La Sala Macchine ha descrizione "Una scala sale alla terrazza; una botola protegge la discesa.".
+La Cisterna ha descrizione "La botola conduce alla sala macchine sopra di te.".

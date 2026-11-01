@@ -496,3 +496,7 @@ La correzione del sinonimo conserva identità e risoluzione delle due entità.
 La lezione 25 verifica che una porta sul collegamento dentro/fuori condivida
 lo stato da entrambi i lati, senza rendere raggiungibili oggetti nell’altra
 stanza. Il collegamento richiesto dagli estremi della porta resta un invariante.
+
+Il laboratorio 24b verifica una porta sul solo collegamento verticale
+inferiore: la scala superiore resta percorribile e l’atlante conserva
+due archi per tre livelli, indipendentemente dalla chiusura della botola.

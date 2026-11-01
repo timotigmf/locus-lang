@@ -1891,3 +1891,34 @@ def test_internal_door_lesson_shares_state_without_remote_object_access(
     failed = step(current, parse_session_command(current, outside))
     assert failed.event.kind == "no_exit"
     assert failed.session == current
+
+
+def test_trapdoor_lesson_blocks_only_the_lower_connection_and_keeps_map_topology() -> None:
+    from locus.studio import map_data
+
+    current = start(instantiate(compile_story_file(TUTORIAL / "24b_botola_cisterna.locus")))
+    ids = {entity.label: entity.id for entity in current.world.entities}
+    initial_map = map_data(current.world)
+    assert len(initial_map["rooms"]) == 3
+    assert len(initial_map["links"]) == 2
+    assert all(link["direction"] == "su" for link in initial_map["links"])
+    failed = step(current, parse_session_command(current, "d"))
+    assert failed.event.kind == "door_closed"
+    assert failed.session == current
+    for command, room in (("u", "Terrazza"), ("d", "Sala Macchine")):
+        current = step(current, parse_session_command(current, command)).session
+        assert current.room_id == ids[room]
+    for command in ("apri botola", "d", "chiudi botola"):
+        current = step(current, parse_session_command(current, command)).session
+    assert current.room_id == ids["Cisterna"]
+    failed = step(current, parse_session_command(current, "u"))
+    assert failed.event.kind == "door_closed"
+    assert failed.session == current
+    for command in ("apri botola", "u"):
+        current = step(current, parse_session_command(current, command)).session
+    assert current.room_id == ids["Sala Macchine"]
+    current = step(current, parse_session_command(current, "d")).session
+    failed = step(current, parse_session_command(current, "d"))
+    assert failed.event.kind == "no_exit"
+    assert failed.session == current
+    assert map_data(current.world)["links"] == initial_map["links"]

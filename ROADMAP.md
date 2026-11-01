@@ -322,3 +322,6 @@ autore E409 verificata sulla riga del conflitto e ripresa dopo correzione.
 
 Didattica: soluzione della porta interna nella lezione 25 e precisazione
 dell’invariante che impedisce di lasciare una porta senza collegamento.
+
+Didattica: soluzione della botola fra livelli, con percorso superiore
+indipendente e regressione sull’esportazione della mappa.
